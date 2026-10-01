@@ -1,3 +1,4 @@
+import {restorationCode} from './code-archive.js';
 import {apiURL,apiOrigin} from './hosting.js';
 import './html-to-image.js';
 import {renderDigivice} from './digivices.js';
@@ -32,8 +33,8 @@ export async function prepareForumPost(input,status=()=>{},snapshots){
  status('Publicando ficha com abas Humano e Digimon…');
  const tree=snapshotTree(snapshot,images,snapshots,s);
  const height=await measureForumHeight(tree);
- const response=await fetch(apiURL('/api/forum-sheets'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tree,project:publicArchive(s)})});
+ const response=await fetch(apiURL('/api/forum-sheets'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(tree)});
  if(!response.ok)throw Error('Não foi possível publicar a ficha com abas. Tente novamente.');
  const saved=await response.json();
- const code=embedCode(new URL(saved.path,apiOrigin).href,height);cached={key,code};return code;
+ const code=embedCode(new URL(saved.path,apiOrigin).href,height).replace('<iframe ', '<iframe data-bonds-project="'+restorationCode(s)+'" ');cached={key,code};return code;
 }

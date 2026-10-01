@@ -1,10 +1,11 @@
+import {restoreEmbeddedCode} from './code-archive.js';
 import {apiURL} from './hosting.js';
 import {fresh,parseProject,parseCharacterCode} from './rules.js';
 import {initializeForms,stageOrder,blankForm} from './forms.js';
 import {species,effects} from './catalog.js';
 import {archetypes} from './archetypes.js';
 export function sheetId(raw){const text=raw.trim();const match=text.match(/<iframe\b[^>]*\bsrc\s*=\s*["']([^"']+)["']/i);const value=match?match[1].replaceAll('&amp;','&'):text;let url;try{url=new URL(value);}catch{return null;}if(url.origin!=='https://bonds-character-app.mateuzim-alves.chatgpt.site'||!/^\/sheets\/[a-f0-9]{64}$/.test(url.pathname))throw Error('Use o código ou link de uma ficha publicada pelo Bonds Terminal.');return url.pathname.split('/').pop();}
-export async function recoverCharacter(raw,current){if(!raw.trim())throw Error('Cole o código da ficha anterior.');if(raw.length>2000000)throw Error('Código muito grande.');const id=sheetId(raw);if(!id)return {state:parseCharacterCode(raw,current),warning:''};const response=await fetch(apiURL('/api/forum-sheets/'+id));if(!response.ok)throw Error(response.status===404?'Ficha não encontrada. Confira se o código está completo.':'Não foi possível consultar a ficha. Tente novamente.');const data=await response.json();if(data.project)return {state:parseProject(data.project),warning:''};return {state:recoverLegacySheet(data.html),warning:'Código antigo: os textos e atributos disponíveis foram recuperados. Confira as imagens originais, cores e acabamento do Digivice e a progressão: esses dados não eram guardados no post antigo.'};}
+export async function recoverCharacter(raw,current){if(!raw.trim())throw Error('Cole o código da ficha anterior.');if(raw.length>2000000)throw Error('Código muito grande.');const embedded=restoreEmbeddedCode(raw);if(embedded)return {state:embedded,warning:''};const id=sheetId(raw);if(!id)return {state:parseCharacterCode(raw,current),warning:''};throw Error('Este código antigo contém apenas a ficha visual. Abra a ficha salva neste navegador com CARREGAR e gere um novo código em Transmissão para permitir a recuperação completa.');}
 export function recoverLegacySheet(html){
  const doc=new DOMParser().parseFromString(html,'text/html'),root=doc.querySelector('#preview');if(!root)throw Error('Este código antigo não contém uma ficha reconhecível.');
  const clean=v=>v?.trim()==='—'?'':v?.trim()||'';

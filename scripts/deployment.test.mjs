@@ -49,3 +49,9 @@ test('published project restores exact editable state and immutable versions',as
  const legacy=await publish();const legacyResponse=await worker.fetch(new Request('https://bonds-character-app.mateuzim-alves.chatgpt.site/api/forum-sheets/'+legacy.path.split('/').pop()));assert.equal((await legacyResponse.json()).legacy,true);
  const missing=await worker.fetch(new Request('https://bonds-character-app.mateuzim-alves.chatgpt.site/api/forum-sheets/'+'0'.repeat(64)));assert.equal(missing.status,404);
 });
+import {restorationCode,restoreEmbeddedCode} from '../site/code-archive.js';
+test('forum code restores unicode, customizations and extra attacks without network',()=>{
+ const state=initializeForms(fresh());state.name='João & Lívia';state.history='História com acentuação';state.deviceColor='#123456';addSignatureAttack(state);state.digimonForms.rookie.signatureAttacks[1].name='Golpe extra';
+ const code='<iframe data-bonds-project="'+restorationCode(state)+'" src="https://example.com"></iframe>';
+ const restored=restoreEmbeddedCode(code);assert.equal(restored.name,state.name);assert.equal(restored.history,state.history);assert.equal(restored.deviceColor,state.deviceColor);assert.equal(restored.digimonForms.rookie.signatureAttacks[1].name,'Golpe extra');assert.equal(restoreEmbeddedCode('<iframe></iframe>'),null);assert.throws(()=>restoreEmbeddedCode(code+code));assert.throws(()=>restoreEmbeddedCode('<iframe data-bonds-project="invalid"></iframe>'));
+});
