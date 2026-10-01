@@ -4,14 +4,22 @@ const json=(value,status=200)=>Response.json(value,{status});
 const max=3*1024*1024;
 const handler={async fetch(request){try{
  const u=new URL(request.url);
+ if(/^\/api\/forum-sheets\/[a-f0-9]{64}$/.test(u.pathname)){
+  if(request.method!=='GET')return new Response(null,{status:405});
+  const id=u.pathname.split('/').pop();const project=await env.BUCKET.get('projects/'+id+'.json');
+  if(project)return new Response(await project.text(),{headers:{'Content-Type':'application/json','X-Content-Type-Options':'nosniff'}});
+  const sheet=await env.BUCKET.get('sheets/'+id+'.html');if(!sheet)return json({error:'Ficha não encontrada'},404);
+  return json({html:await sheet.text(),legacy:true});
+ }
  if(u.pathname==='/api/forum-sheets'){
   if(request.method!=='POST')return new Response(null,{status:405});
   if(!allowedOrigin(request)||request.headers.get('content-type')!=='application/json')return new Response(null,{status:403});
-  const bytes=await limited(request);if(!bytes||bytes.byteLength>250000)return json({error:'Ficha muito grande'},413);
-  let html;try{html=sheetDocument(JSON.parse(new TextDecoder().decode(bytes)));}catch{return json({error:'Ficha inválida'},400);}
-  const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(html));
+  const bytes=await limited(request);if(!bytes||bytes.byteLength>1500000)return json({error:'Ficha muito grande'},413);
+  let html,project=null;try{const payload=JSON.parse(new TextDecoder().decode(bytes));html=sheetDocument(payload.tree||payload);if(payload.project){if(payload.project.schemaVersion!==1)throw Error('Projeto inválido');project=payload.project;}}catch{return json({error:'Ficha inválida'},400);}
+  const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(html+(project?JSON.stringify(project):'')));
   const hash=Array.from(new Uint8Array(digest),x=>x.toString(16).padStart(2,'0')).join('');
   await env.BUCKET.put('sheets/'+hash+'.html',html,{httpMetadata:{contentType:'text/html; charset=utf-8'}});
+  if(project)await env.BUCKET.put('projects/'+hash+'.json',JSON.stringify({project}),{httpMetadata:{contentType:'application/json'}});
   return json({path:'/sheets/'+hash});
  }
  if(/^\/sheets\/[a-f0-9]{64}$/.test(u.pathname)){

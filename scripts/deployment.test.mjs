@@ -37,3 +37,15 @@ test('additional rookie attacks survive initialization, stage edits and JSON',()
  const restored=parseProject(JSON.parse(JSON.stringify(s)));assert.equal(restored.digimonForms.rookie.signatureAttacks[1].name,'Extra rookie');assert.equal(restored.attack,'Original');assert.equal(availableAttacks(restored).length,8);restored.activeDigimonStage='rookie';assert.equal(removeSignatureAttack(restored,0),false);assert.equal(removeSignatureAttack(restored,1),true);assert.equal(activeForm(restored).signatureAttacks.length,1);
 });
 test('forum embed uses measured full height and disables its own scrollbar',()=>{const code=embedCode('https://example.com/sheets/abc',4567);assert.match(code,/height="4567"/);assert.match(code,/scrolling="no"/);assert.match(code,/embed=full/);assert.throws(()=>embedCode('https://example.com'));});
+test('published project restores exact editable state and immutable versions',async()=>{
+ let source=await readFile(path.join(root,'server/worker.js'),'utf8');
+ source=source.replace("import {env} from 'cloudflare:workers';",`const objects=new Map();const env={BUCKET:{async put(key,value){objects.set(key,value)},async get(key){return objects.has(key)?{text:async()=>objects.get(key),body:objects.get(key)}:null}}};`).replace("'./sheet-document.js'",JSON.stringify(pathToFileURL(path.join(root,'server/sheet-document.js')).href));
+ const {default:worker}=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
+ const state=initializeForms(fresh());state.name='João';state.deviceColor='#123456';unlockStage(state,'champion');state.activeDigimonStage='champion';state.digimonForms.champion.name='Campeão';addSignatureAttack(state);state.digimonForms.champion.signatureAttacks[1].name='Ataque extra';
+ const tree={tag:'article',attrs:{id:'preview'},children:['Teste']};
+ const publish=async project=>(await worker.fetch(new Request('https://bonds-character-app.mateuzim-alves.chatgpt.site/api/forum-sheets',{method:'POST',headers:{origin:'https://digimon-bonds.github.io','content-type':'application/json'},body:JSON.stringify(project?{tree,project}:tree)}))).json();
+ const result=await publish(state);const response=await worker.fetch(new Request('https://bonds-character-app.mateuzim-alves.chatgpt.site/api/forum-sheets/'+result.path.split('/').pop(),{headers:{origin:'https://digimon-bonds.github.io'}}));assert.equal(response.status,200);assert.equal(response.headers.get('access-control-allow-origin'),'https://digimon-bonds.github.io');assert.deepEqual(parseProject((await response.json()).project),parseProject(state));
+ state.name='Alterado';const changed=await publish(state);assert.notEqual(changed.path,result.path);
+ const legacy=await publish();const legacyResponse=await worker.fetch(new Request('https://bonds-character-app.mateuzim-alves.chatgpt.site/api/forum-sheets/'+legacy.path.split('/').pop()));assert.equal((await legacyResponse.json()).legacy,true);
+ const missing=await worker.fetch(new Request('https://bonds-character-app.mateuzim-alves.chatgpt.site/api/forum-sheets/'+'0'.repeat(64)));assert.equal(missing.status,404);
+});
