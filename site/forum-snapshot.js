@@ -23,4 +23,4 @@ export function snapshotTree(sheet,images,snapshots,state){
  function tree(node){if(node.nodeType===3)return node.textContent;if(node.nodeType!==1)return '';const pairs=attrs.filter(k=>node.hasAttribute(k)).map(k=>[k,node.getAttribute(k)]);if(node.classList.contains('device-hotspot'))pairs.push(['data-hotspot',['left','top','width','height'].map(k=>parseFloat(node.style[k])).join(',')]);return {tag:node.localName,attrs:Object.fromEntries(pairs),children:[...node.childNodes].map(tree)};}
  return tree(sheet);
 }
-export function embedCode(url){return '<iframe src="'+url+'" title="Ficha de Personagem — Digimon Bonds" width="100%" height="900" frameborder="0" scrolling="yes" loading="lazy" style="display:block;width:100%;max-width:860px;height:900px;margin:0 auto;border:0;border-radius:16px;"></iframe>';}
+export function embedCode(url){return '<iframe src="'+url+'" title="Ficha de Personagem — Digimon Bonds" width="100%" height="1400" frameborder="0" scrolling="yes" loading="lazy" style="display:block;width:100%;max-width:860px;height:1400px;margin:0 auto;border:0;border-radius:16px;"></iframe>';}
