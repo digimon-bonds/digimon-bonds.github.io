@@ -29,3 +29,11 @@ test('backend permits Pages CORS and rejects untrusted origins',async()=>{
  const res=await worker.fetch(new Request('https://bonds-character-app.mateuzim-alves.chatgpt.site/api/digivice-images',{method:'POST',headers:{origin:'https://digimon-bonds.github.io','content-type':'image/png'},body:'invalid'}));assert.equal(res.status,400);assert.equal(res.headers.get('access-control-allow-origin'),'https://digimon-bonds.github.io');
 });
 
+import {addSignatureAttack,removeSignatureAttack,activeForm,availableAttacks} from '../site/forms.js';
+import {embedCode} from '../site/forum-snapshot.js';
+test('additional rookie attacks survive initialization, stage edits and JSON',()=>{
+ const s=initializeForms(fresh());s.attack='Original';addSignatureAttack(s);s.digimonForms.rookie.signatureAttacks[1].name='Extra rookie';
+ for(const stage of ['champion','ultimate','mega']){unlockStage(s,stage);s.activeDigimonStage=stage;assert.equal(activeForm(s).name,'');addSignatureAttack(s);s.digimonForms[stage].signatureAttacks[1].name='Extra '+stage;}
+ const restored=parseProject(JSON.parse(JSON.stringify(s)));assert.equal(restored.digimonForms.rookie.signatureAttacks[1].name,'Extra rookie');assert.equal(restored.attack,'Original');assert.equal(availableAttacks(restored).length,8);restored.activeDigimonStage='rookie';assert.equal(removeSignatureAttack(restored,0),false);assert.equal(removeSignatureAttack(restored,1),true);assert.equal(activeForm(restored).signatureAttacks.length,1);
+});
+test('forum embed uses measured full height and disables its own scrollbar',()=>{const code=embedCode('https://example.com/sheets/abc',4567);assert.match(code,/height="4567"/);assert.match(code,/scrolling="no"/);assert.match(code,/embed=full/);assert.throws(()=>embedCode('https://example.com'));});

@@ -1,3 +1,4 @@
+if(new URLSearchParams(location.search).get('embed')==='full')document.documentElement.classList.add('forum-full');
 for(const b of document.querySelectorAll('[data-hotspot]')){const values=b.dataset.hotspot.split(',').map(Number);if(values.length===4&&values.every(n=>Number.isFinite(n)&&n>=0&&n<=100))['left','top','width','height'].forEach((key,i)=>b.style[key]=values[i]+'%');}
 const tabs=[...document.querySelectorAll('[data-preview-tab]')];
 function select(tab,focus=false){for(const button of tabs){const selected=button===tab;button.setAttribute('aria-selected',String(selected));button.tabIndex=selected?0:-1;const panel=document.getElementById(button.getAttribute('aria-controls'));if(panel)panel.hidden=!selected;}if(focus)tab.focus();}
