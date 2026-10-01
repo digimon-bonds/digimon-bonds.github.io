@@ -131,4 +131,4 @@ body{background:radial-gradient(ellipse at 75% 0,#203242 0,transparent 52%),#0c1
 #preview .energy-track{width:80%;max-width:520px;margin:0 auto;height:6px}
 #preview .energy-track span{height:6px}
 
-.evolution-unlocks{display:flex;flex-wrap:wrap;gap:8px;margin:28px 0 20px;padding-top:22px;border-top:3px solid var(--orange)}.evolution-unlocks .hint{flex-basis:100%;margin:0}.evolution-unlocks button{flex:1 1 180px;font-size:11px;padding:10px}
+.evolution-unlocks{display:flex;flex-wrap:wrap;gap:8px;margin:28px 0 20px;padding-top:22px;border-top:3px solid var(--amber)}.evolution-unlocks .hint{flex-basis:100%;margin:0}.evolution-unlocks button{flex:1 1 180px;font-size:11px;padding:10px}
