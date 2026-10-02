@@ -1,7 +1,7 @@
 export const palettes=[
 ['digital-classic','DIGITAL CLASSIC','#9BDEE0','#5557C7','#605AB5'],['crimson-link','CRIMSON LINK','#D6D8D9','#8E3138','#531F28'],['amber-terminal','AMBER TERMINAL','#D5C49A','#C98032','#6B4524'],['ocean-signal','OCEAN SIGNAL','#79CED6','#267B8D','#174F68'],['forest-link','FOREST LINK','#A8C69F','#477A57','#274A37'],['tactical-green','TACTICAL GREEN','#8C9575','#46513C','#252D24'],['sakura','SAKURA','#F2C8D5','#C96D92','#75415D'],['royal','ROYAL','#D7D0B6','#644B91','#362A5C'],['solar','SOLAR','#F2D578','#E87F32','#8D4128'],['black-signal','BLACK SIGNAL','#3A4047','#111820','#747E89'],['virus-red','VIRUS RED','#3C3437','#A52936','#5B101C'],['ice-data','ICE DATA','#D9F1F1','#7DB7CE','#477F9E']];
-export const skins=[['clean','Novo'],['broken','Tela trincada'],['dark','Fosco'],['worn','Desgastado'],['carbon','Carbono'],['translucent','Translúcido'],['floral','Floral'],['corrupted','Corrupted'],['retro','Retrô 1999']];
-export const legacySkins={aged:'retro',scratched:'worn',military:'worn',camo:'dark',metal:'clean',sakura:'floral',stickers:'clean',prototype:'retro'};
+export const skins=[['clean','Novo'],['broken','Tela Trincada'],['worn','Desgastado']];
+export const legacySkins={aged:'worn',scratched:'worn',military:'worn',camo:'clean',metal:'clean',sakura:'clean',stickers:'clean',prototype:'clean',dark:'clean',carbon:'clean',translucent:'clean',floral:'clean',corrupted:'clean',retro:'worn'};
 export function paletteFor(s){return palettes.find(p=>p.slice(2).every((v,i)=>v.toLowerCase()===s[['deviceColor','buttonColor','borderColor'][i]]?.toLowerCase()))?.[0]||'custom';}
 export function applyPalette(s,id){const p=palettes.find(p=>p[0]===id);if(!p)return;[s.deviceColor,s.buttonColor,s.borderColor]=p.slice(2);s.selectedPalette=id;}
 export function resetVisual(s){applyPalette(s,'digital-classic');s.trimColor='#384951';s.deviceSkin='clean';s.skinIntensity='normal';s.deviceImage='';}

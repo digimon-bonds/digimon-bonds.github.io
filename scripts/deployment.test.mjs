@@ -6,6 +6,13 @@ import path from 'node:path';
 import {fresh,parseProject} from '../site/rules.js';
 import {stageOrder,initializeForms,unlockStage,lockStage} from '../site/forms.js';
 const root=path.resolve(import.meta.dirname,'..');
+
+test('classic table import separates cells, portraits, prose and attack columns',async()=>{
+ const {recoverTableCharacter}=await import('../site/table-import.js');
+ const cell=t=>'[td]'+t+'[/td]';
+ const raw='REGISTRO VISUAL'+cell('[img]https://imgur.com/portrait.png[/img]')+cell('[b]Nome:[/b] Teste\n[b]Idade:[/b] 14 anos\n[b]Personalidade:[/b] Uma frase [b]importante[/b].')+cell('[b]CORPO[/b][size=20][b]2[/b][/size]')+cell('[b]MENTE[/b][b]4[/b]')+cell('[b]PRESENÇA[/b][b]3[/b]')+cell('[b][color=gold]FALHA[/color][/b]Receio')+'DIGIMON PARCEIRO[spoiler=NOVATO / ROOKIE]'+cell('[img]https://example.com/digimon.png[/img]')+cell('[b]Nome:[/b] Keramon\n[b]Elemento:[/b] Escuridão')+'ATAQUES DE ASSINATURA[tr]'+['Riso','1','Escuridão','Poderoso'].map(cell).join('')+'[/tr][/spoiler][b]HISTÓRIA[/b]'+cell('[justify]História completa.[/justify]');
+ const s=recoverTableCharacter(raw);assert.equal(s.age,'14');assert.deepEqual(s.human,{mente:4,corpo:2,presenca:3});assert.equal(s.personality,'Uma frase importante.');assert.equal(s.flaw,'Receio');assert.equal(s.humanImage,'https://i.imgur.com/portrait.png');assert.equal(s.attack,'Riso');assert.equal(s.effect,'Poderoso');assert.equal(s.history,'História completa.');assert.equal(s.deviceImage,'');assert.equal(parseProject(s).digiImage,'https://example.com/digimon.png');
+});
 test('all local module imports and assets resolve with exact case',async()=>{
  const files=await readdir(path.join(root,'site'),{recursive:true});
  for(const file of files.filter(f=>/\.(js|css|html)$/.test(f))){
