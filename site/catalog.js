@@ -665,3 +665,10 @@ export const effects=[
   }
 ];
 export const elements=['Fogo','Madeira','Água','Gelo','Elétrico','Vento','Terra','Luz','Escuridão','Metal','Neutro'];
+
+// Canonicalize imported labels without coupling an attack to its partner's element.
+export function normalizeElement(value){
+ const clean=String(value??'').replace(/\[\/?(?:b|i|u|color|size)(?:=[^\]]*)?\]/gi,'').replace(/&nbsp;|&#160;|&#xA0;/gi,' ').replace(/[\u200B-\u200D\uFEFF]/g,'').trim();
+ const key=v=>v.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+ return elements.find(e=>key(e)===key(clean))||clean;
+}

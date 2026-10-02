@@ -7,6 +7,16 @@ import {fresh,parseProject} from '../site/rules.js';
 import {stageOrder,initializeForms,unlockStage,lockStage} from '../site/forms.js';
 const root=path.resolve(import.meta.dirname,'..');
 
+test('imported attack elements normalize independently of the partner element',async()=>{
+ const {validate}=await import('../site/rules.js');
+ for(const value of ['Metal','METAL',' metal\u00a0','[b]Metal[/b]','Me\u200btal']){
+  const s=fresh();s.element='Fogo';s.attackElement=value;initializeForms(s);
+  assert.equal(s.attackElement,'Metal');assert.equal(s.element,'Fogo');
+  assert(!validate(s).some(e=>e.field==='attackElement'));
+  assert.equal(parseProject(s).attackElement,'Metal');
+ }
+});
+
 test('classic table import separates cells, portraits, prose and attack columns',async()=>{
  const {recoverTableCharacter}=await import('../site/table-import.js');
  const cell=t=>'[td]'+t+'[/td]';

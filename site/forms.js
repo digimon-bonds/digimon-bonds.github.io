@@ -1,5 +1,5 @@
 import {stages, progress, bonuses} from './progression.js';
-import {species, elements, effects} from './catalog.js';
+import {species, elements, effects, normalizeElement} from './catalog.js';
 
 export const stageOrder=['baby','rookie','champion','ultimate','mega'];
 export const stageNames={baby:'BEBÊ',rookie:'NOVATO',champion:'CAMPEÃO',ultimate:'PERFEITO',mega:'MEGA'};
@@ -8,6 +8,8 @@ const keys=['poder','coracao','inteligencia','agilidade'];
 export function blankForm(stage){const r=stageRules[stage];return {unlocked:stage==='rookie',name:'',image:'',personality:'',digital:'',element:'',classification:'',attributes:Object.fromEntries(keys.map(k=>[k,r.min])),qualities:stage==='baby'?[]:[{name:'',rank:1}],signatureAttacks:stage==='baby'?[]:[{name:'',rank:r.rank,element:'',effects:[{name:'',element:''}]}],imagePosition:'center',zoom:1};}
 export function rookieForm(s){const p=progress(s);return {...blankForm('rookie'),unlocked:s.digimonForms?.rookie?.unlocked??true,name:s.digiName,image:s.digiImage,personality:s.digiPersonality,digital:s.digital,element:species.find(d=>d.name===s.digiName)?.element||s.element,classification:s.classification,attributes:{...s.digi},qualities:p.qualities.filter(q=>q.stage==='Novato').map(q=>({name:q.name,rank:q.rank})),signatureAttacks:[{name:s.attack,rank:p.attackRank,element:s.attackElement||s.element,effects:structuredClone(p.effects)},...structuredClone(s.digimonForms?.rookie?.signatureAttacks?.slice(1)||[])],imagePosition:s.imagePosition,zoom:s.zoom};}
 export function initializeForms(s){
+ for(const key of ['element','attackElement','effectElement'])s[key]=normalizeElement(s[key]);
+ for(const f of Object.values(s.digimonForms||{})){f.element=normalizeElement(f.element);for(const a of f.signatureAttacks||[]){a.element=normalizeElement(a.element);for(const e of a.effects||[])e.element=normalizeElement(e.element);}}
  if(!s.digimonForms){s.digimonForms=Object.fromEntries(stageOrder.map(k=>[k,blankForm(k)]));for(const f of progress(s).forms){const k=stageOrder.find(k=>stageNames[k]===f.stage.toUpperCase());if(k)s.digimonForms[k]={...blankForm(k),unlocked:true,name:f.name,image:f.image,digital:f.digital,element:f.element,classification:f.classification,attributes:{...f.digi},qualities:progress(s).qualities.filter(q=>q.stage===f.stage).map(q=>({name:q.name,rank:q.rank})),signatureAttacks:[structuredClone(f.attack)]};}}
  s.digimonForms.rookie=rookieForm(s);if(!stageOrder.includes(s.activeDigimonStage))s.activeDigimonStage='rookie';return s;
 }
