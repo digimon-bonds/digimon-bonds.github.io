@@ -1,3 +1,4 @@
+import {historicalBase} from './progression.js';
 import {fresh} from './rules.js';
 import {initializeForms,blankForm} from './forms.js';
 import {archetypes} from './archetypes.js';
@@ -41,5 +42,9 @@ export function recoverTableCharacter(raw){
   if(stage==='rookie'){Object.assign(s,{digiName:f.name,digiImage:f.image,digital:f.digital,element:f.element,classification:f.classification,digiPersonality:f.personality,digi:f.attributes,quality:f.qualities[0]?.name||'',attack:f.signatureAttacks[0]?.name||'',attackElement:f.signatureAttacks[0]?.element||'',effect:f.signatureAttacks[0]?.effects[0]?.name||''});}
  }
  if(!s.name||!s.digiName)throw Error('Ficha clássica incompleta: cole todo o código, incluindo Humano e Novato.');
- return initializeForms(s);
+ const previous=fields(raw),rookie=s.digimonForms.rookie,level=Number(previous['NIVEL DE LACO']?.match(/\d+/)?.[0]||1),exp=Number(previous.EXP?.match(/\d+/)?.[0]||0);
+ const talentRank=Number((h.TALENTO||'').match(/Rank\s*(\d+)/i)?.[1]||1);
+ const resources={};for(const [key,label] of Object.entries({energy:'ENERGIA ATUAL / MAXIMA',bond:'PONTOS DE LACO',pv:'PV'})){const found=previous[label]?.match(/-?\d+/);if(found)resources[key]=Number(found[0]);}
+ const imported=historicalBase(s,level,exp,{...resources,talents:[{name:s.talent,rank:talentRank}],qualities:rookie.qualities.map(q=>({...q,stage:'Novato'})),attackRank:rookie.signatureAttacks[0]?.rank||1,effects:rookie.signatureAttacks[0]?.effects||[{name:s.effect,element:''}]});
+ return initializeForms(imported);
 }

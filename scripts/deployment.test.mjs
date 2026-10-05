@@ -72,3 +72,42 @@ test('forum code restores unicode, customizations and extra attacks without netw
  const code='<iframe data-bonds-project="'+restorationCode(state)+'" src="https://example.com"></iframe>';
  const restored=restoreEmbeddedCode(code);assert.equal(restored.name,state.name);assert.equal(restored.history,state.history);assert.equal(restored.deviceColor,state.deviceColor);assert.equal(restored.digimonForms.rookie.signatureAttacks[1].name,'Golpe extra');assert.equal(restoreEmbeddedCode('<iframe></iframe>'),null);assert.throws(()=>restoreEmbeddedCode(code+code));assert.throws(()=>restoreEmbeddedCode('<iframe data-bonds-project="invalid"></iframe>'));
 });
+import {progress,progressionPlan,historicalBase,withUpdate,projectedForm} from '../site/progression.js';
+import {rookieForm,blankForm} from '../site/forms.js';
+
+test('XP milestones cross 5 and each level once, with exact automatic benefits',()=>{
+ let s=initializeForms(fresh());s.talent='Observador';s.quality='Corajoso';s.attack='Golpe';s.element=s.attackElement='Metal';s.effect='PESADO';initializeForms(s);
+ s=historicalBase(s,1,4);
+ const plan=progressionPlan(s,2,5);assert.equal(plan.amount,11);assert.deepEqual(plan.after.pending,['minor','major','attribute','device','minor']);assert.equal(plan.after.level,2);assert.equal(plan.after.exp,5);assert.equal(plan.after.bond,7);assert.equal(plan.after.energy,10);assert.equal(9+plan.after.level,11);assert.equal(plan.next.digimonForms.champion.unlocked,false);
+ assert.equal(plan.milestones.filter(x=>x.kind==='minor').length,2);assert.equal(plan.milestones.filter(x=>x.kind==='evolution').length,1);
+ assert.throws(()=>progressionPlan(s,1,3));assert.throws(()=>progressionPlan(s,2,10));assert.throws(()=>progressionPlan(plan.next,3,0),/pendentes/);
+ s=withUpdate(plan.next,{type:'upgrade',target:'talent',index:0});s=withUpdate(s,{type:'upgrade',choice:'talent',name:'Novo'});s=withUpdate(s,{type:'upgrade',choice:'Resistência'});s=withUpdate(s,{type:'upgrade',name:'Scanner'});s=withUpdate(s,{type:'upgrade',target:'talent',index:1});
+ assert.equal(progress(s).pending.length,0);assert.equal(progress(s).talents[0].rank,2);assert.equal(progress(s).talents[1].rank,2);assert.equal(progress(s).devices[0].rank,1);assert.deepEqual(progress(parseProject(s)),progress(s));
+ const second=progressionPlan(s,3,0).next;assert.throws(()=>withUpdate(second,{type:'upgrade',choice:'talent',name:'Repetido'}),/consecutivas/);assert.throws(()=>historicalBase(s,1,0),/histórico/);
+});
+
+test('independent form qualities and additional attacks upgrade without replay or undo drift',()=>{
+ let s=initializeForms(fresh());s.element=s.attackElement='Metal';s.attack='Inicial';s.effect='PESADO';s.quality='Inicial';s.talent='Talento';initializeForms(s);
+ s.digimonForms.champion={...blankForm('champion'),unlocked:true,qualities:[{name:'Defensor',rank:1}],signatureAttacks:[{name:'Metal',rank:2,element:'Metal',effects:[{name:'PESADO',element:''}]}]};
+ s.digimonForms.rookie.signatureAttacks.push({name:'Extra',rank:1,element:'Metal',effects:[{name:'PESADO',element:''}]});
+ s=historicalBase(s,2,4);s=progressionPlan(s,3,0).next;
+ s=withUpdate(s,{type:'form-upgrade',stage:'champion',index:0,target:'quality',base:{name:'Defensor',rank:1}});
+ s=withUpdate(s,{type:'form-upgrade',stage:'rookie',index:1,target:'attack',choice:'effect',base:projectedForm(s,'rookie').signatureAttacks[1],name:'EFICIENTE',element:''});
+ s=withUpdate(s,{type:'upgrade',name:'Mapa'});
+ for(let i=0;i<4;i++){initializeForms(s);s=parseProject(s);assert.equal(projectedForm(s,'champion').qualities[0].rank,2);assert.equal(rookieForm(s).signatureAttacks[1].effects.length,2);}
+ s.updates.pop();s.updates.pop();initializeForms(s);assert.equal(rookieForm(s).signatureAttacks[1].effects.length,1);assert.equal(projectedForm(s,'champion').qualities[0].rank,2);
+ s.updates.pop();assert.equal(projectedForm(s,'champion').qualities[0].rank,1);
+});
+
+test('multi-level progression respects level 10 and grants nine device upgrades',()=>{
+ const s=initializeForms(fresh()),plan=progressionPlan(s,10,0);
+ assert.equal(plan.after.pending.filter(x=>x==='device').length,9);assert.equal(plan.after.pending.filter(x=>x==='minor').length,9);assert.equal(plan.after.pending.filter(x=>x==='attribute').length,4);assert.equal(plan.after.pending.filter(x=>x==='major').length,9);assert.equal(plan.after.bond,15);
+ assert.throws(()=>progressionPlan(s,10,1));assert.throws(()=>historicalBase(s,11,0));assert.throws(()=>historicalBase(s,2,0,{devices:[{name:'Mapa'},{name:'Mapa'}]}));
+});
+test('updated export restores progress and locked evolution history cannot leak',async()=>{
+ const {restorationCode,restoreEmbeddedCode}=await import('../site/code-archive.js');
+ let s=initializeForms(fresh());s.talent='T';s.quality='Q';s.attack='A';s.effect='PESADO';s.element=s.attackElement='Metal';initializeForms(s);
+ s=progressionPlan(s,1,5).next;s=withUpdate(s,{type:'upgrade',target:'quality',index:0});initializeForms(s);
+ const code='<iframe data-bonds-project="'+restorationCode(s)+'"></iframe>',restored=restoreEmbeddedCode(code);assert.deepEqual(progress(restored),progress(s));assert.equal(rookieForm(restored).qualities[0].rank,2);
+ s.digimonForms.champion={...blankForm('champion'),unlocked:true,qualities:[{name:'Segredo',rank:1}]};s=progressionPlan(s,2,5).next;s=withUpdate(s,{type:'upgrade',choice:'talent',name:'Novo'});s=withUpdate(s,{type:'upgrade',choice:'Defesa'});s=withUpdate(s,{type:'upgrade',name:'Mapa'});s=withUpdate(s,{type:'form-upgrade',stage:'champion',target:'quality',index:0,base:{name:'Segredo',rank:1}});lockStage(s,'champion');assert.equal(restorationCode(s),'');assert.doesNotThrow(()=>parseProject(s));
+});

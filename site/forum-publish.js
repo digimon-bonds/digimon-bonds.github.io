@@ -35,5 +35,5 @@ export async function prepareForumPost(input,status=()=>{},snapshots){
  const response=await fetch(apiURL('/api/forum-sheets'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(tree)});
  if(!response.ok)throw Error('Não foi possível publicar a ficha com abas. Tente novamente.');
  const saved=await response.json();
- const code=embedCode(new URL(saved.path,apiOrigin).href).replace('<iframe ', '<iframe data-bonds-project="'+restorationCode(s)+'" ');cached={key,code};return code;
+ const archive=restorationCode(s);const code=embedCode(new URL(saved.path,apiOrigin).href).replace('<iframe ',archive?'<iframe data-bonds-project="'+archive+'" ':'<iframe ');cached={key,code};return code;
 }

@@ -4,6 +4,32 @@ export const deviceLimits={Scanner:3,'Detecção':3,'Comunicação':3,Mapa:2,Arm
 export const improvementNames=['Resistência','Força','Defesa','Técnica'];
 export const majorNames={talent:'Novo Talento',quality:'Nova Qualidade',effect:'Novo Efeito de Ataque',attack:'Rank de Ataque',minor:'Opção de Atualização Menor'};
 export const protocols=['Troca de Elemento','Reforço de PV','Reforço de Esquiva','Reforço de Dano','Qualidade Temporária','Ataque Temporário'];
+export const formLabels={baby:'Bebê',rookie:'Novato',champion:'Campeão',ultimate:'Perfeito',mega:'Mega'};
+export function projectedForm(s,stage,p=progress(s)){
+ const f=structuredClone(s.digimonForms?.[stage]);if(!f)return f;
+ f.qualities=f.qualities.map((q,i)=>p.formQualities[stage+':'+i]||q);
+ f.signatureAttacks=f.signatureAttacks.map((a,i)=>p.formAttacks[stage+':'+i]||a);
+ if(stage!=='rookie')for(const q of p.qualities.filter(q=>q.stage===formLabels[stage]))if(!f.qualities.some(x=>x.name===q.name))f.qualities.push({name:q.name,rank:q.rank});
+ return f;
+}
+export function progressionPlan(s,level,exp){
+ const p=progress(s);if(p.pending.length)fail('Conclua as escolhas pendentes antes de calcular outra progressão.');
+ if(!integer(level,1,10)||!integer(exp,0,level===10?0:9))fail('Informe Nível 1–10 e EXP 0–9; no Nível 10, EXP 0.');
+ const amount=(level-p.level)*10+exp-p.exp;if(amount<=0)fail('O novo Nível/EXP deve ser maior que a base atual.');
+ const event={type:'exp',reason:'Progressão autorizada pelo Narrador',amount,extra:0},next=withUpdate(s,event),after=progress(next),milestones=[];
+ for(let point=(p.level-1)*10+p.exp+1;point<=(level-1)*10+exp;point++){
+  if(point%10===5)milestones.push({level:Math.floor(point/10)+1,exp:5,kind:'minor',label:'Atualização Menor: +1 Rank em Talento ou Qualidade'});
+  if(point%10===0){const n=point/10+1;milestones.push({level:n,exp:0,kind:'major',label:'Atualização Maior +1 Energia máxima +1 PL máximo; recuperar PL'});if([2,4,6,8].includes(n))milestones.push({level:n,exp:0,kind:'attribute',label:'Melhoria de Atributos para todas as formas'});milestones.push({level:n,exp:0,kind:'device',label:'Uma nova função ou +1 Nível de uma função do Digivice'});if([2,5,8,10].includes(n))milestones.push({level:n,exp:0,kind:'evolution',label:'Requisito de Nível para '+({2:'Campeão',5:'Perfeito',8:'Mega',10:'Formas Lendárias e Fusões'})[n]+'; autorização narrativa ainda necessária'});}
+ }
+ return {event,next,after,amount,milestones};
+}
+export function historicalBase(s,level,exp,extra={}){
+ if((s.updates||[]).some(e=>e.type!=='baseline'))fail('A ficha já possui histórico. Use os valores reconhecidos para evitar ganhos duplicados.');
+ const p=progress(s),f=s.digimonForms?.rookie;
+ const event={type:'baseline',level,exp,talents:p.talents,qualities:p.qualities,attackRank:p.attackRank,effects:p.effects,improvements:p.improvements,devices:p.devices,lastMajor:p.lastMajor,...extra};
+ if(!s.updates?.length&&f){event.attackRank=f.signatureAttacks[0]?.rank||1;event.effects=f.signatureAttacks[0]?.effects||p.effects;event.qualities=f.qualities.map(q=>({...q,stage:'Novato'}));}
+ const next=structuredClone(s);next.updates=[event];next.updateStart=1;progress(next);return next;
+}
 export const stages={Novato:{level:1,min:1,total:12,max:4,hpBase:5,hpHeart:3,damage:2,dodge:1,rank:1},Campeão:{level:2,min:2,total:14,max:5,hpBase:10,hpHeart:4,damage:2,dodge:1,rank:2},Perfeito:{level:5,min:2,total:16,max:6,hpBase:15,hpHeart:5,damage:3,dodge:1,rank:3},Mega:{level:8,min:2,total:18,max:6,hpBase:20,hpHeart:6,damage:4,dodge:2,rank:4}};
 export function formStats(p,form){const r=stages[form.stage],b=bonuses(p);return {pv:r.hpBase+r.hpHeart*form.digi.coracao+b.pv,damage:r.damage*form.digi.poder+b.damage,dodge:form.digi.agilidade+r.dodge+b.dodge,uses:form.digi.inteligencia+b.uses};}
 export function allAttacks(p,s){return [{stage:'Novato',name:s.attack,rank:p.attackRank,element:s.attackElement||s.element,effects:p.effects},...p.forms.map(f=>({stage:f.stage,...f.attack}))]}
@@ -11,7 +37,7 @@ const fail=m=>{throw Error(m)};
 const integer=(v,min,max)=>Number.isSafeInteger(v)&&v>=min&&v<=max;
 const text=v=>typeof v==='string'&&v.trim().length>0;
 export function progress(s){
- const p={level:1,exp:0,energy:10,bond:6,broken:false,pv:5+3*s.digi.coracao,talents:[{name:s.talent,rank:1}],qualities:[{name:s.quality,rank:1,stage:'Novato'}],forms:[],attackRank:1,effects:[{name:s.effect,element:s.effectElement||''}],devices:[],improvements:[],pending:[],lastMajor:'',lastAttribute:'',history:[]};
+ const p={level:1,exp:0,energy:10,bond:6,broken:false,pv:5+3*s.digi.coracao,talents:[{name:s.talent,rank:1}],qualities:[{name:s.quality,rank:1,stage:'Novato'}],forms:[],attackRank:1,effects:[{name:s.effect,element:s.effectElement||''}],devices:[],improvements:[],pending:[],lastMajor:'',lastAttribute:'',history:[],formAttacks:{},formQualities:{}};
  for(const event of s.updates||[])applyEvent(p,event,s);
  return p;
 }
@@ -20,7 +46,21 @@ function minor(p,e){const list=e.target==='talent'?p.talents:e.target==='quality
 function applyEvent(p,e,s){
  if(!e||typeof e!=='object'||Array.isArray(e)||!text(e.type))fail('Registro de Update inválido.');
  let description='';
- if(e.type==='exp'){
+ if(e.type==='baseline'){
+  if(p.history.length)fail('A base histórica só pode ser registrada antes do primeiro Update.');
+  if(!integer(e.level,1,10)||!integer(e.exp,0,e.level===10?0:9))fail('Base: Nível 1–10 e EXP 0–9 (Nível 10: 0).');
+  if(!integer(e.talentRank??1,1,3)||!integer(e.attackRank??1,1,3))fail('Ranks da base inválidos.');
+  p.level=e.level;p.exp=e.exp;p.energy=e.energy??9+e.level;p.bond=e.bond??5+e.level;p.attackRank=e.attackRank??1;p.talents[0].rank=e.talentRank??1;
+  if(e.effects){if(!Array.isArray(e.effects)||e.effects.length>3||e.effects.some(x=>typeof x.name!=='string'||typeof x.element!=='string'))fail('Efeitos históricos inválidos.');p.effects=structuredClone(e.effects);}
+  if(e.qualities){if(!Array.isArray(e.qualities)||e.qualities.some(q=>typeof q.name!=='string'||!integer(q.rank,1,3)||typeof q.stage!=='string'))fail('Qualidades históricas inválidas.');p.qualities=structuredClone(e.qualities);}
+  if(e.talents){if(!Array.isArray(e.talents)||!e.talents.length||e.talents.some(t=>typeof t.name!=='string'||!integer(t.rank,1,3)))fail('Talentos históricos inválidos.');p.talents=structuredClone(e.talents);}
+  if(e.improvements){if(!Array.isArray(e.improvements)||e.improvements.length>[2,4,6,8].filter(n=>n<=e.level).length||e.improvements.some((v,i)=>!improvementNames.includes(v)||(i&&v===e.improvements[i-1])))fail('Melhorias históricas inválidas.');p.improvements=[...e.improvements];p.lastAttribute=p.improvements.at(-1)||'';}
+  if(e.devices){if(!Array.isArray(e.devices)||e.devices.length>e.level-1)fail('Funções históricas inválidas.');for(const d of e.devices){if(!Object.hasOwn(deviceLimits,d.name))fail('Função histórica desconhecida.');const rank=p.devices.filter(x=>x.name===d.name).length+1;if(rank>deviceLimits[d.name]||d.name==='Protocolos Especiais'&&(!protocols.includes(d.protocol)||!text(d.detail)))fail('Função histórica fora dos limites.');p.devices.push({...d,rank});}}
+  if(e.lastMajor){if(!Object.hasOwn(majorNames,e.lastMajor))fail('Última Atualização Maior inválida.');p.lastMajor=e.lastMajor;}
+  p.pv=e.pv??5+3*s.digi.coracao+bonuses(p).pv;p.broken=e.broken===true||p.bond<=-6;
+  if(!integer(p.energy,0,9+p.level)||!integer(p.pv,0,5+3*s.digi.coracao+bonuses(p).pv)||!Number.isSafeInteger(p.bond)||p.bond>5+p.level)fail('Recursos históricos fora dos limites.');
+  description=`Base histórica confirmada: Laço ${p.level}, ${p.exp}/10 EXP. Ganhos anteriores já utilizados; sem recompensas retroativas.`;
+ }else if(e.type==='exp'){
   if(p.pending.length)fail('Conclua as melhorias pendentes antes de registrar outra recompensa.');
   if(p.level===10)fail('Nível 10: limite normal de progressão.');
   if(!text(e.reason)||!integer(e.amount,1,1000000))fail('Informe uma origem e EXP inteira positiva.');
@@ -33,6 +73,21 @@ function applyEvent(p,e,s){
   let remaining=e.amount+extra;
   while(remaining>0){const previous=p.exp,added=Math.min(remaining,10-p.exp);p.exp+=added;remaining-=added;if(previous<5&&p.exp>=5)p.pending.push('minor');if(p.exp===10){p.level++;p.exp=0;if(!p.broken)p.bond=5+p.level;p.pending.push('major');if([2,4,6,8].includes(p.level))p.pending.push('attribute');p.pending.push('device');}}
   description=`${e.reason}: +${e.amount} EXP${extra?` + ${extra} EXP extra (${e.extraReason})`:""} → Laço ${p.level}, ${p.exp}/10 EXP${text(e.reference)?" / "+e.reference:""}`;
+ }else if(e.type==='form-upgrade'){
+  const kind=p.pending[0],stage=e.stage,key=stage+':'+e.index,f=s.digimonForms?.[stage];
+  if(!Object.hasOwn(formLabels,stage)||!f||!integer(e.index,0,99)||!['minor','major'].includes(kind))fail('Selecione uma capacidade de uma forma desbloqueada.');
+  if(kind==='major'&&p.lastMajor===e.choice)fail('A mesma Atualização Maior não pode ser escolhida duas vezes consecutivas.');
+  if(e.target==='quality'&&(kind==='minor'||e.choice==='minor')){
+   if(!text(e.base?.name)||!integer(e.base.rank,1,3))fail('Qualidade anterior inválida.');
+   const q=p.formQualities[key]??structuredClone(e.base);if(q.rank>=3)fail('Rank máximo 3.');q.rank++;p.formQualities[key]=q;description=`${q.name}: Rank ${q.rank}`;
+  }else if(e.target==='attack'&&kind==='major'&&['attack','effect'].includes(e.choice)){
+   if(!text(e.base?.name)||!integer(e.base.rank,1,4)||!Array.isArray(e.base.effects)||e.base.effects.length>3||!elements.includes(e.base.element))fail('Ataque anterior inválido.');
+   const a=p.formAttacks[key]??structuredClone(e.base);
+   if(e.choice==='attack'){if(!['rookie','champion'].includes(stage)||a.rank>=3)fail('Somente Ataques de Novato ou Campeão, até Rank 3.');a.rank++;description=`${a.name}: Rank ${a.rank}`;}
+   else{if(a.effects.length>=3)fail('Máximo de 3 Efeitos por Ataque.');if(!effects.some(x=>x.name===e.name)||e.name!=='MULTI-ELEMENTO'&&a.effects.some(x=>x.name===e.name))fail('Escolha um Efeito oficial ainda não utilizado.');if(e.name==='MULTI-ELEMENTO'&&(!elements.includes(e.element)||e.element===a.element||a.effects.some(x=>x.element===e.element)))fail('Escolha um Elemento adicional diferente.');a.effects.push({name:e.name,element:e.name==='MULTI-ELEMENTO'?e.element:''});description=`${a.name}: +${e.name}`;}
+   p.formAttacks[key]=a;
+  }else fail('Essa escolha não corresponde à melhoria pendente.');
+  if(kind==='major')p.lastMajor=e.choice;p.pending.shift();description=(kind==='minor'?'Atualização Menor':'Atualização Maior')+' — '+description;
  }else if(e.type==='upgrade'){
   const kind=p.pending[0];if(!kind)fail('Não há melhoria pendente.');
   if(kind==='minor')description='Atualização Menor — '+minor(p,e);
@@ -40,7 +95,7 @@ function applyEvent(p,e,s){
    if(!Object.hasOwn(majorNames,e.choice))fail('Escolha uma Atualização Maior.');
    if(p.lastMajor===e.choice)fail('A mesma Atualização Maior não pode ser escolhida duas vezes consecutivas.');
    if(e.choice==='minor')description=minor(p,e);
-   if(['talent','quality'].includes(e.choice)){const list=e.choice==='talent'?p.talents:p.qualities,stage=e.stage||'Novato';if(e.choice==='quality'&&stage!=='Novato'&&!p.forms.some(f=>f.stage===stage))fail('Registre primeiro essa forma.');if(!text(e.name))fail('Informe o nome da nova capacidade.');if(list.some(v=>v.name.toLocaleLowerCase()===e.name.trim().toLocaleLowerCase()&&(e.choice==='talent'||v.stage===stage)))fail('Essa capacidade já existe.');list.push({name:e.name.trim(),rank:1,...(e.choice==='quality'?{stage}:{})});description=`${e.name.trim()}: Rank 1${e.choice==='quality'?' ('+stage+')':''}`;}
+   if(['talent','quality'].includes(e.choice)){const list=e.choice==='talent'?p.talents:p.qualities,stage=e.stage||'Novato';if(e.choice==='quality'&&stage!=='Novato'&&!p.forms.some(f=>f.stage===stage)&&!Object.entries(s.digimonForms||{}).some(([k,f])=>f.unlocked&&formLabels[k]===stage))fail('Registre primeiro essa forma.');if(!text(e.name))fail('Informe o nome da nova capacidade.');if(list.some(v=>v.name.toLocaleLowerCase()===e.name.trim().toLocaleLowerCase()&&(e.choice==='talent'||v.stage===stage))||e.choice==='quality'&&Object.entries(s.digimonForms||{}).some(([k,f])=>k!=='rookie'&&formLabels[k]===stage&&f.qualities.some(q=>q.name.toLocaleLowerCase()===e.name.trim().toLocaleLowerCase())))fail('Essa capacidade já existe.');list.push({name:e.name.trim(),rank:1,...(e.choice==='quality'?{stage}:{})});description=`${e.name.trim()}: Rank 1${e.choice==='quality'?' ('+stage+')':''}`;}
    const attackStage=e.attackStage||'Novato',form=p.forms.find(f=>f.stage===attackStage),attack=attackStage==='Novato'?{name:s.attack,rank:p.attackRank,element:s.attackElement||s.element,effects:p.effects}:form?.attack;
    if(['attack','effect'].includes(e.choice)&&!attack)fail('Escolha um Ataque existente.');
    if(e.choice==='attack'){if(!['Novato','Campeão'].includes(attackStage)||attack.rank>=3)fail('Somente Ataques de Novato ou Campeão, até Rank 3.');if(attackStage==='Novato')p.attackRank++;else attack.rank++;description=`${attack.name}: Rank ${attackStage==='Novato'?p.attackRank:attack.rank}`;}
@@ -64,6 +119,6 @@ function applyEvent(p,e,s){
  }else fail('Tipo de Update desconhecido.');
  p.history.push(description);
 }
-export function withUpdate(s,event){const next=structuredClone(s);next.updates=[...(next.updates||[]),structuredClone(event)];progress(next);return next}
+export function withUpdate(s,event){if(event.type==='form-upgrade'&&!s.digimonForms?.[event.stage]?.unlocked)fail('Selecione uma forma desbloqueada.');const next=structuredClone(s);next.updates=[...(next.updates||[]),structuredClone(event)];progress(next);return next}
 export function validateUpdates(s){if(!Array.isArray(s.updates)||s.updates.length>2000)fail('Histórico de Update inválido.');progress(s);}
 export function updateCode(s){const p=progress(s),safe=v=>String(v).replaceAll('[','［').replaceAll(']','］');return `[b]UPDATE DE FICHA — ${safe(s.name)}[/b]\n${p.history.slice(s.updateStart||0).map((v,i)=>`${i+1}. ${safe(v)}`).join('\n')}\n\nNível de Laço: ${p.level}\nEXP: ${p.exp}/10\nEnergia: ${p.energy}/${9+p.level}\nPontos de Laço: ${p.bond}/${5+p.level}\n${p.broken?'Episódio de Quebra de Laço ativo.\n':''}${p.pending.length?'Melhorias pendentes: '+p.pending.map(k=>({minor:'Atualização Menor',major:'Atualização Maior',attribute:'Melhoria de Atributos',device:'Melhoria de Digivice'})[k]).join(', '):'Melhorias concluídas.'}\n[url=${progressionSource}]Regra de progressão[/url]`}
