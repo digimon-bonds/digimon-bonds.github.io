@@ -35,5 +35,5 @@ export async function prepareForumPost(input,status=()=>{},snapshots){
  const response=await fetch(apiURL('/api/forum-sheets'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(tree)});
  if(!response.ok)throw Error('Não foi possível publicar a ficha com abas. Tente novamente.');
  const saved=await response.json();
- const archive=restorationCode(s);const code=embedCode('https://digimon-bonds.github.io/sheet.html?id='+saved.path.split('/').pop()).replace('<iframe ',archive?'<iframe data-bonds-project="'+archive+'" ':'<iframe ');cached={key,code};return code;
+ const compressed=new Blob([JSON.stringify(tree)]).stream().pipeThrough(new CompressionStream('gzip'));const bytes=new Uint8Array(await new Response(compressed).arrayBuffer());let binary='';for(const byte of bytes)binary+=String.fromCharCode(byte);const visual=btoa(binary).replaceAll('+','-').replaceAll('/','_').replace(/=+$/,'');const archive=restorationCode(s);const code=embedCode('https://digimon-bonds.github.io/sheet.html#'+visual).replace('<iframe ',archive?'<iframe data-bonds-project="'+archive+'" ':'<iframe ');cached={key,code};return code;
 }
