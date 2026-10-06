@@ -55,6 +55,6 @@ export function styleSheet(root){
   if(!groupedTitles.has(title)||heading.closest('.grouped-section')||heading.closest('.progression-card'))continue;
   const first=heading.nextElementSibling;const box=document.createElement('section');box.className='sheet-card grouped-section data-section-card';heading.before(box);box.append(heading);
   heading.classList.add('sheet-section');let next=first;
-  while(next&&next.tagName!=='H3'&&!next.classList.contains('sheet-footer')){const after=next.nextElementSibling;box.append(next);next=after;}
+  while(next&&next.tagName!=='H3'&&!next.classList.contains('grouped-section')&&!next.classList.contains('sheet-footer')){const after=next.nextElementSibling;box.append(next);next=after;}
  }
 }
