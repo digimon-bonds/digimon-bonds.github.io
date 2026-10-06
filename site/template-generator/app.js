@@ -103,7 +103,23 @@ document.querySelector('.tabs').addEventListener('keydown',e=>{if(['ArrowLeft','
 document.querySelectorAll('[data-device]').forEach(b=>b.onclick=()=>{device=b.dataset.device;const width={desktop:680,tablet:540,mobile:360}[device];$('#preview').style.width=width+'px';$('#widthLabel').textContent=width+' PX';document.querySelectorAll('[data-device]').forEach(el=>el.setAttribute('aria-pressed',String(el===b)));});
 $('#selectAll').onclick=()=>{$('#code').focus();$('#code').select();};
 $('#copy').onclick=async()=>{const html=generateHTML();try{await navigator.clipboard.writeText(html);notify('CODE COPIED // READY FOR TRANSMISSION');}catch{const area=document.createElement('textarea');area.value=html;area.style.cssText='position:fixed;left:-10000px';document.body.append(area);area.select();let ok=false;try{ok=document.execCommand('copy');}catch{}area.remove();if(ok)notify('CODE COPIED // READY FOR TRANSMISSION');else{tab(true);$('#code').focus();$('#code').select();notify('Cópia automática indisponível. Use Ctrl+C / ⌘C no código selecionado.');}}};
-function confirmAction(title,text,action){$('#dialogTitle').textContent=title;$('#dialogText').textContent=text;const d=$('#confirmDialog');d.returnValue='';d.onclose=()=>{if(d.returnValue==='confirm')action();};d.showModal();}
+function confirmAction(title,text,action){
+ $('#dialogTitle').textContent=title;$('#dialogText').textContent=text;
+ const d=$('#confirmDialog'),anchor=document.activeElement?.getBoundingClientRect();
+ const page=window.parent!==window?window.parent:window;
+ const pageScroll={left:page.scrollX,top:page.scrollY,behavior:'instant'};
+ const css=getComputedStyle(document.documentElement);
+ const viewportHeight=parseFloat(css.getPropertyValue('--studio-viewport-height'))||innerHeight;
+ const viewportTop=window.parent!==window?Math.max(0,(parseFloat(css.getPropertyValue('--studio-sticky-top'))||16)-16):0;
+ d.style.position='fixed';d.style.margin='0';d.style.inset='auto';
+ d.style.maxHeight=Math.max(120,viewportHeight-32)+'px';d.style.overflowY='auto';
+ d.style.top=(viewportTop+16)+'px';d.style.left='16px';
+ d.returnValue='';d.onclose=()=>{if(d.returnValue==='confirm')action();};d.showModal();
+ const bounds=d.getBoundingClientRect();
+ d.style.top=Math.max(viewportTop+16,Math.min(anchor?.bottom+12||viewportTop+16,viewportTop+viewportHeight-bounds.height-16))+'px';
+ d.style.left=Math.max(16,Math.min((anchor?.right||innerWidth)-bounds.width,innerWidth-bounds.width-16))+'px';
+ page.scrollTo(pageScroll);
+}
 $('#save').onclick=()=>{if(persist(SAVE))notify('PROJECT SAVED // SNAPSHOT ATUALIZADO');};
 $('#load').onclick=()=>{let project;try{const saved=localStorage.getItem(SAVE);if(!saved)return notify('Nenhum SAVE manual encontrado.');project=validate(JSON.parse(saved));}catch{return notify('Não foi possível ler o projeto salvo.');}confirmAction('Carregar projeto salvo?','O rascunho atual será substituído pelo último SAVE manual.',()=>{state=project;sync();persist();notify('PROJECT LOADED');});};
 $('#new').onclick=()=>confirmAction('Iniciar um novo post?','O rascunho será substituído por um post vazio. Use SAVE para guardar uma cópia.',()=>{state=defaults(true);sync();persist();});
