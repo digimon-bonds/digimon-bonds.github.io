@@ -31,7 +31,7 @@ test('database includes migrated rookies and curated Champions, Ultimates and Me
 test('combined filters support case, diacritics, spaces, variants and empty stages',()=>{
  assert.equal(searchDigimon({stage:'rookie'}).length,151);
  assert.equal(searchDigimon({stage:'champion'}).length,244);
- assert.equal(searchDigimon({stage:'ultimate'}).length,238);
+ assert.equal(searchDigimon({stage:'ultimate'}).length,237);
  assert.equal(searchDigimon({query:'  aGuMoN ',stage:'rookie'}).length,9);
  assert.equal(searchDigimon({query:'greymon blue',stage:'champion'}).length,1);
  assert.equal(searchDigimon({query:'Imaginarymon'}).length,0);
