@@ -59,3 +59,11 @@ button:hover,.content-palette button:hover{background:#203d49;color:#ffe0a8;bord
 .content-palette{padding:14px;background:url('../assets/panel-circuit.svg') center top/360px auto no-repeat,#10232d;border:1px solid #3d5b67}.content-palette h2{color:#ffe0a8;font-size:11px;line-height:1.6}.palette-group h3{color:#79c7ce;letter-spacing:1.4px}.content-palette button{padding:10px 8px;text-align:left;line-height:1.4}
 .section-label{color:#ffe0a8;padding-bottom:12px;border-bottom:1px solid #3d5b6766;letter-spacing:1px}.field-grid{gap:14px 18px}label{color:#b8dce6;font-size:12px;letter-spacing:.5px}.label-line{color:#ffe0a8;font-weight:bold;padding-top:10px}.hint{color:#a1bfcc;line-height:1.7}.presets{grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:10px}.presets button{border:1px solid #3d5b67;border-radius:12px;background:#10212b;padding:14px;line-height:1.6;font-size:11px}.presets i{height:4px;width:28px;border-radius:3px}.presets button[aria-pressed=true]{border-color:var(--preset-accent);box-shadow:inset 3px 0 var(--preset-accent);background:#1b3440;color:#e4edf1}.colors{padding:14px;border:1px solid #3d5b67;border-radius:12px;background:#0f222c;gap:12px}.colors label{margin-bottom:0}.status-editor{padding:18px}.status-editor>.section-label{margin:-18px -18px 20px;padding:16px 18px}.template-import{padding:18px}.status-pair{padding:14px;margin:12px 0;background:#0e2029;border:1px solid #3d5b6755;border-radius:10px}.status-pair>span{color:#79c7ce}.editor>.panel-title{color:#ffe0a8;letter-spacing:1px}.system-log{opacity:.75}
 @media(max-width:760px){.block-content{padding:16px}.block-head{padding:14px 12px}.post-settings[open]{padding:0 16px 16px}.post-settings[open]>summary{margin-left:-16px;margin-right:-16px}.post-settings>summary span{display:block;margin:7px 0 0}.presets{grid-template-columns:repeat(2,minmax(0,1fr))}.colors{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* Keep the right column visible while the outer Bonds page scrolls. */
+@media(min-width:761px){
+ main{display:grid}
+ .workspace{position:sticky;top:var(--studio-sticky-top,16px);margin-top:0}
+ .workspace .canvas{min-height:160px;max-height:max(160px,calc(var(--studio-viewport-height,100vh) - 280px))}
+ #code{height:max(160px,calc(var(--studio-viewport-height,100vh) - 340px))}
+}
+@media(max-width:760px){.workspace{position:static;top:auto}}
