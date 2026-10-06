@@ -4,8 +4,8 @@ import {digimonDatabase,digimonStages,searchDigimon,findDigimon,toCreatorSpecies
 import {elements,species} from '../site/catalog.js';
 import {translateClassification} from '../site/digimon-localization.js';
 test('database includes migrated rookies and curated Champions, Ultimates and Megas',()=>{
- assert.equal(digimonDatabase.length,1150);
- assert.equal(new Set(digimonDatabase.map(d=>d.id)).size,1150);
+ assert.equal(digimonDatabase.length,1102);
+ assert.equal(new Set(digimonDatabase.map(d=>d.id)).size,1102);
  assert.equal(getStageSpecies('champion').length,244);
  assert.equal(getStageSpecies('ultimate').length,237);
  assert.equal(getStageSpecies('mega').length,268);
@@ -37,7 +37,7 @@ test('combined filters support case, diacritics, spaces, variants and empty stag
  assert.equal(searchDigimon({query:'Imaginarymon'}).length,0);
  assert.equal(searchDigimon({stage:'mega'}).length,268);
  assert.equal(searchDigimon({query:'wargreymon',stage:'mega'}).length,2);
- assert.equal(searchDigimon({stage:'baby'}).length,106);
+ assert.equal(searchDigimon({stage:'baby'}).length,58);
  assert.equal(searchDigimon({stage:'special'}).length,23);
  assert.equal(searchDigimon({query:'Yoxtu!'}).length,1);
 });
