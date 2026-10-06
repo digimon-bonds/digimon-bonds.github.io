@@ -21213,7 +21213,7 @@ export default {
       "element": "Escuridão",
       "classification": "Homem-Besta / Ninja das Trevas",
       "description": "Guerreiro lupino furtivo que combina agilidade e disciplina, observando o adversário antes de atacar a partir das sombras.",
-      "image": "https://2img.net/i.imgur.com/StQlcvy.png",
+      "image": "./assets/digibank/black-strabimon.png",
       "availableAsPartner": false,
       "initialEligible": true,
       "partner": "KUROGANE KŌGA",
