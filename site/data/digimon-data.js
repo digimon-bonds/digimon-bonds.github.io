@@ -20383,7 +20383,7 @@ export default {
       "reviewStatus": "pending",
       "evolutionCategory": "spirit-combined",
       "requiresSpecialEvolution": false,
-      "evolutionRequirement": "Reúne os Digiespíritos humano e Fera da mesma afinidade. Equivalente a Mega na organização do Bonds.",
+      "evolutionRequirement": "Reúne os Digiespíritos humano e Fera da mesma afinidade.",
       "evolutionComponents": [
         {
           "digimonId": "champion-agnimon",
@@ -20469,7 +20469,7 @@ export default {
       "reviewStatus": "pending",
       "evolutionCategory": "spirit-combined",
       "requiresSpecialEvolution": false,
-      "evolutionRequirement": "Reúne os Digiespíritos humano e Fera da mesma afinidade. Equivalente a Mega na organização do Bonds.",
+      "evolutionRequirement": "Reúne os Digiespíritos humano e Fera da mesma afinidade.",
       "evolutionComponents": [
         {
           "digimonId": "champion-wolfmon",
@@ -20555,7 +20555,7 @@ export default {
       "reviewStatus": "pending",
       "evolutionCategory": "spirit-combined",
       "requiresSpecialEvolution": false,
-      "evolutionRequirement": "Reúne os Digiespíritos humano e Fera da mesma afinidade. Equivalente a Mega na organização do Bonds.",
+      "evolutionRequirement": "Reúne os Digiespíritos humano e Fera da mesma afinidade.",
       "evolutionComponents": [
         {
           "digimonId": "champion-chackmon",
@@ -20743,7 +20743,7 @@ export default {
       "reviewStatus": "pending",
       "evolutionCategory": "spirit-combined",
       "requiresSpecialEvolution": false,
-      "evolutionRequirement": "Reúne os Digiespíritos humano e Fera da mesma afinidade. Equivalente a Mega na organização do Bonds.",
+      "evolutionRequirement": "Reúne os Digiespíritos humano e Fera da mesma afinidade.",
       "evolutionComponents": [
         {
           "digimonId": "champion-fairimon",
@@ -21055,7 +21055,7 @@ export default {
       "reviewStatus": "pending",
       "evolutionCategory": "spirit-combined",
       "requiresSpecialEvolution": false,
-      "evolutionRequirement": "Reúne os Digiespíritos humano e Fera da mesma afinidade. Equivalente a Mega na organização do Bonds.",
+      "evolutionRequirement": "Reúne os Digiespíritos humano e Fera da mesma afinidade.",
       "evolutionComponents": [
         {
           "digimonId": "champion-louwemon",
@@ -21091,7 +21091,7 @@ export default {
       "reviewStatus": "pending",
       "evolutionCategory": "spirit-combined",
       "requiresSpecialEvolution": false,
-      "evolutionRequirement": "Reúne os Digiespíritos humano e Fera da mesma afinidade. Equivalente a Mega na organização do Bonds.",
+      "evolutionRequirement": "Reúne os Digiespíritos humano e Fera da mesma afinidade.",
       "evolutionComponents": [
         {
           "digimonId": "champion-blitzmon",

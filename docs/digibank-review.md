@@ -1104,14 +1104,14 @@ O Creator continua usando seu catálogo atual até validação. Imagens são ref
 - **RagnaLoardmon**: Durandamon + BryweLudramon. Jogress/DNA de Durandamon e BryweLudramon.
 - **Susanomon**: . Reúne os vinte Digiespíritos; evolução especial conforme orientação do autor.
 - **ZeedMillenniummon**: Millenniummon. Manifestação excepcional da linhagem Millenniummon ligada à morte e ao renascimento de seus dados.
-- **Aldamon**: Agunimon + BurningGreymon. Reúne os Digiespíritos humano e Fera da mesma afinidade. Equivalente a Mega na organização do Bonds.
-- **Beowolfmon**: Lobomon + KendoGarurumon. Reúne os Digiespíritos humano e Fera da mesma afinidade. Equivalente a Mega na organização do Bonds.
-- **DaiPenmon**: Kumamon + Korikakumon. Reúne os Digiespíritos humano e Fera da mesma afinidade. Equivalente a Mega na organização do Bonds.
+- **Aldamon**: Agunimon + BurningGreymon. Reúne os Digiespíritos humano e Fera da mesma afinidade.
+- **Beowolfmon**: Lobomon + KendoGarurumon. Reúne os Digiespíritos humano e Fera da mesma afinidade.
+- **DaiPenmon**: Kumamon + Korikakumon. Reúne os Digiespíritos humano e Fera da mesma afinidade.
 - **EmperorGreymon**: . Reúne os Digiespíritos humano e Fera de Fogo, Vento, Gelo, Terra e Madeira.
-- **JetSilphymon**: Kazemon + Zephyrmon. Reúne os Digiespíritos humano e Fera da mesma afinidade. Equivalente a Mega na organização do Bonds.
+- **JetSilphymon**: Kazemon + Zephyrmon. Reúne os Digiespíritos humano e Fera da mesma afinidade.
 - **MagnaGarurumon**: . Reúne os Digiespíritos humano e Fera de Luz, Trovão, Água, Metal e Escuridão.
-- **Rhihimon**: Loweemon + JagerLoweemon. Reúne os Digiespíritos humano e Fera da mesma afinidade. Equivalente a Mega na organização do Bonds.
-- **RhinoKabuterimon**: Beetlemon + MetalKabuterimon. Reúne os Digiespíritos humano e Fera da mesma afinidade. Equivalente a Mega na organização do Bonds.
+- **Rhihimon**: Loweemon + JagerLoweemon. Reúne os Digiespíritos humano e Fera da mesma afinidade.
+- **RhinoKabuterimon**: Beetlemon + MetalKabuterimon. Reúne os Digiespíritos humano e Fera da mesma afinidade.
 - **Burpmon**: . Forma de nível oficial desconhecido; exige avaliação do Narrador.
 - **Calumon**: . Forma de nível oficial desconhecido; exige avaliação do Narrador.
 - **NEO**: . Forma de nível oficial desconhecido; exige avaliação do Narrador.

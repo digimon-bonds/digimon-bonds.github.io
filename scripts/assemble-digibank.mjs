@@ -45,7 +45,7 @@ const hybrids=curated(await read('.digibank-research/hybrid-research.json')).map
  const [stage,evolutionCategory,element,description]=content;
  const entry=officialEntry(row,stage,'Hybrid',new Map([[row.directory_name,[element,description]]]));
  const components=combinedSpirits[row.directory_name];
- const requirement=components?'Reúne os Digiespíritos humano e Fera da mesma afinidade. Equivalente a Mega na organização do Bonds.':row.directory_name==='kaisergreymon'?'Reúne os Digiespíritos humano e Fera de Fogo, Vento, Gelo, Terra e Madeira.':row.directory_name==='magnagarurumon'?'Reúne os Digiespíritos humano e Fera de Luz, Trovão, Água, Metal e Escuridão.':null;
+ const requirement=components?'Reúne os Digiespíritos humano e Fera da mesma afinidade.':row.directory_name==='kaisergreymon'?'Reúne os Digiespíritos humano e Fera de Fogo, Vento, Gelo, Terra e Madeira.':row.directory_name==='magnagarurumon'?'Reúne os Digiespíritos humano e Fera de Luz, Trovão, Água, Metal e Escuridão.':null;
  return {...entry,evolutionCategory,availableAsPartner:stage==='rookie',requiresSpecialEvolution:false,...(requirement?{evolutionRequirement:requirement}:{}),...(components?{evolutionComponents:components.map(([digimonId,name])=>({digimonId,name}))}:{})};
 });
 records.push(...hybrids);
