@@ -18,7 +18,7 @@ export function styleSheet(root){
   bar.append(caption,track);
  }
  const card=(row,type='')=>{if(row.closest('.sheet-card'))return;const box=document.createElement('div');box.className='sheet-card '+type;row.before(box);box.append(row);};
- for(const heading of root.querySelectorAll('.sheet-section')){
+ for(const heading of root.querySelectorAll('h3')){
   if(heading.textContent.trim()!=='LAÇO E PROGRESSÃO'||heading.closest('.progression-card'))continue;
   let next=heading.nextElementSibling;const box=document.createElement('section');box.className='sheet-card progression-card';heading.before(box);box.append(heading);
   while(next&&(next.classList.contains('data-row')||next.classList.contains('sheet-stats'))){const after=next.nextElementSibling;box.append(next);next=after;}
@@ -50,10 +50,11 @@ export function styleSheet(root){
   let row=name;while(row?.classList.contains('data-row')){const next=row.nextElementSibling;box.append(row);row=next;}
  }
  const groupedTitles=new Set(['IDENTIFICAÇÃO','CARACTERÍSTICAS','ATRIBUTOS','RECURSOS DE COMBATE','QUALIDADE','QUALIDADES','ATAQUE DE ASSINATURA','ENERGIA','HISTÓRIA']);
- for(const heading of [...root.querySelectorAll('.sheet-section')]){
+ for(const heading of [...root.querySelectorAll('h3')]){
   const title=heading.textContent.trim();
   if(!groupedTitles.has(title)||heading.closest('.grouped-section')||heading.closest('.progression-card'))continue;
-  let next=heading.nextElementSibling;const box=document.createElement('section');box.className='sheet-card grouped-section data-section-card';heading.before(box);box.append(heading);
-  while(next&&!next.classList.contains('sheet-section')&&!next.classList.contains('sheet-footer')){const after=next.nextElementSibling;box.append(next);next=after;}
+  const first=heading.nextElementSibling;const box=document.createElement('section');box.className='sheet-card grouped-section data-section-card';heading.before(box);box.append(heading);
+  heading.classList.add('sheet-section');let next=first;
+  while(next&&next.tagName!=='H3'&&!next.classList.contains('sheet-footer')){const after=next.nextElementSibling;box.append(next);next=after;}
  }
 }
