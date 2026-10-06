@@ -20,8 +20,7 @@ export function styleSheet(root){
  const card=(row,type='')=>{if(row.closest('.sheet-card'))return;const box=document.createElement('div');box.className='sheet-card '+type;row.before(box);box.append(row);};
  for(const heading of root.querySelectorAll('.sheet-section')){
   if(heading.textContent.trim()!=='LAÇO E PROGRESSÃO'||heading.closest('.progression-card'))continue;
-  const box=document.createElement('section');box.className='sheet-card progression-card';heading.before(box);
-  let next=heading.nextElementSibling;box.append(heading);
+  let next=heading.nextElementSibling;const box=document.createElement('section');box.className='sheet-card progression-card';heading.before(box);box.append(heading);
   while(next&&(next.classList.contains('data-row')||next.classList.contains('sheet-stats'))){const after=next.nextElementSibling;box.append(next);next=after;}
  }
  for(const heading of root.querySelectorAll('.sheet-section')){
@@ -54,8 +53,7 @@ export function styleSheet(root){
  for(const heading of [...root.querySelectorAll('.sheet-section')]){
   const title=heading.textContent.trim();
   if(!groupedTitles.has(title)||heading.closest('.grouped-section')||heading.closest('.progression-card'))continue;
-  const box=document.createElement('section');box.className='sheet-card grouped-section data-section-card';heading.before(box);box.append(heading);
-  let next=heading.nextElementSibling;
+  let next=heading.nextElementSibling;const box=document.createElement('section');box.className='sheet-card grouped-section data-section-card';heading.before(box);box.append(heading);
   while(next&&!next.classList.contains('sheet-section')&&!next.classList.contains('sheet-footer')){const after=next.nextElementSibling;box.append(next);next=after;}
  }
 }
