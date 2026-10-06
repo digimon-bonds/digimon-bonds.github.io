@@ -19,11 +19,25 @@ export function styleSheet(root){
  }
  const card=(row,type='')=>{if(row.closest('.sheet-card'))return;const box=document.createElement('div');box.className='sheet-card '+type;row.before(box);box.append(row);};
  for(const heading of root.querySelectorAll('.sheet-section')){
+  if(heading.textContent.trim()!=='LAÇO E PROGRESSÃO'||heading.closest('.progression-card'))continue;
+  const box=document.createElement('section');box.className='sheet-card progression-card';heading.before(box);
+  let next=heading.nextElementSibling;box.append(heading);
+  while(next&&(next.classList.contains('data-row')||next.classList.contains('sheet-stats'))){const after=next.nextElementSibling;box.append(next);next=after;}
+ }
+ for(const heading of root.querySelectorAll('.sheet-section')){
   const title=heading.textContent.trim();
+  if(title==='CARACTERÍSTICAS'){
+   const stats=heading.nextElementSibling;
+   if(stats?.classList.contains('sheet-stats')&&!heading.closest('.sheet-card')){
+    const box=document.createElement('section');box.className='sheet-card grouped-section characteristics-card';heading.before(box);box.append(heading,stats);
+   }
+   continue;
+  }
   if(!['TALENTOS','TRAÇOS DO PERSONAGEM','QUALIDADE','QUALIDADES'].includes(title))continue;
   const rows=[];let next=heading.nextElementSibling;while(next?.classList.contains('data-row')){rows.push(next);next=next.nextElementSibling;}
   if(!rows.length)continue;
   const group=document.createElement('div');group.className='sheet-card-grid'+(title==='TRAÇOS DO PERSONAGEM'?' sheet-traits':'');heading.after(group);
+  const box=document.createElement('section');box.className='sheet-card grouped-section '+(title==='TRAÇOS DO PERSONAGEM'?'traits-card':'named-section');heading.before(box);box.append(heading,group);
   for(const row of rows){group.append(row);card(row,title==='TRAÇOS DO PERSONAGEM'?'trait-card':'named-card');}
  }
  for(const row of root.querySelectorAll('.data-row')){
