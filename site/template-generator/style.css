@@ -67,3 +67,5 @@ button:hover,.content-palette button:hover{background:#203d49;color:#ffe0a8;bord
  #code{height:max(160px,calc(var(--studio-viewport-height,100vh) - 340px))}
 }
 @media(max-width:760px){.workspace{position:static;top:auto}}
+/* Output colors remain stored inline; only the editing surface keeps its readable ink. */
+.rich-editor,.rich-editor *{color:var(--text)!important;caret-color:var(--text)}
