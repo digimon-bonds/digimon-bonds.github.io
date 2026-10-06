@@ -1,6 +1,7 @@
 // Explicit Bonds classification. Never infer a fusion from an isolated keyword.
 // IDs remain stable when moving a record to another selection category.
 export const specialEvolution={
+ 'mega-imperialdramonpaladinmode':{category:'special',reason:'Imperialdramon Fighter Mode recebe o poder de Omnimon para atingir Paladin Mode.'},
  'mega-susanoomon':{category:'spirit-legendary',reason:'Reúne os vinte Digiespíritos; evolução especial conforme orientação do autor.'},
  'mega-omegamon':{category:'fusion',reason:'Fusão de WarGreymon e MetalGarurumon.'},
  'mega-omegamon-zwart':{category:'fusion',reason:'Fusão da linhagem Omnimon com influência de Black Digitron.'},
@@ -22,6 +23,7 @@ export const specialEvolution={
  'mega-ordinemon':{category:'special',reason:'Manifestação angelical excepcional associada ao colapso da ordem digital.'}
 };
 export const evolutionComponents={
+ 'mega-imperialdramonpaladinmode':[['mega-imperialdramonfightermode','Imperialdramon: Fighter Mode'],['mega-omegamon','Omnimon']],
  'mega-omegamon':[['mega-wargreymon','WarGreymon'],['mega-metalgarurumon','MetalGarurumon']],
  'mega-omegamon-zwart':[['mega-wargreymon','WarGreymon'],['mega-metalgarurumon','MetalGarurumon']],
  'ultimate-paildramon':[['champion-xv-mon','ExVeemon'],['champion-stingmon','Stingmon']],

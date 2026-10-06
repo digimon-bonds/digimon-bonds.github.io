@@ -46,3 +46,9 @@ As 121 variantes alternativas X usam `stage: xbody`, `isXBody: true` e preservam
 ## Bebês e imagens X
 
 A consulta In-Training I acrescenta 48 Bebês (49 na fonte, excluindo Bommon 2010). Atributo oficial ausente permanece nulo; a interface informa Não definido. Elementos e descrições curtas são editoriais. As imagens das 121 variantes X estão em assets/digibank/xbody, servidas pelo próprio projeto; WarGrowlmon X usa o PNG fornecido pelo usuário. O cabeçalho mantém o texto de apresentação e omite contadores duplicados. Total atual: 1085 registros.
+
+## Auditoria de cobertura — 06/10/2026
+
+O índice oficial possui 1321 entradas: 1151 representadas, 66 Armor excluídos por pedido do autor e 104 exclusões de curadoria (família Aegio, versões de anime, modos muito específicos, Enhancement e formas Dex). Não restam entradas sem classificação nesta consulta. O relatório nominal está em digibank-coverage.json e é verificado pelos testes. Isso cobre esta referência e esta data; não afirma cobrir fan Digimon ou todas as mídias existentes.
+
+Os 48 Bebê I existentes foram preservados após a instrução de não substituir; acrescentados 58 Bebê II comuns. Tokomon X permanece em X-Body. Imperialdramon Dragon/Fighter e suas variantes Black foram adicionados; Paladin está em Especiais com requisitos. Gururumon usa Fogo e Black Garurumon usa Escuridão, sem alterar Garurumon (Gelo). Foram acrescentados Calumon, Burpmon e NEO em Especiais com nível oficial Unknown. Migração do Creator para a base central está ativa desde o deploy anterior. Estas correções ainda são locais.

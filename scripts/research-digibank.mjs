@@ -2,7 +2,7 @@
 import {writeFile,mkdir} from 'node:fs/promises';
 const root='https://digimon.net/reference_en/';
 const level=process.argv[2]||'Champion';
-if(!['Rookie','Champion','Ultimate','Mega','Hybrid','XBody','In-TrainingⅠ'].includes(level))throw Error('Unsupported level');
+if(!['Rookie','Champion','Ultimate','Mega','Hybrid','XBody','In-TrainingⅠ','In-TrainingⅡ'].includes(level))throw Error('Unsupported level');
 const headers={'X-Requested-With':'XMLHttpRequest',Referer:root};
 const rows=[];
 let next=0;

@@ -34,6 +34,6 @@ const classifications=Object.freeze({
  'Sea Beast':'Besta Marinha',Seraph:'Serafim','Shining Dragon':'Dragão Radiante',
  'Sky Dragon':'Dragão Celeste','Super Angel':'Arcanjo',Tathāgata:'Tathāgata',
  Undead:'Morto-Vivo',Unidentified:'Não Identificado',Unique:'Único',Vegetation:'Vegetação',
- Slime:'Gelatinoso',Smoke:'Fumaça',Seed:'Semente',Spirit:'Espírito','Mini Angel':'Pequeno Anjo',Virtue:'Virtude',Warrior:'Guerreiro',Weapon:'Arma','Wicked God':'Deus Maligno',Wizard:'Feiticeiro'
+ 'Ancient Dragon Man':'Homem-Dragão Ancestral','Ancient Holy Knight':'Cavaleiro Sagrado Ancestral','Baby Dragon':'Dragão Bebê','Mini Bird':'Pequena Ave',Minor:'Pequeno',Bulb:'Bulbo',Stegosaur:'Estegossauro','Aquatic Beast Man':'Homem-Besta Aquático',Slime:'Gelatinoso',Smoke:'Fumaça',Seed:'Semente',Spirit:'Espírito','Mini Angel':'Pequeno Anjo',Virtue:'Virtude',Warrior:'Guerreiro',Weapon:'Arma','Wicked God':'Deus Maligno',Wizard:'Feiticeiro'
 });
 export function translateClassification(type){return classifications[type]||type;}

@@ -1,6 +1,6 @@
 # Digibank — revisão local
 
-1085 registros: 48 Bebê; 151 Novato; 244 Campeão; 238 Perfeito; 264 Mega; 19 Especial; 121 X-Body. Inclui 75 Novatos migrados, 32 Hybrid adaptados, 72 Novatos complementares, Hyemon, Black Strabimon e 121 variantes X em categoria própria. Sem publicação. Classificação é traduzida para português; official.type conserva o Type original e official.level preserva Hybrid. Elementos são adaptações do Bonds, pendentes de aprovação. Neutro permanece permitido fora dos ciclos.
+1151 registros: 106 Bebê; 151 Novato; 244 Campeão; 238 Perfeito; 268 Mega; 23 Especial; 121 X-Body. Inclui 75 Novatos migrados, 32 Hybrid adaptados, 72 Novatos complementares, Hyemon, Black Strabimon e 121 variantes X em categoria própria. Sem publicação. Classificação é traduzida para português; official.type conserva o Type original e official.level preserva Hybrid. Elementos são adaptações do Bonds, pendentes de aprovação. Neutro permanece permitido fora dos ciclos.
 
 O Creator continua usando seu catálogo atual até validação. Imagens são referências externas, com alternativa visual caso falhem. O fórum descreve Labramon como um leão negro; sua descrição local evita perpetuar essa provável troca.
 
@@ -81,7 +81,7 @@ O Creator continua usando seu catálogo atual até validação. Imagens são ref
 | Gaogamon | Campeão | Vento | Besta veloz de garras desenvolvidas, capaz de combinar corrida e golpes precisos. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=gaogamon) |
 | Gargomon | Campeão | Vento | Agilidade, saltos e planeio com as orelhas prevalecem sobre o uso de armas nos braços. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=galgomon) |
 | Garurumon | Campeão | Gelo | Adaptação solicitada pelo autor: a natureza de lobo da tundra prevalece sobre seu sopro de fogo azul. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=garurumon) |
-| Garurumon (Black) | Campeão | Gelo | Mantém a afinidade glacial da espécie Garurumon; a coloração e o Atributo Digital não definem outro Elemento. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=garurumon_black) |
+| Garurumon (Black) | Campeão | Escuridão | Adaptação definida pelo autor para Black Garurumon. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=garurumon_black) |
 | Gatomon | Campeão | Luz | Felino sagrado cujo anel expressa um poder muito maior do que seu pequeno porte sugere. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=tailmon) |
 | Gawappamon | Campeão | Água | Ciborgue inspirado em um kappa e em tocadores de música, combate com ritmo e recursos aquáticos. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=gawappamon) |
 | Gekomon | Campeão | Água | Anfíbio que transforma sua voz e instrumentos naturais em técnicas sonoras. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=gekomon) |
@@ -103,7 +103,7 @@ O Creator continua usando seu catálogo atual até validação. Imagens são ref
 | Guardromon | Campeão | Metal | Sentinela mecânica de redes, protegida por blindagem e armamento defensivo. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=guardromon) |
 | Guardromon (Gold) | Campeão | Metal | Guardião reforçado com dados de minério, capaz de resistir a ataques contra sua mina. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=gardromon_gold) |
 | GulusGammamon | Campeão | Escuridão | Forma sombria de Gammamon que rejeita interferências e concentra sua vontade no combate. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=gulusgammamon) |
-| Gururumon | Campeão | Gelo | A natureza de lobo das regiões frias aproxima sua afinidade da família Garurumon, apesar de possuir ataques de chama. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=gururumon) |
+| Gururumon | Campeão | Fogo | Adaptação definida pelo autor: Gururumon usa Fogo, distinto de Garurumon. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=gururumon) |
 | Hakubamon | Campeão | Luz | Besta sagrada que reúne traços de cavalo e dragão oriental, vivendo em montanhas isoladas. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=hakubamon) |
 | Hi-Commandramon | Campeão | Metal | Soldado de infantaria pesada da D-Brigade, equipado para avançar sob fogo inimigo. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=hi-commandramon) |
 | Hi-VisionMonitamon | Campeão | Metal | Monitor de reconhecimento avançado, especializado em análise e coleta de informações. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=hi-visionmonitamon) |
@@ -594,6 +594,11 @@ O Creator continua usando seu catálogo atual até validação. Imagens são ref
 | Hexeblaumon | Mega | Gelo | Cavaleiro mágico que molda gelo em armas e defesas para o combate. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=hexeblaumon) |
 | HiAndromon | Mega | Metal | Ciborgue avançado que combina autonomia e um corpo preparado para operações de combate. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=hiandromon) |
 | Hydramon | Mega | Madeira | Planta monstruosa de múltiplas cabeças que transforma crescimento em ameaça. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=hydramon) |
+| Imperialdramon: Dragon Mode | Mega | Escuridão | Dragão ancestral alado de poder imenso, capaz de concentrar energia destrutiva em grandes rajadas. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=imperialdramondragonmode) |
+| Imperialdramon: Dragon Mode (Black) | Mega | Escuridão | Variante negra do dragão ancestral, marcada por poder devastador e temperamento difícil de controlar. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=imperialdramon_dragon_black) |
+| Imperialdramon: Fighter Mode | Mega | Luz | Imperialdramon em forma de guerreiro, com maior controle de seu poder e armamento de energia. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=imperialdramonfightermode) |
+| Imperialdramon: Fighter Mode (Black) | Mega | Escuridão | Guerreiro dracônico negro que direciona sua energia e arsenal para ataques de grande intensidade. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=imperialdramonfightermode_vi) |
+| Imperialdramon: Paladin Mode | Especial | Luz | Cavaleiro sagrado que reúne o poder de Imperialdramon e Omnimon em uma lâmina purificadora. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=imperialdramonpaladinmode) |
 | Invisimon | Mega | Metal | Unidade mecanizada que utiliza ocultação para abordar seus alvos sem ser percebida. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=invisimon) |
 | Jesmon | Mega | Luz | Cavaleiro veloz que combina lâminas e aliados auxiliares para responder ao perigo. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=jesmon) |
 | Jijimon | Mega | Neutro | Ancião que carrega a experiência de muitas eras e orienta outros seres digitais. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=jijimon) |
@@ -1015,6 +1020,67 @@ O Creator continua usando seu catálogo atual até validação. Imagens são ref
 | Yuramon | Bebê | Madeira | Semente digital coberta por penugem, levada pelo vento em busca de abrigo. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=yuramon) |
 | Zerimon | Bebê | Neutro | Bebê raro que divide seu ovo com Conomon e possui um único chifre. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=zerimon) |
 | Zurumon | Bebê | Neutro | Filhote de corpo gelatinoso e origem incomum, que avança rastejando. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=zurumon) |
+| Argomon | Bebê | Neutro | Filhote mutante que se alimenta de dados vazados da rede. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=algomon_lv2) |
+| Bebydomon | Bebê | Fogo | Pequeno dragão que desenvolve força e energia ardente antes da fase Novato. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=babydmon) |
+| Bibimon | Bebê | Elétrico | Bebê elétrico cheio de energia, sempre correndo e explorando. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=bibimon) |
+| Bosamon | Bebê | Neutro | Filhote tímido cuja franja cobre os olhos e reforça seu jeito reservado. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=bosamon) |
+| Bowmon | Bebê | Escuridão | Pequena fera curiosa que investiga o ambiente pelo cheiro. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=bowmon) |
+| Budmon | Bebê | Madeira | Broto vivo formado por dados vegetais, protegido por pequenas toxinas. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=budmon) |
+| Bukamon | Bebê | Água | Bebê aquático brincalhão, ágil tanto na água quanto perto da margem. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=pukamon) |
+| Chapmon | Bebê | Água | Filhote que prefere águas limpas e vive em ambientes aquáticos preservados. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=chapmon) |
+| Chicchimon | Bebê | Vento | Ave bebê amarela que ainda não voa e explora o terreno aos saltos. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=chicchimon) |
+| Cupimon | Bebê | Luz | Pequeno anjo bondoso que espalha alegria e ajuda outros Digimon. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=cupimon) |
+| DemiMeramon | Bebê | Fogo | Chama viva de pequeno porte, alimentada pelo calor de seu núcleo. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=petimeramon) |
+| DemiVeemon | Bebê | Neutro | Pequeno dragão azul com membros desenvolvidos e comportamento inquieto. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=chibimon) |
+| Dorimon | Bebê | Metal | Filhote resistente e indomável que dispara em corridas rápidas. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=dorimon) |
+| Fluffymon | Bebê | Vento | Pequena ave que se esconde na folhagem e observa o ambiente com cautela. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=fluffymon) |
+| Frimon | Bebê | Terra | Filhote com uma gola de pelos endurecidos que serve como proteção. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=frimon) |
+| Gigimon | Bebê | Fogo | Bebê quadrúpede de linhagem dracônica, com apetite e temperamento vivos. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=gigimon) |
+| Gummymon | Bebê | Vento | Filhote alegre e cheio de energia, companheiro frequente de Kokomon. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=gummymon) |
+| Gurimon | Bebê | Fogo | Bebê com dois chifres que percorre o território em busca de alimento. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=gurimon) |
+| Hiyarimon | Bebê | Gelo | Filhote coberto de neve, adaptado a regiões geladas. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=hiyarimon) |
+| Hopmon | Bebê | Luz | Pequeno dragão escamoso com olhos atentos e natureza protetora. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=hopmon) |
+| Kakkinmon | Bebê | Metal | Bebê protegido por um escudo de cobre, firme diante de ameaças. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=kakkinmon) |
+| Kapurimon | Bebê | Metal | Filhote de capacete metálico com antenas para captar sinais. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=capromon) |
+| Kekkomon | Bebê | Neutro | Bebê colorido que usa sua língua sensível para perceber o mundo. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=kekkomon) |
+| Kokomon | Bebê | Escuridão | Filhote gentil e tranquilo, ligado desde cedo à companhia de Gummymon. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=chocomon) |
+| Koromon | Bebê | Fogo | Bebê rosado e ativo, capaz de lançar pequenas bolhas para se defender. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=koromon) |
+| Kozenimon | Bebê | Metal | Criatura minúscula em forma de moeda, otimista e ligada a Ganemon. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=kozenimon) |
+| Kyaromon | Bebê | Luz | Filhote curioso com uma cauda forte e disposição para explorar. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=kyaromon) |
+| Kyokyomon | Bebê | Metal | Bebê alongado que estica o corpo quando precisa intimidar inimigos. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=kyokyomon) |
+| Minomon | Bebê | Madeira | Larva protegida por uma casca resistente, confortável entre plantas. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=minomon) |
+| Missimon | Bebê | Metal | Pequena máquina em forma de míssil, impulsionada por sua própria propulsão. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=missimon) |
+| Mococomon | Bebê | Vento | Filhote de fumaça que ganhou presas e maior controle dos movimentos. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=mococomon) |
+| Monimon | Bebê | Metal | Pequeno ninja de aparência eletrônica que se desloca em grupos discretos. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=monimon) |
+| Moonmon | Bebê | Água | Bebê semelhante a uma gota, associado à tranquilidade das noites de luar. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=moonmon) |
+| Motimon | Bebê | Neutro | Filhote de pele elástica que avança com pequenos apoios sob o corpo. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=mochimon) |
+| Negamon | Bebê | Escuridão | Bebê misterioso que cresce absorvendo dados negativos da rede. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=negamon) |
+| Nyaromon | Bebê | Luz | Pequeno felino caprichoso, curioso e atento a tudo que se move. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=nyaromon) |
+| Onibimon | Bebê | Escuridão | Espírito bebê capaz de atravessar obstáculos materiais. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=onibimon) |
+| Pagumon | Bebê | Escuridão | Filhote travesso que usa suas orelhas para pairar perto do chão. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=pagumon) |
+| Pickmon | Bebê | Metal | Pequeno integrante do grupo Starmons, acostumado a agir em conjunto. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=pickmon) |
+| Pinamon | Bebê | Elétrico | Ave bebê inquieta cuja maneira de correr revela suas emoções. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=pinamon) |
+| Poromon | Bebê | Vento | Pequena ave redonda que já consegue voar a baixa altura. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=poromon) |
+| Puroromon | Bebê | Madeira | Larva alada que controla suas asas de modo independente para mudar de direção. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=puroromon) |
+| Pusurimon | Bebê | Neutro | Filhote quadrúpede com espinhos amarelos e energia para correr sem parar. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=pusurimon) |
+| Puyoyomon | Bebê | Água | Bebê marinho de tentáculos flexíveis, formado a partir de dados de águas-vivas. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=puyoyomon) |
+| Sakuttomon | Bebê | Metal | Pequeno Digimon com duas lâminas, preparado para aprender a combater. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=sakuttomon) |
+| Sunmon | Bebê | Fogo | Filhote solar com uma pequena chama acesa sobre a cabeça. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=sunmon) |
+| Tanemon | Bebê | Madeira | Bebê vegetal com um broto que cresce junto de seu potencial digital. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=tanemon) |
+| Tokomon | Bebê | Luz | Pequeno filhote de quatro patas, gentil mas capaz de se defender com suas presas. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=tokomon) |
+| TorikaraBallmon | Bebê | Neutro | Criatura nascida de dados culinários, de corpo arredondado e aroma peculiar. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=torikaraballmon) |
+| Tsumemon | Bebê | Escuridão | Bebê misterioso com garras nos tentáculos e comportamento imprevisível. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=tsumemon) |
+| Tsunomon | Bebê | Neutro | Filhote peludo de um só chifre, brincalhão e ainda pouco preparado para lutar. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=tunomon) |
+| Tumblemon | Bebê | Terra | Bebê que consome pedras para crescer e desenvolver seu corpo mineral. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=goromon) |
+| Upamon | Bebê | Água | Filhote anfíbio com brânquias laterais, capaz de viver na água e em terra. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=upamon) |
+| Viximon | Bebê | Luz | Pequeno filhote noturno ligado ao luar e à linhagem de Renamon. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=pokomon) |
+| Wanyamon | Bebê | Neutro | Filhote que reúne traços de cães e gatos, ágil e acostumado à convivência. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=wanyamon) |
+| Xiaomon | Bebê | Neutro | Bebê quadrúpede de origem artificial, criado para acompanhar humanos. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=xiaomon) |
+| Yaamon | Bebê | Escuridão | Filhote de atitude teimosa e impulsiva, com uma natureza sombria em formação. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=yarmon) |
+| Yokomon | Bebê | Madeira | Bebê vegetal com uma grande flor na cabeça e raízes usadas para se mover. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=pyocomon) |
+| Burpmon | Especial | Neutro | Mutante de apetite exagerado e corpo volumoso. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=burpmon) |
+| Calumon | Especial | Luz | Pequeno ser misterioso ligado ao potencial de evolução. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=culumon) |
+| NEO | Especial | Neutro | Entidade digital enigmática que desafia os métodos comuns de análise. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=neo) |
 
 ## Condições especiais
 
@@ -1026,6 +1092,7 @@ O Creator continua usando seu catálogo atual até validação. Imagens são ref
 - **Armageddemon**: Linhagem Diaboromon: numerosos indivíduos em estágio inicial. Concentração e fusão de numerosos indivíduos da linhagem Diaboromon.
 - **Chaosmon**: BanchoLeomon + Darkdramon. Jogress instável de BanchoLeomon e Darkdramon, preservando dois núcleos.
 - **GraceNovamon**: Apollomon + Dianamon. Fusão de Apollomon e Dianamon.
+- **Imperialdramon: Paladin Mode**: Imperialdramon: Fighter Mode + Omnimon. Imperialdramon Fighter Mode recebe o poder de Omnimon para atingir Paladin Mode.
 - **Mastemon**: . Requer um Digimon Anjo + um Digimon Anjo Sombrio. A referência não restringe um único par; a combinação deve ser autorizada pelo Narrador.
 - **Millenniummon**: Machinedramon + Kimeramon. Fusão de Machinedramon e Kimeramon.
 - **MoonMillenniummon**: Millenniummon. Manifestação cristalina excepcional da linhagem Millenniummon.
@@ -1045,6 +1112,9 @@ O Creator continua usando seu catálogo atual até validação. Imagens são ref
 - **MagnaGarurumon**: . Reúne os Digiespíritos humano e Fera de Luz, Trovão, Água, Metal e Escuridão.
 - **Rhihimon**: Loweemon + JagerLoweemon. Reúne os Digiespíritos humano e Fera da mesma afinidade. Equivalente a Mega na organização do Bonds.
 - **RhinoKabuterimon**: Beetlemon + MetalKabuterimon. Reúne os Digiespíritos humano e Fera da mesma afinidade. Equivalente a Mega na organização do Bonds.
+- **Burpmon**: . Forma de nível oficial desconhecido; exige avaliação do Narrador.
+- **Calumon**: . Forma de nível oficial desconhecido; exige avaliação do Narrador.
+- **NEO**: . Forma de nível oficial desconhecido; exige avaliação do Narrador.
 
 ## Registros retirados
 
@@ -1114,11 +1184,6 @@ Variantes de Anticorpo X ficam exclusivamente na aba X-Body. Família Aegiomon/A
 - [Gabumon (Bond of Friendship)](https://digimon.net/reference_en/detail.php?directory_name=gabumon_kizuna): Modo, fusão ou versão muito específica.
 - [Gaiomon: Itto Mode](https://digimon.net/reference_en/detail.php?directory_name=gaioumon_itto): Modo, fusão ou versão muito específica.
 - [Gallantmon: Crimson Mode](https://digimon.net/reference_en/detail.php?directory_name=dukemoncrimsonmode): Modo, fusão ou versão muito específica.
-- [Imperialdramon: Dragon Mode](https://digimon.net/reference_en/detail.php?directory_name=imperialdramondragonmode): Modo, fusão ou versão muito específica.
-- [Imperialdramon: Dragon Mode (Black)](https://digimon.net/reference_en/detail.php?directory_name=imperialdramon_dragon_black): Modo, fusão ou versão muito específica.
-- [Imperialdramon: Fighter Mode](https://digimon.net/reference_en/detail.php?directory_name=imperialdramonfightermode): Modo, fusão ou versão muito específica.
-- [Imperialdramon: Fighter Mode (Black)](https://digimon.net/reference_en/detail.php?directory_name=imperialdramonfightermode_vi): Modo, fusão ou versão muito específica.
-- [Imperialdramon: Paladin Mode](https://digimon.net/reference_en/detail.php?directory_name=imperialdramonpaladinmode): Modo, fusão ou versão muito específica.
 - [Jesmon GX](https://digimon.net/reference_en/detail.php?directory_name=jesmongx): Modo, fusão ou versão muito específica.
 - [JetMervamon](https://digimon.net/reference_en/detail.php?directory_name=jetmervamon): Modo, fusão ou versão muito específica.
 - [Junomon: Hysteric Mode](https://digimon.net/reference_en/detail.php?directory_name=junomon_hysteric): Modo, fusão ou versão muito específica.
@@ -1153,3 +1218,5 @@ Variantes de Anticorpo X ficam exclusivamente na aba X-Body. Família Aegiomon/A
 - [Titamon+SkullBaluchimon](https://digimon.net/reference_en/detail.php?directory_name=titamon_skullbaluchimon): Modo, fusão ou versão muito específica.
 - [UltimateChaosmon](https://digimon.net/reference_en/detail.php?directory_name=ultimatechaosmon): Modo, fusão ou versão muito específica.
 - [Bommon (2010 Anime Version)](https://digimon.net/reference_en/detail.php?directory_name=bombmon-xwars): Modo, fusão ou versão muito específica.
+- [MusouKnightmon](https://digimon.net/reference_en/detail.php?directory_name=musoknightmon): Modo, fusão ou versão muito específica.
+- [JetMervamon](https://digimon.net/reference_en/detail.php?directory_name=jetmervamon): Modo, fusão ou versão muito específica.

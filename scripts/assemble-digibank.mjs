@@ -50,13 +50,23 @@ const hybrids=curated(await read('.digibank-research/hybrid-research.json')).map
 });
 records.push(...hybrids);
 await addDigibankSpecies(records,officialEntry);
-const babyText=await editorial('scripts/digibank-baby-editorial.tsv');
-const babies=curated(await read('.digibank-research/in-trainingⅰ-research.json')).map(row=>{
+const babyI=await editorial('scripts/digibank-baby-editorial.tsv'),babyII=await editorial('scripts/digibank-baby-ii-editorial.tsv');
+const babyRows=[...(await read('.digibank-research/in-trainingⅰ-research.json')),...(await read('.digibank-research/in-trainingⅱ-research.json'))];
+const babies=curated(babyRows).map(row=>{
+ const babyText=row.officialLevel.includes('Ⅱ')?babyII:babyI;
  const entry=officialEntry({...row,officialAttribute:row.officialAttribute||'Não definido'},'baby','In-Training',babyText);
  entry.official.attribute=row.officialAttribute||null;entry.initialEligible=false;entry.isXBody=false;
  return entry;
 });
 records.push(...babies);
+const extraText=await editorial('scripts/digibank-supplemental-editorial.tsv');
+for(const row of curated((await read('.digibank-research/supplemental-research.json')).filter(r=>r.officialLevel!=='Armor'))){
+ const entry=officialEntry({...row,officialAttribute:row.officialAttribute||'Não definido'},'special',row.officialLevel,extraText);
+ entry.official.attribute=row.officialAttribute||null;entry.initialEligible=false;entry.isXBody=false;
+ if(row.officialLevel==='Armor'){entry.evolutionCategory='armor';const egg=row.profile.match(/Digi-?Egg of ([A-Za-z]+)/i)?.[1],labels={Courage:'Coragem',Friendship:'Amizade',Love:'Amor',Sincerity:'Sinceridade',Knowledge:'Conhecimento',Reliability:'Confiabilidade',Hope:'Esperança',Light:'Luz',Kindness:'Bondade',Miracles:'Milagres',Destiny:'Destino'};entry.evolutionRequirement='Evolução Armor: requer '+(labels[egg]?'o Digimental de '+labels[egg]:'o Digimental correspondente')+' e autorização do Narrador.';}
+ else {entry.evolutionCategory='special';entry.evolutionRequirement='Forma de nível oficial desconhecido; exige avaliação do Narrador.';}
+ records.push(entry);
+}
 for(const entry of records.filter(d=>d.isXBody))entry.image='./assets/digibank/xbody/'+entry.id+'.jpg';
 const warX=records.find(d=>d.isXBody&&/WarGrowlmon/i.test(d.name));if(!warX)throw Error('Missing WarGrowlmon X');warX.image='./assets/digibank/xbody/wargrowlmon-user.png';
 for(const entry of records){
@@ -68,7 +78,7 @@ for(const id of Object.keys(specialEvolution))if(!records.some(r=>r.id===id))thr
 for(const entry of records)for(const component of entry.evolutionComponents||[])if(!records.some(r=>r.id===component.digimonId))throw Error('Missing evolution component '+component.digimonId);
 for(const [id,[element,reason]] of elementReview){if(!records.some(r=>r.id===id))throw Error('Unknown reviewed species '+id);if(!reason||!['Fogo','Madeira','Água','Gelo','Elétrico','Vento','Terra','Luz','Escuridão','Metal','Neutro'].includes(element))throw Error('Invalid element review '+id);}
 await mkdir('site/data',{recursive:true});
-await writeFile('site/data/digimon-data.js','// Bonds migration snapshot and official species facts. Elements await Bonds approval.\nexport default '+JSON.stringify({version:6,collectedAt:'2026-10-06',entries:records},null,2)+';\n');
+await writeFile('site/data/digimon-data.js','// Bonds migration snapshot and official species facts. Elements await Bonds approval.\nexport default '+JSON.stringify({version:7,collectedAt:'2026-10-06',entries:records},null,2)+';\n');
 await mkdir('docs',{recursive:true});
 const stageNames={baby:'Bebê',rookie:'Novato',champion:'Campeão',ultimate:'Perfeito',mega:'Mega',special:'Especial',xbody:'X-Body'};
 const counts=Object.fromEntries(Object.keys(stageNames).map(stage=>[stage,records.filter(r=>r.stage===stage).length]));

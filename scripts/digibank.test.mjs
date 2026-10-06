@@ -4,12 +4,12 @@ import {digimonDatabase,digimonStages,searchDigimon,findDigimon,toCreatorSpecies
 import {elements,species} from '../site/catalog.js';
 import {translateClassification} from '../site/digimon-localization.js';
 test('database includes migrated rookies and curated Champions, Ultimates and Megas',()=>{
- assert.equal(digimonDatabase.length,1085);
- assert.equal(new Set(digimonDatabase.map(d=>d.id)).size,1085);
+ assert.equal(digimonDatabase.length,1151);
+ assert.equal(new Set(digimonDatabase.map(d=>d.id)).size,1151);
  assert.equal(getStageSpecies('champion').length,244);
  assert.equal(getStageSpecies('ultimate').length,238);
- assert.equal(getStageSpecies('mega').length,264);
- assert.equal(getStageSpecies('special').length,19);
+ assert.equal(getStageSpecies('mega').length,268);
+ assert.equal(getStageSpecies('special').length,23);
  assert.equal(getCreatorSpecies().length,79);
  assert.equal(getStageSpecies('xbody').length,121);
  for(const d of digimonDatabase){
@@ -20,8 +20,8 @@ test('database includes migrated rookies and curated Champions, Ultimates and Me
   assert.match(d.image,/^(https:\/\/|\.\/assets\/)/);assert.match(d.sourceUrl,/^https:\/\//);
   assert.ok(Object.isFrozen(d));
   if(d.provenance==='official'){
-   assert.ok(['Rookie','Champion','Ultimate','Mega','Hybrid','In-Training'].some(level=>d.official.level.startsWith(level)));
-   assert.ok((d.official.attribute||d.progressionStage==='baby'||d.stage==='baby')&&d.official.type);
+   assert.ok(['Rookie','Champion','Ultimate','Mega','Hybrid','In-Training','Armor','Unknown'].some(level=>d.official.level.startsWith(level)));
+   assert.ok((d.official.attribute||d.progressionStage==='baby'||d.stage==='baby'||d.official.level==='Unknown')&&d.official.type);
    assert.equal(d.classification,translateClassification(d.official.type));
    assert.match(d.sourceUrl,/^https:\/\/digimon\.net\/reference_en\/detail\.php\?directory_name=/);
    assert.equal(d.availableAsPartner,d.stage==='rookie'&&d.initialEligible&&!d.partner);
@@ -35,14 +35,14 @@ test('combined filters support case, diacritics, spaces, variants and empty stag
  assert.equal(searchDigimon({query:'  aGuMoN ',stage:'rookie'}).length,9);
  assert.equal(searchDigimon({query:'greymon blue',stage:'champion'}).length,1);
  assert.equal(searchDigimon({query:'Imaginarymon'}).length,0);
- assert.equal(searchDigimon({stage:'mega'}).length,264);
+ assert.equal(searchDigimon({stage:'mega'}).length,268);
  assert.equal(searchDigimon({query:'wargreymon',stage:'mega'}).length,2);
- assert.equal(searchDigimon({stage:'baby'}).length,48);
- assert.equal(searchDigimon({stage:'special'}).length,19);
+ assert.equal(searchDigimon({stage:'baby'}).length,106);
+ assert.equal(searchDigimon({stage:'special'}).length,23);
  assert.equal(searchDigimon({query:'Yoxtu!'}).length,1);
 });
 test('curation excludes X variants, Aegio species and very specific modes',()=>{
- for(const d of digimonDatabase.filter(d=>d.stage!=='xbody'))assert.doesNotMatch(d.name,/Antibody|X[- ]?Body|Aegio|\b2010\b|\bMode\b|Awakened|\bVersion\b/i,d.id);
+ for(const d of digimonDatabase.filter(d=>d.stage!=='xbody'&&!/Imperialdramon/i.test(d.name)))assert.doesNotMatch(d.name,/Antibody|X[- ]?Body|Aegio|\b2010\b|\bMode\b|Awakened|\bVersion\b/i,d.id);
  assert.equal(findDigimon('champion-aegiomon'),undefined);
  assert.equal(findDigimon('champion-greymon'),undefined);
  assert.equal(findDigimon('champion-greymon-x'),undefined);
@@ -66,7 +66,7 @@ test('curation excludes X variants, Aegio species and very specific modes',()=>{
 });
 test('element review prioritizes Bonds nature over equipment, color and classification',()=>{
  for(const [id,element] of [
-  ['champion-garurumon','Gelo'],['champion-garurumon-black','Gelo'],
+  ['champion-garurumon','Gelo'],['champion-garurumon-black','Escuridão'],
   ['ultimate-weregarrumon','Gelo'],['mega-metalgarurumon-black','Gelo'],
   ['champion-stingmon','Madeira'],['champion-kuwagamon','Madeira'],
   ['ultimate-jewelbeemon','Madeira'],['mega-banchostingmon','Madeira'],
@@ -169,3 +169,7 @@ test('X variants are isolated from stages and never offered as initial partners'
  assert.equal(findDigimon('xbody-tokomon-x').digitalAttribute,'Não definido');
  assert.equal(findDigimon('xbody-tokomon-x').official.attribute,null);
 });
+
+test('Baby II and established Imperialdramon forms are present with corrected Bonds elements',()=>{assert.equal(digimonDatabase.filter(d=>d.stage==='baby'&&d.official.level.includes('Ⅱ')).length,58);assert.ok(findDigimon('baby-chicchimon'));assert.equal(findDigimon('champion-gururumon').element,'Fogo');assert.equal(findDigimon('champion-garurumon-black').element,'Escuridão');assert.equal(findDigimon('mega-imperialdramonpaladinmode').stage,'special');assert.equal(findDigimon('mega-imperialdramondragonmode').stage,'mega');assert.equal(findDigimon('special-fladramon'),undefined);});
+
+test('every official catalog entry is represented or intentionally excluded',async()=>{const {readFile}=await import('node:fs/promises');const audit=JSON.parse(await readFile(new URL('../docs/digibank-coverage.json',import.meta.url),'utf8'));assert.equal(audit.entries.length,1321);for(const r of audit.entries){if(r.status==='included')assert.ok(findDigimon(r.databaseId),r.name);else assert.ok(['excluded-armor','excluded-curation'].includes(r.status)&&r.reason,r.name);}assert.equal(digimonDatabase.filter(d=>d.official?.level==='Armor').length,0);});
