@@ -375,8 +375,8 @@
       "name": "Tomorimon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=tomorimon",
       "databaseId": "baby-tomorimon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "mococomon",
@@ -391,8 +391,8 @@
       "name": "Fukamon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=fukamon",
       "databaseId": "baby-fukamon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "parallelmon",
@@ -552,7 +552,7 @@
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=kekomon",
       "databaseId": "baby-kekomon",
       "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "reason": "Bebê I visualmente redundante com Kekkomon, mantido no Bonds."
     },
     {
       "id": "magneticdramon",
@@ -951,8 +951,8 @@
       "name": "Yolkmon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=yolkmon",
       "databaseId": "baby-yolkmon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "callismon",
@@ -1175,8 +1175,8 @@
       "name": "Fusamon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=fusamon",
       "databaseId": "baby-fusamon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "quantumon",
@@ -1680,7 +1680,7 @@
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=puyomon",
       "databaseId": "baby-puyomon",
       "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "reason": "Bebê I visualmente redundante com Puyoyomon, mantido no Bonds."
     },
     {
       "id": "angoramon",
@@ -1703,8 +1703,8 @@
       "name": "Pyonmon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=pyonmon",
       "databaseId": "baby-pyonmon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "gammamon",
@@ -1727,8 +1727,8 @@
       "name": "Curimon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=curimon",
       "databaseId": "baby-curimon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "abbadomon",
@@ -1967,8 +1967,8 @@
       "name": "Sandmon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=sunamon",
       "databaseId": "baby-sunamon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "burpmon",
@@ -2343,8 +2343,8 @@
       "name": "Dokimon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=dokimon",
       "databaseId": "baby-dokimon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "namakemon",
@@ -2511,8 +2511,8 @@
       "name": "Ketomon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=ketomon",
       "databaseId": "baby-ketomon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "nidhoggmon",
@@ -2592,7 +2592,7 @@
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=algomon_lv1",
       "databaseId": "baby-algomon-lv1",
       "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "reason": "Bebê I visualmente redundante com Argomon (Bebê II), mantido no Bonds."
     },
     {
       "id": "ghostmon",
@@ -3431,8 +3431,8 @@
       "name": "Keemon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=keemon",
       "databaseId": "baby-keemon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "impmon_x",
@@ -3552,7 +3552,7 @@
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=pusumon",
       "databaseId": "baby-pusumon",
       "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "reason": "Bebê I visualmente redundante com Pusurimon, mantido no Bonds."
     },
     {
       "id": "surfimon",
@@ -3991,8 +3991,8 @@
       "name": "Pipimon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=pipimon",
       "databaseId": "baby-pipimon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "raguelmon",
@@ -4103,8 +4103,8 @@
       "name": "Cotsucomon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=cotsucomon",
       "databaseId": "baby-cotsucomon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "andiramon_2",
@@ -4463,8 +4463,8 @@
       "name": "Chibickmon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=chibickmon",
       "databaseId": "baby-chibickmon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "chikurimon",
@@ -10327,168 +10327,168 @@
       "name": "Relemon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=relemon",
       "databaseId": "baby-relemon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "leafmon",
       "name": "Leafmon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=leafmon",
       "databaseId": "baby-leafmon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "yuramon",
       "name": "Yuramon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=yuramon",
       "databaseId": "baby-yuramon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "yukimibotamon",
       "name": "YukimiBotamon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=yukimibotamon",
       "databaseId": "baby-yukimibotamon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "mokumon",
       "name": "Mokumon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=mokumon",
       "databaseId": "baby-mokumon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "poyomon",
       "name": "Poyomon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=poyomon",
       "databaseId": "baby-poyomon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "bommon",
       "name": "Bommon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=bommon",
       "databaseId": "baby-bommon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "popomon",
       "name": "Popomon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=popomon",
       "databaseId": "baby-popomon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "botamon",
       "name": "Botamon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=botamon",
       "databaseId": "baby-botamon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "puwamon",
       "name": "Puwamon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=puwamon",
       "databaseId": "baby-puwamon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "pururumon",
       "name": "Pururumon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=pururumon",
       "databaseId": "baby-pururumon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "pupumon",
       "name": "Pupumon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=pupumon",
       "databaseId": "baby-pupumon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "fufumon",
       "name": "Fufumon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=fufumon",
       "databaseId": "baby-fufumon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "punimon",
       "name": "Punimon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=punimon",
       "databaseId": "baby-punimon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "puttimon",
       "name": "Puttimon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=puttimon",
       "databaseId": "baby-puttimon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "petitmon",
       "name": "Petitmon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=petitmon",
       "databaseId": "baby-petitmon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "pitchmon",
       "name": "Pichimon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=pitchmon",
       "databaseId": "baby-pitchmon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "pafumon",
       "name": "Pafumon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=pafumon",
       "databaseId": "baby-pafumon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "bubbmon",
       "name": "Pabumon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=bubbmon",
       "databaseId": "baby-bubbmon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "paomon",
       "name": "Paomon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=paomon",
       "databaseId": "baby-paomon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "nyokimon",
       "name": "Nyokimon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=nyokimon",
       "databaseId": "baby-nyokimon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "dodomon",
@@ -10496,31 +10496,31 @@
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=dodomon",
       "databaseId": "baby-dodomon",
       "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "reason": "Bebê I visualmente redundante com Dorimon, mantido no Bonds."
     },
     {
       "id": "tsubumon",
       "name": "Tsubumon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=tsubumon",
       "databaseId": "baby-tsubumon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "choromon",
       "name": "Choromon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=choromon",
       "databaseId": "baby-choromon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "chicomon",
       "name": "Chibomon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=chicomon",
       "databaseId": "baby-chicomon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "zerimon",
@@ -10528,23 +10528,23 @@
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=zerimon",
       "databaseId": "baby-zerimon",
       "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "reason": "Bebê I visualmente redundante com Gummymon, mantido no Bonds."
     },
     {
       "id": "zurumon",
       "name": "Zurumon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=zurumon",
       "databaseId": "baby-zurumon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "jyarimon",
       "name": "Jyarimon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=jyarimon",
       "databaseId": "baby-jyarimon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     },
     {
       "id": "sakumon",
@@ -10552,7 +10552,7 @@
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=sakumon",
       "databaseId": "baby-sakumon",
       "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "reason": "Bebê I visualmente redundante com Sakuttomon, mantido no Bonds."
     },
     {
       "id": "cocomon",
@@ -10560,15 +10560,15 @@
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=cocomon",
       "databaseId": "baby-cocomon",
       "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "reason": "Bebê I visualmente redundante com Kokomon, mantido no Bonds."
     },
     {
       "id": "kuramon",
       "name": "Kuramon",
       "sourceUrl": "https://digimon.net/reference_en/detail.php?directory_name=kuramon",
       "databaseId": "baby-kuramon",
-      "status": "excluded-curation",
-      "reason": "Bonds mantém apenas Bebê II para evitar pares redundantes de Bebê I e II."
+      "status": "included",
+      "reason": null
     }
   ]
 }

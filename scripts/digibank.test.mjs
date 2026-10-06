@@ -4,8 +4,8 @@ import {digimonDatabase,digimonStages,searchDigimon,findDigimon,toCreatorSpecies
 import {elements,species} from '../site/catalog.js';
 import {translateClassification} from '../site/digimon-localization.js';
 test('database includes migrated rookies and curated Champions, Ultimates and Megas',()=>{
- assert.equal(digimonDatabase.length,1102);
- assert.equal(new Set(digimonDatabase.map(d=>d.id)).size,1102);
+ assert.equal(digimonDatabase.length,1142);
+ assert.equal(new Set(digimonDatabase.map(d=>d.id)).size,1142);
  assert.equal(getStageSpecies('champion').length,244);
  assert.equal(getStageSpecies('ultimate').length,237);
  assert.equal(getStageSpecies('mega').length,268);
@@ -37,7 +37,7 @@ test('combined filters support case, diacritics, spaces, variants and empty stag
  assert.equal(searchDigimon({query:'Imaginarymon'}).length,0);
  assert.equal(searchDigimon({stage:'mega'}).length,268);
  assert.equal(searchDigimon({query:'wargreymon',stage:'mega'}).length,2);
- assert.equal(searchDigimon({stage:'baby'}).length,58);
+ assert.equal(searchDigimon({stage:'baby'}).length,98);
  assert.equal(searchDigimon({stage:'special'}).length,23);
  assert.equal(searchDigimon({query:'Yoxtu!'}).length,1);
 });
@@ -173,3 +173,11 @@ test('X variants are isolated from stages and never offered as initial partners'
 test('Baby II and established Imperialdramon forms are present with corrected Bonds elements',()=>{assert.equal(digimonDatabase.filter(d=>d.stage==='baby'&&d.official.level.includes('Ⅱ')).length,58);assert.ok(findDigimon('baby-chicchimon'));assert.equal(findDigimon('champion-gururumon').element,'Fogo');assert.equal(findDigimon('champion-garurumon-black').element,'Escuridão');assert.equal(findDigimon('mega-imperialdramonpaladinmode').stage,'special');assert.equal(findDigimon('mega-imperialdramondragonmode').stage,'mega');assert.equal(findDigimon('special-fladramon'),undefined);});
 
 test('every official catalog entry is represented or intentionally excluded',async()=>{const {readFile}=await import('node:fs/promises');const audit=JSON.parse(await readFile(new URL('../docs/digibank-coverage.json',import.meta.url),'utf8'));assert.equal(audit.entries.length,1321);for(const r of audit.entries){if(r.status==='included')assert.ok(findDigimon(r.databaseId),r.name);else assert.ok(['excluded-armor','excluded-curation'].includes(r.status)&&r.reason,r.name);}assert.equal(digimonDatabase.filter(d=>d.official?.level==='Armor').length,0);});
+test('baby curation retains distinct Baby I alongside Baby II and omits redundant pairs',()=>{
+ for(const id of ['baby-botamon','baby-punimon','baby-poyomon','baby-kuramon','baby-yuramon']){
+  const entry=findDigimon(id);assert.ok(entry,id);assert.equal(entry.stage,'baby');
+  assert.ok(getStageSpecies('baby').some(species=>species.id===id),id);
+ }
+ for(const id of ['baby-algomon-lv1','baby-kekomon','baby-dodomon'])assert.equal(findDigimon(id),undefined,id);
+ for(const name of ['Argomon','Kekkomon','Dorimon'])assert.equal(searchDigimon({stage:'baby',query:name}).filter(entry=>entry.name===name).length,1,name);
+});
