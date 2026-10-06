@@ -39,7 +39,7 @@ function officialEntry(row,stage,level,text){
 const champs=curated(await read('.digibank-research/champion-research.json')).map(row=>officialEntry(row,'champion','Champion',championText));
 const ultimates=curated(await read('.digibank-research/ultimate-research.json')).map(row=>officialEntry(row,'ultimate','Ultimate',ultimateText));
 const megas=curated(await read('.digibank-research/mega-research.json')).map(row=>officialEntry(row,'mega','Mega',megaText));
-const records=[...rookies,...champs,...ultimates,...megas];
+const records=[...rookies,...champs,...ultimates.filter(d=>d.id!=='ultimate-andiramon'),...megas];
 const hybrids=curated(await read('.digibank-research/hybrid-research.json')).map(row=>{
  const content=hybridText.get(row.directory_name);if(!content)throw Error('Missing Hybrid '+row.directory_name);
  const [stage,evolutionCategory,element,description]=content;
@@ -74,6 +74,7 @@ for(const entry of records){
  const special=specialEvolution[entry.id];
  if(special){entry.progressionStage=entry.stage;entry.stage='special';entry.evolutionCategory=special.category;entry.requiresSpecialEvolution=true;entry.evolutionRequirement=special.reason;entry.evolutionComponents=(evolutionComponents[entry.id]||[]).map(([digimonId,name])=>({digimonId,name}));}
 }
+for(const entry of records)if(/Black/i.test(entry.name)){entry.element='Escuridão';entry.elementReason='Versão Black: afinidade Escuridão definida pelo autor do Bonds.';}
 for(const id of Object.keys(specialEvolution))if(!records.some(r=>r.id===id))throw Error('Unknown special '+id);
 for(const entry of records)for(const component of entry.evolutionComponents||[])if(!records.some(r=>r.id===component.digimonId))throw Error('Missing evolution component '+component.digimonId);
 for(const [id,[element,reason]] of elementReview){if(!records.some(r=>r.id===id))throw Error('Unknown reviewed species '+id);if(!reason||!['Fogo','Madeira','Água','Gelo','Elétrico','Vento','Terra','Luz','Escuridão','Metal','Neutro'].includes(element))throw Error('Invalid element review '+id);}

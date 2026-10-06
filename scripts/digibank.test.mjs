@@ -4,10 +4,10 @@ import {digimonDatabase,digimonStages,searchDigimon,findDigimon,toCreatorSpecies
 import {elements,species} from '../site/catalog.js';
 import {translateClassification} from '../site/digimon-localization.js';
 test('database includes migrated rookies and curated Champions, Ultimates and Megas',()=>{
- assert.equal(digimonDatabase.length,1151);
- assert.equal(new Set(digimonDatabase.map(d=>d.id)).size,1151);
+ assert.equal(digimonDatabase.length,1150);
+ assert.equal(new Set(digimonDatabase.map(d=>d.id)).size,1150);
  assert.equal(getStageSpecies('champion').length,244);
- assert.equal(getStageSpecies('ultimate').length,238);
+ assert.equal(getStageSpecies('ultimate').length,237);
  assert.equal(getStageSpecies('mega').length,268);
  assert.equal(getStageSpecies('special').length,23);
  assert.equal(getCreatorSpecies().length,79);
@@ -67,7 +67,7 @@ test('curation excludes X variants, Aegio species and very specific modes',()=>{
 test('element review prioritizes Bonds nature over equipment, color and classification',()=>{
  for(const [id,element] of [
   ['champion-garurumon','Gelo'],['champion-garurumon-black','Escuridão'],
-  ['ultimate-weregarrumon','Gelo'],['mega-metalgarurumon-black','Gelo'],
+  ['ultimate-weregarrumon','Gelo'],['mega-metalgarurumon-black','Escuridão'],
   ['champion-stingmon','Madeira'],['champion-kuwagamon','Madeira'],
   ['ultimate-jewelbeemon','Madeira'],['mega-banchostingmon','Madeira'],
   ['ultimate-machgaogamon','Vento'],['mega-blitzgreymon','Elétrico'],
@@ -84,7 +84,7 @@ test('Creator adapter preserves species fields without modifying the existing ca
   const entry=digimonDatabase.find(d=>d.stage==='rookie'&&d.legacyName===old.name);
   assert.ok(entry,old.name);
   const adapted=toCreatorSpecies(entry);
-  const normalizedOld={...old,digital:old.digital==='Virus'?'Vírus':old.digital};
+  const normalizedOld={...old,digital:old.digital==='Virus'?'Vírus':old.digital,element:/Black/i.test(old.name)?'Escuridão':old.element};
   assert.deepEqual(adapted,normalizedOld);
  }
  const kudamon=findDigimon('rookie-kudamon');assert.equal(kudamon.partner,'KAILEN DUR');assert.equal(kudamon.availableAsPartner,false);

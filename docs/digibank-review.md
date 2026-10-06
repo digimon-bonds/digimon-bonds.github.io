@@ -1,6 +1,6 @@
 # Digibank — revisão local
 
-1151 registros: 106 Bebê; 151 Novato; 244 Campeão; 238 Perfeito; 268 Mega; 23 Especial; 121 X-Body. Inclui 75 Novatos migrados, 32 Hybrid adaptados, 72 Novatos complementares, Hyemon, Black Strabimon e 121 variantes X em categoria própria. Sem publicação. Classificação é traduzida para português; official.type conserva o Type original e official.level preserva Hybrid. Elementos são adaptações do Bonds, pendentes de aprovação. Neutro permanece permitido fora dos ciclos.
+1150 registros: 106 Bebê; 151 Novato; 244 Campeão; 237 Perfeito; 268 Mega; 23 Especial; 121 X-Body. Inclui 75 Novatos migrados, 32 Hybrid adaptados, 72 Novatos complementares, Hyemon, Black Strabimon e 121 variantes X em categoria própria. Sem publicação. Classificação é traduzida para português; official.type conserva o Type original e official.level preserva Hybrid. Elementos são adaptações do Bonds, pendentes de aprovação. Neutro permanece permitido fora dos ciclos.
 
 O Creator continua usando seu catálogo atual até validação. Imagens são referências externas, com alternativa visual caso falhem. O fórum descreve Labramon como um leão negro; sua descrição local evita perpetuar essa provável troca.
 
@@ -23,10 +23,10 @@ O Creator continua usando seu catálogo atual até validação. Imagens são ref
 | BaoHuckmon | Campeão | Fogo | Sua técnica de sopro flamejante expressa melhor sua energia dracônica do que as pequenas lâminas do corpo. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=baohuckmon) |
 | BetelGammamon | Campeão | Fogo | Forma rubra de Gammamon que concentra sua energia ardente em ataques corpo a corpo. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=betelgammamon) |
 | Birdramon | Campeão | Fogo | Ave envolta em chamas que atravessa o céu com asas incendiárias. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=birdramon) |
-| BlackGaogamon | Campeão | Vento | Besta de grande porte que combina garras desenvolvidas com movimentos rápidos. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=blackgaogamon) |
-| BlackGargomon | Campeão | Escuridão | Especialista em emboscadas nas sombras e ataques noturnos; o contexto de caça prevalece sobre o armamento. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=blackgalgomon) |
-| BlackGatomon | Campeão | Escuridão | Felino de natureza sombria, pequeno no tamanho e perigoso em ataques furtivos. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=blacktailmon) |
-| BlackGrowlmon | Campeão | Escuridão | Dragão negro de comportamento feroz, marcado por uma forte natureza viral. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=blackgrowmon) |
+| BlackGaogamon | Campeão | Escuridão | Versão Black: afinidade Escuridão definida pelo autor do Bonds. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=blackgaogamon) |
+| BlackGargomon | Campeão | Escuridão | Versão Black: afinidade Escuridão definida pelo autor do Bonds. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=blackgalgomon) |
+| BlackGatomon | Campeão | Escuridão | Versão Black: afinidade Escuridão definida pelo autor do Bonds. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=blacktailmon) |
+| BlackGrowlmon | Campeão | Escuridão | Versão Black: afinidade Escuridão definida pelo autor do Bonds. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=blackgrowmon) |
 | BladeKuwagamon | Campeão | Metal | Inseto mecânico cujo corpo armado e blindado funciona como uma lâmina viva. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=bladekuwagamon) |
 | Blimpmon | Campeão | Vento | Veículo cujo corpo de dirigível é construído para a navegação aérea; o revestimento não determina sozinho a afinidade. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=blimpmon) |
 | BomberNanimon | Campeão | Fogo | Invasor de origem incomum cujo corpo explosivo transforma aproximações em ameaças. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=bombernanimon) |
@@ -81,7 +81,7 @@ O Creator continua usando seu catálogo atual até validação. Imagens são ref
 | Gaogamon | Campeão | Vento | Besta veloz de garras desenvolvidas, capaz de combinar corrida e golpes precisos. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=gaogamon) |
 | Gargomon | Campeão | Vento | Agilidade, saltos e planeio com as orelhas prevalecem sobre o uso de armas nos braços. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=galgomon) |
 | Garurumon | Campeão | Gelo | Adaptação solicitada pelo autor: a natureza de lobo da tundra prevalece sobre seu sopro de fogo azul. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=garurumon) |
-| Garurumon (Black) | Campeão | Escuridão | Adaptação definida pelo autor para Black Garurumon. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=garurumon_black) |
+| Garurumon (Black) | Campeão | Escuridão | Versão Black: afinidade Escuridão definida pelo autor do Bonds. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=garurumon_black) |
 | Gatomon | Campeão | Luz | Felino sagrado cujo anel expressa um poder muito maior do que seu pequeno porte sugere. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=tailmon) |
 | Gawappamon | Campeão | Água | Ciborgue inspirado em um kappa e em tocadores de música, combate com ritmo e recursos aquáticos. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=gawappamon) |
 | Gekomon | Campeão | Água | Anfíbio que transforma sua voz e instrumentos naturais em técnicas sonoras. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=gekomon) |
@@ -120,7 +120,7 @@ O Creator continua usando seu catálogo atual até validação. Imagens são ref
 | KausGammamon | Campeão | Vento | Forma azul de Gammamon que plana utilizando membranas nos braços e correntes de ar. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=kausgammamon) |
 | Kinkakumon | Campeão | Elétrico | As descargas de alta tensão do corpo e os chutes elétricos predominam sobre o material de sua arma. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=kinkakumon) |
 | Kiwimon | Campeão | Madeira | Ave ancestral terrestre com afinidade vegetal, adapta-se ao solo através de pernas fortes. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=kiwimon) |
-| KnightChessmon (Black) | Campeão | Metal | Cavaleiro de aparência enxadrística que lança dardos e salta sobre adversários. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=knightchessmon_black) |
+| KnightChessmon (Black) | Campeão | Escuridão | Versão Black: afinidade Escuridão definida pelo autor do Bonds. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=knightchessmon_black) |
 | KnightChessmon (White) | Campeão | Metal | Cavaleiro branco de pernas vigorosas, especializado em arremessos e mobilidade. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=knightchessmon) |
 | Kogamon | Campeão | Escuridão | Ninja de máscara roxa que percorre o mundo treinando técnicas furtivas. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=kougamon) |
 | Kokatorimon | Campeão | Terra | Ave de pernas musculosas, adaptada à vida terrestre e a ataques de grande impacto. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=cockatrimon) |
@@ -244,7 +244,6 @@ O Creator continua usando seu catálogo atual até validação. Imagens são ref
 | Andromon | Perfeito | Metal | Protótipo ciborgue humanoide que combina um corpo resistente com armamento integrado. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=andromon) |
 | Angewomon | Perfeito | Luz | Anjo de elevada hierarquia que enfrenta ameaças sombrias com poderes sagrados. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=angewomon) |
 | Antylamon | Perfeito | Luz | Besta sagrada de forma leporina que controla a energia espiritual circulando em seu corpo. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=andiramon_2) |
-| Antylamon (Deva) | Perfeito | Luz | Deva de aparência de coelho e natureza gentil, associado à proteção de Azulongmon. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=andiramon) |
 | Argomon | Perfeito | Escuridão | Mutante de processamento acelerado que usa numerosos cipós como tentáculos para controlar grandes áreas. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=algomon-ultimate) |
 | ArkhaiAngemon | Perfeito | Luz | Anjo de hierarquia Principado, dedica seus poderes ao cuidado e à proteção de outros Digimon. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=arkhaiangemon) |
 | Arukenimon | Perfeito | Escuridão | Rainha aracnídea de grande astúcia que exerce influência sobre Dokugumon e outros insetoides. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=archnemon) |
@@ -259,10 +258,10 @@ O Creator continua usando seu catálogo atual até validação. Imagens são ref
 | Betsumon | Perfeito | Neutro | Marionete excêntrica que imita outros Digimon para confundir seus adversários. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=betsumon) |
 | BigMamemon | Perfeito | Metal | Mutante de pequeno corpo e grande poder explosivo, atua como líder entre os Mamemon. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=bigmamemon) |
 | BishopChessmon | Perfeito | Metal | Peça guerreira de aparência enxadrística, domina ataques de longa distância. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=bishopchessmon) |
-| BlackKingNumemon | Perfeito | Neutro | Numemon de corpo negro que conquistou sua posição entre os dados descartados. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=blackkingnumemon) |
-| BlackMachGaogamon | Perfeito | Vento | Mantém as técnicas de tornado e a especialização aérea da espécie, apesar da alteração de cor. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=blackmachgaogamon) |
-| BlackRapidmon | Perfeito | Escuridão | A variante especializa-se em aproximação silenciosa e combate noturno, cuja natureza prevalece sobre as armas. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=blackrapidmon) |
-| BlackWarGrowlmon | Perfeito | Metal | Dragão ciborgue de natureza viral, reforça a ferocidade de BlackGrowlmon com armamento pesado. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=blackmegalogrowmon) |
+| BlackKingNumemon | Perfeito | Escuridão | Versão Black: afinidade Escuridão definida pelo autor do Bonds. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=blackkingnumemon) |
+| BlackMachGaogamon | Perfeito | Escuridão | Versão Black: afinidade Escuridão definida pelo autor do Bonds. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=blackmachgaogamon) |
+| BlackRapidmon | Perfeito | Escuridão | Versão Black: afinidade Escuridão definida pelo autor do Bonds. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=blackrapidmon) |
+| BlackWarGrowlmon | Perfeito | Escuridão | Versão Black: afinidade Escuridão definida pelo autor do Bonds. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=blackmegalogrowmon) |
 | Blossomon | Perfeito | Madeira | Flor gigante de numerosos tentáculos, utiliza estruturas vegetais para alcançar seus oponentes. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=blossomon) |
 | BlueMeramon | Perfeito | Fogo | Criatura de chamas azuis intensas, possui fogo capaz de produzir efeitos extremos de temperatura. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=bluemeramon) |
 | Bombermon | Perfeito | Fogo | Mutante fascinado por explosões, transforma detonações em sua principal forma de combate. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=bombermon) |
@@ -463,7 +462,7 @@ O Creator continua usando seu catálogo atual até validação. Imagens são ref
 | WaruSeadramon | Perfeito | Escuridão | Serpente marinha corrompida que canaliza poder obscuro através do chifre de sua cabeça. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=waruseadramon) |
 | Weddinmon | Perfeito | Luz | Figura feérica de vestido de bolo, dedica seus recursos à felicidade e à união de outros Digimon. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=weddinmon) |
 | WereGarurumon | Perfeito | Gelo | Mantém a afinidade da família Garurumon adaptada ao frio, sem converter a postura bípede em elemento terrestre. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=weregarrumon) |
-| WereGarurumon (Black) | Perfeito | Gelo | A variante compartilha a natureza glacial de sua linhagem; cor e Atributo Digital não obrigam alteração de Elemento. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=weregarurumon_black) |
+| WereGarurumon (Black) | Perfeito | Escuridão | Versão Black: afinidade Escuridão definida pelo autor do Bonds. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=weregarurumon_black) |
 | Whamon | Perfeito | Água | Gigante das profundezas do Net Ocean, desloca enormes massas de água com seu corpo. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=whamon) |
 | Wingdramon | Perfeito | Vento | Dragão celeste de asas desenvolvidas, voa livremente graças às propriedades de suas escamas. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=wingdramon) |
 | Wisemon | Perfeito | Neutro | Feiticeiro envolto em mistério que utiliza um livro como vínculo para atravessar espaço e tempo. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=wisemon) |
@@ -514,9 +513,9 @@ O Creator continua usando seu catálogo atual até validação. Imagens são ref
 | BeelStarmon | Mega | Escuridão | Pistoleira de aparência demoníaca que resolve confrontos com precisão e mobilidade. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=beelstarmon) |
 | Beelzemon | Mega | Escuridão | Combatente demoníaco independente, equipado com armas e uma postura ameaçadora. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=beelzebumon) |
 | BigUkkomon | Mega | Neutro | Ser ancestral associado à renovação da vida digital após uma grande destruição. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=bigukkomon) |
-| BlackSaintGargomon | Mega | Metal | Fortaleza mecanizada que compensa a pouca mobilidade com armas distribuídas por todo o corpo. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=blacksaintgalgomon) |
-| BlackSeraphimon | Mega | Escuridão | Anjo cuja armadura e asas foram transformadas pelo ressentimento e pela corrupção. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=blackseraphimon) |
-| BlackWarGreymon | Mega | Escuridão | A energia obscura de seus ataques e sua contraposição à forma original predominam sobre a armadura negra. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=blackwargreymon) |
+| BlackSaintGargomon | Mega | Escuridão | Versão Black: afinidade Escuridão definida pelo autor do Bonds. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=blacksaintgalgomon) |
+| BlackSeraphimon | Mega | Escuridão | Versão Black: afinidade Escuridão definida pelo autor do Bonds. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=blackseraphimon) |
+| BlackWarGreymon | Mega | Escuridão | Versão Black: afinidade Escuridão definida pelo autor do Bonds. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=blackwargreymon) |
 | Blastmon | Mega | Terra | Gigante cristalino cuja armadura se recompõe, combinando peso extremo e golpes devastadores. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=blastmon) |
 | BlitzGreymon | Mega | Elétrico | A eletricidade utilizada por seu armamento e seus ataques representa melhor sua afinidade do que a blindagem. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=blitzgreymon) |
 | Bloomlordmon | Mega | Madeira | Cavaleiro das plantas que floresce em defesa da vida e do equilíbrio natural. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=bloomlordmon) |
@@ -533,7 +532,7 @@ O Creator continua usando seu catálogo atual até validação. Imagens são ref
 | ChaosGallantmon | Mega | Escuridão | Cavaleiro sombrio de lança e escudo, movido por uma força destrutiva. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=chaosdukemon) |
 | Chaosdramon | Mega | Metal | Dragão mecânico de corpo vermelho que amplia a força de uma arquitetura de combate pesada. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=chaosdramon) |
 | Chaosmon | Especial | Neutro | Existência instável que preserva dois núcleos digitais em um único corpo. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=chaosmon) |
-| Cherubimon (Black) | Mega | Escuridão | A forma sombria de um guardião celestial, tomada por impulsos destrutivos. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=cherubimon-vice) |
+| Cherubimon (Black) | Mega | Escuridão | Versão Black: afinidade Escuridão definida pelo autor do Bonds. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=cherubimon-vice) |
 | Cherubimon (Good) | Mega | Luz | Guardião celestial que protege outros seres com sua energia sagrada. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=cherubimon) |
 | ClavisAngemon | Mega | Luz | Guardião de um portão entre mundos, portador de uma chave que protege sua passagem. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=clavisangemon) |
 | Craniamon | Mega | Luz | Cavaleiro de armadura imponente, especializado em defesa e combate com sua arma longa. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=craniummon) |
@@ -575,7 +574,7 @@ O Creator continua usando seu catálogo atual até validação. Imagens são ref
 | Gallantmon | Mega | Luz | Cavaleiro de lança e escudo que equilibra uma natureza perigosa com um ideal protetor. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=dukemon) |
 | Gankoomon | Mega | Fogo | Gankoomon: Cavaleiro de grande poder, que combina proteção e técnica em confrontos decisivos. O calor e as chamas orientam sua afinidade no Bonds. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=gankoomon) |
 | Ghoulmon | Mega | Escuridão | Antigo anjo que mantém uma postura vigilante a partir das regiões sombrias do mundo digital. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=deathmon) |
-| Ghoulmon (Black) | Mega | Escuridão | Guardião sombrio de aparência negra, ligado ao poder destrutivo de uma origem angelical corrompida. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=deathmon-black) |
+| Ghoulmon (Black) | Mega | Escuridão | Versão Black: afinidade Escuridão definida pelo autor do Bonds. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=deathmon-black) |
 | GigaSeadramon | Mega | Água | Dragão marinho mecanizado que combina velocidade subaquática e armamento de interceptação. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=gigaseadramon) |
 | Goldramon | Mega | Luz | Dragão celestial que manifesta poder sagrado e uma presença protetora. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=goddramon) |
 | GraceNovamon | Especial | Luz | Divindade de escala cósmica que une forças celestes em uma existência radiante. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=gracenovamon) |
@@ -595,9 +594,9 @@ O Creator continua usando seu catálogo atual até validação. Imagens são ref
 | HiAndromon | Mega | Metal | Ciborgue avançado que combina autonomia e um corpo preparado para operações de combate. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=hiandromon) |
 | Hydramon | Mega | Madeira | Planta monstruosa de múltiplas cabeças que transforma crescimento em ameaça. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=hydramon) |
 | Imperialdramon: Dragon Mode | Mega | Escuridão | Dragão ancestral alado de poder imenso, capaz de concentrar energia destrutiva em grandes rajadas. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=imperialdramondragonmode) |
-| Imperialdramon: Dragon Mode (Black) | Mega | Escuridão | Variante negra do dragão ancestral, marcada por poder devastador e temperamento difícil de controlar. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=imperialdramon_dragon_black) |
+| Imperialdramon: Dragon Mode (Black) | Mega | Escuridão | Versão Black: afinidade Escuridão definida pelo autor do Bonds. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=imperialdramon_dragon_black) |
 | Imperialdramon: Fighter Mode | Mega | Luz | Imperialdramon em forma de guerreiro, com maior controle de seu poder e armamento de energia. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=imperialdramonfightermode) |
-| Imperialdramon: Fighter Mode (Black) | Mega | Escuridão | Guerreiro dracônico negro que direciona sua energia e arsenal para ataques de grande intensidade. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=imperialdramonfightermode_vi) |
+| Imperialdramon: Fighter Mode (Black) | Mega | Escuridão | Versão Black: afinidade Escuridão definida pelo autor do Bonds. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=imperialdramonfightermode_vi) |
 | Imperialdramon: Paladin Mode | Especial | Luz | Cavaleiro sagrado que reúne o poder de Imperialdramon e Omnimon em uma lâmina purificadora. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=imperialdramonpaladinmode) |
 | Invisimon | Mega | Metal | Unidade mecanizada que utiliza ocultação para abordar seus alvos sem ser percebida. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=invisimon) |
 | Jesmon | Mega | Luz | Cavaleiro veloz que combina lâminas e aliados auxiliares para responder ao perigo. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=jesmon) |
@@ -637,7 +636,7 @@ O Creator continua usando seu catálogo atual até validação. Imagens são ref
 | Mervamon | Mega | Terra | Mantém o eixo de força física e natureza serpentina da linhagem Minervamon. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=mervamon) |
 | MetalEtemon | Mega | Metal | Combatente de corpo metálico que reúne resistência e a extravagância de um artista. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=metaletemon) |
 | MetalGarurumon | Mega | Gelo | Lobo mecanizado que combina mobilidade, armamento e ataques de natureza glacial. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=metalgarurumon) |
-| MetalGarurumon (Black) | Mega | Gelo | Preserva o armamento glacial e a natureza da espécie MetalGarurumon; a cor negra não exige mudança elemental. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=metalgarurumon_black) |
+| MetalGarurumon (Black) | Mega | Escuridão | Versão Black: afinidade Escuridão definida pelo autor do Bonds. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=metalgarurumon_black) |
 | MetalPiranimon | Mega | Água | Predador aquático de corpo reforçado que transforma suas mandíbulas em uma arma ameaçadora. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=metalpiranimon) |
 | MetalSeadramon | Mega | Água | Serpente marinha de corpo metálico, adaptada à velocidade e ao combate subaquático. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=metalseadramon) |
 | Metallicdramon | Mega | Vento | Dragão dos céus que patrulha grandes alturas com uma estrutura de aparência metálica. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=metallicdramon) |
@@ -824,7 +823,7 @@ O Creator continua usando seu catálogo atual até validação. Imagens são ref
 | Monmon | Novato | Madeira | Pequeno primata que utiliza um estilingue e agilidade para enfrentar ameaças. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=koemon) |
 | Neemon | Novato | Neutro | Fera despreocupada que alterna momentos de distração com reações inesperadas. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=neamon) |
 | Otamamon (Red) | Novato | Fogo | Mutação avermelhada de Otamamon ligada ao calor, que prefere águas aquecidas e fontes termais. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=otamamon-red) |
-| PawnChessmon (Black) | Novato | Metal | Pequeno soldado de aparência enxadrística que usa equipamentos para compensar sua força inicial limitada. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=paunchessmon) |
+| PawnChessmon (Black) | Novato | Escuridão | Versão Black: afinidade Escuridão definida pelo autor do Bonds. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=paunchessmon) |
 | PawnChessmon (White) | Novato | Metal | Soldado branco da linhagem Chessmon que participa de confrontos com equipamento defensivo. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=paunchessmon-white) |
 | Phascomon | Novato | Escuridão | Fera sombria das florestas do Dark Area, cuja aparência dócil esconde recursos perigosos. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=phascomon) |
 | Pillomon | Novato | Vento | Mamífero de aparência macia que flutua enquanto dorme e manifesta poderes ligados aos sonhos. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=pillomon) |
@@ -845,7 +844,7 @@ O Creator continua usando seu catálogo atual até validação. Imagens são ref
 | Takinmon | Novato | Terra | Fera de regiões montanhosas, reconhecível pela pelagem dourada e traços bovinos. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=takinmon) |
 | Terriermon Assistant | Novato | Neutro | Aprendiz estudioso que auxilia pesquisas sobre as diferentes espécies de Digimon. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=terriermon_assistant) |
 | Tinkermon | Novato | Vento | Fada ágil que acompanha Petermon e utiliza voo e pequenos recursos mágicos. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=tinkermon) |
-| ToyAgumon (Black) | Novato | Escuridão | Marionete de blocos contaminada por dados sombrios, de comportamento provocador e agressivo. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=toyagumon_black) |
+| ToyAgumon (Black) | Novato | Escuridão | Versão Black: afinidade Escuridão definida pelo autor do Bonds. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=toyagumon_black) |
 | Ukkomon | Novato | Neutro | Ser feérico ancestral associado a desejos e a acontecimentos misteriosos do Mundo Digital. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=ukkomon) |
 | Vemmon | Novato | Metal | Criatura artificial programada para consumir dados e fortalecer sua estrutura. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=bemmon) |
 | Vorvomon | Novato | Fogo | Pequeno dragão de minério quente que mantém uma ligação direta com calor e rochas vulcânicas. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=vorvomon) |
@@ -920,11 +919,11 @@ O Creator continua usando seu catálogo atual até validação. Imagens são ref
 | Allomon (X Antibody) | X-Body | Neutro | Adaptação provisória pela natureza predominante do Type oficial; requer revisão. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=allomon_x) |
 | Gomamon (X Antibody) | X-Body | Água | Afinidade adaptada a partir de Gomamon. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=gomamon_x) |
 | Kokuwamon (X Antibody) | X-Body | Elétrico | Afinidade adaptada a partir de Kokuwamon. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=kokuwamon_x) |
-| BlackWarGreymon (X Antibody) | X-Body | Escuridão | Afinidade adaptada a partir de BlackWarGreymon. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=blackwargreymon_x) |
+| BlackWarGreymon (X Antibody) | X-Body | Escuridão | Versão Black: afinidade Escuridão definida pelo autor do Bonds. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=blackwargreymon_x) |
 | LadyDevimon (X Antibody) | X-Body | Escuridão | Afinidade adaptada a partir de LadyDevimon. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=ladydevimon_x) |
 | MetalGreymon (Virus) (X Antibody) | X-Body | Metal | Afinidade adaptada a partir de MetalGreymon (Virus). | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=metalgreymon_vi_x) |
 | Ogremon (X Antibody) | X-Body | Terra | Afinidade adaptada a partir de Ogremon. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=orgemon_x) |
-| Agumon (Black) (X Antibody) | X-Body | Fogo | Afinidade adaptada a partir de Black Agumon. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=agumon_b_x) |
+| Agumon (Black) (X Antibody) | X-Body | Escuridão | Versão Black: afinidade Escuridão definida pelo autor do Bonds. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=agumon_b_x) |
 | Rosemon (X Antibody) | X-Body | Madeira | Afinidade adaptada a partir de Rosemon. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=rosemon_x) |
 | PrinceMamemon (X Antibody) | X-Body | Neutro | Afinidade adaptada a partir de PrinceMamemon. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=princemamemon_x) |
 | SkullMammothmon (X Antibody) | X-Body | Escuridão | Afinidade adaptada a partir de SkullMammothmon. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=skullmammon_x) |
@@ -943,7 +942,7 @@ O Creator continua usando seu catálogo atual até validação. Imagens são ref
 | Barbamon (X Antibody) | X-Body | Escuridão | Afinidade adaptada a partir de Barbamon. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=barbamon_x) |
 | Creepymon (X Antibody) | X-Body | Escuridão | Afinidade adaptada a partir de Creepymon. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=demon_x) |
 | DarkKnightmon (X Antibody) | X-Body | Escuridão | Afinidade adaptada a partir de DarkKnightmon. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=darkknightmon_x) |
-| Cherubimon (Black) (X Antibody) | X-Body | Escuridão | Afinidade adaptada a partir de Cherubimon (Black). | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=cherubimondark_x) |
+| Cherubimon (Black) (X Antibody) | X-Body | Escuridão | Versão Black: afinidade Escuridão definida pelo autor do Bonds. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=cherubimondark_x) |
 | Ophanimon: Falldown Mode (X Antibody) | X-Body | Luz | Adaptação provisória pela natureza predominante do Type oficial; requer revisão. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=ofanimonfdm_x) |
 | WarGreymon (X Antibody) | X-Body | Fogo | Afinidade adaptada a partir de WarGreymon. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=wargreymon_x) |
 | MetalGarurumon (X Antibody) | X-Body | Gelo | Afinidade adaptada a partir de MetalGarurumon. | [Oficial](https://digimon.net/reference_en/detail.php?directory_name=metalgarurumon_x) |
