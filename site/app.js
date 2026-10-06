@@ -150,7 +150,7 @@ document.addEventListener('click',e=>{
  if(button.dataset.unlockStage){changeLock(button.dataset.unlockStage,true);return;}
  if(button.dataset.lockStage){changeLock(button.dataset.lockStage,false);return;}
  if(button.hasAttribute('data-remove-quality')&&activeForm(s).unlocked){const index=Number(button.dataset.removeQuality),f=s.digimonForms[s.activeDigimonStage];if(Number.isInteger(index)&&index>=0&&index<f.qualities.length&&(f.qualities.length>1||s.activeDigimonStage==='baby')){f.qualities.splice(index,1);persist();renderEditor();renderPreview();document.querySelector('[data-add-quality]')?.focus();}return;}
- if(button.hasAttribute('data-add-quality')&&activeForm(s).unlocked){s.digimonForms[s.activeDigimonStage].qualities.push({name:'',rank:1});persist();renderEditor();renderPreview();}
+ if(button.hasAttribute('data-add-quality')&&s.activeDigimonStage!=='rookie'&&activeForm(s).unlocked){s.digimonForms[s.activeDigimonStage].qualities.push({name:'',rank:1});persist();renderEditor();renderPreview();}
 });
 document.addEventListener('keydown',e=>{const tab=e.target.closest('[data-stage]');if(!tab||!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const i=stageOrder.indexOf(tab.dataset.stage),next=e.key==='Home'?0:e.key==='End'?4:Math.max(0,Math.min(4,i+(e.key==='ArrowRight'?1:-1)));requestStage(stageOrder[next],tab.dataset.context);});
 document.addEventListener('input',e=>{
