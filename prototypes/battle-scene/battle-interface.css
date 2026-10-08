@@ -85,3 +85,10 @@
 .arena.custom-background{background-image:none}
 .arena-background{position:absolute;inset:0 0 auto;width:100%;height:calc(100% - var(--dock-space,0px));object-fit:cover;object-position:center;z-index:-2;pointer-events:none}
 .arena-background[hidden],#commandPanel[hidden]{display:none}
+
+/* Resize the actual image box, avoiding upscaling a small composited sprite. */
+.combatant .sprite,.multiple .sprite{width:calc(200px * var(--unit-scale,1));height:calc(215px * var(--unit-scale,1));max-height:none;image-rendering:auto}
+.sprite.pixel-art{image-rendering:pixelated}
+@media(max-width:700px){.combatant .sprite,.multiple .sprite{width:calc(170px * var(--unit-scale,1));height:calc(180px * var(--unit-scale,1));}}
+.lab-quality-picker{margin:18px 0;border:1px solid #31616f;border-radius:10px;padding:14px}
+#labQualityStatus{font-size:12px;color:#83efc0}

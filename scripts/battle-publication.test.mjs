@@ -59,7 +59,7 @@ test('empty scenes preserve setup and accept/remove their first NPC without phan
  const repository=createSceneRepository(newSceneData(emptyBattle()),async()=>{});
  let saved=await repository.execute('setup',{command:'presentation',args:[{background:'data:image/png;base64,'+'a'.repeat(3200000)}],revision:0,requestId:'bg',mode:'narrator'},true);
  assert.equal(saved.state.round,1);assert.equal(saved.state.actors.length,0);assert.equal(saved.state.scene.background.length,3200022);
- const withNpc=createNpc(saved.state,{name:'Teste NPC',image:'https://example.com/npc.png',attributes:{power:2,heart:2,intelligence:2,agility:2},hp:8,element:'Fogo',digitalAttribute:'Data',stage:'rookie',qualities:[],attacks:[]});
+ const withNpc=createNpc(saved.state,{name:'Teste NPC',image:'https://example.com/npc.png',attributes:{power:3,heart:3,intelligence:3,agility:3},hp:8,element:'Fogo',digitalAttribute:'Data',stage:'rookie',qualities:[],attacks:[]});
  assert.equal(withNpc.actors.length,1);assert.equal(withNpc.humans.length,0);assert.equal(withNpc.actors[0].forms.rookie.name,'Teste NPC');
  const empty=removeParticipant(withNpc,withNpc.actors[0].id);assert.deepEqual(empty.actors,[]);assert.equal(empty.scene.background,saved.state.scene.background);
 });

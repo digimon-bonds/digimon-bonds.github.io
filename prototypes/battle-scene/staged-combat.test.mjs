@@ -19,7 +19,7 @@ test('NPC can target human; Body plus Talent dodge is reactive and lethal damage
  s=e.rollDodge(s,{},()=>0);assert.equal(s.humans[0].remaining,1);s=e.confirmDodge(s);assert.equal(e.survivalOffer(s).resource,'Energia');s=e.acceptResult(e.decideSurvival(s,true));assert.equal(s.humans[0].energy,1);assert.equal(s.actors[0].hp,14);assert.equal(s.pairs[0].bond,4);
 });
 test('Narrator creates allied NPC pair and edits resources atomically without giving actions or player control',()=>{
- let s=createNpc(e.initialBattle(),{name:'NPC parceiro',humanName:'NPC humano',hp:8,level:1,bond:6,energy:10,characteristics:{body:2,mind:2,presence:2}},'ally');const a=s.actors.at(-1),h=s.humans.at(-1);assert.equal(a.side,'ally');assert.equal(a.controller,'narrator');assert.equal(h.name,'NPC humano');assert.equal(canChoose(s,'player',null,a.id),false);assert.equal(canChoose(s,'narrator',null,a.id),true);
+ let s=createNpc(e.initialBattle(),{name:'NPC parceiro',stage:'rookie',attributes:{power:3,heart:3,intelligence:3,agility:3},humanName:'NPC humano',hp:8,level:1,bond:6,energy:10,characteristics:{body:2,mind:2,presence:2}},'ally');const a=s.actors.at(-1),h=s.humans.at(-1);assert.equal(a.side,'ally');assert.equal(a.controller,'narrator');assert.equal(h.name,'NPC humano');assert.equal(canChoose(s,'player',null,a.id),false);assert.equal(canChoose(s,'narrator',null,a.id),true);
  s=e.skipAction(s,'digimon',a.id);s=adjustResources(s,{actorId:a.id,hp:6,energy:4,bond:2});assert.equal(s.actors.at(-1).remaining,0);assert.equal(s.humans.at(-1).energy,4);assert.equal(s.pairs.at(-1).bond,2);assert.throws(()=>adjustResources(s,{actorId:a.id,hp:999,energy:4,bond:2}));
 });
 
