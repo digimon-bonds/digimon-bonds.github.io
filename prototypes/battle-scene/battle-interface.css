@@ -80,3 +80,8 @@
  .combatant .sprite,.multiple .sprite{width:170px;height:180px}
  .combatant .ground-ring,.multiple .ground-ring{bottom:101px}
 }
+
+/* Large uploaded images are real image elements, not size-limited CSS variables. */
+.arena.custom-background{background-image:none}
+.arena-background{position:absolute;inset:0 0 auto;width:100%;height:calc(100% - var(--dock-space,0px));object-fit:cover;object-position:center;z-index:-2;pointer-events:none}
+.arena-background[hidden],#commandPanel[hidden]{display:none}

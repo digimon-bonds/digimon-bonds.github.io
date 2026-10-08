@@ -1,3 +1,4 @@
+import {emptyBattle} from './scene-engine.mjs';
 import {sceneCard,nameScene,validSceneId} from './scene-directory.mjs';
 import {newSceneData} from './scene-repository.mjs';
 import {randomBytes} from 'node:crypto';
@@ -15,7 +16,7 @@ http.createServer(async(req,res)=>{try{const url=new URL(req.url,'http://localho
  const send=(code,data)=>res.writeHead(code,{'Content-Type':'application/json','Cache-Control':'no-store'}).end(JSON.stringify(data));
  if(!narratorGate.isAuthorized(req)){send(403,{error:'Entre com a senha do narrador.'});return;}
  if(req.method==='GET'){await mkdir(sceneFolder,{recursive:true});const scenes=[];for(const file of await readdir(sceneFolder)){if(!file.endsWith('.json'))continue;const id=file.slice(0,-5);if(validSceneId(id))scenes.push(sceneCard(id,JSON.parse(await readFile(path.join(sceneFolder,file),'utf8'))));}send(200,{scenes});return;}
- if(req.method==='POST'&&req.headers.origin==='http://'+req.headers.host){let body='';for await(const chunk of req){body+=chunk;if(body.length>1024)throw Error('Solicitação muito grande');}const id=crypto.randomUUID(),data=nameScene(newSceneData(),JSON.parse(body).name);await mkdir(sceneFolder,{recursive:true});await writeFile(path.join(sceneFolder,id+'.json'),JSON.stringify(data));send(201,{id});return;}send(403,{error:'Solicitação inválida.'});return;
+ if(req.method==='POST'&&req.headers.origin==='http://'+req.headers.host){let body='';for await(const chunk of req){body+=chunk;if(body.length>1024)throw Error('Solicitação muito grande');}const id=crypto.randomUUID(),data=nameScene(newSceneData(emptyBattle()),JSON.parse(body).name);await mkdir(sceneFolder,{recursive:true});await writeFile(path.join(sceneFolder,id+'.json'),JSON.stringify(data));send(201,{id});return;}send(403,{error:'Solicitação inválida.'});return;
  }if(pathname==='/api/scene'){
  const sceneStore=await storeFor(url.searchParams.get('id'));
  const send=(code,data)=>res.writeHead(code,{'Content-Type':'application/json','Cache-Control':'no-store'}).end(JSON.stringify(data));

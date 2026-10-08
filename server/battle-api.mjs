@@ -1,3 +1,4 @@
+import {emptyBattle} from '../prototypes/battle-scene/scene-engine.mjs';
 import {createSceneRepository,newSceneData} from '../prototypes/battle-scene/scene-repository.mjs';
 import {sceneCard,nameScene,validSceneId} from '../prototypes/battle-scene/scene-directory.mjs';
 import {listApproved,readApproved} from '../prototypes/battle-scene/forum-service.mjs';
@@ -36,7 +37,7 @@ export async function battleAPI(request,bucket,{narratorPasswordHash=passwordHas
   if(!authorized)return json({error:'Entre com a senha do narrador.'},403);
   if(request.method==='GET'){const scenes=[];let cursor;do{const page=await bucket.list({prefix:'battle/cards/',cursor});for(const object of page.objects){const card=await bucket.get(object.key);if(card)scenes.push(await card.json());}cursor=page.truncated?page.cursor:undefined;}while(cursor);return json({scenes:scenes.sort((a,b)=>b.updatedAt-a.updatedAt)});}
   if(request.method!=='POST')return json({error:'Método indisponível.'},405);
-  const input=await body(request),id=crypto.randomUUID(),data=nameScene(newSceneData(),input.name);
+  const input=await body(request),id=crypto.randomUUID(),data=nameScene(newSceneData(emptyBattle()),input.name);
   await bucket.put('battle/scenes/'+id,JSON.stringify(data));await bucket.put('battle/cards/'+id,JSON.stringify(sceneCard(id,data)));return json({id},201);
  }
  const id=url.searchParams.get('id');if(!validSceneId(id))return json({error:'Selecione uma cena de batalha.'},400);
