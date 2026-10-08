@@ -1,0 +1,38 @@
+{
+  "mode": "built-in image_gen",
+  "useCase": "background-extraction",
+  "catalogSource": "site/digimon-database.js",
+  "promptTemplate": "Background extraction only. Edit target: the provided Digibank artwork of {name}. Remove the white background and background gaps. Preserve the exact original character illustration, pose, anatomy, colors, white body parts, claws, outlines, equipment, and energy effects. Full uncropped character with small transparent margin. Actual alpha transparency PNG. No redesign, restyling, text, added objects, scenery or ground shadow.",
+  "stages": {
+    "rookie": {
+      "total": 151,
+      "completed": 148,
+      "attempted": 151
+    },
+    "champion": {
+      "total": 244,
+      "completed": 20,
+      "attempted": 20
+    }
+  },
+  "pending": [
+    {
+      "digibankId": "rookie-terriermon",
+      "name": "Terriermon",
+      "stage": "rookie",
+      "reason": "A ferramenta de imagem recusou este recorte."
+    },
+    {
+      "digibankId": "rookie-tyutyumon",
+      "name": "ChuuChuumon",
+      "stage": "rookie",
+      "reason": "A ferramenta de imagem recusou este recorte."
+    },
+    {
+      "digibankId": "rookie-soundbirdmon",
+      "name": "Soundbirdmon",
+      "stage": "rookie",
+      "reason": "A ferramenta de imagem recusou este recorte."
+    }
+  ]
+}

@@ -16,9 +16,14 @@ test('examples use distinct species and keep independent actor and human actions
 });
 
 
-test('battle artwork covers exactly the 30 occupied Rookie Digibank entries, using local transparent PNGs only',()=>{
- const partners=digimonDatabase.filter(d=>d.stage==='rookie'&&d.partner);
- assert.equal(partners.length,30);assert.equal(sheetArt.length,partners.length);
- for(const d of partners){const art=sheetArt.find(a=>a.digibankId===d.id);assert.ok(art,d.name);assert.equal(art.sourceImage,d.image);assert.equal(art.partner.length>0,true);assert.equal(art.stage,'rookie');assert.equal(art.transparent,true);assert.ok(art.transparentPixels>0&&art.visiblePixels>0);assert.equal(sheetSprite(d.name.toUpperCase()+'.'),art.image);const png=readFileSync(new URL(art.image,import.meta.url));assert.equal(png.subarray(1,4).toString(),'PNG');assert.equal(png[25],6,'PNG must contain real alpha');}
+test('Digibank cutouts use local alpha PNGs and account for every requested species',()=>{
+ const record=JSON.parse(readFileSync(new URL('./assets/partners/cutout-generation.json',import.meta.url),'utf8'));
+ const rookies=digimonDatabase.filter(d=>d.stage==='rookie');assert.equal(rookies.length,151);
+ assert.equal(record.stages.rookie.attempted,151);assert.equal(record.stages.champion.attempted,20);
+ assert.equal(new Set(sheetArt.map(a=>a.digibankId)).size,sheetArt.length);
+ for(const d of rookies){const completed=sheetArt.some(a=>a.digibankId===d.id),pending=record.pending.some(a=>a.digibankId===d.id);assert.notEqual(completed,pending,d.name+' must have one recorded outcome');}
+ for(const art of sheetArt){const d=digimonDatabase.find(d=>d.id===art.digibankId);assert.ok(d,art.name);assert.equal(art.sourceImage,d.image);assert.equal(String(art.partner||'').toLocaleLowerCase(),String(d.partner||'').toLocaleLowerCase());assert.equal(art.stage,d.stage);assert.equal(art.transparent,true);assert.ok(art.transparentPixels>0&&art.visiblePixels>0);assert.equal(sheetSprite(d.name.toUpperCase()+'.'),art.image);const png=readFileSync(new URL(art.image,import.meta.url));assert.equal(png.subarray(1,4).toString(),'PNG');assert.equal(png[25],6,'PNG must contain real alpha');}
+ for(const stage of ['rookie','champion']){assert.equal(record.stages[stage].completed,sheetArt.filter(a=>a.stage===stage).length);assert.equal(record.stages[stage].attempted,record.stages[stage].completed+record.pending.filter(a=>a.stage===stage).length);}
+ for(const item of record.pending){assert.ok(digimonDatabase.some(d=>d.id===item.digibankId&&d.name===item.name&&d.stage===item.stage));assert.equal(sheetArt.some(a=>a.digibankId===item.digibankId),false);assert.ok(item.reason);}
  assert.equal(sheetArt.some(a=>a.name==='Alphamon'),false);
 });
