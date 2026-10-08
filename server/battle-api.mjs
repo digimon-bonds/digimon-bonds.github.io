@@ -7,7 +7,7 @@ const token=()=>Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toStr
 function cookie(request,key){return (request.headers.get('cookie')||'').split(';').map(x=>x.trim()).find(x=>x.startsWith(key+'='))?.slice(key.length+1)||'';}
 async function body(request,max=1024){const text=await request.text();if(text.length>max)throw Error('Solicitação muito grande.');return JSON.parse(text);}
 function trusted(request){return request.headers.get('origin')===new URL(request.url).origin;}
-export async function battleAPI(request,bucket){
+export async function battleAPI(request,bucket,{narratorPasswordHash=passwordHash}={}){
  const url=new URL(request.url),route=url.pathname;
  if(!['/api/narrator','/api/scenes','/api/scene','/api/forum/sheets','/api/forum/sheet'].includes(route))return null;
  const narratorToken=cookie(request,'bonds_narrator');
@@ -21,7 +21,7 @@ export async function battleAPI(request,bucket){
   const attempts=await bucket.get(rateKey);const rate=attempts?await attempts.json():{count:0,until:Date.now()+60000};
   if(rate.until>Date.now()&&rate.count>=10)return json({error:'Muitas tentativas. Aguarde um minuto.'},429);
   const input=await body(request),hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(input.password||''))),b=>b.toString(16).padStart(2,'0')).join('');
-  if(hash!==passwordHash){await bucket.put(rateKey,JSON.stringify({count:rate.until>Date.now()?rate.count+1:1,until:rate.until>Date.now()?rate.until:Date.now()+60000}));return json({error:'Senha incorreta. Tente novamente.'},401);}
+  if(hash!==narratorPasswordHash){await bucket.put(rateKey,JSON.stringify({count:rate.until>Date.now()?rate.count+1:1,until:rate.until>Date.now()?rate.until:Date.now()+60000}));return json({error:'Senha incorreta. Tente novamente.'},401);}
   const id=token();await bucket.put('battle/sessions/'+id,JSON.stringify({expires:Date.now()+12*60*60*1000}));
   return json({authorized:true},200,{'Set-Cookie':'bonds_narrator='+id+'; HttpOnly; Secure; SameSite=Strict; Path=/api; Max-Age=43200'});
  }

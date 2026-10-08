@@ -1,6 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {battleAPI} from '../server/battle-api.mjs';
+import {battleAPI as handleBattleAPI} from '../server/battle-api.mjs';
+const testPassword='test-only-secret';
+const testHash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(testPassword))),b=>b.toString(16).padStart(2,'0')).join('');
+const battleAPI=(request,bucket)=>handleBattleAPI(request,bucket,{narratorPasswordHash:testHash});
 function memoryBucket(){const objects=new Map();let revision=0;return {objects,async get(key){const value=objects.get(key);return value?{etag:value.etag,json:async()=>JSON.parse(value.text)}:null;},async put(key,text,options={}){if(options.onlyIf&&objects.get(key)?.etag!==options.onlyIf.etagMatches)return null;const value={text,etag:String(++revision)};objects.set(key,value);return value;},async list({prefix}){return {objects:[...objects.keys()].filter(key=>key.startsWith(prefix)).map(key=>({key})),truncated:false};}};}
 const origin='https://battle.example';
 function request(path,{cookie='',body,originHeader=origin}={}){return new Request(origin+path,{method:body?'POST':'GET',headers:{cookie,origin:originHeader,'Content-Type':'application/json'},...(body?{body:JSON.stringify(body)}:{})});}
@@ -8,7 +11,7 @@ test('published battle API gates the directory and creates independent persisten
  const bucket=memoryBucket();
  assert.equal((await battleAPI(request('/api/scenes'),bucket)).status,403);
  assert.equal((await battleAPI(request('/api/narrator',{body:{password:'wrong'}}),bucket)).status,401);
- const login=await battleAPI(request('/api/narrator',{body:{password:'mateus26262622'}}),bucket);
+ const login=await battleAPI(request('/api/narrator',{body:{password:testPassword}}),bucket);
  assert.equal(login.status,200);assert.match(login.headers.get('Set-Cookie'),/HttpOnly; Secure/);
  const cookie=login.headers.get('Set-Cookie').split(';')[0];
  const create=async name=>(await (await battleAPI(request('/api/scenes',{cookie,body:{name}}),bucket)).json()).id;
@@ -24,7 +27,7 @@ test('published battle API gates the directory and creates independent persisten
  const forged=await battleAPI(request('/api/scenes',{cookie,body:{name:'CSRF'},originHeader:'https://foreign.example'}),bucket);assert.equal(forged.status,403);
 });
 test('competing published commands cannot overwrite a saved roll or revision',async()=>{
- const bucket=memoryBucket();const login=await battleAPI(request('/api/narrator',{body:{password:'mateus26262622'}}),bucket),cookie=login.headers.get('Set-Cookie').split(';')[0];
+ const bucket=memoryBucket();const login=await battleAPI(request('/api/narrator',{body:{password:testPassword}}),bucket),cookie=login.headers.get('Set-Cookie').split(';')[0];
  const {id}=await (await battleAPI(request('/api/scenes',{cookie,body:{name:'Concorrência'}}),bucket)).json();
  const body={command:'presentation',args:[{name:'Primeira alteração'}],revision:0,requestId:'same',mode:'narrator'};
  const results=await Promise.all(['one','two'].map(requestId=>battleAPI(request('/api/scene?id='+id,{cookie,body:{...body,requestId}}),bucket)));
