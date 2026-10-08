@@ -5,7 +5,7 @@ const sceneEndpoint='/api/scene'+(sceneId?'?id='+encodeURIComponent(sceneId):'')
 import {battleLogEntries} from './battle-log.mjs';
 import {initCommandWheel,commandIcon} from './command-wheel.mjs';
 import {draftNpc} from './npc.mjs';
-import {findSheetArt} from './sheet-art.mjs';
+import {findSheetArt,sheetArt} from './sheet-art.mjs';
 import {parsePublicSheet} from './forum-import.mjs';
 import {renderInterface,combatantHUD} from './battle-interface.mjs';
 import {canChoose,canOperate} from './interface-policy.mjs';
@@ -59,7 +59,7 @@ function render(){renderTeams();
  if(maintenancePairId!==pair.id){maintenancePairId=pair.id;const choices=maintenanceChoices.get(pair.id)||{sustain:true,allowZero:false,rescueEnabled:false};$('#sustain').checked=choices.sustain;$('#allowZero').checked=choices.allowZero;}
  setText('dataOrigin',state.actors.some(a=>a.source)?'LOCAL · FICHAS PÚBLICAS + LAB':'LOCAL · FICHAS FICTÍCIAS');setText('teamCounts',state.actors.filter(a=>a.side==='ally').length+' × '+state.actors.filter(a=>a.side==='enemy').length);for(const [id,side] of [['addAlly','ally'],['addEnemy','enemy']])$('#'+id).disabled=busy||state.actors.filter(a=>a.side===side).length>=5;$('#removeActor').disabled=busy;setText('sceneName',state.scene.name);setText('round','ROUND '+pad(state.round));setText('humanName',human.name);setText('energy',`${human.energy} / ${9+pair.level}`);setText('bond',`${pair.bond} / ${maxBond}`);setText('bondLevel',`NÍVEL DE LAÇO ${pair.level}${pair.bond<0?' · LAÇO ENFRAQUECIDO':''}${pair.bond<=-6?' · QUEBRA DE LAÇO':''}`);
  setText('digimonStatus',ally.remaining&&ally.hp?'AVAILABLE':'LOCKED');setText('humanStatus',human.energy===0?'OUT':human.skipped?human.lastAction||'SKIPPED':human.remaining?'AVAILABLE':'USED');setText('turnStatus',busy?'PROCESSING':state.phase==='closed'?'ROUND CLOSED':engine.roundStatus(state).ready?'RODADA PRONTA':engine.partnershipStatus(state,pair.id).label);setText('sceneStatus',busy?'PROCESSING ACTION':engine.pendingResolutions(state).length?engine.pendingResolutions(state).length+' ACTIONS WAITING':state.phase==='closed'?'RODADA ENCERRADA':engine.roundStatus(state).ready?'RODADA CONCLUÍDA':'AGUARDANDO AÇÃO');
- for(const a of state.actors){const af=engine.currentForm(a),m=engine.markers(af),root=$('#'+a.id);updateHud(a);root.querySelector('img').src=findSheetArt(af.name)?.image||af.image;root.querySelector('img').classList.toggle('pixel-art',!!findSheetArt(af.name)?.pixelArt);root.querySelector('img').alt=af.name;root.querySelector('img').style.setProperty('--sprite-flip',a.flipped?-1:1);root.style.setProperty('--idle-duration',(4.2+state.actors.indexOf(a)*.31)+'s');root.style.setProperty('--idle-delay',(-state.actors.indexOf(a)*.63)+'s');root.querySelector('.sprite-position').style.transform=`translate(${a.position.x}px,${a.position.y}px) scale(${a.position.scale})`;root.classList.toggle('defeated',a.hp===0);root.classList.toggle('low-hp',a.hp>0&&a.hp/m.hp<=.25);$('#'+a.id+'Combatant').classList.toggle('shielded',a.defending);}
+ for(const a of state.actors){const af=engine.currentForm(a),m=engine.markers(af),root=$('#'+a.id);updateHud(a);root.querySelector('img').src=af.image||findSheetArt(af.name)?.image;root.querySelector('img').classList.toggle('pixel-art',!!findSheetArt(af.name)?.pixelArt);root.querySelector('img').alt=af.name;root.querySelector('img').style.setProperty('--sprite-flip',a.flipped?-1:1);root.style.setProperty('--idle-duration',(4.2+state.actors.indexOf(a)*.31)+'s');root.style.setProperty('--idle-delay',(-state.actors.indexOf(a)*.63)+'s');root.querySelector('.sprite-position').style.transform=`translate(${a.position.x}px,${a.position.y}px) scale(${a.position.scale})`;root.classList.toggle('defeated',a.hp===0);root.classList.toggle('low-hp',a.hp>0&&a.hp/m.hp<=.25);$('#'+a.id+'Combatant').classList.toggle('shielded',a.defending);}
  setText('actorController',actor.controller==='player'?'PLAYER // ALIADO':'NARRADOR // NPC');setText('actorActionStatus',actor.hp===0?'OUT':actor.remaining?'ACTION AVAILABLE':'ACTION LOCKED');setText('signatureUses',`${actor.uses[actor.formId]??f.attributes.intelligence} / ${f.attributes.intelligence} USOS`);
  const blocked=busy||state.phase!=='open'||(engine.entityPending(state,actor.id)&&!engine.canContinueMulti(state,actor.id))||actor.remaining===0||!actor.hp||actorPairFinalized(actor);document.querySelectorAll('[data-action]').forEach(b=>b.disabled=blocked||engine.canContinueMulti(state,actor.id)&&!['attack','signature'].includes(b.dataset.action)||['attack','signature'].includes(b.dataset.action)&&engine.incomingAttacks(state,actor.id).length>0||b.dataset.action==='defend'&&engine.incomingAttacks(state,actor.id).some(r=>r.pending.dodge)||b.dataset.action==='signature'&&!f.attacks.length);$('#skipNpc').hidden=actor.controller!=='narrator';$('#skipNpc').disabled=blocked;
  if(pair.turnFinalized&&!busy&&state.phase==='open')setText('turnStatus','TURNO CONCLUÍDO');
@@ -159,6 +159,24 @@ function setLabMode(creating){
  $('#labForm button[type="submit"]').textContent=creating?'ADICIONAR NPC':'APLICAR AO CENÁRIO';
  for(const id of ['labScene','labActor','labFormId','labLevel','labBond','labEnergy','labHumanName','labTalents','labUnlocked','labActive'])$('#'+id).closest('label').hidden=creating&&!(npcSide==='ally'&&['labLevel','labBond','labEnergy','labHumanName','labTalents'].includes(id));
 }
+const galleryArts=[...sheetArt,{name:'Alphamon',image:'assets/alphamon.png'}];
+function renderLabGallery(){
+ const query=fieldValue('labArtSearch').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+ const visible=galleryArts.filter(art=>art.name.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().includes(query));
+ const chosen=fieldValue('labImageLink');
+ $('#labArtGrid').replaceChildren(...visible.map(art=>{
+  const button=document.createElement('button'),image=document.createElement('img'),name=document.createElement('span');
+  const url=new URL(art.image,location.href).href;
+  button.type='button';button.className='lab-art-choice';button.setAttribute('aria-label','Usar imagem de '+art.name);button.setAttribute('aria-pressed',String(chosen===url));
+  image.src=art.image;image.alt='';image.loading='lazy';name.textContent=art.name;button.append(image,name);
+  button.addEventListener('click',()=>{ $('#labImage').value='';$('#labImageLink').value=url;$('#labArtPreview').src=url;setText('labArtStatus','Imagem selecionada: '+art.name+'. Salve para aplicar ao participante.');renderLabGallery(); });
+  return button;
+ }));
+ if(!visible.length)setText('labArtStatus','Nenhum Digimon encontrado.');
+}
+$('#labArtSearch').addEventListener('input',()=>{setText('labArtStatus','');renderLabGallery();});
+$('#labImageLink').addEventListener('input',()=>{ $('#labImage').value='';setText('labArtStatus','');if(fieldValue('labImageLink'))$('#labArtPreview').src=fieldValue('labImageLink');renderLabGallery(); });
+$('#labImage').addEventListener('change',async()=>{const file=$('#labImage').files[0];if(file?.type==='image/png'&&file.size<=12*1024*1024){$('#labImageLink').value='';$('#labArtPreview').src=await imageData(file);setText('labArtStatus','PNG escolhido: '+file.name);renderLabGallery();}});
 function fillLab(rebuild=false){
  const labState=npcDraft||state,actor=engine.actorById(labState,fieldValue('labActor')),pair=engine.pairOf(labState,actor);
  if(rebuild){$('#labFormId').innerHTML=Object.entries(actor.forms).map(([id,f])=>option(id,engine.STAGES[f.stage].label+' // '+f.name)).join('');$('#labFormId').value=actor.formId;}
@@ -167,7 +185,7 @@ function fillLab(rebuild=false){
  for(const key of Object.keys(engine.ATTRIBUTES))$('#lab'+key[0].toUpperCase()+key.slice(1)).value=f.attributes[key];
  $('#labHp').value=actor.hp;$('#labLevel').value=pair?.level||1;$('#labBond').value=pair?.bond||0;$('#labEnergy').value=pair?labState.humans.find(h=>h.pairId===pair.id).energy:0;
  $('#labTalents').disabled=!pair;$('#labTalents').value=pair?labState.humans.find(h=>h.pairId===pair.id).talents.map(t=>t.name+' | '+t.rank).join('\n'):'';
- $('#labUnlocked').checked=f.unlocked;$('#labActive').checked=id===actor.formId;$('#labX').value=actor.position.x;$('#labY').value=actor.position.y;$('#labScale').value=actor.position.scale;$('#labImage').value='';
+ $('#labUnlocked').checked=f.unlocked;$('#labActive').checked=id===actor.formId;$('#labX').value=actor.position.x;$('#labY').value=actor.position.y;$('#labScale').value=actor.position.scale;$('#labImage').value='';$('#labGallery').open=false;$('#labArtSearch').value='';setText('labArtStatus','');renderLabGallery();
  for(const id of Object.keys(engine.CONDITIONS))$('#condition-'+id).checked=!!actor.conditions[id];
  for(const id of ['labLevel','labBond','labEnergy'])$('#'+id).disabled=!pair;
  updateLabPreview();
