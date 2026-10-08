@@ -1,7 +1,7 @@
 import {createSceneRepository,newSceneData} from '../prototypes/battle-scene/scene-repository.mjs';
 import {sceneCard,nameScene,validSceneId} from '../prototypes/battle-scene/scene-directory.mjs';
 import {listApproved,readApproved} from '../prototypes/battle-scene/forum-service.mjs';
-const passwordHash='b495fa6faea84d41afbdfd509659becbb8751936c5ac74fe715c830c4621e6a0';
+const passwordHash='e83c75981aef00afbc27b9419341458822f85fb8faee74d84474a90ad02f4809';
 const json=(data,status=200,headers={})=>Response.json(data,{status,headers:{'Cache-Control':'no-store',...headers}});
 const token=()=>Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,'0')).join('');
 function cookie(request,key){return (request.headers.get('cookie')||'').split(';').map(x=>x.trim()).find(x=>x.startsWith(key+'='))?.slice(key.length+1)||'';}

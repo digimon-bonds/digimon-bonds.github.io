@@ -1,6 +1,6 @@
 import {createHash,randomBytes,timingSafeEqual} from 'node:crypto';
 // Local prototype gate only. Real account permissions require a future backend.
-const defaultHash='b495fa6faea84d41afbdfd509659becbb8751936c5ac74fe715c830c4621e6a0';
+const defaultHash='e83c75981aef00afbc27b9419341458822f85fb8faee74d84474a90ad02f4809';
 export function createNarratorGate(hash=defaultHash){
  const sessions=new Set();
  const authorized=req=>[...(req.headers.cookie||'').matchAll(/(?:^|;\s*)bonds_narrator=([a-f0-9]{64})(?=;|$)/g)].some(match=>sessions.has(match[1]));
