@@ -1,0 +1,6 @@
+// Reject the four excess uint32 values so all six faces have equal probability.
+export function secureD6Fraction(read=()=>{const a=new Uint32Array(1);globalThis.crypto.getRandomValues(a);return a[0];}){let n;do{n=read();if(!Number.isInteger(n)||n<0||n>4294967295)throw Error('Fonte criptográfica inválida');}while(n>=4294967292);return (n%6)/6;}
+export function rollDie(random=secureD6Fraction){const n=random();if(!Number.isFinite(n)||n<0||n>=1)throw Error('Fonte aleatória inválida');return 1+Math.floor(n*6);}
+export function modifier(advantages=[],disadvantages=[]){return advantages.length&&disadvantages.length?'normal':advantages.length?'advantage':disadvantages.length?'disadvantage':'normal';}
+export function countSuccesses(dice,mode='normal'){const threshold={normal:4,advantage:3,disadvantage:5}[mode];if(!threshold||dice.some(d=>!Number.isInteger(d)||d<1||d>6))throw Error('Rolagem inválida');return dice.filter(d=>d>=threshold).length;}
+export function rollPool(pool,mode='normal',random=secureD6Fraction){if(!Number.isInteger(pool)||pool<0||pool>100)throw Error('Grupo de dados inválido (0–100)');const dice=Array.from({length:pool},()=>rollDie(random));return {pool,mode,dice,successes:countSuccesses(dice,mode),forced:false};}

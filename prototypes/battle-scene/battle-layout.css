@@ -1,0 +1,42 @@
+/* A single horizontal formation; compact status panels sit at each sprite's feet. */
+.arena{overflow-x:auto;overflow-y:hidden;height:520px;align-items:stretch;scrollbar-color:#4c7888 #0b202b;scrollbar-width:thin}
+.arena-grid{left:0;right:0;bottom:0;height:32%;transform:none;background-size:48px 28px}
+.team{display:flex;align-items:stretch;justify-content:center;padding:12px;gap:10px;min-width:0}
+.team>.combatant{flex:1;min-width:0;height:100%;display:block}
+.team.multiple{display:flex;gap:8px;padding:12px;grid-template-columns:none;grid-auto-rows:auto}
+.arena:has(.multiple){height:470px;min-height:470px;grid-template-columns:minmax(max-content,1fr) 45px minmax(max-content,1fr)}
+.team.multiple>.combatant{flex:1 0 185px;width:185px;max-width:225px;min-width:185px}
+.team:not(.multiple){min-width:230px}
+.team:not(.multiple)>.combatant{max-width:260px}
+.combatant .combatant-label,.multiple .combatant-label{top:auto;bottom:43px;left:4px;right:4px;width:auto!important;max-width:none;border-radius:9px;padding:8px 10px;background:#0b202bdc;backdrop-filter:blur(4px)}
+.combatant-label>span,.multiple .combatant-label>span{font-size:7px;letter-spacing:.4px}
+.combatant-label h2,.multiple .combatant-label h2{font:600 13px/1.2 Arial,sans-serif;margin:3px 0 4px;overflow-wrap:anywhere}
+.hud-meta,.multiple .hud-meta{font:9px/1.4 Arial,sans-serif;margin:0;color:#9db7c3}
+.hp-caption,.multiple .hp-caption{font-size:9px;margin:6px 0 4px}
+.combatant-label progress{height:5px}
+.condition-tags{margin-top:3px}
+.combatant .sprite-anchor,.multiple .sprite-anchor{inset:8px -10px 138px}
+.combatant .sprite,.multiple .sprite{height:290px;width:230px;max-width:none;max-height:100%;object-fit:contain;object-position:50% 100%}
+.combatant .ground-ring,.multiple .ground-ring{bottom:138px;left:10%;width:80%;height:22px}
+.unit-select{bottom:9px;width:calc(100% - 8px);font-size:9px;min-height:28px;border-radius:7px;padding:6px}
+.selected .combatant-label{border-color:#69cbdc88;box-shadow:0 0 14px #67d8e40b}
+.arena-center{padding:0;align-self:center}
+.arena-location{font-size:8px;letter-spacing:0}
+.arena .round-status{font-size:8px}
+.team-tools small{line-height:1.4}
+.formation-views{display:flex;align-items:center;gap:8px;margin:10px 0;color:var(--muted)}
+.formation-views button{font-size:9px;padding:7px 10px}
+.formation-views small{font-size:11px}
+@media(max-width:760px){
+ .arena{grid-template-columns:1fr 30px 1fr;height:440px}
+ .team{padding:5px;gap:5px}
+ .team:not(.multiple){min-width:145px;min-height:0}
+ .arena:has(.multiple){height:450px;min-height:450px;grid-template-columns:minmax(max-content,1fr) 30px minmax(max-content,1fr)}
+ .team.multiple{padding:5px;gap:5px}
+ .team.multiple>.combatant{min-width:175px;width:175px;flex-basis:175px}
+ .combatant .sprite,.multiple .sprite{width:205px;height:270px}
+ .combatant-label h2,.multiple .combatant-label h2{font-size:12px}
+ .hud-meta,.multiple .hud-meta{font-size:8px}
+ .combatant .sprite-anchor,.multiple .sprite-anchor{inset:8px -5px 136px}
+ .formation-views{flex-wrap:wrap}.formation-views small{flex-basis:100%}
+}

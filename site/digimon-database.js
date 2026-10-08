@@ -1,4 +1,5 @@
 import snapshot from './data/digimon-data.js';
+import {resolvePartnerImage} from './partner-image.js';
 
 export const digimonStages=Object.freeze([
  {id:'baby',label:'BEBÊ'}, {id:'rookie',label:'NOVATO'},
@@ -40,7 +41,7 @@ export function getStageSpecies(stage,{includeSpecial=false,evolutionCategory='a
 }
 // Explicit adapter for the later Creator migration. Never unlocks a form or modifies a sheet.
 export function toCreatorSpecies(entry){
- return {name:(entry.legacyName||entry.name).toLocaleUpperCase('pt-BR'),image:entry.image,digital:entry.digitalAttribute,
+ return {name:(entry.legacyName||entry.name).toLocaleUpperCase('pt-BR'),image:resolvePartnerImage(entry.image),digital:entry.digitalAttribute,
   element:entry.element,classification:entry.classification,occupied:Boolean(entry.partner)};
 }
 export function getCreatorSpecies({availableOnly=false}={}){

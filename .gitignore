@@ -4,3 +4,5 @@ dist/
 .env.*
 *.log
 .digibank-research/
+
+prototypes/battle-scene/.battle-state/

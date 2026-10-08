@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="240" viewBox="0 0 320 240">
+  <defs>
+    <pattern id="mesh" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#51bfa3" stroke-opacity=".16" stroke-width=".6"/>
+      <circle cx="0" cy="0" r="1.2" fill="#6fe8bb" fill-opacity=".3"/>
+    </pattern>
+  </defs>
+  <path fill="url(#mesh)" d="M0 0h320v240H0z"/>
+  <g fill="#66e5ae" fill-opacity=".2" font-family="Consolas,monospace" font-size="9" letter-spacing="4">
+    <text x="12" y="24">01001 11010 00101 01100</text>
+    <text x="50" y="72">10110 00110 10101</text>
+    <text x="12" y="120">00101 11001 01010 11001</text>
+    <text x="82" y="168">11010 01001 10110</text>
+    <text x="12" y="216">10101 00110 11001 01010</text>
+  </g>
+  <path d="M0 48h64l32 32h64M320 192h-64l-32-32h-64" fill="none" stroke="#6fe8bb" stroke-opacity=".2"/>
+</svg>

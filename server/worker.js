@@ -1,9 +1,11 @@
+import {battleAPI} from './battle-api.mjs';
 import {env} from 'cloudflare:workers';
 import {sheetDocument} from './sheet-document.js';
 const json=(value,status=200)=>Response.json(value,{status});
 const max=3*1024*1024;
 const handler={async fetch(request){try{
  const u=new URL(request.url);
+ const battle=await battleAPI(request,env.BUCKET);if(battle)return battle;
  if(/^\/api\/forum-sheets\/[a-f0-9]{64}$/.test(u.pathname)){
   if(request.method!=='GET')return new Response(null,{status:405});
   const id=u.pathname.split('/').pop();const project=await env.BUCKET.get('projects/'+id+'.json');

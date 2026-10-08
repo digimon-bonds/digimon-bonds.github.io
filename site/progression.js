@@ -1,4 +1,4 @@
-import {effects,elements} from './catalog.js';
+import {effects,elements,normalizeElementFields} from './catalog.js';
 export const progressionSource='https://digimonbonds.forumeiros.com/t16-07-experiencia-e-progressao';
 export const deviceLimits={Scanner:3,'Detecção':3,'Comunicação':3,Mapa:2,Armazenamento:3,Booster:3,'Protocolos Especiais':3,'Scanner de Cards':3};
 export const improvementNames=['Resistência','Força','Defesa','Técnica'];
@@ -120,5 +120,5 @@ function applyEvent(p,e,s){
  p.history.push(description);
 }
 export function withUpdate(s,event){if(event.type==='form-upgrade'&&!s.digimonForms?.[event.stage]?.unlocked)fail('Selecione uma forma desbloqueada.');const next=structuredClone(s);next.updates=[...(next.updates||[]),structuredClone(event)];progress(next);return next}
-export function validateUpdates(s){if(!Array.isArray(s.updates)||s.updates.length>2000)fail('Histórico de Update inválido.');progress(s);}
+export function validateUpdates(s){if(!Array.isArray(s.updates)||s.updates.length>2000)fail('Histórico de Update inválido.');normalizeElementFields(s);progress(s);}
 export function updateCode(s){const p=progress(s),safe=v=>String(v).replaceAll('[','［').replaceAll(']','］');return `[b]UPDATE DE FICHA — ${safe(s.name)}[/b]\n${p.history.slice(s.updateStart||0).map((v,i)=>`${i+1}. ${safe(v)}`).join('\n')}\n\nNível de Laço: ${p.level}\nEXP: ${p.exp}/10\nEnergia: ${p.energy}/${9+p.level}\nPontos de Laço: ${p.bond}/${5+p.level}\n${p.broken?'Episódio de Quebra de Laço ativo.\n':''}${p.pending.length?'Melhorias pendentes: '+p.pending.map(k=>({minor:'Atualização Menor',major:'Atualização Maior',attribute:'Melhoria de Atributos',device:'Melhoria de Digivice'})[k]).join(', '):'Melhorias concluídas.'}\n[url=${progressionSource}]Regra de progressão[/url]`}

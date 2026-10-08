@@ -40,7 +40,7 @@ test('all five forms retain independent data and locks through JSON',()=>{
 });
 test('backend permits Pages CORS and rejects untrusted origins',async()=>{
  let source=await readFile(path.join(root,'server/worker.js'),'utf8');
- source=source.replace("import {env} from 'cloudflare:workers';","const env={};").replace("'./sheet-document.js'",JSON.stringify(pathToFileURL(path.join(root,'server/sheet-document.js')).href));
+ source=source.replace("import {env} from 'cloudflare:workers';","const env={};").replace("'./battle-api.mjs'",JSON.stringify(pathToFileURL(path.join(root,'server/battle-api.mjs')).href)).replace("'./sheet-document.js'",JSON.stringify(pathToFileURL(path.join(root,'server/sheet-document.js')).href));
  const {default:worker}=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
  for(const [origin,status] of [['https://digimon-bonds.github.io',204],['https://evil.example',403]]){const res=await worker.fetch(new Request('https://bonds-character-app.mateuzim-alves.chatgpt.site/api/forum-sheets',{method:'OPTIONS',headers:{origin}}));assert.equal(res.status,status);assert.equal(res.headers.get('access-control-allow-origin'),status===204?origin:null);}
  const res=await worker.fetch(new Request('https://bonds-character-app.mateuzim-alves.chatgpt.site/api/digivice-images',{method:'POST',headers:{origin:'https://digimon-bonds.github.io','content-type':'image/png'},body:'invalid'}));assert.equal(res.status,400);assert.equal(res.headers.get('access-control-allow-origin'),'https://digimon-bonds.github.io');
@@ -56,7 +56,7 @@ test('additional rookie attacks survive initialization, stage edits and JSON',()
 test('forum embed has bounded height and restores scrolling',()=>{const code=embedCode('https://example.com/sheets/abc');assert.match(code,/height="1400"/);assert.match(code,/scrolling="yes"/);assert(!code.includes('embed=full'));});
 test('published project restores exact editable state and immutable versions',async()=>{
  let source=await readFile(path.join(root,'server/worker.js'),'utf8');
- source=source.replace("import {env} from 'cloudflare:workers';",`const objects=new Map();const env={BUCKET:{async put(key,value){objects.set(key,value)},async get(key){return objects.has(key)?{text:async()=>objects.get(key),body:objects.get(key)}:null}}};`).replace("'./sheet-document.js'",JSON.stringify(pathToFileURL(path.join(root,'server/sheet-document.js')).href));
+ source=source.replace("import {env} from 'cloudflare:workers';",`const objects=new Map();const env={BUCKET:{async put(key,value){objects.set(key,value)},async get(key){return objects.has(key)?{text:async()=>objects.get(key),body:objects.get(key)}:null}}};`).replace("'./battle-api.mjs'",JSON.stringify(pathToFileURL(path.join(root,'server/battle-api.mjs')).href)).replace("'./sheet-document.js'",JSON.stringify(pathToFileURL(path.join(root,'server/sheet-document.js')).href));
  const {default:worker}=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
  const state=initializeForms(fresh());state.name='João';state.deviceColor='#123456';unlockStage(state,'champion');state.activeDigimonStage='champion';state.digimonForms.champion.name='Campeão';addSignatureAttack(state);state.digimonForms.champion.signatureAttacks[1].name='Ataque extra';
  const tree={tag:'article',attrs:{id:'preview'},children:['Teste']};

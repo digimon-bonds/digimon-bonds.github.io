@@ -5,6 +5,8 @@ import {renderDigivice} from './digivices.js';
 import {initializeForms,stageOrder,activeForm,publicArchive} from './forms.js';
 import {generateForumPost} from './forum-post.js';
 import {captureSheet,snapshotTree,embedCode} from './forum-snapshot.js';
+import {partnerVisual} from './partner-cutouts.js';
+import {loadPartnerImage} from './partner-image.js';
 const esc=v=>String(v??'').replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;');
 const valid=u=>/^https?:\/\//.test(u);
 let cached=null;
@@ -17,11 +19,11 @@ export async function prepareForumPost(input,status=()=>{},snapshots){
   status('Preparando Digivice // '+(f.unlocked?f.name:'ACCESS LOCKED'));
   const host=document.createElement('div');host.style.cssText='position:fixed;left:-10000px;top:0;width:640px;pointer-events:none;';document.body.append(host);
   try{
-   host.innerHTML=renderDigivice({...s,activeDigimonStage:stage,formLocked:!f.unlocked,digiName:f.unlocked?f.name:'',digiImage:f.unlocked?f.image:'',zoom:f.zoom,imagePosition:f.imagePosition},esc,valid);
+   host.innerHTML=renderDigivice({...s,activeDigimonStage:stage,formLocked:!f.unlocked,digiName:f.unlocked?f.name:'',digiImage:f.unlocked?f.image:'',imageMode:f.imageMode,imageBackground:f.imageBackground,zoom:f.zoom,imagePosition:f.imagePosition},esc,valid);
    const figure=host.querySelector('figure');figure.style.cssText='width:640px;max-width:none;margin:0;container-type:inline-size;';
    host.querySelectorAll('button,figcaption').forEach(el=>el.remove());
    const img=host.querySelector('.digivice-lcd img');
-   if(img){img.crossOrigin='anonymous';img.src=apiURL('/api/partner-image?url='+encodeURIComponent(f.image));await img.decode().catch(()=>{throw Error('Não foi possível carregar a imagem de '+f.name+'. Confira a URL da imagem.');});}
+   if(img)await loadPartnerImage(img,partnerVisual(f).image,url=>apiURL('/api/partner-image?url='+encodeURIComponent(url)));
    const blob=await globalThis.htmlToImage.toBlob(host.querySelector('.digivice-display'),{width:640,height:640,pixelRatio:1,skipFonts:true,backgroundColor:'transparent'});
    if(!blob)throw Error('Não foi possível gerar a imagem do Digivice.');
    status('Publicando imagem // '+(f.unlocked?f.name:'ACCESS LOCKED'));

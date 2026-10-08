@@ -2,7 +2,10 @@ import {historicalBase} from './progression.js';
 import {fresh} from './rules.js';
 import {initializeForms,blankForm} from './forms.js';
 import {archetypes} from './archetypes.js';
-import {effects,species} from './catalog.js';
+import {effects} from './catalog.js';
+import {selectableSpecies} from './species-selection.js';
+import {labelKey,speciesKey,uniqueLabelMatch} from './import-labels.js';
+import {resolvePartnerImage} from './partner-image.js';
 
 const text=value=>value.replace(/\[(?:\/?(?:table|tr|td|b|i|u|size|color|center|justify|spoiler|img|url))\b[^\]]*\]/gi,'').replace(/&amp;/g,'&').replace(/&nbsp;/g,' ').trim();
 const norm=value=>text(value).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[●:]/g,'').trim();
@@ -22,7 +25,7 @@ export function recoverTableCharacter(raw){
  const personality=cells(human).find(c=>/\[b\]Personalidade:\[\/b\]/i.test(c));
  if(personality)s.personality=text(personality.split(/\[b\]Personalidade:\[\/b\]/i)[1]);
  s.humanImage=image(human);s.humanImageLayout='portrait';
- s.archetype=archetypes.find(a=>norm(a.name)===norm(h.ARQUETIPO||''))?.id||'';
+ s.archetype=uniqueLabelMatch(archetypes,h.ARQUETIPO)?.id||'';
  for(const [key,label] of Object.entries({corpo:'CORPO',mente:'MENTE',presenca:'PRESENCA'}))s.human[key]=Number(h[label])||0;
  s.talent=(h.TALENTO||'').replace(/\s*\|\s*Rank\s*\d+/i,'');
  for(const key of Object.keys(s.custom))s.custom[key]=true;
@@ -31,13 +34,14 @@ export function recoverTableCharacter(raw){
  initializeForms(s);
  for(const match of raw.matchAll(/\[spoiler=([^\]]+)\]([\s\S]*?)\[\/spoiler\]/gi)){
   const stage=({BEBE:'baby',NOVATO:'rookie',CAMPEAO:'champion',PERFEITO:'ultimate',MEGA:'mega'})[norm(match[1].split('/')[0])];if(!stage)continue;
-  const f=blankForm(stage),v=fields(match[2]);if(!v.NOME)continue;f.unlocked=true;f.name=species.find(x=>norm(x.name)===norm(v.NOME))?.name||v.NOME;f.image=image(match[2]);
+  const f=blankForm(stage),v=fields(match[2]);if(!v.NOME)continue;f.unlocked=true;const entry=uniqueLabelMatch(selectableSpecies(stage),v.NOME,speciesKey);f.name=stage==='rookie'&&entry?(entry.legacyName||entry.name).toLocaleUpperCase('pt-BR'):entry?.name||v.NOME;f.image=entry?.id==='rookie-black-strabimon'?resolvePartnerImage(entry.image):image(match[2])||resolvePartnerImage(entry?.image);
   for(const [key,label] of Object.entries({digital:'ATRIBUTO DIGITAL',element:'ELEMENTO',classification:'CLASSIFICACAO',personality:'PERSONALIDADE & CARACTERISTICAS'}))f[key]=v[label]||'';
+  if(entry){for(const [key,canonical] of Object.entries({digital:entry.digitalAttribute,classification:entry.classification}))if(labelKey(f[key])===labelKey(canonical)||!f[key])f[key]=canonical;}
   const pc=cells(match[2]).find(c=>/\[b\]Personalidade & Características:\[\/b\]/i.test(c));if(pc)f.personality=text(pc.split(/\[b\]Personalidade & Características:\[\/b\]/i)[1]);
   for(const key of Object.keys(f.attributes))f.attributes[key]=Number(v[norm(key)])||1;
-  f.qualities=[...match[2].matchAll(/\[b\]● Qualidade:\[\/b\]([^\r\n]*)/gi)].map(m=>text(m[1])).filter(Boolean).map(t=>({name:t.split('|')[0].trim(),rank:Number(t.match(/Rank\s*(\d+)/i)?.[1])||1}));
+  f.qualities=[...match[2].matchAll(/\[b\]● Qualidade:\[\/b\]([^\r\n]*)/gi)].map(m=>text(m[1])).filter(t=>t&&!/^[—–-]+$/.test(t)).map(t=>({name:t.split('|')[0].trim(),rank:Number(t.match(/Rank\s*(\d+)/i)?.[1])||1}));
   const attackArea=match[2].slice(match[2].indexOf('ATAQUES DE ASSINATURA'));
-  f.signatureAttacks=[...attackArea.matchAll(/\[tr\]([\s\S]*?)\[\/tr\]/gi)].map(m=>cells(m[1]).map(text)).filter(c=>c.length===4&&/^\d+$/.test(c[1])&&c[0]).map(c=>({name:c[0],rank:Number(c[1]),element:c[2],effects:c[3].split(';').map(e=>({name:effects.find(x=>norm(x.name)===norm(e))?.name||e.trim(),element:''}))}));
+  f.signatureAttacks=[...attackArea.matchAll(/\[tr\]([\s\S]*?)\[\/tr\]/gi)].map(m=>cells(m[1]).map(text)).filter(c=>c.length===4&&/^\d+$/.test(c[1])&&c[0]).map(c=>({name:c[0],rank:Number(c[1]),element:c[2],effects:c[3].split(';').map(e=>({name:uniqueLabelMatch(effects,e)?.name||e.trim(),element:''}))}));
   s.digimonForms[stage]=f;
   if(stage==='rookie'){Object.assign(s,{digiName:f.name,digiImage:f.image,digital:f.digital,element:f.element,classification:f.classification,digiPersonality:f.personality,digi:f.attributes,quality:f.qualities[0]?.name||'',attack:f.signatureAttacks[0]?.name||'',attackElement:f.signatureAttacks[0]?.element||'',effect:f.signatureAttacks[0]?.effects[0]?.name||''});}
  }

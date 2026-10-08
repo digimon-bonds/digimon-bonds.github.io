@@ -1,0 +1,93 @@
+/* Player presentation: circuitry, glass panels and a dual-channel dial. */
+.command-stage{display:grid;grid-template-columns:minmax(0,1fr);position:relative;align-items:center;gap:16px;padding:0 18px}
+.command-stage .command-wheel{grid-column:1;grid-row:1;min-width:0}
+.command-stage.has-decision{grid-template-columns:minmax(180px,1fr) minmax(0,800px) minmax(200px,1fr)}
+.command-stage.has-decision .command-wheel{grid-column:2}
+.command-roll-card,.command-decision-card{min-width:0;padding:18px 14px;border:1px solid #4a9bad88;border-top:2px solid #79dee4;border-radius:5px 14px 5px 14px;background:linear-gradient(135deg,#173d4af5,#081d29fa);box-shadow:0 8px 24px #0005;position:relative;z-index:4;overflow-wrap:anywhere}
+.command-roll-card{grid-column:1;grid-row:1;display:grid;gap:12px}
+.command-decision-card{grid-column:3;grid-row:1;border-top-color:#f1c37b}
+.command-stage aside[hidden]{display:none}
+.command-stage aside h3{font:10px/1.5 var(--mono);letter-spacing:1px;color:#8ae3e8;margin:0 0 10px}
+.command-decision-card h3{color:#f1c37b!important}
+.command-stage aside>b{font:600 16px/1.4 Arial,sans-serif;color:#edfaff}
+.command-stage aside p,.decision-target{font:12px/1.6 Arial,sans-serif;color:#b6cdd6;margin:0 0 15px}
+.command-stage .dice-tray{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-start;margin:0}
+.command-stage .die{width:30px;height:34px;font-size:18px}
+.command-stage .roll-meta{font-size:9px}.command-stage .success-count{font-size:15px;text-align:left}
+.command-stage .resolution-actions{display:flex;flex-direction:column;gap:10px;padding:0;margin:16px 0 0;border:0;min-width:0}
+.command-stage .resolution-actions button,.command-stage .incoming-banner button{width:100%;white-space:normal;font:10px/1.6 var(--mono);padding:12px 9px;min-height:46px}
+.command-stage .waiting-note{margin:0;font:12px/1.6 Arial,sans-serif;color:#b6cdd6}
+.command-stage .incoming-banner{margin:14px 0 0;padding:12px 0 0;border:0;border-top:1px solid #d6ad6055;background:none;box-shadow:none;display:grid;gap:10px}
+.command-stage .incoming-banner[hidden]{display:none}
+.command-stage .incoming-banner button[hidden]{display:none}
+@media(max-width:1390px){.command-stage.has-decision{grid-template-columns:180px minmax(0,1fr) 200px;gap:10px;padding:0 12px}.command-stage.has-decision .command-wheel button.command-option{width:116px;height:88px}.command-stage.has-decision .command-wheel button.command-option b{font-size:10px}.command-stage.has-decision .wheel-core{width:180px;height:180px;padding:18px}.command-stage.has-decision .wheel-core p{font-size:10px}}
+@media(max-width:1150px){.command-stage.has-decision{grid-template-columns:1fr 1fr;padding:16px 12px 0}.command-roll-card{grid-column:1;grid-row:1;align-self:stretch}.command-decision-card{grid-column:2;grid-row:1}.command-stage.has-decision .command-wheel{grid-column:1/-1;grid-row:2}.command-stage.has-decision .command-wheel button.command-option{width:144px;height:96px}}
+@media(max-width:700px){.command-stage{padding:0}.command-stage.has-decision{gap:10px;padding:12px 6px 0}.command-roll-card,.command-decision-card{padding:13px 10px}.command-stage.has-decision .command-wheel button.command-option{width:112px;height:88px}.command-stage.has-decision .wheel-core{width:180px;height:180px}}
+@media(max-width:550px){.command-stage.has-decision .command-wheel button.command-option{width:94px;height:88px}.command-stage.has-decision .wheel-core{width:120px;height:150px;padding:12px}.command-stage.has-decision .wheel-core h3{font-size:11px}.command-stage.has-decision .wheel-core p{font-size:9px}.command-stage aside>b{font-size:14px}}
+body[data-view=player]{--player-line:#3c8293;--player-light:#86e6ed;background:radial-gradient(ellipse at 50% 4%,#143b4966,transparent 55%),#07131d}
+body[data-view=player] .controlled-banner{border:1px solid #477b8c66;border-left:3px solid #71e2dc;border-radius:5px 12px 5px 12px;background:linear-gradient(105deg,#15313f,#0a1c28);box-shadow:inset 0 1px #a8f6ff0a}
+body[data-view=player] .controlled-banner>b{color:#e5f6f9;font:600 13px Arial,sans-serif;letter-spacing:.2px}
+body[data-view=player] #battlePhase{color:#93b4c2;background:#0b202b;border-color:#3a647655;font:11px/1.6 Arial,sans-serif;box-shadow:none}
+body[data-view=player] .control-picker{background:linear-gradient(120deg,#153542,#0b1e2a);border:1px solid #4e8b9c66;border-radius:6px 14px 6px 14px;box-shadow:inset 0 1px #a0eefa16}
+body[data-view=player] #playerChoices button{border-radius:5px 12px 5px 12px;background:linear-gradient(125deg,#1c4050,#0d2633);box-shadow:inset 0 1px #c9faff10,0 4px 16px #0002}
+body[data-view=player] .arena:after{border:1px solid #77dce199;border-radius:6px 22px 6px 22px;box-shadow:inset 0 0 70px #02101f66,inset 0 0 0 5px #0c29394d,0 0 22px #68d9eb12}
+body[data-view=player] .arena:before{border-left:2px solid #71e5e8;border-top:1px solid #6ed6e244;border-bottom:1px solid #6ed6e244;border-radius:0 6px 6px 0;background:linear-gradient(100deg,#051721e8,#0a2533ba);box-shadow:0 5px 16px #0004;color:#a0f2f4;font-size:9px;letter-spacing:2px;padding:10px 16px;backdrop-filter:blur(8px)}
+body[data-view=player] .arena-scan{background:repeating-linear-gradient(0deg,transparent 0 4px,#02111c12 5px),linear-gradient(0deg,#00101d33,transparent 30%,transparent 80%,#00101d22);border-radius:6px 22px 6px 22px;opacity:.65}
+body[data-view=player] .arena-center{gap:10px}body[data-view=player] .arena-center .versus{font-style:italic;letter-spacing:-3px;text-shadow:0 0 18px #a7ecf53b}
+body[data-view=player] .arena-location{font-size:8px;letter-spacing:3px;color:#9ed3df}
+body[data-view=player] .ground-ring{height:24px;border-style:dashed;box-shadow:0 0 20px #5ceaf130,inset 0 0 18px #72e1ec22}
+body[data-view=player] .combatant .combatant-dock .combatant-label{isolation:isolate;border-radius:4px 14px 4px 14px;border:1px solid #4b8da2a6;border-top-color:#79e0e6;box-shadow:inset 3px 0 #66cdd82e,inset 0 1px #abf4ff16,0 10px 24px #0005;background:linear-gradient(120deg,#153746f5,#091c29f5);padding:13px 14px}
+body[data-view=player] .combatant-label:before{content:"";position:absolute;right:0;top:0;bottom:0;width:47%;z-index:-1;opacity:.35;pointer-events:none;background:linear-gradient(135deg,transparent 49.5%,#66d2e666 50%,transparent 50.6%) 0 10px/100% 48px no-repeat,linear-gradient(90deg,transparent,#68c8d866) 0 58px/100% 1px no-repeat,radial-gradient(circle,#79dce5 0 2px,transparent 3px) 20px 54px/9px 9px no-repeat}
+body[data-view=player] .enemy .combatant-label{border-top-color:#e9bb71!important;border-color:#a8855699!important;background:linear-gradient(120deg,#263440f5,#101f2bf5)!important}
+body[data-view=player] .combatant-label h2{font:700 16px/1.25 Arial,sans-serif;margin:6px 0 4px;letter-spacing:.1px}
+body[data-view=player] .hud-human{font-size:11px;color:#b0ccd7}
+body[data-view=player] .hud-chip{border-radius:3px;padding:3px 6px;font-size:8px;background:#051823b3}
+body[data-view=player] .hp-track{height:9px;border-radius:2px;background:#04131c;box-shadow:0 0 8px #68d2df18,inset 0 1px 3px #0008}
+body[data-view=player] .hp-fill{box-shadow:0 0 8px #79dce888;background:repeating-linear-gradient(90deg,#81e1df 0 12px,#448f9a 12px 13px)}
+body[data-view=player] .enemy .hp-fill{background:repeating-linear-gradient(90deg,#eac079 0 12px,#9c7a46 12px 13px)}
+body[data-view=player] .low-hp .hp-fill{background:#e78566}
+body[data-view=player] .partnership.player-hud{max-width:none;padding:0;margin:14px 0;border:0;background:#071621e8;border-radius:6px;box-shadow:0 8px 24px #0003}
+body[data-view=player] #resourceMeters>div,body[data-view=player] .partnership>span{position:relative;overflow:hidden;border:1px solid #477c8d77;border-top-color:#6dcdd4a1;border-radius:4px 10px 4px 10px;background:linear-gradient(130deg,#15313e,#0b202c);padding:12px 14px;box-shadow:inset 0 1px #c2f5ff0b}
+body[data-view=player] #resourceMeters>div:after,body[data-view=player] .partnership>span:after{content:"";position:absolute;right:-5px;top:7px;width:55px;height:20px;border-bottom:1px solid #61b8cc33;border-left:1px solid #61b8cc33;transform:skew(-40deg);pointer-events:none}
+body[data-view=player] #resourceMeters small,body[data-view=player] .partnership small{font:8px var(--mono);letter-spacing:1px;color:#9ebfcd}
+body[data-view=player] #resourceMeters b{font:600 17px var(--mono);color:#d1f7f5}
+body[data-view=player] #resourceMeters>div:nth-child(2){border-top-color:#d2aa6a}body[data-view=player] #resourceMeters>div:nth-child(2) b{color:#f4d69d}
+body[data-view=player] #feedback{font:12px/1.5 Arial,sans-serif;color:#92b4c2;margin:10px 2px 16px}
+body[data-view=player] .command-deck{border:1px solid #4a8a9d88;border-radius:6px 18px 6px 18px;background:radial-gradient(ellipse at 50% 40%,#102c39dd 0 20%,#071a2199 65%),url("command-mesh.svg"),linear-gradient(145deg,#102b3b,#071722 65%);box-shadow:inset 0 1px #bbf4ff1c,0 12px 35px #0004,0 0 24px #5ed3e609;overflow:hidden}
+body[data-view=player] .command-deck:before{width:120px;height:18px;border-color:#7ee5e9;z-index:5}body[data-view=player] .command-deck:after{z-index:5}
+body[data-view=player] .command-deck-heading{padding:16px 22px;background:linear-gradient(100deg,#1a4052b3,#0c2433b3);border-bottom:1px solid #527c8b66;letter-spacing:0}
+.command-heading-title{display:flex;align-items:center;gap:12px}.command-heading-title>i{font:9px var(--mono);font-style:normal;letter-spacing:1px;border:1px solid #6bdce377;color:#9cf3f3;border-radius:4px;padding:6px 8px;background:#0c2936}
+.command-heading-title>div{display:grid;gap:4px}.command-heading-title b{font:600 15px Arial,sans-serif;color:#e0f3f8;letter-spacing:.2px}.command-deck-heading .command-heading-title small{font:11px Arial,sans-serif;color:#91b6c7}
+body[data-view=player] .command-deck-heading>span{border:1px solid #4b839166;background:#082330;border-radius:4px;padding:6px 9px;color:#8ccbd5;font:8px var(--mono);letter-spacing:1px}
+/* One continuous colored band replaces the radial ticks and concentric outlines. */
+body[data-view=player] .command-wheel{height:650px;margin:14px auto 6px;background:radial-gradient(ellipse at center,#0a202bba 0 24%,transparent 61%)}
+body[data-view=player] .command-wheel:before{inset:59px 95px;border:0;padding:18px;background:linear-gradient(180deg,#65e4f0 0%,#237b9d 32%,#173c50 48%,#785b35 65%,#edbc70 100%);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude;box-shadow:none;opacity:.85}
+body[data-view=player] .command-wheel:after{inset:59px 95px;border:0;background:linear-gradient(180deg,#47d9e8,#184254 48%,#e4aa59);mask:radial-gradient(ellipse,transparent 57%,#000 69%,transparent 77%);filter:blur(18px);opacity:.22;z-index:-1;box-shadow:none}
+body[data-view=player] .wheel-core{width:218px;height:218px;padding:28px;gap:10px;border:1px solid #82d4e655;background:radial-gradient(circle at 35% 30%,#21495a,#0b2332 65%,#05151f);box-shadow:0 12px 35px #0008,inset 0 0 30px #3b91b22b}
+body[data-view=player] .wheel-core:before{inset:-9px;border:0;padding:7px;background:linear-gradient(180deg,#83f1f3,#2e7b98 42%,#66513a 58%,#f2c580);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude;box-shadow:none;opacity:1}
+body[data-view=player] .core-link{font-size:8px;color:#a2dfe9;letter-spacing:3px}.core-glyph i{width:4px;height:4px;box-shadow:0 0 7px currentColor}
+body[data-view=player] .wheel-core h3{font:600 14px/1.4 Arial,sans-serif;letter-spacing:.5px;color:#edfaff;text-shadow:0 0 16px #c1f4ff22}
+body[data-view=player] .wheel-core p{color:#aac8d8;font-size:11px;line-height:1.5}
+body[data-view=player] .wheel-owner{font-size:36px;letter-spacing:10px;opacity:.65}body[data-view=player] .owner-digimon{top:29%}body[data-view=player] .owner-human{bottom:29%}
+body[data-view=player] .command-wheel .panel-heading h2{font:600 10px var(--mono);letter-spacing:3px}.command-wheel .panel-heading>span{letter-spacing:1px}
+body[data-view=player] .command-wheel button.command-option{width:144px;height:96px;border-radius:4px 14px 4px 14px!important;border-color:#4ba6c1!important;background:linear-gradient(145deg,#1a465bbf,#0a2335f5 65%)!important;box-shadow:inset 0 1px #d1f9ff26,inset 0 -3px #06162399,0 6px 18px #0005,0 0 14px #56d0ee10;gap:6px}
+body[data-view=player] .command-wheel button.command-option:before{inset:6px;border-color:#89dfec33;clip-path:polygon(0 0,55% 0,60% 14%,90% 14%,100% 0,100% 100%,45% 100%,40% 86%,10% 86%,0 100%)}
+body[data-view=player] .command-wheel button.command-option:after{width:3px;height:3px;left:9px;top:9px;box-shadow:120px 72px currentColor;opacity:.65}
+body[data-view=player] .command-wheel button.command-option .command-icon{width:31px;height:31px;filter:drop-shadow(0 0 8px #58d9ed55)}
+body[data-view=player] .command-wheel button.command-option b{font-size:11px;letter-spacing:1.2px}.command-wheel button.command-option small{font-family:Arial,sans-serif;font-size:10px}
+body[data-view=player] .command-wheel .human-panel button.command-option{border-color:#b98e57!important;background:linear-gradient(145deg,#463b2abf,#1b252ef5 70%)!important;color:#f2d09d;box-shadow:inset 0 1px #fff0ca22,inset 0 -3px #171d2499,0 6px 18px #0005,0 0 14px #c49b6010}
+body[data-view=player] .command-wheel button.command-option:hover:not(:disabled),body[data-view=player] .command-wheel button.command-option:focus-visible:not(:disabled),body[data-view=player] .command-wheel button.command-option.chosen:not(:disabled){border-color:#78ebac!important;color:#b4ffd1;background:linear-gradient(145deg,#1b493b,#0b2826)!important;box-shadow:inset 0 1px #c6ffde44,0 0 0 1px #57b98355,0 0 24px #67d99522;outline-color:#81eab0;outline-offset:3px}
+body[data-view=player] .command-wheel button.command-option:disabled{opacity:.38;filter:saturate(.4);box-shadow:inset 0 1px #a3d7e511}
+body[data-view=player] .command-support{padding:18px;gap:14px;background:linear-gradient(180deg,#061925bb,#0c2430);border-top:1px solid #52819066}
+body[data-view=player] .command-support>section{position:relative;isolation:isolate;overflow:hidden;border-radius:5px 12px 5px 12px;border:1px solid #487e9066;border-top-color:#7ad2dc99;background:linear-gradient(125deg,#14334099,#0b202d);padding:17px}
+body[data-view=player] .command-support>section:after{content:"";position:absolute;z-index:-1;right:-10px;top:14px;width:120px;height:30px;border-top:1px solid #74cddd33;border-left:1px solid #74cddd33;transform:skew(-45deg);pointer-events:none}
+body[data-view=player] .command-support>.human-support{border-top-color:#c29d68aa}
+body[data-view=player] .command-support h3{font-size:10px;letter-spacing:1.6px;margin-bottom:16px}
+body[data-view=player] .secondary-actions>button{border-radius:4px 9px 4px 9px;border-color:#507e8c99;background:linear-gradient(125deg,#1d3d4b,#0e2534);font:10px/1.5 var(--mono)}
+body[data-view=player] .action-help{border-color:#47728044;background:#071c2755;color:#9db9c8;border-radius:5px}
+body[data-view=player] .resolution-panel,body[data-view=player] .log-panel{border:1px solid #487c8d88;border-radius:5px 14px 5px 14px;background:linear-gradient(130deg,#13303d,#091e2b);box-shadow:inset 0 1px #b2f1ff11,0 10px 25px #0002}
+body[data-view=player] .resolution-panel>.panel-heading,body[data-view=player] .log-panel>.panel-heading{background:linear-gradient(110deg,#1c4251,#102b3a);border-top-color:#7dcdd366;border-bottom-color:#6291a244}
+body[data-view=player] .resolution-ticket{border-radius:4px 10px 4px 10px;background:linear-gradient(135deg,#173c49,#0b2533)}
+body[data-view=player] .incoming-banner{border-radius:4px 14px 4px 14px;border-color:#dfbc79;background:linear-gradient(105deg,#443a25,#122b37);box-shadow:inset 3px 0 #f2cc7f,0 0 20px #d5aa4f12}
+@media(max-width:700px){body[data-view=player] .command-wheel{height:650px}.command-heading-title>div b{font-size:13px}.command-deck-heading .command-heading-title small{font-size:10px}body[data-view=player] .command-deck-heading{padding:14px}body[data-view=player] .command-wheel:before{inset:90px 20px}body[data-view=player] .command-wheel:after{inset:90px 20px}body[data-view=player] .command-wheel button.command-option{width:112px;height:88px}body[data-view=player] .wheel-core{width:180px;height:180px;padding:20px}body[data-view=player] .command-support{padding:12px}}
+@media(max-width:550px){body[data-view=player] .command-wheel button.command-option{width:94px;height:88px}body[data-view=player] .command-wheel button.command-option b{font-size:9px;letter-spacing:.6px}body[data-view=player] .command-wheel button.command-option small{font-size:8px}body[data-view=player] .command-wheel button.command-option:after{box-shadow:71px 64px currentColor}body[data-view=player] .wheel-core{width:120px;height:150px;padding:12px}body[data-view=player] .wheel-core h3{font-size:11px}body[data-view=player] .wheel-core p{font-size:9px}body[data-view=player] .wheel-owner{font-size:24px;letter-spacing:4px}body[data-view=player] .command-wheel .panel-heading h2{font-size:9px}body[data-view=player] .combatant-label h2{font-size:14px}}
