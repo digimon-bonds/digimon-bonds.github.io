@@ -34,3 +34,20 @@ test('competing published commands cannot overwrite a saved roll or revision',as
  assert.deepEqual(results.map(r=>r.status).sort(),[200,409]);
  const saved=await (await battleAPI(request('/api/scene?id='+id,{cookie}),bucket)).json();assert.equal(saved.revision,1);
 });
+
+test('GitHub Pages sessions and saved scenes work without third-party cookies',async()=>{
+ const bucket=memoryBucket(),github='https://digimon-bonds.github.io',client='a'.repeat(64);
+ const req=(path,{session='',body,source=github,identity=client}={})=>new Request(origin+path,{method:body?'POST':'GET',headers:{origin:source,'Content-Type':'application/json','Authorization':'Bearer '+session,'X-Bonds-Client':identity},...(body?{body:JSON.stringify(body)}:{})});
+ const login=await battleAPI(req('/api/narrator',{body:{password:testPassword}}),bucket);
+ assert.equal(login.status,200);const {sessionToken}=await login.json();assert.match(sessionToken,/^[a-f0-9]{64}$/);
+ assert.equal((await (await battleAPI(req('/api/narrator',{session:sessionToken}),bucket)).json()).authorized,true);
+ assert.equal((await (await battleAPI(req('/api/narrator',{session:sessionToken,source:'https://evil.example'}),bucket)).json()).authorized,false);
+ const created=await battleAPI(req('/api/scenes',{session:sessionToken,body:{name:'GitHub'}}),bucket);assert.equal(created.status,201);const {id}=await created.json();
+ assert.equal((await battleAPI(req('/api/scene?id='+id,{identity:''}),bucket)).status,400);
+ const loaded=await battleAPI(req('/api/scene?id='+id),bucket);assert.equal(loaded.status,200);assert.equal(loaded.headers.get('Set-Cookie'),null);const saved=await loaded.json();
+ const change={command:'presentation',args:[{name:'Estado persistido'}],revision:saved.revision,requestId:'github-save',mode:'narrator'};
+ assert.equal((await battleAPI(req('/api/scene?id='+id,{body:change}),bucket)).status,403);
+ assert.equal((await battleAPI(req('/api/scene?id='+id,{session:sessionToken,body:change}),bucket)).status,200);
+ const afterReload=await (await battleAPI(req('/api/scene?id='+id),bucket)).json();assert.equal(afterReload.state.scene.name,'Estado persistido');assert.equal(afterReload.revision,1);
+ assert.equal((await battleAPI(req('/api/scenes',{session:sessionToken,body:{name:'Foreign'},source:'https://evil.example'}),bucket)).status,403);
+});

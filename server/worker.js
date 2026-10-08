@@ -61,7 +61,7 @@ async function limited(message){if(Number(message.headers.get('content-length'))
 function allowedOrigin(request){const origin=request.headers.get('origin');return origin===new URL(request.url).origin||origin==='https://digimon-bonds.github.io';}
 export default {async fetch(request){
  const isAPI=new URL(request.url).pathname.startsWith('/api/');
- if(isAPI&&request.method==='OPTIONS'){if(!allowedOrigin(request))return new Response(null,{status:403});return new Response(null,{status:204,headers:{'Access-Control-Allow-Origin':request.headers.get('origin'),'Access-Control-Allow-Methods':'GET,POST,OPTIONS','Access-Control-Allow-Headers':'Content-Type','Access-Control-Max-Age':'86400','Vary':'Origin'}});}
+ if(isAPI&&request.method==='OPTIONS'){if(!allowedOrigin(request))return new Response(null,{status:403});return new Response(null,{status:204,headers:{'Access-Control-Allow-Origin':request.headers.get('origin'),'Access-Control-Allow-Methods':'GET,POST,OPTIONS','Access-Control-Allow-Headers':'Content-Type, Authorization, X-Bonds-Client','Access-Control-Max-Age':'86400','Vary':'Origin'}});}
  const response=await handler.fetch(request);if(!isAPI||!allowedOrigin(request))return response;
  const headers=new Headers(response.headers);headers.set('Access-Control-Allow-Origin',request.headers.get('origin'));headers.append('Vary','Origin');return new Response(response.body,{status:response.status,headers});
 }};

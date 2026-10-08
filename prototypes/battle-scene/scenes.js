@@ -1,8 +1,9 @@
+import {apiFetch} from './api-client.mjs';
 const $=id=>document.getElementById(id);
 let creating=false;
 const environments={grid:'linear-gradient(150deg,#173a4c,#0b1b27)',ice:'linear-gradient(140deg,#8bb8c9,#1c3a50)',sunset:'linear-gradient(140deg,#b87652,#252742)',forest:'linear-gradient(140deg,#357c68,#0b252c)',metro:'linear-gradient(140deg,#567785,#162735)',city:'linear-gradient(140deg,#555186,#11232f)'};
 async function loadScenes(){
- const response=await fetch('/api/scenes');const data=await response.json();if(!response.ok)throw Error(data.error||'Não foi possível carregar as cenas.');
+ const response=await apiFetch('/api/scenes');const data=await response.json();if(!response.ok)throw Error(data.error||'Não foi possível carregar as cenas.');
  $('scenes').replaceChildren();$('status').textContent=data.scenes.length+' cena(s) aberta(s)';$('createScene').disabled=false;
  if(!data.scenes.length){const p=document.createElement('p');p.className='empty';p.textContent='Nenhuma cena aberta. Clique em Criar cena para preparar a primeira batalha.';$('scenes').append(p);}
  for(const scene of data.scenes){
@@ -19,8 +20,8 @@ function openAccess(create=false){creating=create;$('accessTitle').textContent=c
 $('createScene').onclick=()=>openAccess(true);
 $('access').addEventListener('cancel',e=>{if(!creating)e.preventDefault();});
 $('accessForm').onsubmit=async e=>{e.preventDefault();$('unlock').disabled=true;try{
- const response=await fetch('/api/narrator',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:$('password').value})});const result=await response.json();if(!response.ok||!result.authorized)throw Error(result.error||'Acesso indisponível.');$('password').value='';
- if(creating){const created=await fetch('/api/scenes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:$('sceneName').value})});const scene=await created.json();if(!created.ok)throw Error(scene.error||'Não foi possível criar a cena.');location.href='index.html?scene='+encodeURIComponent(scene.id)+'&narrator=1';return;}
+ const response=await apiFetch('/api/narrator',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:$('password').value})});const result=await response.json();if(!response.ok||!result.authorized)throw Error(result.error||'Acesso indisponível.');$('password').value='';
+ if(creating){const created=await apiFetch('/api/scenes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:$('sceneName').value})});const scene=await created.json();if(!created.ok)throw Error(scene.error||'Não foi possível criar a cena.');location.href='index.html?scene='+encodeURIComponent(scene.id)+'&narrator=1';return;}
  $('access').close();await loadScenes();
  }catch(error){$('accessError').textContent=error.message;}finally{$('unlock').disabled=false;}};
-try{const response=await fetch('/api/narrator');if(!(await response.json()).authorized)openAccess();else await loadScenes();}catch(error){$('status').textContent=error.message;}
+try{const response=await apiFetch('/api/narrator');if(!(await response.json()).authorized)openAccess();else await loadScenes();}catch(error){$('status').textContent=error.message;}

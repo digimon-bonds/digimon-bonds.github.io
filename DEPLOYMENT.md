@@ -13,7 +13,7 @@ Node 24: `npm ci`, `npm test`, `npm run build`. O build só recria `dist/` neste
 
 ## Forumeiros
 
-`site/hosting.js` envia as três rotas `/api/*` ao serviço existente em https://bonds-character-app.mateuzim-alves.chatgpt.site quando a interface roda no GitHub Pages. O backend permite CORS especificamente para https://digimon-bonds.github.io. Os posts e PNGs permanecem persistentes no R2 existente; a hospedagem antiga deve continuar ativa. Não há tokens no cliente nem nos workflows.
+`site/hosting.js` envia as três rotas `/api/*` ao serviço existente em https://bonds-character-app.mateuzim-alves.chatgpt.site quando a interface roda no GitHub Pages. O backend permite CORS especificamente para https://digimon-bonds.github.io. Os posts e PNGs permanecem persistentes no R2 existente; a hospedagem antiga deve continuar ativa. Não há segredos de infraestrutura nem senha do narrador nos arquivos estáticos ou workflows.
 
 ## Dados locais
 
@@ -25,10 +25,10 @@ Settings → Pages → Source: GitHub Actions. O workflow não usa subdiretório
 
 ## Cenas de batalha
 
-O build inclui a interface do Battle Scene em `dist/battle/`. O card da página inicial abre a galeria na origem do serviço existente, onde o cookie HttpOnly do narrador pode proteger o acesso sem depender de cookies entre sites.
+O build inclui a interface do Battle Scene em `dist/battle/`. O card da página inicial abre `/battle/scenes.html` no próprio GitHub Pages. Todas as páginas e artes do Battle Link são publicadas nesse domínio. Apenas as chamadas de API vão ao serviço existente, com CORS limitado à origem exata do GitHub.
 
 `server/battle-api.mjs` usa o R2 existente para sessões temporárias do narrador, cards e estados independentes por cena. A senha é validada no servidor. O estado usa revisão, identificador de solicitação e gravação condicional por ETag; uma atualização concorrente é rejeitada e retorna o estado salvo. Nenhum estado de teste de `.battle-state/` entra no build.
 
-Ao publicar o serviço, inclua `server/battle-api.mjs` e os módulos importados de `prototypes/battle-scene/`. Preserve o binding R2 BUCKET. A interface de produção deve abrir `https://bonds-character-app.mateuzim-alves.chatgpt.site/battle/scenes.html`.
+Ao publicar o serviço, inclua `server/battle-api.mjs` e os módulos importados de `prototypes/battle-scene/`. Preserve o binding R2 BUCKET. A interface de produção abre `https://digimon-bonds.github.io/battle/scenes.html`. No GitHub, a sessão temporária do narrador fica em sessionStorage e é enviada via Authorization; a identificação aleatória do navegador fica em localStorage para preservar o controle após F5. Na origem do serviço, os cookies HttpOnly existentes continuam funcionando. Tokens não vão em URLs. Não depende de cookies de terceiros.
 
 A integração com contas e propriedade real das fichas continua pendente. O acesso do narrador usa uma sessão de 12 horas; o botão Criar cena pede novamente sua senha. Cada cena recebe um link próprio. O campo de fundo personalizado é refletido no card da galeria.
