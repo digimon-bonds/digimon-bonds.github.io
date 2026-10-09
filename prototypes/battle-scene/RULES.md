@@ -61,3 +61,20 @@ Restaurado a pedido do usuário: cada participante pode agir enquanto tiver aç�
 
 
 O estado de combate e a aleatoriedade agora são controlados e salvos pelo servidor local. A rolagem é persistida antes de ser exibida; atualizar não restitui ações ou custos. Apenas o Narrador autenticado pode recomeçar a cena. Ao chegar a 0 PV/Energia, o Log registra que o combatente está fora de batalha; Força para Lutar que preserve 1 não gera essa mensagem.
+
+
+## Digivice em combate
+
+Fonte: https://digimonbonds.forumeiros.com/t15-08-digivice. Booster e Protocolos Especiais usam a ação do Humano, preservando a do parceiro. Nenhuma melhoria é concedida automaticamente por nível. A importação conserva os registros estruturados e reconhece slots numerados do fórum, com tolerância a caixa, acentos e pontuação.
+
+Booster 1: uma ativação por combate, Vantagem no próximo Ataque. Booster 2 também permite escolher a próxima Esquiva. Booster 3 permite duas ativações por combate. A Vantagem entra na regra normal de cancelamento; não modifica rolagens já feitas. Forçar usa o mesmo grupo e modificador da rolagem original.
+
+Cada Protocolo instalado pode ser ativado uma vez por combate; expira ao concluir a próxima ação do Digimon (Esquiva é reação). Troca de Elemento muda espécie e assinaturas para o elemento registrado na aquisição; Reforço de PV soma 10 PV atuais/máximos e os retira ao expirar; Reforço de Esquiva soma 1d6; Reforço de Dano soma 2; Qualidade Temporária concede Rank 2; Ataque Temporário usa o maior Rank das assinaturas da forma atual. Parâmetros vêm da ficha, nunca de escolhas enviadas pelo cliente. Para Ataque Temporário, registre `Nome | Elemento | Efeito` (efeito opcional). Parâmetros não reconhecidos bloqueiam a ativação e solicitam revisão da ficha. Scanner de Cards permanece bloqueado por solicitação do usuário.
+
+Usos, ação consumida e bônus pendentes são persistidos pelo repositório. Recomeçar Cena remove os usos/bônus, preservando as melhorias instaladas. A interface só permite ativar quando o servidor anuncia suporte ao comando.
+
+## Imagens e resolução
+
+A Galeria fica em `archive/galeria/index.html`, sem card na página inicial. O editor pesquisa qualquer nome do Digibank, sem elementos de imagem nos resultados; apenas o item selecionado solicita a arte, priorizando o recorte transparente quando disponível. A cena não pré-carrega a galeria inteira. O botão AÇÃO reutiliza a ilustração e as cores padrão do Digivice das fichas.
+
+A apresentação dos dados dura aproximadamente 400 ms, sem revelação sequencial por dado. O resultado continua vindo do servidor e sendo persistido antes da animação. A atualização periódica não sobrepõe requisições nem roda com a página oculta. O editor de assinatura apresenta os efeitos do catálogo: os já implementados são automáticos; os demais são conservados como `sourceEffects`, identificados como aplicação manual pelo Narrador, sem efeito automático inventado.

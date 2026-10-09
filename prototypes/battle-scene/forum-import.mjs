@@ -1,3 +1,4 @@
+import {readDeviceSlots} from './digivice.mjs';
 import {displayName} from './display-names.mjs';
 import {recoverTableCharacter} from '/creator/table-import.js';
 import {restoreEmbeddedCode} from '/creator/code-archive.js';
@@ -33,7 +34,7 @@ export function parsePublicSheet(html,source){
    s=recoverTableCharacter(raw);}
   if(!s&&post.querySelector('#preview'))s=recoverLegacySheet(post.innerHTML);
   if(!s)continue;
-  const p=progress(s),forms={};for(const [stage,f] of Object.entries(s.digimonForms||{}))if(f.unlocked)forms[stage]=projectedForm(s,stage,p);
+  const p=progress(s),forms={};if(!p.devices.length)p.devices=readDeviceSlots(toBBCode(post).replace(/\[\/(?:td|tr)\]/gi,'\n').replace(/\[[^\]]*\]/g,''));for(const [stage,f] of Object.entries(s.digimonForms||{}))if(f.unlocked)forms[stage]=projectedForm(s,stage,p);
   const normalized={...s,digimonForms:forms};for(const [stage,f] of Object.entries(forms)){f.name=displayName(f.name,selectableSpecies(stage).map(d=>d.name));f.element=normalizeElement(f.element);for(const a of f.signatureAttacks)a.element=normalizeElement(a.element);}
   const result=adaptSheet(normalized,p,bonuses(p),source);result.warnings.push(...inferred);return result;
  }

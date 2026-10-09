@@ -47,3 +47,25 @@ body.commands-open .arena,body.commands-open .arena:has(.multiple){height:1000px
 @media(max-width:600px){.arena-action{width:154px;height:178px;top:24px;bottom:auto}.arena-action b{font-size:14px}.arena-action small{font-size:7px}#commandDialog{inset:12px 8px auto;width:calc(100% - 16px);max-height:calc(100% - 270px);border-radius:8px 18px 8px 18px}#commandDialog #commandPanel .command-deck-heading{padding:12px;gap:8px}#commandDialog .command-close{font-size:8px;padding:9px;max-width:105px}#commandDialog #commandPanel .command-heading-title>i{display:none}#commandDialog #commandPanel .command-heading-title b{font-size:14px}#commandDialog .command-context{padding:8px 12px}#commandDialog #commandPanel .command-wheel,#commandDialog #commandPanel .command-stage.has-decision .command-wheel{height:auto;width:100%;margin:4px auto 12px}#commandDialog #commandPanel .wheel-core,#commandDialog #commandPanel .command-stage.has-decision .wheel-core{width:100%;height:auto;min-height:90px;padding:14px}#commandDialog #commandPanel .command-wheel button.command-option,#commandDialog #commandPanel .command-stage.has-decision .command-wheel button.command-option{width:100%;height:86px}#commandDialog #commandPanel .command-wheel button.command-option:after{box-shadow:none}#commandDialog #commandPanel .command-stage.has-decision{grid-template-columns:1fr}#commandDialog #commandRoll{grid-column:1;grid-row:2}#commandDialog #commandDecision{grid-column:1;grid-row:1}#commandDialog #commandPanel .command-stage.has-decision .command-wheel{grid-row:3}}
 @media(prefers-reduced-motion:reduce){#commandDialog[open]{animation:none}}
 @media(max-width:600px){body.commands-open .arena,body.commands-open .arena:has(.multiple){height:910px;min-height:910px}}
+
+/* Reuse the character-sheet Digivice illustration. */
+.arena-action{width:240px;height:240px;border-radius:44%;overflow:visible}
+.arena-action .action-device{border-radius:0;object-fit:contain}
+.arena-action b{left:34%;top:46%;width:33%;font-size:19px;color:#ffe5a0;text-shadow:0 0 12px #ffc76577}
+.command-context{justify-content:space-between;gap:20px!important}
+.context-team{display:flex;flex-wrap:wrap;gap:8px;flex:1;min-width:0}
+.context-team.enemy{justify-content:flex-end}
+.target-picker{border:0;padding:0;margin:0 0 18px;display:flex;flex-wrap:wrap;gap:10px}
+.target-picker legend{font:10px var(--mono);color:#94bcca;margin-bottom:10px;letter-spacing:1px}
+.target-card{position:relative;display:flex!important;align-items:center;gap:12px;min-width:180px;flex:1;padding:13px!important;border:1px solid #4c7181;background:linear-gradient(135deg,#16333f,#091d28);border-radius:5px 14px 5px 14px;cursor:pointer}
+.target-card input,.digivice-function input{position:absolute;opacity:0;width:1px;height:1px}
+.target-card:has(input:checked){border-color:#ffd078;box-shadow:inset 3px 0 #ffd078,0 0 18px #ffc16418;background:linear-gradient(135deg,#3b3524,#14262c)}
+.target-card:has(input:focus-visible),.digivice-function:has(input:focus-visible){outline:2px solid #a3ffce;outline-offset:3px}
+.target-card img{width:58px;height:68px;object-fit:contain}
+.target-card>span{display:grid;gap:6px}.target-card b{font:600 14px Arial,sans-serif;color:#e0f4f5}.target-card small,.target-card span>span{font:9px var(--mono);color:#a7c3cc}
+.digivice-function-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:18px 0}
+.digivice-function{position:relative;display:grid!important;gap:9px;padding:16px!important;border:1px solid #4d7284;background:#112d38;border-radius:4px 14px;cursor:pointer}
+.digivice-function:has(input:checked){border-color:#eac373;box-shadow:inset 0 3px #eac373}.digivice-function:has(input:disabled){opacity:.45;cursor:not-allowed}.digivice-function b{font:600 12px Arial,sans-serif;color:#f0d8a8}.digivice-function small{font:10px/1.5 var(--mono);color:#afc6cf}
+@media(max-width:600px){.arena-action{width:190px;height:190px}.arena-action b{font-size:16px}.command-context{gap:10px!important}.context-unit{min-width:0}.digivice-function-grid{grid-template-columns:1fr}}
+
+.lab-art-choice.name-only{min-height:40px;padding:10px!important;font:12px Arial,sans-serif;display:block;text-align:left}.lab-art-grid{max-height:260px;overflow:auto;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))!important}.effect-help{background:#071b25;border:1px solid #537a88;border-left:3px solid #f3bf68;border-radius:5px;padding:12px;color:#c3dbe2;font:12px/1.6 Arial,sans-serif}.lab-attack-picker{margin:16px 0;padding:16px;border:1px solid #a27e43;border-radius:7px 14px}

@@ -1,6 +1,7 @@
 import {markers,STAGES} from './rules.mjs';
 import {loseBond,spendBond,spendEnergy,rescue} from './resources.mjs';
-export const currentForm=actor=>actor.forms[actor.formId];
+export {effectiveForm as currentForm} from './digivice.mjs';
+import {effectiveForm as currentForm} from './digivice.mjs';
 export function highestForm(actor){return Object.entries(actor.forms).filter(([,f])=>f.unlocked).sort((a,b)=>STAGES[b[1].stage].order-STAGES[a[1].stage].order)[0]?.[0];}
 export function changeForm(actor,id,{floor=true}={}){const oldMax=markers(currentForm(actor)).hp,loss=oldMax-actor.hp;actor.formId=id;const max=markers(currentForm(actor)).hp;actor.hp=Math.max(floor?1:0,max-loss);if(!(id in actor.uses))actor.uses[id]=currentForm(actor).attributes.intelligence;}
 export function evolve(actor,human,pair,id){const form=actor.forms[id];if(!form||!form.unlocked||pair.level<STAGES[form.stage].level||id===actor.formId)throw Error('Forma indisponível');if(human.energy===0)throw Error('Humano sem Energia');const higher=STAGES[form.stage].order>STAGES[currentForm(actor).stage].order;

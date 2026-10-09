@@ -1,0 +1,4 @@
+const key=v=>String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/-$/,'');
+export const automaticEffects=['eficiente','pesado','atordoador','venenoso','enfraquecedor','quebra-bloqueio','desorientador','imobilizador'];
+const manualEffects=['ataque-multiplo','explosivo','multi-elemento','sobrecarregado','vampirismo','curativo','animador'];
+export function npcSignature(line,index=0){const [name,rank,element,effectText]=line.split('|').map(s=>s.trim()),effect=key(effectText);if(effect&&!automaticEffects.includes(effect)&&!manualEffects.includes(effect))throw Error('Efeito desconhecido: escolha um efeito na lista.');return {id:'attack-'+index,name,rank:Number(rank),element,effect:automaticEffects.includes(effect)?effect:null,sourceEffects:effect?[effect]:[]};}

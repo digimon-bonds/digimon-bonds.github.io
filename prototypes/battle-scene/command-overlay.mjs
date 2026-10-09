@@ -1,3 +1,4 @@
+import {renderDigivice,deviceDefaults} from '/creator/digivices.js';
 import {currentForm,markers} from './engine.mjs';
 
 // Presentation only: the same command nodes, permissions and handlers are retained.
@@ -7,7 +8,7 @@ export function initCommandOverlay(){
  const launch=document.createElement('button');launch.id='openCommands';launch.className='arena-action';launch.type='button';launch.disabled=true;
  launch.setAttribute('aria-haspopup','dialog');launch.setAttribute('aria-controls','commandDialog');launch.setAttribute('aria-expanded','false');
  launch.setAttribute('aria-label','AÇÃO — Abrir controle de combate');
- launch.innerHTML='<img class="action-device" src="digivice-action.svg" alt="" draggable="false"><b>AÇÃO</b><small id="commandCue">CONTROLE DE COMBATE</small>';frame.append(launch);
+ const device=document.createElement('template');device.innerHTML=renderDigivice({...deviceDefaults,digiName:'',digiImage:'',zoom:1,imagePosition:'center',deviceSkin:'clean'},v=>String(v),()=>false);const illustration=device.content.querySelector('svg');illustration.classList.add('action-device');illustration.querySelectorAll('image').forEach(img=>img.setAttribute('href','/creator/'+img.getAttribute('href')));launch.append(illustration);launch.insertAdjacentHTML('beforeend','<b>AÇÃO</b><small id="commandCue">CONTROLE DE COMBATE</small>');frame.append(launch);
  const dialog=document.createElement('dialog');dialog.id='commandDialog';dialog.setAttribute('aria-label','Controle de combate');frame.append(dialog);
  const close=document.createElement('button');close.id='closeCommands';close.type='button';close.className='command-close';close.textContent='VOLTAR À ARENA ×';
  panel.querySelector('.console-status').replaceWith(close);
@@ -42,11 +43,11 @@ export function syncCommandOverlay({state,actor,busy}){
  launch.classList.toggle('reaction-ready',!!incoming);
  if(!actor)closeCommands();
  fitAboveCards();
- const context=document.querySelector('#commandContext');context.replaceChildren(...state.actors.map(unit=>{
+ const context=document.querySelector('#commandContext');context.replaceChildren(...['ally','enemy'].map(side=>{const group=document.createElement('div');group.className='context-team '+side;group.setAttribute('aria-label',side==='ally'?'Aliados':'Inimigos');group.append(...state.actors.filter(unit=>unit.side===side).map(unit=>{
   const form=currentForm(unit),chip=document.createElement('div');chip.className='context-unit '+unit.side;
   const img=document.createElement('img');img.src=form.image;img.alt='';
   const name=document.createElement('b');name.textContent=form.name;
   const hp=document.createElement('small');hp.textContent=`PV ${unit.hp} / ${markers(form).hp}`;
   chip.append(img,name,hp);return chip;
- }));
+ }));return group;}));
 }

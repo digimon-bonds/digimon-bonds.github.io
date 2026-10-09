@@ -20,7 +20,7 @@ export function applySceneCommand(s,command,args,context){
   case 'decideSurvival':own(pending?.context.targetId);return e.decideSurvival(s,args[0]);
   case 'acceptResult':own(pending?.kind==='attack'?pending.context.targetId:pending?.entityId);return e.acceptResult(s);
   case 'forceTest':own(pending?.kind==='attack'?pending.context[args[0]==='attack'?'actorId':'targetId']:pending?.entityId);return e.forceTest(s,args[0]);
-  case 'defend':case 'evolveAction':case 'observe':case 'giveCoordinates':own(args[0]);return e[command](s,...args);
+  case 'useDigivice':case 'defend':case 'evolveAction':case 'observe':case 'giveCoordinates':own(args[0]);return e[command](s,...args);
   case 'skipAction':own(args[1]);return e[command](s,...args);
   case 'skipPair':{own(args[0]);let n=s;const a=e.actorById(n,args[0]),h=n.humans.find(h=>h.pairId===a.pairId);if(a.remaining&&a.hp)n=e.skipAction(n,'digimon',a.id);if(h?.remaining&&h.energy)n=e.skipAction(n,'human',h.id);return n;}
   case 'adjustResources':admin();return adjustResources(s,args[0]);
@@ -37,7 +37,7 @@ export function createSceneRepository(initial,save){
  let tail=Promise.resolve();
  const write=async next=>{await save(next);data=next;};
  const serial=fn=>{const result=tail.then(fn);tail=result.catch(()=>{});return result;};
- const snapshot=token=>({state:structuredClone(data.state),revision:data.revision,actorId:data.clients[token]?.actorId||null,maintenance:structuredClone(data.maintenance)});
+ const snapshot=token=>({capabilities:{digivice:true},state:structuredClone(data.state),revision:data.revision,actorId:data.clients[token]?.actorId||null,maintenance:structuredClone(data.maintenance)});
  return {
   read:token=>serial(()=>snapshot(token)),
   execute:(token,request,narrator=false)=>serial(async()=>{
