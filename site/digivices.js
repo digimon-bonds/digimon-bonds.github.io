@@ -19,7 +19,7 @@ export function modelFor(id){return digiviceModels.find(m=>m.id===id)||digiviceM
 let renderId=0;
 const rgb=hex=>[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)/255);
 export function renderDigivice(s,escape,validURL){
- const visual=partnerVisual({name:s.digiName,image:s.digiImage,imageMode:s.imageMode,imageBackground:s.imageBackground});
+ const visual=partnerVisual({name:s.digiName,image:s.digiImage,imageMode:s.imageMode,imageBackground:s.imageBackground,stage:s.activeDigimonStage||'rookie'});
  const m=modelFor(s.deviceModel),[sx,sy,sw,sh]=m.screen,scale=m.id==='d-ark'?.94:1.12,w=sw*scale,h=sh*scale,x=sx-(w-sw)/2,y=sy-(h-sh)/2,id='digivice-'+(++renderId),body=rgb(validHex(s.deviceColor)?s.deviceColor:deviceDefaults.deviceColor),buttons=rgb(validHex(s.buttonColor)?s.buttonColor:deviceDefaults.buttonColor);
  // Neutral shell and magenta button material are recolored independently at display time.
  const bodyMatrix=body.map(c=>`${c} 0 0 0 0`).join(' ')+' 0 0 0 1 0';

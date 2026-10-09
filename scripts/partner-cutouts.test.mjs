@@ -12,7 +12,7 @@ import {sheetArt} from '../prototypes/battle-scene/sheet-art.mjs';
 test('every completed Digibank cutout is bundled with the creator and tolerates imported names',()=>{
  assert.equal(partnerCutouts.length,sheetArt.length);
  for(const art of partnerCutouts){
-  const visual=partnerVisual({name:art.name.toUpperCase()+'.',imageMode:'cutout',imageBackground:'#aabbcc'});
+  const visual=partnerVisual({name:art.name.toUpperCase()+'.',stage:art.stage,imageMode:'cutout',imageBackground:'#aabbcc'});
   assert.ok(existsSync(new URL(visual.image)));
   assert.equal(visual.background,'#aabbcc');
   const battleArt=sheetArt.find(a=>a.id===art.id);assert.ok(battleArt,art.name);

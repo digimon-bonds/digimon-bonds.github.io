@@ -11,8 +11,8 @@
     },
     "champion": {
       "total": 244,
-      "completed": 20,
-      "attempted": 20
+      "completed": 186,
+      "attempted": 210
     }
   },
   "pending": [
@@ -20,19 +20,428 @@
       "digibankId": "rookie-terriermon",
       "name": "Terriermon",
       "stage": "rookie",
-      "reason": "A ferramenta de imagem recusou este recorte."
+      "reason": "A ferramenta de imagem recusou este recorte.",
+      "attempted": true
     },
     {
       "digibankId": "rookie-tyutyumon",
       "name": "ChuuChuumon",
       "stage": "rookie",
-      "reason": "A ferramenta de imagem recusou este recorte."
+      "reason": "A ferramenta de imagem recusou este recorte.",
+      "attempted": true
     },
     {
       "digibankId": "rookie-soundbirdmon",
       "name": "Soundbirdmon",
       "stage": "rookie",
-      "reason": "A ferramenta de imagem recusou este recorte."
+      "reason": "A ferramenta de imagem recusou este recorte.",
+      "attempted": true
+    },
+    {
+      "digibankId": "champion-blackgalgomon",
+      "name": "BlackGargomon",
+      "stage": "champion",
+      "reason": "A ferramenta de imagem recusou este recorte.",
+      "attempted": true
+    },
+    {
+      "digibankId": "champion-darklizamon",
+      "name": "DarkLizardmon",
+      "stage": "champion",
+      "reason": "A ferramenta de imagem recusou este recorte.",
+      "attempted": true
+    },
+    {
+      "digibankId": "champion-igamon",
+      "name": "Ninjamon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": true
+    },
+    {
+      "digibankId": "champion-nisedrimogemon",
+      "name": "NiseDrimogemon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": true
+    },
+    {
+      "digibankId": "champion-numemon",
+      "name": "Numemon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": true
+    },
+    {
+      "digibankId": "champion-octmon",
+      "name": "Octomon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": true
+    },
+    {
+      "digibankId": "champion-orgemon",
+      "name": "Ogremon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": true
+    },
+    {
+      "digibankId": "champion-omekamon",
+      "name": "Omekamon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": true
+    },
+    {
+      "digibankId": "champion-paledramon",
+      "name": "Paledramon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": true
+    },
+    {
+      "digibankId": "champion-gokimon",
+      "name": "Roachmon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": true
+    },
+    {
+      "digibankId": "champion-saberdramon",
+      "name": "Saberdramon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": true
+    },
+    {
+      "digibankId": "champion-sandyammamon",
+      "name": "SandYanmamon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": true
+    },
+    {
+      "digibankId": "champion-sangloupmon",
+      "name": "Sangloupmon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": true
+    },
+    {
+      "digibankId": "champion-sistermonnoir",
+      "name": "Sistermon Noir",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": true
+    },
+    {
+      "digibankId": "champion-soulmon",
+      "name": "Soulmon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": true
+    },
+    {
+      "digibankId": "champion-starmon",
+      "name": "Starmon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": true
+    },
+    {
+      "digibankId": "champion-strikedramon",
+      "name": "Strikedramon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": true
+    },
+    {
+      "digibankId": "champion-scumon",
+      "name": "Sukamon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": true
+    },
+    {
+      "digibankId": "champion-sunflowmon",
+      "name": "Sunflowmon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": true
+    },
+    {
+      "digibankId": "champion-symbareangoramon",
+      "name": "SymbareAngoramon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": true
+    },
+    {
+      "digibankId": "champion-tobucatmon",
+      "name": "TobuCatmon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": true
+    },
+    {
+      "digibankId": "champion-tortamon",
+      "name": "Tortomon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": true
+    },
+    {
+      "digibankId": "champion-trailmon",
+      "name": "Trailmon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": true
+    },
+    {
+      "digibankId": "champion-troopmon",
+      "name": "Troopmon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": true
+    },
+    {
+      "digibankId": "champion-turbomon",
+      "name": "Turbomon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-turuiemon",
+      "name": "Turuiemon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-tuskmon",
+      "name": "Tuskmon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-tuwarmon",
+      "name": "Tuwarmon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-yunimon",
+      "name": "Unimon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-v-dramon",
+      "name": "Veedramon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-vegimon",
+      "name": "Vegiemon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-evilmon",
+      "name": "Vilemon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-waspmon",
+      "name": "Waspmon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-zassoumon",
+      "name": "Weedmon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-wendimon",
+      "name": "Wendigomon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-wezengammamon",
+      "name": "WezenGammamon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-whamon-2",
+      "name": "Whamon (Champion)",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-witchmon",
+      "name": "Witchmon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-wizarmon",
+      "name": "Wizardmon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-wolvermon",
+      "name": "Wolvermon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-woodmon",
+      "name": "Woodmon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-xiquemon",
+      "name": "Xiquemon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-yakiimon",
+      "name": "Yakiimon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-yammamon",
+      "name": "Yanmamon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-youkomon",
+      "name": "Youkomon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-yoxtuyoxtumon",
+      "name": "Yoxtu!Yoxtu!mon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-zubaeagermon",
+      "name": "ZubaEagermon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-agnimon",
+      "name": "Agunimon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-arbormon",
+      "name": "Arbormon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-blitzmon",
+      "name": "Beetlemon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-duskmon",
+      "name": "Duskmon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-grottemon",
+      "name": "Grumblemon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-fairimon",
+      "name": "Kazemon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-chackmon",
+      "name": "Kumamon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-ranamon",
+      "name": "Lanamon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-wolfmon",
+      "name": "Lobomon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-louwemon",
+      "name": "Loweemon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
+    },
+    {
+      "digibankId": "champion-mercuremon",
+      "name": "Mercurymon",
+      "stage": "champion",
+      "reason": "Limite diário de geração atingido; aguardando retomada.",
+      "attempted": false
     }
   ]
 }
