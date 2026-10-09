@@ -6,8 +6,9 @@ export function initCommandOverlay(){
  const frame=document.createElement('div');frame.className='arena-frame';arena.before(frame);frame.append(arena);
  const launch=document.createElement('button');launch.id='openCommands';launch.className='arena-action';launch.type='button';launch.disabled=true;
  launch.setAttribute('aria-haspopup','dialog');launch.setAttribute('aria-controls','commandDialog');launch.setAttribute('aria-expanded','false');
- launch.innerHTML='<span class="action-emblem" aria-hidden="true">✦</span><b>AGIR</b><small id="commandCue">CONTROLE DE COMBATE</small>';frame.append(launch);
- const dialog=document.createElement('dialog');dialog.id='commandDialog';dialog.setAttribute('aria-label','Controle de combate');document.body.append(dialog);
+ launch.setAttribute('aria-label','AÇÃO — Abrir controle de combate');
+ launch.innerHTML='<img class="action-device" src="digivice-action.svg" alt="" draggable="false"><b>AÇÃO</b><small id="commandCue">CONTROLE DE COMBATE</small>';frame.append(launch);
+ const dialog=document.createElement('dialog');dialog.id='commandDialog';dialog.setAttribute('aria-label','Controle de combate');frame.append(dialog);
  const close=document.createElement('button');close.id='closeCommands';close.type='button';close.className='command-close';close.textContent='VOLTAR À ARENA ×';
  panel.querySelector('.console-status').replaceWith(close);
  const context=document.createElement('div');context.id='commandContext';context.className='command-context';context.setAttribute('aria-label','Participantes da cena');panel.querySelector('.command-deck-heading').after(context);
@@ -17,11 +18,20 @@ export function initCommandOverlay(){
  launch.addEventListener('click',openCommands);close.addEventListener('click',closeCommands);
  dialog.addEventListener('click',event=>{if(event.target!==dialog)return;const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)closeCommands();});
  dialog.addEventListener('close',()=>{launch.setAttribute('aria-expanded','false');document.body.classList.remove('commands-open');launch.focus({preventScroll:true});});
+ document.addEventListener('keydown',event=>{if(event.key==='Escape'&&dialog.open&&!document.querySelector('dialog[open]:not(#commandDialog)')){event.preventDefault();closeCommands();}});
+ window.addEventListener('resize',fitAboveCards);
+}
+function fitAboveCards(){
+ const dialog=document.querySelector('#commandDialog');if(!dialog.open)return;
+ const frame=document.querySelector('.arena-frame').getBoundingClientRect();
+ const cards=[...document.querySelectorAll('.combatant-dock')].map(node=>node.getBoundingClientRect().top);
+ if(cards.length)dialog.style.maxHeight=Math.max(200,Math.min(...cards)-frame.top-parseFloat(getComputedStyle(dialog).top)-24)+'px';
 }
 export function openCommands(){
  const dialog=document.querySelector('#commandDialog'),launch=document.querySelector('#openCommands');
  if(dialog.open||launch.disabled)return;
- dialog.showModal();document.body.classList.add('commands-open');launch.setAttribute('aria-expanded','true');
+ dialog.show();document.body.classList.add('commands-open');launch.setAttribute('aria-expanded','true');
+ fitAboveCards();
  document.querySelector('#closeCommands').focus({preventScroll:true});
 }
 export function closeCommands(){document.querySelector('#commandDialog')?.close();}
@@ -31,6 +41,7 @@ export function syncCommandOverlay({state,actor,busy}){
  document.querySelector('#commandCue').textContent=incoming?'ATAQUE RECEBIDO · REAGIR':state.pending?'ROLAGEM EM ANDAMENTO':'CONTROLE DE COMBATE';
  launch.classList.toggle('reaction-ready',!!incoming);
  if(!actor)closeCommands();
+ fitAboveCards();
  const context=document.querySelector('#commandContext');context.replaceChildren(...state.actors.map(unit=>{
   const form=currentForm(unit),chip=document.createElement('div');chip.className='context-unit '+unit.side;
   const img=document.createElement('img');img.src=form.image;img.alt='';
