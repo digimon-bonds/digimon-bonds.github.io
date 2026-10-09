@@ -1,5 +1,6 @@
 // Original SVG pictograms: crisp at every size, without font/emoji dependencies.
 const paths={
+ reserved:'<path d="m32 7 22 13v24L32 57 10 44V20Z"/><path d="M21 32h22M32 21v22"/>',
  digivice:'<path d="M21 7h22l10 13v24L43 57H21L11 44V20Z"/><rect x="21" y="20" width="22" height="19" rx="3"/><path d="M27 13h10M27 47h10M16 27v7M48 27v7"/>',
  sword:'<path d="m37 8 15-2-2 15-23 23-7-7Z" fill="currentColor" stroke="none"/><path d="m18 34 13 13M24 41 12 53M9 50l6 6"/>',
  signature:'<path d="m37 8 15-2-2 15-23 23-7-7Z" fill="currentColor" stroke="none"/><path d="m18 34 13 13M24 41 12 53M9 50l6 6M12 9v12M6 15h12M47 41v12M41 47h12"/>',
@@ -13,8 +14,11 @@ const paths={
 export const commandIcon=name=>`<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">${paths[name]||paths.help}</svg>`;
 export function initCommandWheel(){
  document.querySelectorAll('[data-command-icon]').forEach(node=>node.innerHTML=commandIcon(node.dataset.commandIcon));
+ document.querySelectorAll('.command-half').forEach(group=>group.querySelectorAll('button.command-option').forEach((button,index)=>{
+  const slot=document.createElement('span');slot.className='command-slot';slot.textContent=String(index+1).padStart(2,'0');slot.setAttribute('aria-hidden','true');button.append(slot);
+ }));
  const title=document.querySelector('#commandFocus'),description=document.querySelector('#commandDescription');
- const reset=()=>{title.textContent='ESCOLHA SUA AÇÃO';description.textContent=document.querySelector('.human-panel').hidden?'Selecione uma ação deste Digimon.':'Digimon acima. Humano abaixo. Cada um tem sua própria ação.';};
+ const reset=()=>{title.textContent='SELECIONE UM COMANDO';description.textContent=document.querySelector('.human-panel').hidden?'Escolha a próxima ação deste Digimon.':'Duas ações. Uma conexão. Digimon acima, Humano abaixo.';};
  document.querySelectorAll('.command-wheel button').forEach(button=>{
   button.setAttribute('aria-description',button.dataset.hint);
   const show=()=>{title.textContent=button.querySelector('b')?.textContent||'AÇÃO';description.textContent=button.id==='humanObserve'?document.querySelector('#observeHelp').textContent:button.dataset.hint;};

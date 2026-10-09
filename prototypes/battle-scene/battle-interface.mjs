@@ -29,8 +29,8 @@ export function renderInterface({state,mode,playerId,busy,choose}){
  if(!narrator&&!actor){document.querySelectorAll('.commands button,.human-panel button,.digimon-support button,.human-support button').forEach(b=>b.disabled=true);$('#pairHud').hidden=true;}else $('#pairHud').hidden=false;
  const operator=state.actors.find(a=>a.id===$('#operator').value),unpairedNPC=narrator&&!operator?.pairId;
  $('.human-panel').hidden=unpairedNPC;
- $('#commandFocus').textContent='ESCOLHA SUA AÇÃO';
- $('#commandDescription').textContent=unpairedNPC?'Selecione uma ação deste Digimon.':'Digimon acima. Humano abaixo. Cada um tem sua própria ação.';
+ $('#commandFocus').textContent='SELECIONE UM COMANDO';
+ $('#commandDescription').textContent=unpairedNPC?'Escolha a próxima ação deste Digimon.':'Duas ações. Uma conexão. Digimon acima, Humano abaixo.';
  if(unpairedNPC)$('#pairHud').hidden=true;
  document.querySelectorAll('.combatant').forEach(node=>{const controlled=narrator?node.id===($('#operator').value+'Combatant'):actor&&node.id===actor.id+'Combatant';node.classList.toggle('selected',!!controlled);});
  const resolution=$('#resolutionPanel');resolution.classList.toggle('standby',!busy&&!state.pending&&!state.result);
