@@ -8,7 +8,7 @@ export function initCommandOverlay(){
  const launch=document.createElement('button');launch.id='openCommands';launch.className='arena-action';launch.type='button';launch.disabled=true;
  launch.setAttribute('aria-haspopup','dialog');launch.setAttribute('aria-controls','commandDialog');launch.setAttribute('aria-expanded','false');
  launch.setAttribute('aria-label','AÇÃO — Abrir controle de combate');
- const device=document.createElement('template');device.innerHTML=renderDigivice({...deviceDefaults,digiName:'',digiImage:'',zoom:1,imagePosition:'center',deviceSkin:'clean'},v=>String(v),()=>false);const illustration=device.content.querySelector('svg');illustration.classList.add('action-device');illustration.querySelectorAll('image').forEach(img=>img.setAttribute('href','/creator/'+img.getAttribute('href')));launch.append(illustration);launch.insertAdjacentHTML('beforeend','<b>AÇÃO</b><small id="commandCue">CONTROLE DE COMBATE</small>');frame.append(launch);
+ const device=document.createElement('template');device.innerHTML=renderDigivice({...deviceDefaults,digiName:'',digiImage:'',zoom:1,imagePosition:'center',deviceSkin:'clean'},v=>String(v),()=>false);const illustration=device.content.querySelector('svg');illustration.classList.add('action-device');illustration.querySelectorAll('image').forEach(img=>img.setAttribute('href','/creator/'+img.getAttribute('href')));launch.append(illustration);launch.insertAdjacentHTML('beforeend',actionScreen()+'<small id="commandCue">CONTROLE DE COMBATE</small>');frame.append(launch);
  const dialog=document.createElement('dialog');dialog.id='commandDialog';dialog.setAttribute('aria-label','Controle de combate');frame.append(dialog);
  const close=document.createElement('button');close.id='closeCommands';close.type='button';close.className='command-close';close.textContent='VOLTAR À ARENA ×';
  panel.querySelector('.console-status').replaceWith(close);
@@ -51,3 +51,6 @@ export function syncCommandOverlay({state,actor,busy}){
   chip.append(img,name,hp);return chip;
  }));return group;}));
 }
+
+// Compact pixel lettering stays crisp without loading an additional font.
+function actionScreen(){const glyphs=['01110/10001/10001/11111/10001/10001/10001','01111/10000/10000/10000/10000/10000/01111','01110/10001/10001/11111/10001/10001/10001','01110/10001/10001/10001/10001/10001/01110'];let pixels='';glyphs.forEach((glyph,i)=>glyph.split('/').forEach((row,y)=>[...row].forEach((cell,x)=>{if(cell==='1')pixels+=`<rect x="${i*7+x}" y="${y+3}" width=".86" height=".86"/>`;})));for(const [x,y] of [[9,10],[8,11],[15,1],[16,0],[17,1],[18,0]])pixels+=`<rect x="${x}" y="${y}" width=".86" height=".86"/>`;return '<span class="action-lcd" aria-hidden="true"><svg class="action-lettering" viewBox="0 0 26 12" fill="currentColor" focusable="false">'+pixels+'</svg></span>';}
