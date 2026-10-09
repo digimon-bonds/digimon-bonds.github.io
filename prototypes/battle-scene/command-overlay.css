@@ -1,0 +1,48 @@
+.arena-frame{position:relative;isolation:isolate}
+.arena-action{position:absolute;z-index:6;left:50%;bottom:170px;transform:translateX(-50%);display:grid;justify-items:center;align-content:center;gap:4px;width:176px;min-height:94px;border:1px solid #ffdc92;border-radius:8px 22px 8px 22px;color:#34230e;background:linear-gradient(125deg,#ffe4a5,#edb24e 65%,#cd8b2e);box-shadow:0 10px 30px #0009,0 0 28px #eeb65333,inset 0 1px #fff7d9,inset 0 -4px #ad742f55;transition:box-shadow .2s,filter .2s}
+.arena-action:before{content:"";position:absolute;inset:6px;border:1px solid #79551c55;border-radius:3px 16px 3px 16px;pointer-events:none}
+.arena-action b{font:800 23px/1.1 var(--mono);letter-spacing:4px;padding-left:4px}
+.arena-action small{font:7px/1.3 var(--mono);letter-spacing:1px;max-width:150px}
+.action-emblem{font-size:17px;line-height:1}
+.arena-action:hover:not(:disabled){background:linear-gradient(125deg,#fff0c6,#ffd27c 65%,#edb24e);border-color:#fff1c7;box-shadow:0 10px 30px #0009,0 0 35px #ffd28066,inset 0 1px #fff}
+.arena-action:focus-visible{outline:2px solid #b5ffcf;outline-offset:5px}
+.arena-action:disabled{opacity:.55}
+.arena-action.reaction-ready{box-shadow:0 10px 30px #0009,0 0 0 4px #efc27e20,0 0 38px #eeb65355}
+#commandDialog{position:fixed;inset:auto 18px 18px;width:min(1240px,calc(100% - 36px));max-width:none;max-height:calc(100dvh - 80px);padding:0;margin:0 auto;border:1px solid #6cbdce99;border-radius:8px 24px 8px 24px;background:#081c27f5;overflow:auto;box-shadow:0 28px 90px #000b,0 0 50px #67e0eb15;scrollbar-width:thin;scrollbar-color:#467785 #0a1d27}
+#commandDialog::backdrop{background:#020c144d;backdrop-filter:none}
+#commandDialog[open]{animation:command-arrive .22s ease-out}
+#commandDialog #commandPanel{border:0;border-radius:0;background-color:transparent;box-shadow:none}
+#commandDialog #commandPanel .command-deck-heading{padding:13px 20px;position:sticky;top:0;z-index:10;background:#102c39f5;backdrop-filter:blur(12px)}
+#commandDialog #commandPanel .command-heading-title b{font-size:16px}
+#commandDialog .command-close{border:1px solid #7ca4ad66;background:#081e29;color:#d8edf1;border-radius:4px 10px 4px 10px;font:9px var(--mono);letter-spacing:1px;padding:10px 14px;flex:none}
+#commandDialog .command-close:hover{border-color:#efc27e;color:#ffdb9b}
+.command-context{display:flex;gap:8px;padding:8px 20px;border-bottom:1px solid #73c9dc22;overflow-x:auto;background:#05162099;scrollbar-width:thin}
+.context-unit{display:grid;grid-template-columns:30px auto;column-gap:8px;align-items:center;flex:none;padding:3px 12px 3px 4px;border-left:2px solid #67cdd5;border-radius:2px 7px 2px 7px;background:#18354288}
+.context-unit.enemy{border-left-color:#e9bc75;background:#3a332788}
+.context-unit img{width:30px;height:34px;object-fit:contain;grid-row:1/3}
+.context-unit b{font:600 11px Arial,sans-serif;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#e0f4f5}
+.context-unit small{font:8px var(--mono);color:#9fbdc9}
+#commandDialog #commandPanel .command-wheel{width:min(100%,700px);height:400px;margin:12px auto}
+#commandDialog #commandPanel .command-wheel .panel-heading>span{display:none}
+#commandDialog #commandPanel .command-wheel:before{width:330px;height:330px;padding:8px}
+#commandDialog #commandPanel .command-wheel:after{width:360px;height:360px}
+#commandDialog #commandPanel .command-wheel button.command-option{width:126px;height:78px;gap:4px;padding:8px!important}
+#commandDialog #commandPanel .command-wheel button.command-option:after{box-shadow:102px 55px currentColor}
+#commandDialog #commandPanel .command-wheel button.command-option .command-icon{width:23px;height:23px}
+#commandDialog #commandPanel .command-wheel button.command-option b{font-size:10px;letter-spacing:.8px}
+#commandDialog #commandPanel .command-wheel button.command-option small{font-size:9px}
+#commandDialog #commandPanel .wheel-core{width:144px;height:144px;padding:16px;gap:6px}
+#commandDialog #commandPanel .core-link{font-size:6px;letter-spacing:1px}
+#commandDialog #commandPanel .wheel-core h3{font-size:11px;letter-spacing:.5px}
+#commandDialog #commandPanel .wheel-core p{font-size:10px;line-height:1.4}
+#commandDialog #commandPanel .wheel-owner{font-size:16px;letter-spacing:5px}
+#commandDialog #commandPanel .owner-digimon{top:28%}
+#commandDialog #commandPanel .owner-human{bottom:28%}
+.command-inventory>summary{padding:12px 22px;border-top:1px solid #6092a633;color:#a3bdc9;font:9px var(--mono);letter-spacing:1.5px;cursor:pointer;background:#071924aa}
+#commandDialog #commandPanel .command-support{padding:14px 20px}
+body.commands-open{overflow:hidden}
+@keyframes command-arrive{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@media(min-width:1001px){#commandDialog #commandPanel .command-stage.has-decision{grid-template-columns:minmax(165px,1fr) minmax(480px,700px) minmax(185px,1fr);gap:12px;padding:0 16px}#commandDialog #commandPanel .command-stage.has-decision .command-wheel{grid-column:2;grid-row:1}#commandDialog #commandRoll{grid-column:1;grid-row:1}#commandDialog #commandDecision{grid-column:3;grid-row:1}#commandDialog #commandPanel .command-stage.has-decision button.command-option{width:110px}#commandDialog #commandPanel .command-stage.has-decision button.command-option:after{box-shadow:86px 55px currentColor}#commandDialog .command-roll-card,#commandDialog .command-decision-card{padding:14px 12px}}
+@media(max-width:1000px){#commandDialog #commandPanel .command-stage.has-decision{grid-template-columns:1fr 1fr;padding:12px;gap:12px}#commandDialog #commandRoll{grid-column:1;grid-row:1}#commandDialog #commandDecision{grid-column:2;grid-row:1}#commandDialog #commandPanel .command-stage.has-decision .command-wheel{grid-column:1/-1;grid-row:2}}
+@media(max-width:600px){.arena-action{width:142px;min-height:80px;bottom:32px}.arena-action b{font-size:20px}.arena-action small{font-size:6px}#commandDialog{inset:auto 8px 8px;width:calc(100% - 16px);max-height:calc(100dvh - 48px);border-radius:8px 18px 8px 18px}#commandDialog #commandPanel .command-deck-heading{padding:12px;gap:8px}#commandDialog .command-close{font-size:8px;padding:9px;max-width:105px}#commandDialog #commandPanel .command-heading-title>i{display:none}#commandDialog #commandPanel .command-heading-title b{font-size:14px}#commandDialog .command-context{padding:8px 12px}#commandDialog #commandPanel .command-wheel,#commandDialog #commandPanel .command-stage.has-decision .command-wheel{height:auto;width:100%;margin:4px auto 12px}#commandDialog #commandPanel .wheel-core,#commandDialog #commandPanel .command-stage.has-decision .wheel-core{width:100%;height:auto;min-height:90px;padding:14px}#commandDialog #commandPanel .command-wheel button.command-option,#commandDialog #commandPanel .command-stage.has-decision .command-wheel button.command-option{width:100%;height:86px}#commandDialog #commandPanel .command-wheel button.command-option:after{box-shadow:none}#commandDialog #commandPanel .command-stage.has-decision{grid-template-columns:1fr}#commandDialog #commandRoll{grid-column:1;grid-row:2}#commandDialog #commandDecision{grid-column:1;grid-row:1}#commandDialog #commandPanel .command-stage.has-decision .command-wheel{grid-row:3}}
+@media(prefers-reduced-motion:reduce){#commandDialog[open]{animation:none}}

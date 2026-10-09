@@ -1,3 +1,4 @@
+import {syncCommandOverlay} from './command-overlay.mjs';
 import {roundStatus,partnershipStatus} from './round-status.mjs';
 import {conditionHelp} from './condition-help.mjs';
 import {currentForm,markers,STAGES,CONDITIONS} from './engine.mjs';
@@ -10,6 +11,7 @@ export function combatantHUD(state,actor,mode,controlled){
 }
 export function renderInterface({state,mode,playerId,busy,choose}){
  const $=s=>document.querySelector(s),narrator=mode==='narrator',actor=state.actors.find(a=>a.id===playerId),human=state.humans.find(h=>h.pairId===actor?.pairId),pair=state.pairs.find(p=>p.id===actor?.pairId);
+ syncCommandOverlay({state,actor:narrator?state.actors.find(a=>a.id===$('#operator').value):actor,busy});
  document.body.dataset.view=mode;document.body.classList.toggle('rolling',busy);
  $('[id=narratorTerminal]').hidden=!narrator;
  document.querySelectorAll('[data-view]').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.view===mode));b.disabled=busy||!!state.pending&&b.dataset.view===mode;});
