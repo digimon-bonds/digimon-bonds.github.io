@@ -3,7 +3,7 @@
   'use strict';
   if(document.currentScript && document.currentScript.dataset.bondsCancelled==='1')return;
   var BASE_URL = 'https://digimon-bonds.github.io/forum-skin/';
-  var VERSION = '20261013-10-public-beta2';
+  var VERSION = '20261013-10-public-beta3';
   var root=document.documentElement, storageKey='bondsSkinVersion', failKey='bondsSkinFailsafe';
   if (document.getElementById('bonds-skin-switcher-style')) return;
   var flag=new URLSearchParams(location.search).get('bondsos'), preference='2', failedSession='';
@@ -76,7 +76,7 @@
   var suffix='?v='+encodeURIComponent(VERSION),base=BASE_URL.replace(/\/?$/,'/');
   css.id='bonds-os-css';css.rel='stylesheet';css.href=base+'bonds-os.css'+suffix;
   var early=element('style');early.id='bonds-os-critical';
-  early.textContent='html.bonds-os-loading,html.bonds-os-loading body{background:#07141d!important;color:#dcebf0!important}html.bonds-os-loading :is(#wrap,#page-body,#main-content,.headerbar,.post,.postbody,.postprofile,.panel,.forabg,.forumbg,.navbar){background-color:#0b202b!important;background-image:none!important;border-color:#365767!important}html.bonds-os-loading #page-header .navbar{visibility:hidden!important}html.bonds-os-loading .postprofile{background:none!important}';
+  early.textContent='html.bonds-os-loading,html.bonds-os-loading body{background:#0b202b!important;color:#dcebf0!important}html.bonds-os-loading :is(#wrap,#page-body,#main-content,.headerbar,.post,.postbody,.postprofile,.panel,.forabg,.forumbg,.navbar){background-color:#0b202b!important;background-image:none!important;border-color:#365767!important}html.bonds-os-loading #page-header .navbar{visibility:hidden!important}html.bonds-os-loading #wrap{opacity:0!important;pointer-events:none!important}html.bonds-os-loading .postprofile{background:none!important}';
   document.head.appendChild(early);root.classList.add('bonds-os-loading');clearBridge();
   function clearEarly(){root.classList.remove('bonds-os-loading');early.remove();}
   function cleanListeners(){clearTimeout(timer);document.removeEventListener('bonds-os-ready',ready);document.removeEventListener('bonds-os-failed',rollback);document.removeEventListener('DOMContentLoaded',start);}

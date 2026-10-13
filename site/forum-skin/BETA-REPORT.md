@@ -1,6 +1,6 @@
 # BONDS OS v10 — PUBLIC BETA PREP
 
-Versão: 20261013-10-public-beta2. Instalação no painel não executada.
+Versão: 20261013-10-public-beta3. Instalação no painel não executada.
 
 ## Escopo
 
@@ -35,3 +35,7 @@ Build normal inclui /forum-skin/. Commit, workflow e verificação HTTPS final e
 ## Acabamento public-beta2
 
 Seletor sem subtítulos, textos revisados, cabeçalho de comunidade e status beta removidos. Slots de publicidade da plataforma ocultos somente na Skin 2.0. Quantidade de dados acompanha a opção selecionada por CSS, sem alterar eventos, valores ou regras nativas. Prévia do editor distingue #preview de posts numéricos, preservando o conteúdo da mensagem. Bootstrap revisado somente para pintura inicial e chave do loader; atualização manual documentada no guia.
+
+## Frame de transição — public-beta3
+
+Durante bootstrap/loading, #wrap fica transparente e sem interação, deixando apenas o fundo escuro. A proteção é contínua entre bootstrap e loader; ready e recuperação removem a classe e restauram a interface. Skin clássica explicitamente selecionada não recebe a proteção.

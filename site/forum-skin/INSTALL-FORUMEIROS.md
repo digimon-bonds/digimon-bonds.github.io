@@ -1,6 +1,6 @@
 # Instalar BONDS OS — beta pública controlada
 
-Versão: 20261013-10-public-beta2. A instalação é manual; esta entrega não alterou o painel. Depois de instalar, visitantes sem preferência recebem a Skin 2.0.
+Versão: 20261013-10-public-beta3. A instalação é manual; esta entrega não alterou o painel. Depois de instalar, visitantes sem preferência recebem a Skin 2.0.
 
 ## Antes de começar
 
@@ -29,10 +29,10 @@ Salve uma cópia dos códigos atuais do fórum. Desative somente os loaders expe
   function clear(){clearTimeout(t);document.documentElement.classList.remove('bonds-bootstrap-loading');if(c)c.remove();}
   if(v==='2'&&!f&&q!=='fallback'){
     c=document.createElement('style');c.id='bonds-bootstrap-critical';
-    c.textContent='html.bonds-bootstrap-loading,html.bonds-bootstrap-loading body{background:#07141d!important;color:#dcebf0!important}html.bonds-bootstrap-loading :is(#wrap,#page-body,#main-content,.headerbar,.post,.postbody,.postprofile,.panel,.forabg,.forumbg,.navbar){background-color:#0b202b!important;background-image:none!important}html.bonds-bootstrap-loading #page-header .navbar{visibility:hidden!important}';
+    c.textContent='html.bonds-bootstrap-loading,html.bonds-bootstrap-loading body{background:#0b202b!important;color:#dcebf0!important}html.bonds-bootstrap-loading :is(#wrap,#page-body,#main-content,.headerbar,.post,.postbody,.postprofile,.panel,.forabg,.forumbg,.navbar){background-color:#0b202b!important;background-image:none!important}html.bonds-bootstrap-loading #page-header .navbar{visibility:hidden!important}html.bonds-bootstrap-loading #wrap{opacity:0!important;pointer-events:none!important}';
     document.head.appendChild(c);document.documentElement.classList.add('bonds-bootstrap-loading');
   }
-  s.src='https://digimon-bonds.github.io/forum-skin/forumeiros-loader.js?v=20261013-10-public-beta2';
+  s.src='https://digimon-bonds.github.io/forum-skin/forumeiros-loader.js?v=20261013-10-public-beta3';
   function cancel(){s.dataset.bondsCancelled='1';s.remove();clear();}
   s.onload=clear;s.onerror=cancel;t=setTimeout(cancel,12000);document.head.appendChild(s);
 }());
@@ -44,7 +44,7 @@ Abra https://digimonbonds.forumeiros.com/?bondsos=1 para selecionar 2.0 e gravar
 
 Sem preferência, a versão é 2.0. A escolha fica neste navegador/origem em localStorage, chave bondsSkinVersion, valores 1 e 2; acompanha login/logout, sem modificar permissões. Se o storage for bloqueado, o padrão continua 2.0; o seletor usa o parâmetro da URL na página atual para manter a escolha durante o reload. Links seguintes sem parâmetro voltam ao padrão quando não há storage.
 
-Para minimizar a primeira pintura bege, o bootstrap deve executar cedo, no head gerado pelo gerenciador em Todas as páginas. Ele aplica um fundo estrutural temporário e oculta somente a navegação clássica enquanto busca o loader; o conteúdo continua disponível. Na clássica não aplica esse fundo. Código injetado tarde por outra ferramenta não consegue impedir uma pintura que já ocorreu.
+Para minimizar a primeira pintura bege, o bootstrap deve executar cedo, no head gerado pelo gerenciador em Todas as páginas. Ele mantém o fundo escuro e oculta temporariamente #wrap durante o carregamento, impedindo que logo, banner e conteúdo clássicos apareçam antes da nova skin. A proteção passa do bootstrap ao loader sem intervalo e é removida quando a skin fica pronta ou ocorre falha/timeout. Na clássica não aplica esse fundo. Código injetado tarde por outra ferramenta não consegue impedir uma pintura que já ocorreu.
 
 Execute BETA-CHECKLIST.md com admin, conta comum e visitante. Testes locais não comprovam SCEditor, moderação, envios, MP ou dados em sessão real. Verifique também a largura móvel de 390px.
 
@@ -69,3 +69,7 @@ O código do painel só carrega o loader hospedado. Atualizações normais de CS
 ## Revisão de acabamento
 
 Nesta revisão é necessário substituir uma vez o bootstrap existente pelo bloco acima: a faixa clássica aparece antes do download do loader, e a URL anterior do próprio loader pode permanecer em cache. A nova chave explícita atualiza loader, CSS e JS. Apenas publicar os arquivos não invalida o loader já armazenado no navegador. Não foram feitas alterações no painel nesta entrega.
+
+## Correção do frame de transição
+
+A revisão public-beta3 oculta o invólucro nativo durante as duas etapas do carregamento. A mudança no bootstrap é necessária porque o logo antigo aparece antes de o loader remoto chegar. Substitua somente o bootstrap BONDS OS existente; não altere o CSS clássico, templates ou App.
