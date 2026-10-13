@@ -1,6 +1,6 @@
 # Instalar BONDS OS — beta pública controlada
 
-Versão: 20261013-10-public-beta6. A instalação é manual; esta entrega não alterou o painel. Depois de instalar, visitantes sem preferência recebem a Skin 2.0.
+Versão: 20261013-10-public-beta7. A instalação é manual; esta entrega não alterou o painel. Depois de instalar, visitantes sem preferência recebem a Skin 2.0.
 
 ## Antes de começar
 
@@ -82,3 +82,8 @@ Se já instalou o bootstrap public-beta4 com proteção do frame inicial, manten
 ## Atualização public-beta6
 
 Mantenha o bootstrap atual. Esta revisão restringe capas aos mundos e protege a estrutura dos posts contra tags de formatação não fechadas por templates.
+
+
+## Atualização public-beta7
+
+Refinamento do template de leitura em Sistemas e destaque dos nomes dos arquétipos. Mantenha o bootstrap instalado. A revisão do loader atualiza as URLs de CSS e JavaScript.

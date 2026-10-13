@@ -1,6 +1,6 @@
 # BONDS OS v10 — PUBLIC BETA PREP
 
-Versão: 20261013-10-public-beta6. Instalação no painel não executada.
+Versão: 20261013-10-public-beta7. Instalação no painel não executada.
 
 ## Escopo
 
@@ -64,3 +64,12 @@ No tópico t77, o template de Dreiqui abre `<b>` em `Vou provar que já sou cres
 Não foram editadas mensagens, nem alterado o bootstrap instalado. O loader usa revisão public-beta6 para CSS/JS.
 
 Validação public-beta6: 184 testes aprovados; em Sistemas, 11 cards sem capas/consultas; em Tóquio, 11 cards com capas. No t77, todos os 20 conteúdos da captura foram preservados, a mensagem #377 voltou de uma coluna de 210px para 996px, e o documento não apresenta overflow global a 390px.
+
+
+## Leitura de Sistemas — public-beta7
+
+Os posts narrativos da conta Omegamon em Sistemas recebem uma superfície de leitura de até 860px, com recuo interno de até 42px e blocos de prosa de até 70ch. Seções, exemplos e tabelas de referência possuem tratamentos distintos. Foram removidas apenas quebras de linha de espaçamento entre blocos; as quebras dentro do texto e das listas permanecem. Textos justificados no desktop; alinhamento à esquerda em telas pequenas para evitar espaços excessivos.
+
+Os 14 arquétipos usam nomes em dourado claro, fonte de 22px/700, cabeçalho próprio com índice e cards de habilidade mais definidos. No celular, títulos de 20px e descrições alinhadas à esquerda. A edição se aplica ao template de Sistemas; posts autorais nos mundos continuam preservados. Bootstrap inalterado.
+
+Verificação: Humanos, Mecânicas e Digimon com prosa de 566px no viewport de 1280px; 14 arquétipos sem overflow a 390px; 75 entradas Digibank sem overflow interno. Testes completos e verificação HTTPS acompanham a publicação.
