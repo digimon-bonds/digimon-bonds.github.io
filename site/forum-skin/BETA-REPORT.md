@@ -18,7 +18,7 @@ Rolagem 317 em topic-65: Hollow/avatar correto, corpo automático intacto. Templ
 
 ## Limites reais
 
-Não houve validação autenticada real de SCEditor, moderação, submissões, MP ou rolagens. O viewport solicitado 390px segue ignorado pelo navegador de testes; não declarar mobile comprovado. Rodar BETA-CHECKLIST.md após a instalação manual. Prévia estática e fixtures não enviam formulários.
+Não houve validação autenticada real de SCEditor, moderação, submissões, MP ou rolagens. Após as primeiras tentativas ignoradas, o navegador aplicou efetivamente 390px: home, seletor, subfórum, rolagem, ficha, editor, perfil e mensagens passaram sem overflow horizontal global. Isso valida as capturas e fixtures locais, não um aparelho físico nem sessão autenticada. Rodar BETA-CHECKLIST.md após a instalação manual. Prévia estática e fixtures não enviam formulários.
 
 ## Rede e rollback
 
@@ -27,3 +27,7 @@ Feed: normalmente 11, máximo 21 consultas por atualização; três simultâneas
 ## Publicação
 
 Build normal inclui /forum-skin/. Commit, workflow e verificação HTTPS final estão no PUBLICACAO.md do pacote entregue.
+
+## Resultado automático
+
+173 testes locais passaram; o bootstrap exato da documentação é comparado por teste. O build normal concluiu.
