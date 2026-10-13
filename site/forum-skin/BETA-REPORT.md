@@ -1,6 +1,6 @@
 # BONDS OS v10 — PUBLIC BETA PREP
 
-Versão: 20261013-10-public-beta5. Instalação no painel não executada.
+Versão: 20261013-10-public-beta6. Instalação no painel não executada.
 
 ## Escopo
 
@@ -53,3 +53,14 @@ Capa de tópico: último post narrativo de Omegamon, ignorando mensagens automá
 Validação no navegador: 75 Digimon/14 arquétipos; 390px sem overflow global (scrollWidth 382); template narrativo #474 preservado e banner XZVp8vwH reconhecido após ler página p25. Outros 27 templates de jogadores preservados na captura de exemplo. Bootstrap public-beta4 mantido sem alteração; revisão do loader atualizada para public-beta5.
 
 Validação final desta revisão: 179 testes locais passaram; build de produção concluído. O bootstrap não mudou nesta revisão.
+
+
+## Capas por área e isolamento de templates — public-beta6
+
+As capas e as consultas de banners ficam restritas ao Mundo Humano, Mundo Digital e seus subfóruns. Sistemas, Fichas e demais áreas mantêm os cards de circuitos sem imagens.
+
+No tópico t77, o template de Dreiqui abre `<b>` em `Vou provar que já sou crescidinho!` sem `</b>`, nas mensagens #212, #269 e #379. O parser reconstrói essas tags em mensagens seguintes e envolve `.postprofile` e `.postbody`; o grid então comprime ambos na coluna de avatar. A skin remove somente wrappers de formatação entre `.inner` e os componentes nativos. Os nós de conteúdo e seus templates permanecem intactos. A correção na fonte do template é `<b>Vou provar que já sou crescidinho!</b></div>`.
+
+Não foram editadas mensagens, nem alterado o bootstrap instalado. O loader usa revisão public-beta6 para CSS/JS.
+
+Validação public-beta6: 184 testes aprovados; em Sistemas, 11 cards sem capas/consultas; em Tóquio, 11 cards com capas. No t77, todos os 20 conteúdos da captura foram preservados, a mensagem #377 voltou de uma coluna de 210px para 996px, e o documento não apresenta overflow global a 390px.

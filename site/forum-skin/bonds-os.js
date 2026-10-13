@@ -321,12 +321,22 @@
     return null;
   }
 
+  function worldArtwork(refs) {
+    for (var i=0;i<refs.length;i++) {
+      try {
+        var match=new URL(refs[i],location.origin).pathname.match(/^\/f(2|3|10|11|12|14|15|16)(?:-|$)/);
+        if(match)return /^(2|15|16)$/.test(match[1])?'human-world-v10.webp':'digital-world-v10.webp';
+      } catch (_) {}
+    }
+    return null;
+  }
   function enhanceTopicArtwork(main) {
     var rows=Array.from(main.querySelectorAll('[data-bos-topic-row]'));
     if (!rows.length) return;
-    var paths=Array.from(main.querySelectorAll('.diretorio a')).map(function(a){return a.getAttribute('href')||'';}).join(' ');
-    paths+=' '+(document.body.getAttribute('data-bos-source')||location.href);
-    var fallback=/\/f3(?:-|\b)|mundo-digital/i.test(paths)?'digital-world-v10.webp':/\/f(?:2|15|16)(?:-|\b)|mundo-humano/i.test(paths)?'human-world-v10.webp':null;
+    var paths=Array.from(main.querySelectorAll('.diretorio a')).map(function(a){return a.getAttribute('href')||'';});
+    paths.push(document.body.getAttribute('data-bos-source')||location.href);
+    var fallback=worldArtwork(paths);
+    if(!fallback)return; // Other areas neither decorate cards with images nor fetch topic banners.
     function apply(row,ref) {
       var url=safeArtURL(ref); if(!url)return;
       row.style.setProperty('--bos-topic-art','url('+JSON.stringify(url)+')'); row.dataset.bosTopicArt='';
@@ -391,8 +401,27 @@
     });
   }
 
+  function repairPostShell(post) {
+    if(!/^p\d+$/.test(post.id))return;
+    var inner=post.querySelector(':scope > .inner');if(!inner)return;
+    var wrappers=new Set();
+    ['.postprofile','.postbody'].forEach(function(selector){
+      var target=inner.querySelector(selector), chain=[], node=target&&target.parentElement;
+      while(node&&node!==inner&&/^(B|STRONG|I|EM|U|S|SMALL|BIG|FONT)$/.test(node.tagName)){
+        chain.push(node);node=node.parentElement;
+      }
+      // Only parser-reconstructed formatting around native shell nodes, never authored .content.
+      if(node===inner)chain.forEach(function(wrapper){wrappers.add(wrapper);});
+    });
+    wrappers.forEach(function(wrapper){
+      while(wrapper.firstChild)wrapper.parentNode.insertBefore(wrapper.firstChild,wrapper);
+      wrapper.remove();
+    });
+    if(wrappers.size)post.dataset.bosShellRepaired='';
+  }
   function enhanceInteriors(kind) {
     var main = document.querySelector('#main-content'); if (!main || kind === 'home') return;
+    document.querySelectorAll('.post[id^="p"]').forEach(repairPostShell);
     var systems = isSystemsPage(Array.from(main.querySelectorAll('.diretorio a')).map(function(a){return a.getAttribute('href')||'';}));
     document.documentElement.dataset.bosArea = systems ? 'systems' : 'authored';
     var names = {topic:'TRANSMISSÃO / HISTÓRIA',forum:'ARQUIVO / TÓPICOS',category:'REDE / FÓRUNS',profile:'IDENTIDADE / DIGIESCOLHIDO',editor:'ESCRITA / NOVA TRANSMISSÃO',messages:'DIGITAL LINK / MENSAGENS',account:'IDENTIDADE / CONTA',members:'COMUNIDADE / DIGIESCOLHIDOS',groups:'COMUNIDADE / GRUPOS',search:'REDE / PESQUISA',login:'ACESSO / CONEXÃO',register:'ACESSO / NOVO VÍNCULO',faq:'SUPORTE / PERGUNTAS'};

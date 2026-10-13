@@ -4,11 +4,25 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 const source=await readFile(new URL('../site/forum-skin/bonds-os.js',import.meta.url),'utf8');
 const context={URL,Array,Set,location:{origin:'https://digimonbonds.forumeiros.com'},rollActor:c=>c.roll?'Actor':null,api:{}};
-runInNewContext(source.slice(source.indexOf('  function topicURL('),source.indexOf('  function rollActor('))+source.slice(source.indexOf('  function topicKey('),source.indexOf('  function parsePosts('))+source.slice(source.indexOf('  function safeArtURL('),source.indexOf('  function enhanceTopicArtwork('))+'Object.assign(api,{safeArtURL,topicBanner,readTopicBanner});',context);
+runInNewContext(source.slice(source.indexOf('  function topicURL('),source.indexOf('  function rollActor('))+source.slice(source.indexOf('  function topicKey('),source.indexOf('  function parsePosts('))+source.slice(source.indexOf('  function safeArtURL('),source.indexOf('  function enhanceTopicArtwork('))+'Object.assign(api,{safeArtURL,topicBanner,readTopicBanner,worldArtwork});',context);
 const {safeArtURL,topicBanner}=context.api;
 function image(src,width=640,height=240,quoted=false){return {tagName:'IMG',style:{},getAttribute:k=>({src,width,height}[k]??null),closest:()=>quoted?{}:null};}
 function post(id,author,nodes=[],declared=null){const content={querySelector:s=>s==='[data-topic-banner]'?declared:null,querySelectorAll:()=>nodes};return {id:'p'+id,content,querySelector:s=>s==='.postprofile dt strong'?{textContent:author}:content};}
 const doc=posts=>({querySelectorAll:()=>posts});
+
+test('only world forums and their descendants receive topic artwork',()=>{
+ for(const id of [2,15,16])assert.equal(context.api.worldArtwork(['/f'+id+'-place']),'human-world-v10.webp');
+ for(const id of [3,10,11,12,14])assert.equal(context.api.worldArtwork(['/f'+id+'-place']),'digital-world-v10.webp');
+ for(const path of ['/f4-sistemas','/f41-world','/f5-fichas','/search','/f8-off-topic'])assert.equal(context.api.worldArtwork([path]),null);
+ assert.equal(context.api.worldArtwork(['/f3-mundo-digital','/f99-new-region']),'digital-world-v10.webp');
+});
+
+test('Systems returns before scheduling artwork observers or making requests',()=>{
+ const c={Array,location:context.location,worldArtwork:context.api.worldArtwork,document:{body:{getAttribute:()=>'/f4-sistemas'}},api:{}};
+ runInNewContext(source.slice(source.indexOf('  function enhanceTopicArtwork('),source.indexOf('  function enhanceCatalog('))+'api.run=enhanceTopicArtwork;',c);
+ // No observer, window, asset helpers or request APIs exist: any attempted work fails this test.
+ c.api.run({querySelectorAll:selector=>selector==='[data-bos-topic-row]'?[{}]:[]});
+});
 test('cover URLs allow HTTP images but reject empty, local, data and executable schemes',()=>{
  for(const value of [null,undefined,'','javascript:alert(1)','data:image/png;base64,a','file:///private'])assert.equal(safeArtURL(value),null);
  assert.equal(safeArtURL('https://images.example/cover.jpg'),'https://images.example/cover.jpg');
