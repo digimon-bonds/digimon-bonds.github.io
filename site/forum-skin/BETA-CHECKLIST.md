@@ -1,6 +1,6 @@
 # BONDS OS v10 — checklist obrigatório do beta real
 
-Versão: 20261013-10-beta2. **Nenhuma linha abaixo foi marcada como validada em sessão autenticada.** O responsável deve preencher data, conta/perfil (sem senha), navegador, URL e observação.
+Versão: 20261013-10-public-beta1. **Nenhuma linha abaixo foi marcada como validada em sessão autenticada.** O responsável deve preencher data, conta/perfil (sem senha), navegador, URL e observação.
 
 Execute cada caso com skin original (?bondsos=0) e beta (?bondsos=1), desktop e ~390px onde aplicável. Use área e conteúdo descartáveis para envios/moderação/exclusão. Não cole senhas/tokens/cookies no relatório. Salve o rascunho antes de testar falhas de rede.
 
@@ -11,7 +11,7 @@ Data: ____ · Navegador: ____ · Conta/perfil: ____ · Versão: ____
 | Teste | Resultado esperado | PASSOU | FALHOU | OBSERVAÇÃO |
 |---|---|:---:|:---:|---|
 | Login | Entrar; beta permanece na mesma aba; identidade e permissões corretas. | ☐ | ☐ | |
-| Logout | Sair; conteúdo restrito desaparece, skin continua opt-in. | ☐ | ☐ | |
+| Logout | Sair; conteúdo restrito desaparece, preferência de skin permanece. | ☐ | ☐ | |
 | Responder tópico | Enviar um post de teste e conferir uma única publicação. | ☐ | ☐ | |
 | Criar tópico | Criar em área de testes; título, categoria e conteúdo corretos. | ☐ | ☐ | |
 | Editar | Editar post de teste, manter ID/HTML e anexos. | ☐ | ☐ | |
@@ -34,7 +34,7 @@ Data: ____ · Navegador: ____ · Conta/perfil: ____ · Versão: ____
 
 | Teste | Resultado esperado | PASSOU | FALHOU | OBSERVAÇÃO |
 |---|---|:---:|:---:|---|
-| Login/logout | Preferência por aba mantida; conteúdos/permissões acompanham a sessão real. | ☐ | ☐ | |
+| Login/logout | Preferência deste navegador mantida; conteúdos/permissões acompanham a sessão real. | ☐ | ☐ | |
 | Responder | Publicar uma única resposta no tópico de testes. | ☐ | ☐ | |
 | Criar tópico | Criar apenas onde permitido; áreas proibidas continuam proibidas. | ☐ | ☐ | |
 | Editar próprio post | Texto e template preservados; não ganha permissão sobre post de terceiros. | ☐ | ☐ | |
@@ -66,11 +66,11 @@ Data: ____ · Navegador: ____ · Conta/perfil: ____ · Versão: ____
 
 | Teste | Resultado esperado | PASSOU | FALHOU | OBSERVAÇÃO |
 |---|---|:---:|:---:|---|
-| Sem parâmetro, nova sessão | Nenhum CSS/JS/asset da skin, classe ou mudança DOM. | ☐ | ☐ | |
-| ?bondsos=1 | Ativa; navegar sem parâmetro mantém na mesma aba. | ☐ | ☐ | |
-| ?bondsos=0 | Skin original; preferência removida; navegação seguinte original. | ☐ | ☐ | |
-| Storage bloqueado | URL explícita funciona; sem persistência na navegação comum. | ☐ | ☐ | |
-| CSS bloqueado no DevTools | Original mantida; preferência limpa; sem tela branca. | ☐ | ☐ | |
+| Sem parâmetro e sem preferência | Skin 2.0 e seletor, sem preferência prévia. | ☐ | ☐ | |
+| ?bondsos=1 | Seleciona e salva 2.0; páginas seguintes mantêm a escolha. | ☐ | ☐ | |
+| ?bondsos=0 | Skin original; preferência 1 salva; navegação seguinte original. | ☐ | ☐ | |
+| Storage bloqueado | Default 2; URL/seletor funciona no reload atual; sem persistência entre páginas comuns. | ☐ | ☐ | |
+| CSS bloqueado no DevTools | Original mantida; preferência preservada; seletor disponível. | ☐ | ☐ | |
 | JS bloqueado no DevTools | CSS/classes removidos; original utilizável. | ☐ | ☐ | |
 | Rede pendente | Rollback após 20s por recurso; sem ciclo de recargas. | ☐ | ☐ | |
 | Loader duplicado | Um CSS, um JS, um hero, um painel, sem handlers duplicados. | ☐ | ☐ | |
@@ -83,7 +83,7 @@ Data: ____ · Navegador: ____ · Conta/perfil: ____ · Versão: ____
 
 Bloquear avanço se houver envio duplicado, permissão indevida, perda de texto/template, controles inacessíveis, erro relevante da skin, rolagem global causada pela skin ou rollback inoperante. Se falhar, usar ?bondsos=0 e desativar o loader no painel se necessário.
 
-A execução dessa checklist não autoriza tornar a skin padrão. Produção geral depende de aprovação posterior.
+Beta pública com padrão 2.0 foi autorizada; instalação permanece manual pelo responsável. Encerramento do beta/produção estável depende dos resultados reais.
 
 ## Correções visuais finais
 
@@ -98,9 +98,31 @@ A execução dessa checklist não autoriza tornar a skin padrão. Produção ger
 
 | Caso | PASSOU | FALHOU | OBSERVAÇÃO |
 |---|---|---|---|
-| Home sem sumário, textos novos, pôster completo e visor claro | | | |
+| Home sem sumário, textos novos, cena integrada da comunidade e visor claro | | | |
 | Novo tópico à esquerda em Sistemas, Arquivos e cada área permitida | | | |
 | Responder/criar/editar sem título antigo ou faixa bege | | | |
 | Horário, citar, editar, excluir e demais opções nativas no cabeçalho | | | |
 | Links e permissões dos controles mantidos após troca de página | | | |
 | Avatar/nome mantidos, templates de jogadores intactos | | | |
+
+## Beta3
+
+| Caso | PASSOU | FALHOU | OBSERVAÇÃO |
+|---|---|---|---|
+| Rolagem mostra solicitante; resultado e permissões nativos intactos | | | |
+| Perfil ausente na página usa inicial, sem foto errada | | | |
+| Feed mostra solicitante da rolagem automática | | | |
+| Parceiros/paisagens novos e cena da comunidade legíveis em desktop/celular | | | |
+
+## PUBLIC BETA — seletor e transporte
+
+| Teste | PASSOU | FALHOU | OBSERVAÇÃO |
+|---|---|---|---|
+| Sem preferência abre 2.0; escolha 1.0 persiste em outra página/aba | | | |
+| Troca 2→1 e 1→2 salva e recarrega, sem resíduos | | | |
+| Clássica sem CSS/JS/loading Bonds OS, somente seletor | | | |
+| Botão App original intacto e sem sobreposição em desktop/390px | | | |
+| Teclado, setas, ESC, clique fora e opção ativa acessíveis | | | |
+| Falha CSS/JS mantém preferência e botão para tentar novamente | | | |
+| Falha parcial recarrega uma vez; clássico sem loop | | | |
+| Loader indisponível remove loading temporário após 12s | | | |

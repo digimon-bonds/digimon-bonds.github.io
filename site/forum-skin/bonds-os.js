@@ -28,6 +28,12 @@
     } catch (_) {}
     return null;
   }
+  function rollActor(content) {
+    if (!content || !content.textContent) return null;
+    var match = content.textContent.trim().match(/^O membro\s+['“](.+?)['”]\s+realizou a seguinte ação:/);
+    if (!match || !content.querySelector(':scope > div > hr') || !content.querySelector(':scope > div > img') || content.querySelector('table,style,article,section')) return null;
+    return match[1].trim() || null;
+  }
   function topicKey(url) { return url.pathname.match(/^\/t(\d+)/)[1]; }
   function pageOffset(url) { var m = url.pathname.match(/^\/t\d+p(\d+)/); return m ? Number(m[1]) : 0; }
   function parsePosts(doc, url, title) {
@@ -42,7 +48,8 @@
       var anchor = stamp && stamp.closest('a[href]');
       var href = anchor && topicURL(anchor.getAttribute('href'));
       if (!name || !stamp || !href || href.hash !== '#' + id || topicKey(href) !== topicKey(url)) return;
-      posts.push({ id: id, title: title, author: name.textContent.trim(), date: stamp.textContent.trim(), href: href.pathname + '#' + id });
+      var actor = rollActor(post.querySelector('.postbody > .content'));
+      posts.push({ id: id, title: title, author: actor || name.textContent.trim(), date: stamp.textContent.trim(), href: href.pathname + '#' + id });
     });
     return posts;
   }
@@ -236,6 +243,28 @@
       });
     });
   }
+  function presentRollActor(post, profile, actor) {
+    var preceding = Array.from(document.querySelectorAll('.post[id^="p"]'));
+    var source = preceding.slice(0,preceding.indexOf(post)).reverse().find(function(candidate){
+      if (candidate.hasAttribute('data-bos-roll')) return false;
+      var name=candidate.querySelector('.postprofile dt > strong, .postprofile .bos-author-card > strong, .postprofile dt > a:not(:has(img))');
+      return name && name.textContent.trim() === actor;
+    });
+    var original = profile.querySelector(':scope > dl');
+    if (original) { original.dataset.bosRollOrigin=''; original.setAttribute('aria-hidden','true'); }
+    var sourceProfile=source && source.querySelector('.postprofile'), avatar=sourceProfile && sourceProfile.querySelector('dt img');
+    var data=make('dl','bos-roll-profile-data'), term=make('dt','');
+    if (avatar) {
+      var image=make('img',''); image.src=avatar.currentSrc || avatar.src; image.alt=actor;
+      image.width=120; image.height=120; image.loading='lazy'; term.appendChild(image);
+    } else { var fallback=make('span','bos-roll-avatar',Array.from(actor)[0].toUpperCase()); fallback.setAttribute('aria-hidden','true'); term.appendChild(fallback); }
+    var card=make('div','bos-author-card'); card.append(make('strong','',actor),make('span','bos-author-role','Rolagem de dados')); term.appendChild(card); data.appendChild(term); profile.prepend(data);
+    profile.dataset.bosRole=sourceProfile ? sourceProfile.dataset.bosRole || profileKind(sourceProfile) : 'guest';
+    profile.dataset.bosRollAuthor=actor;
+    post.dataset.bosRoll='';
+    // Native bot profile/permissions and generated roll HTML remain in the document.
+    // Only the displayed identity changes; controls are still moved from the native profile.
+  }
   function enhanceInteriors(kind) {
     var main = document.querySelector('#main-content'); if (!main || kind === 'home') return;
     var systems = isSystemsPage(Array.from(main.querySelectorAll('.diretorio a')).map(function(a){return a.getAttribute('href')||'';}));
@@ -311,7 +340,8 @@
       var content = body.querySelector('.content');
       // A system roll is identified by its generated preamble and flat image payload.
       // Only mark its outer post; all authored content nodes remain untouched.
-      if(content && /^O membro ['“]/.test(content.textContent.trim()) && /realizou a seguinte ação:/.test(content.textContent) && content.querySelector(':scope > div > hr') && content.querySelector(':scope > div > img') && !content.querySelector('table,style,article,section')) post.dataset.bosRoll='';
+      var actor = rollActor(content);
+      if (actor) presentRollActor(post,profile,actor);
       if(content && !systems) {
         // Restore the inherited ink expected by an authored paper template without editing its nodes.
         var paper=Array.from(content.querySelectorAll('table,div,article,section')).find(function(node){var rgb=getComputedStyle(node).backgroundColor.match(/[\d.]+/g);return rgb&&(rgb.length<4||+rgb[3]>.85);});
@@ -394,8 +424,8 @@
       var brand = make('a', 'bos-brand'); brand.href = '/';
       var logo = make('img', 'bos-logo'); logo.src = ASSETS + 'bonds-logo.svg'; logo.alt = 'Digimon Bonds'; logo.width = 560; logo.height = 190;
       brand.appendChild(logo);
-      var status = make('div', 'bos-preview-status'); status.appendChild(make('span', 'bos-preview-label', 'BONDS OS // PREVIEW'));
-      var exit = make('a', 'bos-exit', 'Sair do preview ↗');
+      var status = make('div', 'bos-preview-status'); status.appendChild(make('span', 'bos-preview-label', 'BONDS OS // BETA PÚBLICA'));
+      var exit = make('a', 'bos-exit', 'Usar Skin 1.0 ↗');
       var offURL = new URL(location.href); offURL.searchParams.set('bondsos', '0'); exit.href = offURL.href;
       status.appendChild(exit); hero.append(art, brand); header.appendChild(hero); header.dataset.bosReady = '';
       var nav = document.querySelector('#page-header .navbar'); if (nav) nav.appendChild(status);
@@ -416,13 +446,13 @@
         row.dataset.bosNode = number;
         row.dataset.bosKind = ({4:'guide',1:'story',5:'record',6:'update',2:'human',3:'digital',8:'social'})[number] || 'forum';
         var circuit = make('img', 'bos-card-circuit'); circuit.src = ASSETS + 'card-circuit.svg'; circuit.alt = ''; circuit.setAttribute('aria-hidden', 'true'); row.appendChild(circuit);
-        var partner = {4: 'agumon', 5: 'gabumon', 6: 'gatomon', 1: 'jijimon'}[number];
+        var partner = {4: 'agumonhakase', 5: 'terriermon-assistant', 6: 'gatomon', 1: 'jijimon'}[number];
         if (partner) {
           var silhouette = make('img', 'bos-partner-shadow'); silhouette.src = ASSETS + (partner === 'jijimon' ? 'jijimon-cutout.webp' : partner + '.webp'); silhouette.alt = ''; silhouette.setAttribute('aria-hidden', 'true'); silhouette.loading = 'lazy';
           var window = make('div', 'bos-partner-window'); window.setAttribute('aria-hidden', 'true'); window.appendChild(silhouette); row.appendChild(window); row.classList.add('bos-has-partner'); window.appendChild(make('span', 'bos-partner-caption', partner.toUpperCase() + ' / DIGITAL PARTNER'));
         }
         if (number === '2' || number === '3' || number === '8') {
-          var scene = make('img', 'bos-scene'); scene.src = ASSETS + (number === '2' ? 'human-world.svg' : number === '3' ? 'digital-world.svg' : 'bond-core.svg'); scene.alt = ''; scene.setAttribute('aria-hidden','true'); row.appendChild(scene);
+          var scene = make('img', 'bos-scene'); scene.src = ASSETS + (number === '2' ? 'human-world-v10.webp' : number === '3' ? 'digital-world-v10.webp' : 'bond-core.svg'); scene.alt = ''; scene.loading='lazy'; scene.decoding='async'; scene.setAttribute('aria-hidden','true'); row.appendChild(scene);
         }
         var meta = make('div', 'bos-node-meta');
         meta.append(make('span', '', (({4:'GUIA',1:'NARRATIVAS',5:'PERSONAGENS',6:'PROGRESSO',2:'EXPLORAÇÃO',3:'EXPLORAÇÃO',8:'CONVERSAS'})[number] || 'FÓRUM') + ' / ' + number.padStart(2, '0')), make('span', 'bos-link-label', '↗')); dterm.prepend(meta);
@@ -442,14 +472,14 @@
       if (statistics) { statistics.before(community); community.append(statistics, aside); }
       else { layout.after(community); community.appendChild(aside); }
       var intro = make('div', 'bos-home-intro');
-      intro.append(make('span', 'bos-eyebrow', 'DIGIMON BONDS / COMMUNITY NETWORK'), make('h1', '', 'Nossos mundos estão conectados.'), make('p', '', 'Encontre seu parceiro e atravesse a fronteira'));
+      intro.append(make('span', 'bos-eyebrow', 'DIGIMON BONDS / COMMUNITY NETWORK'), make('h1', '', 'Nossos mundos estão conectados.'), make('p', '', 'Encontre seu parceiro e atravesse a fronteira.'));
       var welcome = make('div', 'bos-welcome-copy');
       while (intro.firstChild) welcome.appendChild(intro.firstChild);
       intro.appendChild(welcome); layout.before(intro); addActivity(aside);
       if (statistics) {
-        var poster = make('figure','bos-community-art'), posterImage=make('img','');
-        posterImage.src=ASSETS+'community-poster.webp'; posterImage.alt='Pôster pop-art Digimon Bonds com os parceiros Digimon';
-        posterImage.width=1254; posterImage.height=1254; posterImage.loading='lazy'; posterImage.decoding='async';
+        var poster = make('figure','bos-community-art bos-community-scene'), posterImage=make('img','');
+        posterImage.src=ASSETS+'community-bond.webp'; posterImage.alt='Um digiescolhido e seu parceiro Digimon juntos na cidade';
+        posterImage.width=883; posterImage.height=439; posterImage.loading='lazy'; posterImage.decoding='async';
         poster.appendChild(posterImage); statistics.appendChild(poster);
       }
       var communityHeading = make('header', 'bos-community-heading');

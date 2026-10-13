@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import {test} from 'node:test';
 const source=await readFile(new URL('../site/forum-skin/bonds-os.js',import.meta.url),'utf8');
 const context={URL,Set,Number,Array,LIMIT:10,location:{origin:'https://digimonbonds.forumeiros.com'},api:{},Map,Promise,AbortController,setTimeout,clearTimeout};
-runInNewContext(source.slice(source.indexOf('  function topicURL('),source.indexOf('  function addActivity('))+'\nObject.assign(api,{topicURL,newest,parsePosts,pageOffset,topicKey,collectTopic,readPage});',context);
+runInNewContext(source.slice(source.indexOf('  function topicURL('),source.indexOf('  function addActivity('))+'\nObject.assign(api,{topicURL,newest,parsePosts,pageOffset,topicKey,collectTopic,readPage,rollActor});',context);
 const {topicURL,newest,parsePosts,pageOffset,topicKey}=context.api;
 test('two authors in the same topic keep separate messages; only duplicate IDs collapse',()=>{
   const posts=newest([{id:455,author:'Mikazuchi Yuki',href:'/t58#455'},{id:456,author:'Omegamon',href:'/t58#456'},{id:455,author:'Mikazuchi Yuki',href:'/t58#455'}]);
@@ -76,3 +76,17 @@ test('activity waits for load then idle; refresh cancels pending task and is sin
  const refresh=e.made.find(n=>n.className==='bos-refresh');const first=refresh.handlers.click(),second=refresh.handlers.click();assert.equal(e.reads,1);assert.equal(e.idleTasks.size,0);e.resolveRead({});await Promise.all([first,second]);assert.equal(refresh.disabled,false);assert.match(e.made.find(n=>n.className==='bos-feed-status').textContent,/Não foi possível/);
 });
 test('idle callback fallback schedules one timer after load',()=>{const e=activityEnvironment(false);assert.equal(e.timers.size,0);e.events.load();assert.equal(e.timers.size,1);assert.equal(e.reads,0)});
+
+test('roll identity comes from the native preamble, never from the bot author',()=>{
+ const content=(text,template=false,images=true)=>({textContent:text,querySelector:s=>s==='table,style,article,section'?(template?{}:null):images?{}:null});
+ assert.equal(context.api.rollActor(content("O membro ' Hollow ' realizou a seguinte ação: dados")), 'Hollow');
+ assert.equal(context.api.rollActor(content("O membro 'João D'Ávila' realizou a seguinte ação: dados")), "João D'Ávila");
+ assert.equal(context.api.rollActor(content("O membro 'Hollow' realizou a seguinte ação: dados",true)),null);
+ assert.equal(context.api.rollActor(content("O membro 'Hollow' realizou a seguinte ação: dados",false,false)),null);
+ assert.equal(context.api.rollActor(content("Hollow rolou dados numa história")),null);
+ const profile={querySelector:s=>s==='.author'?{textContent:'Hoje',closest:()=>({getAttribute:()=>'/t58-title#317'})}:{textContent:'Omegamon'}};
+ const roll=content("O membro 'Hollow' realizou a seguinte ação: dados");
+ const post={id:'p317',querySelector:s=>s.startsWith('.postprofile')?profile:roll};
+ const result=context.api.parsePosts({querySelectorAll:()=>[post]},topicURL('/t58-title'),'Tópico');
+ assert.equal(result[0].author,'Hollow');assert.equal(result[0].id,317);
+});

@@ -685,3 +685,23 @@ html.bonds-os-preview #page-body [data-bos-post] .bos-post-date {flex-basis:60%;
 html.bonds-os-preview #page-body [data-bos-post] .bos-post-tools .profile-icons {order:3;flex-basis:100%;}
 html.bonds-os-preview .bos-community-art {height:auto;aspect-ratio:1;padding:10px;}
 }
+
+/* v10 beta3: integrated scenery and the person who requested a native roll. */
+html.bonds-os-preview [data-bos-post] .postprofile > dl[data-bos-roll-origin] {display:none!important;}
+html.bonds-os-preview [data-bos-post] .postprofile .bos-roll-avatar {box-sizing:border-box;display:grid;place-items:center;width:120px!important;height:120px;border:2px solid #76acbc;border-radius:50%;background:radial-gradient(circle at 35% 30%,#315c70,#102934);color:#dceff5!important;font:600 42px/1 'Exo 2','Segoe UI',sans-serif!important;box-shadow:0 0 0 5px #4f82931a,0 8px 24px #0004;}
+html.bonds-os-preview [data-bos-node="4"] .bos-partner-window .bos-partner-shadow {width:100%;right:0;object-fit:contain;object-position:50% 60%;}
+html.bonds-os-preview [data-bos-node="5"] .bos-partner-window .bos-partner-shadow {width:100%;right:0;object-fit:contain;object-position:50% 60%;}
+html.bonds-os-preview [data-bos-kind="human"] .bos-scene,html.bonds-os-preview [data-bos-kind="digital"] .bos-scene {width:100%;height:200px;object-fit:cover;object-position:50% 48%;opacity:.83;filter:saturate(.7) brightness(.83);mask-image:linear-gradient(0deg,transparent,#000 60%);}
+html.bonds-os-preview [data-bos-kind="digital"] .bos-scene {object-position:50% 53%;filter:saturate(.78) brightness(.83);}
+html.bonds-os-preview #page-body [data-bos-category] li.row[data-bos-kind="human"],html.bonds-os-preview #page-body [data-bos-category] li.row[data-bos-kind="digital"] {padding-top:150px;}
+html.bonds-os-preview .bos-community-art.bos-community-scene {height:330px;min-height:0;padding:0;border:0;border-radius:12px;background:#0a1c27;box-shadow:none;}
+html.bonds-os-preview .bos-community-scene img {width:100%;height:100%;object-fit:cover;object-position:50% 43%;border-radius:0;filter:saturate(.8) brightness(.88);}
+html.bonds-os-preview .bos-community-scene::before {display:none;}
+html.bonds-os-preview .bos-community-scene::after {content:'';position:absolute;inset:-1px;pointer-events:none;background:linear-gradient(90deg,#0a1c27,transparent 13%,transparent 88%,#0a1c27),linear-gradient(0deg,#0a1c27,transparent 28%,transparent 85%,#0a1c27);}
+@media(max-width:850px) {
+html.bonds-os-preview .bos-community-art.bos-community-scene {height:auto;aspect-ratio:883/439;}
+html.bonds-os-preview .bos-community-scene img {position:absolute;inset:0;}
+}
+@media(prefers-reduced-motion:reduce) {
+html.bonds-os-preview #page-body a,html.bonds-os-preview #page-body button,html.bonds-os-preview #page-body [data-bos-node] {transition:none;}
+}
