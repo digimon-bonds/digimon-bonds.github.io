@@ -3,7 +3,7 @@
   'use strict';
   if(document.currentScript && document.currentScript.dataset.bondsCancelled==='1')return;
   var BASE_URL = 'https://digimon-bonds.github.io/forum-skin/';
-  var VERSION = '20261013-10-public-beta3';
+  var VERSION = '20261013-10-public-beta4';
   var root=document.documentElement, storageKey='bondsSkinVersion', failKey='bondsSkinFailsafe';
   if (document.getElementById('bonds-skin-switcher-style')) return;
   var flag=new URLSearchParams(location.search).get('bondsos'), preference='2', failedSession='';

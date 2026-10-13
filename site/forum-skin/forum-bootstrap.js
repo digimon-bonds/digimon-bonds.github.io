@@ -12,7 +12,7 @@
     c.textContent='html.bonds-bootstrap-loading,html.bonds-bootstrap-loading body{background:#0b202b!important;color:#dcebf0!important}html.bonds-bootstrap-loading :is(#wrap,#page-body,#main-content,.headerbar,.post,.postbody,.postprofile,.panel,.forabg,.forumbg,.navbar){background-color:#0b202b!important;background-image:none!important}html.bonds-bootstrap-loading #page-header .navbar{visibility:hidden!important}html.bonds-bootstrap-loading #wrap{opacity:0!important;pointer-events:none!important}';
     document.head.appendChild(c);document.documentElement.classList.add('bonds-bootstrap-loading');
   }
-  s.src='https://digimon-bonds.github.io/forum-skin/forumeiros-loader.js?v=20261013-10-public-beta3';
+  s.src='https://digimon-bonds.github.io/forum-skin/forumeiros-loader.js?v=20261013-10-public-beta4';
   function cancel(){s.dataset.bondsCancelled='1';s.remove();clear();}
   s.onload=clear;s.onerror=cancel;t=setTimeout(cancel,12000);document.head.appendChild(s);
 }());

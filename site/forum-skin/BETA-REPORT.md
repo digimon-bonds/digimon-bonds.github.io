@@ -1,6 +1,6 @@
 # BONDS OS v10 — PUBLIC BETA PREP
 
-Versão: 20261013-10-public-beta3. Instalação no painel não executada.
+Versão: 20261013-10-public-beta4. Instalação no painel não executada.
 
 ## Escopo
 
@@ -39,3 +39,7 @@ Seletor sem subtítulos, textos revisados, cabeçalho de comunidade e status bet
 ## Frame de transição — public-beta3
 
 Durante bootstrap/loading, #wrap fica transparente e sem interação, deixando apenas o fundo escuro. A proteção é contínua entre bootstrap e loader; ready e recuperação removem a classe e restauram a interface. Skin clássica explicitamente selecionada não recebe a proteção.
+
+## Telefone sem rolagens — public-beta4
+
+Posts automáticos de dados reconhecidos pelo preâmbulo e estrutura nativos são excluídos antes da ordenação/limite do feed. Posts comuns do narrador e templates de jogadores continuam elegíveis. A exibição e identidade de rolagens dentro dos tópicos permanecem intactas.

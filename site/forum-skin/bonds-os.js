@@ -49,7 +49,8 @@
       var href = anchor && topicURL(anchor.getAttribute('href'));
       if (!name || !stamp || !href || href.hash !== '#' + id || topicKey(href) !== topicKey(url)) return;
       var actor = rollActor(post.querySelector('.postbody > .content'));
-      posts.push({ id: id, title: title, author: actor || name.textContent.trim(), date: stamp.textContent.trim(), href: href.pathname + '#' + id });
+      if (actor) return; // Automatic dice results stay in the topic, outside the phone feed.
+      posts.push({ id: id, title: title, author: name.textContent.trim(), date: stamp.textContent.trim(), href: href.pathname + '#' + id });
     });
     return posts;
   }

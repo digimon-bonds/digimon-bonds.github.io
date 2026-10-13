@@ -77,7 +77,7 @@ test('activity waits for load then idle; refresh cancels pending task and is sin
 });
 test('idle callback fallback schedules one timer after load',()=>{const e=activityEnvironment(false);assert.equal(e.timers.size,0);e.events.load();assert.equal(e.timers.size,1);assert.equal(e.reads,0)});
 
-test('roll identity comes from the native preamble, never from the bot author',()=>{
+test('automatic dice posts are excluded from the phone; ordinary narrator and authored templates remain',()=>{
  const content=(text,template=false,images=true)=>({textContent:text,querySelector:s=>s==='table,style,article,section'?(template?{}:null):images?{}:null});
  assert.equal(context.api.rollActor(content("O membro ' Hollow ' realizou a seguinte ação: dados")), 'Hollow');
  assert.equal(context.api.rollActor(content("O membro 'João D'Ávila' realizou a seguinte ação: dados")), "João D'Ávila");
@@ -88,5 +88,10 @@ test('roll identity comes from the native preamble, never from the bot author',(
  const roll=content("O membro 'Hollow' realizou a seguinte ação: dados");
  const post={id:'p317',querySelector:s=>s.startsWith('.postprofile')?profile:roll};
  const result=context.api.parsePosts({querySelectorAll:()=>[post]},topicURL('/t58-title'),'Tópico');
- assert.equal(result[0].author,'Hollow');assert.equal(result[0].id,317);
+ assert.equal(result.length,0);
+ for (const body of [content('Mensagem normal do narrador'),content("O membro 'Hollow' realizou a seguinte ação: dados",true)]) {
+  const normal={id:'p317',querySelector:s=>s.startsWith('.postprofile')?profile:body};
+  const kept=context.api.parsePosts({querySelectorAll:()=>[normal]},topicURL('/t58-title'),'Tópico');
+  assert.equal(kept.length,1);assert.equal(kept[0].author,'Omegamon');
+ }
 });
