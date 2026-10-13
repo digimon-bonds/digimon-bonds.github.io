@@ -13,9 +13,9 @@
     6: ['Evolução, conquistas e atualizações da sua ficha.'],
     2: ['Explore cidades, encontre outros escolhidos e escreva sua história.'],
     3: ['Novos territórios, mistérios e encontros no Mundo Digital.'],
-    8: ['Conversas, ideias e encontros da comunidade.']
+    8: ['Um tópico livre para teste de templates e outras ideias']
   };
-  var categoryDescriptions = ['Seu primeiro passo no universo Bonds.', 'Cada laço deixa um registro.', 'Duas realidades. Uma mesma jornada.', 'O encontro continua além da aventura.'];
+  var categoryDescriptions = ['Seu primeiro passo no universo Bonds.', 'Cada laço deixa um registro.', 'Sua jornada acontece aqui', 'O encontro continua além da aventura.'];
   function make(tag, className, text) {
     var node = document.createElement(tag); node.className = className;
     if (text) node.textContent = text;
@@ -187,7 +187,7 @@
     if (/^\/f\d+/.test(path)) return 'forum';
     if (/^\/c\d+/.test(path)) return 'category';
     if (/^\/u\d+/.test(path)) return 'profile';
-    if (/posting|preview-editor/.test(path)) return 'editor';
+    if (/posting|preview-editor/.test(path) || /^\/post(?:\/|$)/.test(path)) return 'editor';
     if (/privmsg|preview-inbox/.test(path)) return 'messages';
     if (/profile|preview-account/.test(path)) return 'account';
     if (/memberlist/.test(path)) return 'members';
@@ -201,13 +201,48 @@
   function isSystemsPage(hrefs) {
     return hrefs.some(function(href){return /(?:^|\/)f4(?:-|$)/.test(href)||/(?:^|\/)forum-4\.html(?:[?#]|$)/.test(href);});
   }
+  function actionLabel(link) {
+    var href = link.getAttribute('href') || '';
+    if (/[?&]mode=quote(?:&|$)/i.test(href)) return 'Citar';
+    if (/[?&]mode=editpost(?:&|$)/i.test(href)) return 'Editar';
+    if (/[?&]mode=delete(?:&|$)/i.test(href)) return 'Excluir';
+    var image = link.querySelector('img');
+    return link.getAttribute('aria-label') || link.title || (image && image.alt) || link.textContent.trim();
+  }
+  function movePostControls(profile, body, tools) {
+    // Move the actual native nodes: keep URLs, inline handlers and existing permissions.
+    var date = profile.querySelector(':scope > a:has(.author), :scope > .author');
+    if (date) { date.classList.add('bos-post-date'); tools.appendChild(date); }
+    [profile, body].forEach(function(parent){
+      var controls = parent.querySelector(':scope > .profile-icons');
+      if (!controls) return;
+      controls.querySelectorAll('a').forEach(function(link){
+        var label = actionLabel(link);
+        if (label) { link.dataset.bosAction = label; if (!link.hasAttribute('aria-label')) link.setAttribute('aria-label',label); }
+      });
+      tools.appendChild(controls);
+    });
+  }
+  function enhanceCompose(main) {
+    main.querySelectorAll('.post-icon, .reply-icon').forEach(function(icon){
+      if (icon.closest('.content, .postprofile')) return;
+      var buttons = icon.closest('.buttons');
+      if (buttons) buttons.classList.add('bos-compose-card');
+      else if (!icon.closest('.bos-compose-card')) { var card=make('div','bos-compose-card'); icon.before(card); card.appendChild(icon); }
+      icon.querySelectorAll('a').forEach(function(link){
+        var href=link.getAttribute('href') || '';
+        link.dataset.bosCompose = /[?&]mode=reply(?:&|$)/i.test(href) || icon.classList.contains('reply-icon') ? 'Responder' : /[?&]mode=newtopic(?:&|$)/i.test(href) ? 'Novo tópico' : actionLabel(link) || 'Novo tópico';
+        if (!link.hasAttribute('aria-label')) link.setAttribute('aria-label',link.dataset.bosCompose);
+      });
+    });
+  }
   function enhanceInteriors(kind) {
     var main = document.querySelector('#main-content'); if (!main || kind === 'home') return;
     var systems = isSystemsPage(Array.from(main.querySelectorAll('.diretorio a')).map(function(a){return a.getAttribute('href')||'';}));
     document.documentElement.dataset.bosArea = systems ? 'systems' : 'authored';
     var names = {topic:'TRANSMISSÃO / HISTÓRIA',forum:'ARQUIVO / TÓPICOS',category:'REDE / FÓRUNS',profile:'IDENTIDADE / DIGIESCOLHIDO',editor:'ESCRITA / NOVA TRANSMISSÃO',messages:'DIGITAL LINK / MENSAGENS',account:'IDENTIDADE / CONTA',members:'COMUNIDADE / DIGIESCOLHIDOS',groups:'COMUNIDADE / GRUPOS',search:'REDE / PESQUISA',login:'ACESSO / CONEXÃO',register:'ACESSO / NOVO VÍNCULO',faq:'SUPORTE / PERGUNTAS'};
     if (!main.querySelector('.bos-page-heading')) {
-      var title = main.querySelector(':scope > h1.page-title, :scope > h2.page-title, :scope > h1');
+      var title = Array.from(main.querySelectorAll('h1.page-title, h2.page-title, :scope > h1')).find(function(node){return !node.closest('.content, #topicreview');});
       var heading = make('header','bos-page-heading'); heading.appendChild(make('span','bos-eyebrow',names[kind] || 'DIGIMON BONDS / REDE'));
       if (!title) title = make('h1','page-title',document.title.replace(/ - Digimon Bonds$/,''));
       title.classList.add('bos-page-title'); heading.appendChild(title);
@@ -219,6 +254,16 @@
         var back = make('a','bos-back-home','← Página inicial'); back.href = '/'; heading.appendChild(back);
       }
       main.prepend(heading);
+    }
+    enhanceCompose(main);
+    if (kind === 'editor') {
+      // Legacy posting templates wrap their title/editor in post profile/body frames.
+      // Scope this reset to structural shells; never touch quoted/player content.
+      main.querySelectorAll('.postprofile, .postbody').forEach(function(shell){
+        if (shell.closest('.post[id^="p"], #topicreview, .content')) return;
+        shell.dataset.bosEditorShell='';
+        if (shell.matches('.postprofile') && !shell.textContent.trim() && !shell.querySelector('input,select,textarea,button,iframe,img,a')) shell.dataset.bosEditorOrnament='';
+      });
     }
     document.querySelectorAll('.forumbg').forEach(function (box) {
       if (!box.querySelector('a.topictitle')) {
@@ -318,7 +363,9 @@
       });
       var tools = make('nav','bos-post-tools'); tools.setAttribute('aria-label','Navegação da mensagem ' + id);
       var permalink = make('a','','Mensagem #' + id); permalink.href = '#' + id;
-      var top = make('a','','↑ Topo'); top.href = '#page-header'; tools.append(permalink,top); body.prepend(tools);
+      permalink.className='bos-post-permalink';
+      tools.appendChild(permalink); movePostControls(profile,body,tools);
+      var top = make('a','bos-post-top','↑ Topo'); top.href = '#page-header'; tools.appendChild(top); body.prepend(tools);
     });
     if (kind === 'profile') {
       main.querySelectorAll('.module .h3, .panel .h3, .module h3').forEach(function(title){
@@ -395,16 +442,16 @@
       if (statistics) { statistics.before(community); community.append(statistics, aside); }
       else { layout.after(community); community.appendChild(aside); }
       var intro = make('div', 'bos-home-intro');
-      intro.append(make('span', 'bos-eyebrow', 'DIGIMON BONDS / COMMUNITY NETWORK'), make('h1', '', 'Nossos mundos estão conectados.'), make('p', '', 'Encontre seu parceiro. Atravesse a fronteira. Construa seu laço.'));
-      var jumps = make('nav', 'bos-category-nav'); jumps.setAttribute('aria-label', 'Ir para uma categoria');
-      categories.forEach(function (category, index) {
-        var title = category.querySelector('h2');
-        var jump = make('a', '', String(index + 1).padStart(2, '0') + ' / ' + (title ? title.textContent.trim() : 'Categoria'));
-        jump.href = '#' + category.id; jump.appendChild(make('span', 'bos-jump-description', ['Comece por aqui', 'Personagens e evolução', 'Explore os dois mundos', 'Encontre a comunidade'][index] || 'Abrir categoria')); jumps.appendChild(jump);
-      });
+      intro.append(make('span', 'bos-eyebrow', 'DIGIMON BONDS / COMMUNITY NETWORK'), make('h1', '', 'Nossos mundos estão conectados.'), make('p', '', 'Encontre seu parceiro e atravesse a fronteira'));
       var welcome = make('div', 'bos-welcome-copy');
       while (intro.firstChild) welcome.appendChild(intro.firstChild);
-      intro.append(welcome, jumps); layout.before(intro); addActivity(aside);
+      intro.appendChild(welcome); layout.before(intro); addActivity(aside);
+      if (statistics) {
+        var poster = make('figure','bos-community-art'), posterImage=make('img','');
+        posterImage.src=ASSETS+'community-poster.webp'; posterImage.alt='Pôster pop-art Digimon Bonds com os parceiros Digimon';
+        posterImage.width=1254; posterImage.height=1254; posterImage.loading='lazy'; posterImage.decoding='async';
+        poster.appendChild(posterImage); statistics.appendChild(poster);
+      }
       var communityHeading = make('header', 'bos-community-heading');
       communityHeading.append(make('span','bos-eyebrow','LAÇOS / COMUNIDADE'),make('h2','','Conexões que continuam.'),make('p','','Quem faz parte desta história — e o que está acontecendo agora.'));
       community.prepend(communityHeading);

@@ -2,7 +2,7 @@
 (function () {
   'use strict';
   var BASE_URL = 'https://digimon-bonds.github.io/forum-skin/';
-  var VERSION = '20261012-10-beta1'; // Empty disables cache busting.
+  var VERSION = '20261013-10-beta2'; // Empty disables cache busting.
   var key = 'bondsos', flag = new URLSearchParams(location.search).get(key);
   var active = flag === '1';
   try {

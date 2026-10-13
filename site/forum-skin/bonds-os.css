@@ -629,3 +629,59 @@ html.bonds-os-preview #page-footer a:focus-visible {outline:2px solid #f2ce8c;ou
 
 /* Container forum empty-list placeholder, only when real subforums exist. */
 html.bonds-os-preview .forumbg[data-bos-container-empty] {display:none;}
+
+/* v10 beta2: clear hierarchy, native actions and a composed community area. */
+html.bonds-os-preview .bos-home-intro {grid-template-columns:minmax(0,1fr);}
+html.bonds-os-preview .bos-home-intro h1 {max-width:24ch;}
+html.bonds-os-preview .bos-community-art {position:relative;isolation:isolate;display:flex;align-items:center;justify-content:center;min-width:0;margin:0;padding:12px;height:330px;overflow:hidden;border:1px solid #466775;border-radius:8px 24px 8px 8px;background:radial-gradient(ellipse at center,#284954,#0a1a24 75%);box-shadow:inset 0 0 0 5px #07172066;}
+html.bonds-os-preview .bos-community-art::before {content:'';position:absolute;z-index:-1;inset:0;background:url('./assets/card-circuit.svg') center/100% 100% no-repeat;opacity:.4;}
+html.bonds-os-preview .bos-community-art img {display:block;width:100%;height:100%;max-width:100%;object-fit:contain;border-radius:5px;}
+html.bonds-os-preview .bos-phone-screen {background:linear-gradient(150deg,#2e5361,#1b3543);border-color:#73909a;box-shadow:inset 0 1px 0 #a3d5df33;color:#e4f1f6;}
+html.bonds-os-preview .bos-phone-screen .bos-feed-status {color:#d0e3eb;}
+html.bonds-os-preview .bos-phone-screen .bos-stream-entry {border-bottom-color:#87b8c53d;}
+html.bonds-os-preview .bos-phone-screen .bos-stream-date,html.bonds-os-preview .bos-phone-screen .bos-stream-number {color:#b0ccd6;}
+html.bonds-os-preview .bos-phone-screen .bos-stream-author {color:#ffcb80;}
+html.bonds-os-preview .bos-phone-screen .bos-stream-topic {color:#eef8fc;}
+html.bonds-os-preview .bos-phone-scroll {scrollbar-color:#a0cbd5 #193746;}
+html.bonds-os-preview #page-body .topic-actions {display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;width:100%;height:auto;min-height:0;margin:22px 0;padding:0;clear:both;}
+html.bonds-os-preview #page-body .bos-compose-card {box-sizing:border-box;position:relative;display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:10px;float:none;width:fit-content;max-width:100%;margin:0 auto 0 0!important;padding:12px;border:1px solid #496d7b;border-top:2px solid #91bdc8;border-radius:6px 18px 6px 6px;background:linear-gradient(135deg,#1d3b49,#102630);box-shadow:0 8px 20px #0002;}
+html.bonds-os-preview #page-body .bos-compose-card :is(.post-icon,.reply-icon) {position:static!important;inset:auto!important;float:none;width:auto;height:auto;margin:0!important;padding:0;}
+html.bonds-os-preview #page-body .bos-compose-card a {box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;gap:12px;width:auto;min-height:42px;padding:10px 18px!important;border:1px solid #c6a464;border-radius:4px 10px 4px 4px;background:linear-gradient(120deg,#e4c17c,#bb9758)!important;color:#102430!important;font:600 13px/1.4 'Exo 2','Segoe UI',sans-serif;text-decoration:none;}
+html.bonds-os-preview #page-body .bos-compose-card a img {display:none;}
+html.bonds-os-preview #page-body .bos-compose-card a::before {content:'+';font:22px/1 monospace;}
+html.bonds-os-preview #page-body .bos-compose-card a[data-bos-compose]::after {content:attr(data-bos-compose)!important;}
+html.bonds-os-preview #page-body .bos-compose-card a:hover {filter:brightness(1.12);}
+html.bonds-os-preview #page-body .bos-compose-card a:focus-visible,html.bonds-os-preview #page-body .bos-post-tools a:focus-visible {outline:2px solid #b4e6f3;outline-offset:4px;}
+html.bonds-os-preview[data-bos-page="editor"] #page-body [data-bos-editor-shell] {box-sizing:border-box;position:static;inset:auto;float:none;display:block;width:100%;max-width:100%;height:auto;min-height:0;margin:0!important;padding:0;border:0;border-radius:0;background:none!important;box-shadow:none;color:#cddfe7;}
+html.bonds-os-preview[data-bos-page="editor"] #page-body [data-bos-editor-ornament] {display:none;}
+html.bonds-os-preview[data-bos-page="editor"] #page-body .bos-page-heading .bos-page-title {height:auto;min-height:0;display:block;background:none!important;}
+html.bonds-os-preview [data-bos-post] .postprofile {--bos-id-accent:#8da8b6;isolation:isolate;overflow:hidden;background:radial-gradient(circle at 50% 80px,#33536388,transparent 170px),linear-gradient(160deg,#183744,#091d28 420px)!important;box-shadow:inset -1px 0 #77abb522;}
+html.bonds-os-preview [data-bos-post] .postprofile[data-bos-role="narrator"] {--bos-id-accent:#dfbb75;}
+html.bonds-os-preview [data-bos-post] .postprofile[data-bos-role="player"] {--bos-id-accent:#7ecbda;}
+html.bonds-os-preview [data-bos-post] .postprofile::before {content:'IDENTIDADE / AUTOR';display:block;margin:0 0 22px;padding:0 0 12px;border-bottom:1px solid #6c9caa4d;color:var(--bos-id-accent);font:9px/1.6 var(--bos-mono);letter-spacing:.1em;text-align:center;}
+html.bonds-os-preview [data-bos-post] .postprofile::after {content:'';position:absolute;z-index:-1;inset:0;background:url('./assets/card-circuit.svg') center 80px/auto 280px no-repeat;opacity:.2;pointer-events:none;}
+html.bonds-os-preview [data-bos-post] .postprofile .bos-author-card {box-shadow:0 8px 18px #0003,inset 0 0 0 3px #071a2533;}
+html.bonds-os-preview #page-body [data-bos-post] .bos-post-tools {position:relative;isolation:isolate;display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:12px 18px;min-height:70px;margin:0 -30px 24px;padding:16px 24px;border:0;border-bottom:1px solid #527d8c;border-left:3px solid #7db9c6;background:linear-gradient(115deg,#203e4b,#102934 65%);box-shadow:0 4px 12px #0002;}
+html.bonds-os-preview #page-body [data-bos-post] .bos-post-permalink {font:600 10px/1.5 var(--bos-mono);color:#d5ebf3;letter-spacing:.025em;}
+html.bonds-os-preview #page-body [data-bos-post] .bos-post-date {display:block;position:static;inset:auto;flex:1;min-width:130px;width:auto;margin:0!important;padding:0!important;border:0;background:none;color:#b8d2dc;text-transform:none;}
+html.bonds-os-preview #page-body [data-bos-post] .bos-post-date .author,html.bonds-os-preview #page-body [data-bos-post] .author.bos-post-date {margin:0;padding:0;color:#b8d2dc;font:10px/1.6 var(--bos-mono);}
+html.bonds-os-preview #page-body [data-bos-post] .bos-post-tools .profile-icons {position:static!important;inset:auto!important;float:none;display:flex!important;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:6px;width:auto;height:auto;margin:0!important;padding:0;list-style:none;}
+html.bonds-os-preview #page-body [data-bos-post] .bos-post-tools .profile-icons li {float:none;display:none;margin:0;padding:0;}
+html.bonds-os-preview #page-body [data-bos-post] .bos-post-tools .profile-icons li:has(a) {display:block;}
+html.bonds-os-preview #page-body [data-bos-post] .bos-post-tools .profile-icons a {position:static;display:inline-flex!important;align-items:center;justify-content:center;box-sizing:border-box;width:auto;min-height:34px;padding:7px 11px;border:1px solid #6d9aab;border-radius:4px 9px 4px 4px;background:#193947!important;color:#d5eaf2;font:600 11px/1.4 'Exo 2','Segoe UI',sans-serif;text-decoration:none;}
+html.bonds-os-preview #page-body [data-bos-post] .bos-post-tools .profile-icons a[data-bos-action]::after {content:attr(data-bos-action)!important;}
+html.bonds-os-preview #page-body [data-bos-post] .bos-post-tools .profile-icons a[data-bos-action] img {display:none;}
+html.bonds-os-preview #page-body [data-bos-post] .bos-post-tools .profile-icons a:not([data-bos-action]) img {display:inline-block;}
+html.bonds-os-preview #page-body [data-bos-post] .bos-post-tools .profile-icons a:hover {background:#2a5262!important;border-color:#abd6e1;}
+html.bonds-os-preview #page-body [data-bos-post] .bos-post-tools .profile-icons a[href*="mode=delete"] {border-color:#ac7b73;color:#eec0b2;}
+html.bonds-os-preview #page-body [data-bos-post] .bos-post-top {margin-left:auto;color:#a5c9d7;white-space:nowrap;}
+@media(max-width:900px) {
+html.bonds-os-preview [data-bos-post] .postprofile::after {background-position:center;background-size:100% auto;}
+html.bonds-os-preview .bos-community-art {height:300px;}
+}
+@media(max-width:640px) {
+html.bonds-os-preview #page-body [data-bos-post] .bos-post-tools {margin-left:-16px;margin-right:-16px;padding:14px 16px;gap:10px;}
+html.bonds-os-preview #page-body [data-bos-post] .bos-post-date {flex-basis:60%;}
+html.bonds-os-preview #page-body [data-bos-post] .bos-post-tools .profile-icons {order:3;flex-basis:100%;}
+html.bonds-os-preview .bos-community-art {height:auto;aspect-ratio:1;padding:10px;}
+}

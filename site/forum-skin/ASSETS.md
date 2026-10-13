@@ -14,3 +14,7 @@ A correção adicional solicitada para Estrela em Ascensão acrescenta arquetipo
 Conversão Pillow/WebP lossless, method=6, exact=True. Todos conservam 1254 × 1254 px e transparência. Comparação de cada imagem descomprimida em RGBA: pixels idênticos, inclusive canais transparentes; nenhum redimensionamento ou perda de qualidade.
 
 Hero JPG (305874 bytes) não foi recodificado. Logo/circuitos/cenários SVG mantidos. PNGs substituídos, wisemon.jpg, jijimon.jpg e story-core.svg sem uso foram retirados somente desta pasta de implantação. Os originais do App não foram alterados; o pacote local anterior preserva a versão de origem. O manifesto final possui onze imagens em uso, incluindo a reparação solicitada.
+
+## Beta2 — pôster da comunidade
+
+community-poster.webp deriva do pôster fornecido pelo usuário, 1254 × 1254 px. Original PNG: 2396682 bytes; WebP lossless: 1575048 bytes, pixels RGBA idênticos. Imagem inteira preservada, sem recorte. Total atual da pasta assets: 5488136 bytes (aproximadamente 5,49 MB), incluindo 12 imagens e registro de proveniência. O aumento em relação ao beta1 corresponde ao pôster solicitado.

@@ -1,6 +1,6 @@
 # BONDS OS v10 — checklist obrigatório do beta real
 
-Versão: 20261012-10-beta1. **Nenhuma linha abaixo foi marcada como validada em sessão autenticada.** O responsável deve preencher data, conta/perfil (sem senha), navegador, URL e observação.
+Versão: 20261013-10-beta2. **Nenhuma linha abaixo foi marcada como validada em sessão autenticada.** O responsável deve preencher data, conta/perfil (sem senha), navegador, URL e observação.
 
 Execute cada caso com skin original (?bondsos=0) e beta (?bondsos=1), desktop e ~390px onde aplicável. Use área e conteúdo descartáveis para envios/moderação/exclusão. Não cole senhas/tokens/cookies no relatório. Salve o rascunho antes de testar falhas de rede.
 
@@ -93,3 +93,14 @@ A execução dessa checklist não autoriza tornar a skin padrão. Produção ger
 | Mundo Humano / Digital com subfóruns | Sem lista “Nenhuma mensagem” redundante; subfóruns permanecem acessíveis. | ☐ | ☐ | |
 | Subfórum realmente vazio | Aviso de vazio permanece; botão criar segue permissão original. | ☐ | ☐ | |
 | Estrela em Ascensão / Sistemas | Arte corrigida, sem deformação, com alpha e proporção preservada. | ☐ | ☐ | |
+
+## Beta2 — inspeção dos refinamentos
+
+| Caso | PASSOU | FALHOU | OBSERVAÇÃO |
+|---|---|---|---|
+| Home sem sumário, textos novos, pôster completo e visor claro | | | |
+| Novo tópico à esquerda em Sistemas, Arquivos e cada área permitida | | | |
+| Responder/criar/editar sem título antigo ou faixa bege | | | |
+| Horário, citar, editar, excluir e demais opções nativas no cabeçalho | | | |
+| Links e permissões dos controles mantidos após troca de página | | | |
+| Avatar/nome mantidos, templates de jogadores intactos | | | |

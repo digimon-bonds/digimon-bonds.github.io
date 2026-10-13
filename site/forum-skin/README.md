@@ -1,6 +1,6 @@
 # BONDS OS v10 — BETA CONTROLADO
 
-Versão do loader: **20261012-10-beta1**. Escopo congelado: correções, compatibilidade, performance, assets e implantação. Nenhuma nova feature ou redesign.
+Versão do loader: **20261013-10-beta2**. Beta2 inclui os refinamentos visuais e de texto solicitados, preservando mecânicas e templates de jogadores.
 
 ## Ativação e limites
 
@@ -67,3 +67,7 @@ Testes do loader, feed e contratos fazem parte de scripts/forum-*.test.mjs e do 
 O loader injeta CSS crítico síncrono apenas no opt-in, antes de buscar a skin: superfícies estruturais escuras sem molduras/imagens antigas. Não oculta o body; é removido no ready e no rollback. Para impedir a primeira pintura bege, o loader precisa executar no head antes da pintura (gerenciador JavaScript do Forumeiros em todas as páginas), e não ser injetado tardiamente por extensão/rodapé. A hospedagem isoladamente não corrige carregamento tardio.
 
 Nas páginas com subfóruns, oculta somente a lista vazia “Nenhuma mensagem”; fóruns realmente vazios conservam seu aviso. A imagem aprovada de Estrela em Ascensão em Sistemas recebe uma versão com rosto corrigido; nenhuma imagem de jogador é substituída.
+
+## Refinamentos beta2
+
+Resumo de categorias removido da abertura; textos atualizados. Controles nativos de criar/responder ficam em card à esquerda. Horário e opções já fornecidas pelo fórum são movidos por referência ao cabeçalho do post; nenhuma permissão ou URL é criada. Estruturas antigas do editor recebem reset fora dos conteúdos de jogadores. Visor do celular mais claro e pôster fornecido integrado à comunidade. Instalações do beta1 devem substituir o loader pelo desta entrega para usar o cache bust 20261013-10-beta2.

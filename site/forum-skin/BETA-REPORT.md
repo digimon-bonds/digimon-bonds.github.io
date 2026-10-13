@@ -1,6 +1,6 @@
 # BONDS OS v10 BETA PREP
 
-Versão: 20261012-10-beta1. Escopo congelado, incluindo as três correções adicionais explicitamente solicitadas.
+Versão atual: 20261013-10-beta2. Os registros abaixo do beta1 são históricos; ver refinamentos beta2 no final.
 
 ## Publicação
 
@@ -33,3 +33,7 @@ BONDS OS: falhas com origem forum-skin/bonds-os.js ou forumeiros-loader.js, sele
 Desktop 1280px: home, Mundo Humano, fórum vazio, tópico 58, editor, perfil e mensagens inicializam sem overflow horizontal global. Arquétipos carrega a arte reparada. Mundo Humano oculta a lista redundante; fórum 16 realmente vazio mantém aviso. Console local sem erros/warnings nas páginas verificadas. Fixture com CSS atrasado 8s mostrou bonds-os-loading, fundo rgb(7,20,29), frame none e body visível; concluiu ready removendo CSS crítico.
 
 A capacidade de viewport solicitada em 390px continuou reportando innerWidth 1280px neste navegador. Portanto NÃO foi possível comprovar 390px nesta execução; conferir no checklist real. Formulários locais são demonstrações inertes.
+
+## Refinamentos beta2 — 2026-10-13
+
+Textos e sumário da home revisados; card de composição à esquerda; editor sem molduras antigas; visor claro e pôster inteiro; perfil com circuitos e cabeçalho de ações. Reprodução local com links Citar/Editar/Excluir: mesmos nós, mesmos hrefs, três handlers preservados e disparados, sem envio. Horário movido por referência. Formulário de Responder com título aninhado: mesmo form/textarea, action/name/value preservados; fundo antigo ausente. Templates da amostra Mundo Humano permanecem idênticos. Isso não é validação autenticada real: editor e controles foram reproduzidos com fixtures locais identificadas. Últimos Posts e opt-in inalterados.
