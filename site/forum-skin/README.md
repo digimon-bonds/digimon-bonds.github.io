@@ -1,6 +1,6 @@
 # BONDS OS v10 — PUBLIC BETA
 
-Versão: 20261013-10-public-beta1. Após instalação manual, Skin 2.0 é padrão; Skin 1.0 é o fórum original com apenas o seletor independente. Não houve acesso ou alteração no painel Forumeiros.
+Versão: 20261013-10-public-beta2. Após instalação manual, Skin 2.0 é padrão; Skin 1.0 é o fórum original com apenas o seletor independente. Não houve acesso ou alteração no painel Forumeiros.
 
 ## Instalação
 

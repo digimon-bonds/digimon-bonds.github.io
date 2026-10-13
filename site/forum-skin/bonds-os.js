@@ -13,9 +13,9 @@
     6: ['Evolução, conquistas e atualizações da sua ficha.'],
     2: ['Explore cidades, encontre outros escolhidos e escreva sua história.'],
     3: ['Novos territórios, mistérios e encontros no Mundo Digital.'],
-    8: ['Um tópico livre para teste de templates e outras ideias']
+    8: ['Um tópico livre para Testes de Templates, Rolls e outras ideias.']
   };
-  var categoryDescriptions = ['Seu primeiro passo no universo Bonds.', 'Cada laço deixa um registro.', 'Sua jornada acontece aqui', 'O encontro continua além da aventura.'];
+  var categoryDescriptions = ['Seu primeiro passo no universo Bonds.', 'Cada laço deixa um registro.', 'Sua jornada acontece aqui.', 'O encontro continua além da aventura.'];
   function make(tag, className, text) {
     var node = document.createElement(tag); node.className = className;
     if (text) node.textContent = text;
@@ -289,7 +289,8 @@
       // Legacy posting templates wrap their title/editor in post profile/body frames.
       // Scope this reset to structural shells; never touch quoted/player content.
       main.querySelectorAll('.postprofile, .postbody').forEach(function(shell){
-        if (shell.closest('.post[id^="p"], #topicreview, .content')) return;
+        var owner = shell.closest('.post');
+        if ((owner && /^p[1-9]\d*$/.test(owner.id)) || shell.closest('#topicreview, .content')) return;
         shell.dataset.bosEditorShell='';
         if (shell.matches('.postprofile') && !shell.textContent.trim() && !shell.querySelector('input,select,textarea,button,iframe,img,a')) shell.dataset.bosEditorOrnament='';
       });
@@ -424,11 +425,7 @@
       var brand = make('a', 'bos-brand'); brand.href = '/';
       var logo = make('img', 'bos-logo'); logo.src = ASSETS + 'bonds-logo.svg'; logo.alt = 'Digimon Bonds'; logo.width = 560; logo.height = 190;
       brand.appendChild(logo);
-      var status = make('div', 'bos-preview-status'); status.appendChild(make('span', 'bos-preview-label', 'BONDS OS // BETA PÚBLICA'));
-      var exit = make('a', 'bos-exit', 'Usar Skin 1.0 ↗');
-      var offURL = new URL(location.href); offURL.searchParams.set('bondsos', '0'); exit.href = offURL.href;
-      status.appendChild(exit); hero.append(art, brand); header.appendChild(hero); header.dataset.bosReady = '';
-      var nav = document.querySelector('#page-header .navbar'); if (nav) nav.appendChild(status);
+      hero.append(art, brand); header.appendChild(hero); header.dataset.bosReady = '';
     }
     var categories = Array.from(document.querySelectorAll('#page-body .forabg')).filter(function (c) { return c.querySelector('ul.forums'); });
     categories.forEach(function (category, index) {
@@ -482,9 +479,6 @@
         posterImage.width=883; posterImage.height=439; posterImage.loading='lazy'; posterImage.decoding='async';
         poster.appendChild(posterImage); statistics.appendChild(poster);
       }
-      var communityHeading = make('header', 'bos-community-heading');
-      communityHeading.append(make('span','bos-eyebrow','LAÇOS / COMUNIDADE'),make('h2','','Conexões que continuam.'),make('p','','Quem faz parte desta história — e o que está acontecendo agora.'));
-      community.prepend(communityHeading);
       [['.postinho', 'Mensagens publicadas'], ['.doidos', 'Digiescolhidos']].forEach(function (item) {
         var counter = document.querySelector('#estatistics ' + item[0]);
         var number = counter && counter.textContent.match(/\d[\d.,]*/);

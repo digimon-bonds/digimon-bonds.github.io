@@ -705,3 +705,12 @@ html.bonds-os-preview .bos-community-scene img {position:absolute;inset:0;}
 @media(prefers-reduced-motion:reduce) {
 html.bonds-os-preview #page-body a,html.bonds-os-preview #page-body button,html.bonds-os-preview #page-body [data-bos-node] {transition:none;}
 }
+
+/* Public polish: platform slots only; authored post templates remain intact. */
+html.bonds-os-preview :is([id^="prebid"], [id^="taboola-"], #Forumactif_Video, .akcelo-wrapper, [data-bos-sponsored]),
+html.bonds-os-preview #main-content > div:has([id^="prebid"]) {display:none!important;height:0!important;min-height:0!important;max-height:0!important;margin:0!important;padding:0!important;overflow:hidden!important;clip-path:inset(100%)!important;pointer-events:none!important;}
+html.bonds-os-preview #page-body .rolada #list_dice td {--bos-dice-step:114px;}
+html.bonds-os-preview #page-body .rolada #list_dice td:has(.dice-option:nth-child(1).selected) input[name^="nb_rolls_"] {left:calc(50% - var(--bos-dice-step));}
+html.bonds-os-preview #page-body .rolada #list_dice td:has(.dice-option:nth-child(2).selected) input[name^="nb_rolls_"] {left:50%;}
+html.bonds-os-preview #page-body .rolada #list_dice td:has(.dice-option:nth-child(3).selected) input[name^="nb_rolls_"] {left:calc(50% + var(--bos-dice-step));}
+@media(max-width:700px){html.bonds-os-preview #page-body .rolada #list_dice td {--bos-dice-step:63px;}}

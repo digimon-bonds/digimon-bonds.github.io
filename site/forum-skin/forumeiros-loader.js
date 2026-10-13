@@ -3,7 +3,7 @@
   'use strict';
   if(document.currentScript && document.currentScript.dataset.bondsCancelled==='1')return;
   var BASE_URL = 'https://digimon-bonds.github.io/forum-skin/';
-  var VERSION = '20261013-10-public-beta1';
+  var VERSION = '20261013-10-public-beta2';
   var root=document.documentElement, storageKey='bondsSkinVersion', failKey='bondsSkinFailsafe';
   if (document.getElementById('bonds-skin-switcher-style')) return;
   var flag=new URLSearchParams(location.search).get('bondsos'), preference='2', failedSession='';
@@ -46,9 +46,9 @@
     trigger.setAttribute('aria-haspopup','menu'); trigger.setAttribute('aria-expanded','false'); trigger.setAttribute('aria-controls','bonds-skin-menu');
     menu=element('div'); menu.id='bonds-skin-menu'; menu.hidden=true; menu.setAttribute('role','menu'); menu.setAttribute('aria-label','Interface');
     menu.appendChild(element('p','bonds-skin-heading','INTERFACE'));
-    [['2','2.0 // BONDS OS','Nova interface'],['1','1.0 // CLÁSSICA','Interface original']].forEach(function(item){
+    [['2','2.0 // BONDS OS'],['1','1.0 // CLÁSSICA']].forEach(function(item){
       var option=element('button','',item[1]); option.id='bonds-skin-'+item[0]; option.type='button'; option.dataset.version=item[0]; option.setAttribute('role','menuitemradio');
-      option.appendChild(element('span','',item[2])); option.addEventListener('click',function(){choose(item[0]);}); options.push(option); menu.appendChild(option);
+      option.addEventListener('click',function(){choose(item[0]);}); options.push(option); menu.appendChild(option);
     });
     status=element('p'); status.id='bonds-skin-status'; status.setAttribute('role','status'); menu.appendChild(status);
     trigger.addEventListener('click',function(){
@@ -76,7 +76,7 @@
   var suffix='?v='+encodeURIComponent(VERSION),base=BASE_URL.replace(/\/?$/,'/');
   css.id='bonds-os-css';css.rel='stylesheet';css.href=base+'bonds-os.css'+suffix;
   var early=element('style');early.id='bonds-os-critical';
-  early.textContent='html.bonds-os-loading,html.bonds-os-loading body{background:#07141d!important;color:#dcebf0!important}html.bonds-os-loading :is(#wrap,#page-body,#main-content,.headerbar,.post,.postbody,.postprofile,.panel,.forabg,.forumbg){background-color:#0b202b!important;background-image:none!important;border-color:#365767!important}html.bonds-os-loading .postprofile{background:none!important}';
+  early.textContent='html.bonds-os-loading,html.bonds-os-loading body{background:#07141d!important;color:#dcebf0!important}html.bonds-os-loading :is(#wrap,#page-body,#main-content,.headerbar,.post,.postbody,.postprofile,.panel,.forabg,.forumbg,.navbar){background-color:#0b202b!important;background-image:none!important;border-color:#365767!important}html.bonds-os-loading #page-header .navbar{visibility:hidden!important}html.bonds-os-loading .postprofile{background:none!important}';
   document.head.appendChild(early);root.classList.add('bonds-os-loading');clearBridge();
   function clearEarly(){root.classList.remove('bonds-os-loading');early.remove();}
   function cleanListeners(){clearTimeout(timer);document.removeEventListener('bonds-os-ready',ready);document.removeEventListener('bonds-os-failed',rollback);document.removeEventListener('DOMContentLoaded',start);}
