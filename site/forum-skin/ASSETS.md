@@ -1,0 +1,16 @@
+# BONDS OS v10 — assets do beta
+
+Total da pasta antes: 5025863 bytes (5,03 MB decimais). Depois da otimização original: 3239495 bytes (3,24 MB), incluindo o registro de proveniência. Economia: 35,5%.
+
+A correção adicional solicitada para Estrela em Ascensão acrescenta arquetipo-estrela-v10.webp (673592 bytes). Total final com essa nova arte: 3913087 bytes (3,91 MB); redução líquida aproximada de 22,1% em relação à pasta inicial.
+
+| Original | WebP | Antes (bytes) | Depois (bytes) | Redução |
+|---|---|---:|---:|---:|
+| agumon.png | agumon.webp | 854953 | 549810 | 35.7% |
+| gabumon.png | gabumon.webp | 1144009 | 773590 | 32.4% |
+| gatomon.png | gatomon.webp | 976572 | 623620 | 36.1% |
+| jijimon-cutout.png | jijimon-cutout.webp | 1616091 | 979168 | 39.4% |
+
+Conversão Pillow/WebP lossless, method=6, exact=True. Todos conservam 1254 × 1254 px e transparência. Comparação de cada imagem descomprimida em RGBA: pixels idênticos, inclusive canais transparentes; nenhum redimensionamento ou perda de qualidade.
+
+Hero JPG (305874 bytes) não foi recodificado. Logo/circuitos/cenários SVG mantidos. PNGs substituídos, wisemon.jpg, jijimon.jpg e story-core.svg sem uso foram retirados somente desta pasta de implantação. Os originais do App não foram alterados; o pacote local anterior preserva a versão de origem. O manifesto final possui onze imagens em uso, incluindo a reparação solicitada.

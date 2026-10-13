@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 190" role="img" aria-labelledby="title">
+<title id="title">Digimon Bonds — DB</title>
+<defs>
+<linearGradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff4c9"/><stop offset=".35" stop-color="#ffd77b"/><stop offset=".48" stop-color="#e9a348"/><stop offset=".5" stop-color="#fff0b1"/><stop offset=".7" stop-color="#eeb34f"/><stop offset="1" stop-color="#ab6029"/></linearGradient>
+<linearGradient id="edge" x2="0" y2="1"><stop stop-color="#fff3ca"/><stop offset="1" stop-color="#9d622e"/></linearGradient>
+<linearGradient id="gold" x2="0" y2="1"><stop stop-color="#ffdc91"/><stop offset="1" stop-color="#efa637"/></linearGradient></defs>
+<g transform="translate(2 24) scale(1.42)"> <path d="M13 14h53l-8 58H5z" fill="#10212b" stroke="#f6b34b" stroke-width="2.5"/>
+ <g transform="translate(3 0) skewX(-7)">
+  <path fill="#e5f3fa" fill-rule="evenodd" d="M18 29h11l7 7v16l-7 7H18zm6 6v18h3l3-3V38l-3-3z"/>
+  <path fill="url(#gold)" fill-rule="evenodd" d="M39 29h13l5 5v7l-3 3 3 3v7l-5 5H39zm6 6v6h5l1-1v-4l-1-1zm0 12v6h5l1-1v-4l-1-1z"/>
+ </g>
+</g>
+<text x="118" y="49" fill="#dbf4f8" font-family="Bahnschrift,Arial,sans-serif" font-size="20" font-weight="600" letter-spacing="11">DIGIMON</text>
+<g transform="translate(124 64) skewX(-6)" fill="url(#metal)" stroke="url(#edge)" stroke-width="1" stroke-linejoin="round" fill-rule="evenodd">
+<path d="M4 0h42Q70 0 70 22q0 14-13 21 15 6 15 20Q72 86 46 86H4Q0 86 0 82V4Q0 0 4 0Zm14 16v19h27q8 0 8-10t-8-9Zm0 35v19h28q9 0 9-10t-9-9Z"/>
+<path d="M105 0h22q27 0 27 27v32q0 27-27 27h-22Q78 86 78 59V27Q78 0 105 0Zm1 17q-11 0-11 11v30q0 11 11 11h20q11 0 11-11V28q0-11-11-11Z"/>
+<path d="M166 86q-4 0-4-4V4q0-4 4-4h10q3 0 5 3l36 52V4q0-4 4-4h9q4 0 4 4v78q0 4-4 4h-10q-3 0-5-3l-36-52v51q0 4-4 4Z"/>
+<path d="M248 0h35q33 0 33 33v20q0 33-33 33h-35q-4 0-4-4V4q0-4 4-4Zm13 17v52h21q17 0 17-17V34q0-17-17-17Z"/>
+<path d="M351 0h40q4 0 4 4v9q0 4-4 4h-39q-10 0-10 9t10 9h19q27 0 27 25t-27 26h-42q-4 0-4-4v-9q0-4 4-4h41q11 0 11-9t-11-9h-19q-26 0-26-25t26-26Z"/>
+</g>
+<path d="m116 157 27 0 7 7h304l13-13h55l17-17" fill="none" stroke="#78dce9" stroke-width="2"/>
+<path d="M151 170h87m9 0h16m7 0h6" stroke="#78dce9" stroke-opacity=".45"/>
+<path d="m483 158 8-8m0 8 8-8m0 8 8-8" stroke="#f7bf61" stroke-width="2"/>
+<circle cx="542" cy="131" r="3" fill="#7de3ec"/>
+</svg>

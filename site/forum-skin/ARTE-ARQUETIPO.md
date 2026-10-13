@@ -1,0 +1,7 @@
+# BONDS OS v10 — correção de Estrela em Ascensão
+
+Arquivo: assets/arquetipo-estrela-v10.webp. Fonte original fornecida pelo fórum: https://i.ibb.co/jPhxc34Z/image-removebg-preview-19.png. Edição pelo imagegen integrado; não usada CLI. Resultado inspecionado e convertido para WebP lossless com alpha (1026 × 1533). Substituição limitada à URL original dentro de Sistemas.
+
+## Prompt final
+
+Use case: precise-object-edit. Edit the supplied full-body transparent anime/cartoon illustration for the Digimon Bonds 'Estrela em Ascensão' archetype. Correct ONLY the girl's malformed face: clean coherent face anatomy, two properly aligned expressive anime eyes looking naturally toward the viewer, a small normal nose, and one naturally shaped cheerful open smiling mouth with a clean simple interior. Keep her dark brown skin tone and joyful personality. Match the existing hand-drawn line style and flat cel shading. Preserve her identity, blonde high ponytail, pink sunglasses atop her head, heart earrings, pink off-shoulder cropped top, green plaid skirt, microphone and raised hand, pose, proportions, shoes, small green creature, and ALL composition outside the face as closely as possible. Keep the entire figure and small creature fully inside the canvas. True transparent background with clean alpha; no new scene, no labels or text, no additional objects. Do not redesign or sexualize the character.

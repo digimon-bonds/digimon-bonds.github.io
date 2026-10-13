@@ -1,0 +1,631 @@
+/* BONDS OS / v10 — isolated preview, shared foundations for the whole forum. */
+
+/* 00 TOKENS */
+html.bonds-os-preview {
+  --bos-bg:#07141D; --bos-deep:#050E14; --bos-surface:#0B202B;
+  --bos-light:#102A36; --bos-blue:#2E7184; --bos-cyan:#62DCEB;
+  --bos-orange:#F7AA3D; --bos-text:#DCEBF0; --bos-muted:#7899A4;
+  --bos-line:#2e718455; --bos-mono:Consolas,'Courier New',monospace;
+  background:var(--bos-deep);
+}
+
+/* 01 BASE / HOME COMPOSITION */
+html.bonds-os-preview body {
+  margin:0; padding:0; min-width:0; color:var(--bos-text);
+  font:14px/1.6 'Exo 2','Segoe UI',Arial,sans-serif;
+  background:radial-gradient(ellipse at 50% 0,#173c4a55,transparent 65%),
+    linear-gradient(#62dceb03 1px,transparent 1px),linear-gradient(90deg,#62dceb03 1px,transparent 1px),var(--bos-bg);
+  background-size:auto,48px 48px,48px 48px,auto;
+}
+html.bonds-os-preview #wrap {width:100%; min-width:0; margin:0; padding:0; border:0; background:none;}
+html.bonds-os-preview #page-body {width:min(1380px,calc(100% - 64px))!important; margin:28px auto 40px;}
+html.bonds-os-preview #page-header *,html.bonds-os-preview [data-bos-category] *,html.bonds-os-preview .bos-home-layout * {box-sizing:border-box;}
+html.bonds-os-preview .topomenu {display:none;}
+html.bonds-os-preview #main-content > div:has([id^="prebid"]) {min-width:0!important; max-width:100%; overflow-x:auto;}
+html.bonds-os-preview :is(#page-header,[data-bos-category],.bos-activity) :is(a,button,summary):focus-visible {outline:2px solid var(--bos-orange); outline-offset:4px;}
+html.bonds-os-preview .bos-home-layout {display:grid; grid-template-columns:minmax(0,1fr); gap:30px; align-items:start;}
+html.bonds-os-preview .bos-category-stack {min-width:0;}
+html.bonds-os-preview .bos-home-intro {padding:10px 0 28px;}
+html.bonds-os-preview .bos-eyebrow {color:var(--bos-muted); font:10px/1.6 var(--bos-mono); letter-spacing:.12em;}
+html.bonds-os-preview .bos-home-intro h1 {color:var(--bos-text); font:500 clamp(25px,3vw,36px)/1.25 'Exo 2','Segoe UI',sans-serif; margin:10px 0; letter-spacing:-.03em;}
+html.bonds-os-preview .bos-home-intro p {color:#93adb9; margin:0; font-size:14px;}
+
+/* 02 HEADER — full artwork, graphic logo, soft connection to the page. */
+html.bonds-os-preview #page-header .headerbar[data-bos-ready] {height:auto; width:100%; margin:0; padding:0; background:var(--bos-bg); position:relative;}
+html.bonds-os-preview .headerbar[data-bos-ready]>a {display:none;}
+html.bonds-os-preview #page-header .bos-hero {position:relative; isolation:isolate; max-width:1920px; margin:auto; overflow:hidden;}
+html.bonds-os-preview #page-header .bos-hero-art {display:block; position:static; width:100%; height:auto; max-width:100%; max-height:none; margin:0; opacity:1; object-fit:contain; filter:saturate(.85) contrast(.98);}
+html.bonds-os-preview .bos-hero::after {content:''; position:absolute; inset:0; pointer-events:none; background:linear-gradient(0deg,#07141d 0%,#07141d55 9%,transparent 28%),linear-gradient(90deg,#07141d88,transparent 32%,transparent 80%,#07141d44);}
+html.bonds-os-preview #page-header .bos-brand {position:absolute; z-index:1; left:5%; bottom:14%; display:block; margin:0; padding:0; width:clamp(150px,30vw,480px); text-decoration:none; filter:drop-shadow(0 4px 18px #000b);}
+html.bonds-os-preview #page-header .bos-logo {display:block; width:100%; height:auto; margin:0; opacity:1; filter:none;}
+
+/* 03 USER BAR — original avatar, account links and search handlers. */
+html.bonds-os-preview #page-header .navbar {position:relative; z-index:2; padding:0 32px; margin-top:-26px; background:none;}
+html.bonds-os-preview #page-header ul.navlinks {position:relative; inset:auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:14px 24px; width:min(1380px,100%); margin:0 auto; padding:17px 22px; border:1px solid #2e718488; border-top:2px solid var(--bos-orange); border-radius:8px; background:#0b202bf5; box-shadow:0 12px 32px #0003; color:var(--bos-text);}
+html.bonds-os-preview #page-header .navlinks>div:has(li) {display:flex; align-items:center; flex-wrap:wrap; gap:6px 18px; background:none; -webkit-text-fill-color:currentColor;}
+html.bonds-os-preview #page-header .navlinks li {float:none; margin:0; filter:none; text-shadow:none;}
+html.bonds-os-preview #page-header .navlinks .mainmenu {display:inline-flex; align-items:center; min-height:36px; font:11px/1.5 var(--bos-mono); color:#b8d0d9; text-shadow:none; -webkit-text-fill-color:currentColor;}
+html.bonds-os-preview #page-header .navlinks .mainmenu:hover {color:var(--bos-cyan);}
+html.bonds-os-preview #page-header .apry {display:flex; align-items:center; gap:12px;}
+html.bonds-os-preview #page-header .apry img {width:42px; height:42px; max-width:42px; max-height:42px; border:1px solid var(--bos-blue); border-radius:50%; object-fit:cover;}
+html.bonds-os-preview #page-header .apry p {margin:0; color:var(--bos-muted); font:10px/1.6 var(--bos-mono);}
+html.bonds-os-preview #page-header .apry p b {color:var(--bos-text); background:none; font:600 14px/1.6 'Segoe UI',sans-serif; text-shadow:none; -webkit-text-fill-color:currentColor;}
+html.bonds-os-preview .bos-preview-status {display:flex; justify-content:flex-end; align-items:center; gap:18px; max-width:1380px; margin:10px auto 0; font:9px/1.6 var(--bos-mono);}
+html.bonds-os-preview .bos-preview-label {color:var(--bos-muted); letter-spacing:.08em;}
+html.bonds-os-preview #page-header .bos-exit {position:static; margin:0; padding:3px 0; color:#a6bec8; font:10px/1.6 var(--bos-mono); text-shadow:none; text-decoration:none;}
+html.bonds-os-preview #page-header .bos-exit:hover {color:var(--bos-orange);}
+
+/* 04 HOME CATEGORIES — new chip rails, original semantic headings. */
+html.bonds-os-preview #page-body .forabg[data-bos-category] {position:relative; padding:0; margin:0 0 52px; border:0; border-radius:0; background:none; scroll-margin-top:24px; --bos-section:#62DCEB;}
+html.bonds-os-preview [data-bos-category]>.inner>.corners-top,html.bonds-os-preview [data-bos-category]>.inner>.corners-bottom {display:none;}
+html.bonds-os-preview #page-body [data-bos-category] li.header {display:flex; align-items:center; gap:14px; position:relative; min-height:66px; height:auto; margin:0 0 20px; padding:4px 0 18px; border:0; border-bottom:1px solid #2e718477; border-radius:0; background:none!important;}
+html.bonds-os-preview [data-bos-category] .header dl.icon {display:block; min-width:0; margin:0; padding:0; background:none!important;}
+html.bonds-os-preview [data-bos-category] .header dd.dterm {float:none; width:auto; padding:0; border:0; margin:0;}
+html.bonds-os-preview #page-body [data-bos-category] .header h2 {position:static; margin:0; color:var(--bos-text)!important; font:600 25px/1.25 'Exo 2',sans-serif; letter-spacing:.08em; text-transform:uppercase;}
+html.bonds-os-preview [data-bos-category] .header h2::after {content:none;}
+html.bonds-os-preview .bos-category-index {flex:0 0 42px; height:42px; display:grid; place-items:center; color:var(--bos-section); border:1px solid var(--bos-section); background:linear-gradient(135deg,#f7aa3d11,#102a36); font:13px var(--bos-mono); clip-path:polygon(9px 0,100% 0,100% calc(100% - 9px),calc(100% - 9px) 100%,0 100%,0 9px);}
+html.bonds-os-preview .bos-category-desc {margin-left:auto; color:var(--bos-muted); font:13px/1.5 'Segoe UI',sans-serif; letter-spacing:0; text-align:right;}
+
+/* 05 HOME NODES — new cards; no legacy banner/background artwork. */
+html.bonds-os-preview #page-body [data-bos-category] ul.forums {display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:22px; margin:0; padding:0; background:none;}
+html.bonds-os-preview #page-body [data-bos-category] li.row[data-bos-node] {isolation:isolate; position:relative; overflow:hidden; float:none; box-sizing:border-box; width:auto; height:auto; min-height:340px; display:grid; margin:0; padding:30px 28px 0; border:1px solid #365566; border-radius:10px 28px 10px 10px; background:linear-gradient(135deg,#102a36,#0b202b 60%,#0a1c26)!important; box-shadow:inset 0 1px #62dceb0c,0 8px 20px #0002;}
+html.bonds-os-preview .comunidade [data-bos-node] {grid-column:1/-1;}
+html.bonds-os-preview [data-bos-node]::after {content:''; position:absolute; inset:7px; border:1px solid #62dceb09; border-top-right-radius:12px; border-bottom-left-radius:9px; pointer-events:none;}
+html.bonds-os-preview #page-body [data-bos-node] dl.icon {display:grid; position:relative; z-index:1; grid-template-columns:max-content 1fr; align-content:stretch; grid-template-rows:1fr auto auto; gap:16px 12px; height:100%; min-height:100%; margin:0; padding:0; background:none!important;}
+html.bonds-os-preview #page-body [data-bos-node] dd {position:static; inset:auto; float:none; width:auto; height:auto; min-height:0; margin:0; padding:0; border:0; background:none; color:var(--bos-text); z-index:auto;}
+html.bonds-os-preview #page-body [data-bos-node] dd.dterm {grid-column:1/-1; min-width:0; min-height:155px; font-size:12px; line-height:1.6;}
+html.bonds-os-preview [data-bos-node] .dterm>div {margin:0!important;}
+html.bonds-os-preview [data-bos-node] .dterm br {display:none;}
+html.bonds-os-preview [data-bos-node] .bos-node-meta {display:flex; gap:12px; justify-content:space-between; color:var(--bos-muted); font:9px/1.6 var(--bos-mono); letter-spacing:.1em; margin-bottom:12px!important;}
+html.bonds-os-preview [data-bos-node] .bos-link-label {color:var(--bos-orange); font-size:18px; line-height:12px;}
+html.bonds-os-preview [data-bos-node] h3.hierarchy {margin:0 0 8px; padding:0; border:0; background:none;}
+html.bonds-os-preview #page-body [data-bos-node] a.forumtitle,html.bonds-os-preview #page-body [data-bos-node] a.forumtitle::first-line {position:static; display:block; margin:0; padding:0; background:none; font:600 clamp(25px,2.3vw,34px)/1.15 'Exo 2','Segoe UI',sans-serif; text-transform:none; letter-spacing:-.02em; color:var(--bos-text); -webkit-text-fill-color:currentColor; text-shadow:none; overflow-wrap:anywhere;}
+html.bonds-os-preview .bos-node-description {max-width:45ch; margin:0 0 10px; color:#acc1cb; font:14px/1.65 'Exo 2',sans-serif;}
+html.bonds-os-preview #page-body [data-bos-node] .dterm a.gensmall {display:inline-block; position:static; width:auto; margin:5px 5px 3px 0; padding:4px 7px; border:1px solid var(--bos-line); border-radius:3px; background:#050e1444; color:#a6c5cf; font:9px/1.5 var(--bos-mono); text-transform:uppercase;}
+html.bonds-os-preview #page-body [data-bos-node] dd.topics,html.bonds-os-preview #page-body [data-bos-node] dd.posts {display:flex; align-items:baseline; justify-content:flex-start; gap:6px; padding:0; width:max-content; border:0; color:var(--bos-cyan); font:13px/1.5 var(--bos-mono);}
+html.bonds-os-preview [data-bos-node] dd.topics::before,html.bonds-os-preview [data-bos-node] dd.posts::before {content:none!important;}
+html.bonds-os-preview [data-bos-node] dd dfn {display:inline; position:static; width:auto; height:auto; visibility:visible; color:var(--bos-muted); font:9px/1.5 var(--bos-mono); text-transform:uppercase;}
+html.bonds-os-preview #page-body [data-bos-node] dd.lastpost {grid-column:1/-1; display:flex; align-items:center; gap:10px; border-top:1px solid var(--bos-line); padding-top:12px; min-width:0;}
+html.bonds-os-preview #page-body [data-bos-node] .lastpost-avatar {position:static; float:none; padding:0; flex:0 0 28px;}
+html.bonds-os-preview #page-body [data-bos-node] .lastpost-avatar img {position:static; inset:auto; z-index:auto; display:block; width:28px; height:28px; max-width:28px; max-height:28px; border:1px solid var(--bos-blue); border-radius:50%; object-fit:cover;}
+html.bonds-os-preview #page-body [data-bos-node] .last-info {position:static; inset:auto; width:auto; min-width:0; padding:0; background:none; color:#9bb7c2; font:10px/1.6 'Segoe UI',sans-serif; overflow-wrap:anywhere;}
+html.bonds-os-preview [data-bos-node] .last-info::before {content:'ÚLTIMA TRANSMISSÃO'; display:block; color:var(--bos-muted); font:8px/1.8 var(--bos-mono); letter-spacing:.08em;}
+html.bonds-os-preview #page-body [data-bos-node] .last-info a {color:var(--bos-text); font-size:11px;}
+html.bonds-os-preview #page-body [data-bos-node] .last-info span {float:none!important; display:inline; padding:0; color:#9bb7c2!important; font-size:inherit;}
+html.bonds-os-preview [data-bos-node] .last-post-icon img {vertical-align:middle;}
+
+/* 06 TOPIC LIST / ACTIVITY — home stream reads individual real messages. */
+html.bonds-os-preview .bos-activity {position:relative; display:flex; flex-direction:column; height:610px; min-height:480px; padding:0 12px; border:2px solid #59717b; border-radius:34px; background:linear-gradient(110deg,#35454e,#101c24 15%,#0a131a 85%,#43535b); box-shadow:inset 0 0 0 4px #091017,0 24px 45px #0005;}
+html.bonds-os-preview .bos-activity h2 {margin:5px 0 12px; color:var(--bos-text); font:500 24px/1.2 'Exo 2',sans-serif;}
+html.bonds-os-preview .bos-refresh {display:block; padding:6px 10px; min-height:32px; border:1px solid var(--bos-line); border-radius:3px; background:#102a36; color:var(--bos-cyan); font:10px var(--bos-mono); cursor:pointer;}
+html.bonds-os-preview .bos-refresh:disabled {opacity:.45; cursor:wait;}
+html.bonds-os-preview .bos-feed-status {margin:10px 0 14px; color:#91adb9; font:10px/1.6 'Segoe UI',sans-serif;}
+html.bonds-os-preview .bos-post-stream {list-style:none; margin:0; padding:0;}
+html.bonds-os-preview .bos-stream-entry {display:flex; gap:12px; padding:17px 0; border-top:1px solid var(--bos-line);}
+html.bonds-os-preview .bos-stream-number {padding-top:2px; color:#3c6576; font:10px var(--bos-mono);}
+html.bonds-os-preview .bos-stream-body {min-width:0;}
+html.bonds-os-preview .bos-stream-author {display:block; color:var(--bos-orange); font:11px/1.4 'Exo 2',sans-serif; margin-bottom:5px;}
+html.bonds-os-preview .bos-stream-topic {display:block; color:#cde0e8; font:500 12px/1.5 'Exo 2',sans-serif; overflow-wrap:anywhere;}
+html.bonds-os-preview .bos-stream-topic:hover {color:var(--bos-cyan);}
+html.bonds-os-preview .bos-stream-date {display:block; margin-top:6px; color:var(--bos-muted); font:9px/1.5 var(--bos-mono);}
+html.bonds-os-preview .bos-feed-fallback {margin-top:14px; border-top:1px solid var(--bos-line); padding-top:14px; color:var(--bos-muted); font-size:11px;}
+html.bonds-os-preview .bos-feed-fallback summary {cursor:pointer; padding:4px 0;}
+html.bonds-os-preview .bos-activity #f_widgets_col_1 {display:block!important; width:auto!important; padding:12px 0; font:11px/1.6 'Segoe UI',sans-serif;}
+html.bonds-os-preview .bos-activity #f_widgets_col_1 .module {background:none; border:0; color:#94b3bf; padding:0;}
+html.bonds-os-preview .bos-activity #f_widgets_col_1 a {color:var(--bos-cyan);}
+html.bonds-os-preview .bos-activity #f_widgets_col_1 span {color:#94b3bf!important;}
+html.bonds-os-preview .bos-activity #f_widgets_col_1 .h3,html.bonds-os-preview .bos-activity #f_widgets_col_1 .corners-top,html.bonds-os-preview .bos-activity #f_widgets_col_1 .corners-bottom {display:none;}
+
+/* 07 POSTS — preserve native templates until the next phase. */
+/* 08 PROFILE — preserve native templates until the next phase. */
+/* 09 FORMS / EDITOR — no SCEditor changes. */
+html.bonds-os-preview .user_login_form {padding:18px; color:var(--bos-muted); background:var(--bos-surface); border:1px solid var(--bos-line); border-radius:4px;}
+html.bonds-os-preview .user_login_form label {color:var(--bos-muted);}
+
+/* 10 FOOTER / HOME STATISTICS */
+html.bonds-os-preview #estatistics {display:grid; grid-template-columns:1fr; gap:16px; margin:18px 0 32px;}
+html.bonds-os-preview #estatistics .contagiens {display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); width:100%; height:auto; gap:14px;}
+html.bonds-os-preview #estatistics .whos-online {display:grid; grid-template-columns:1fr 2fr; width:100%; height:auto; gap:14px;}
+html.bonds-os-preview #estatistics .firula {display:none;}
+html.bonds-os-preview #estatistics :is(.agora,.horas72,.postinho,.doidos,.novinho) {box-sizing:border-box; width:100%; padding:20px; margin:0; border:1px solid var(--bos-line); border-radius:4px; background:var(--bos-surface); color:var(--bos-text); box-shadow:none;}
+html.bonds-os-preview #estatistics :is(.agora,.horas72)::before {background:none; color:var(--bos-muted); -webkit-text-fill-color:currentColor; font:11px/1.8 var(--bos-mono); letter-spacing:.04em; text-align:left; margin-bottom:14px;}
+html.bonds-os-preview #estatistics a,html.bonds-os-preview #estatistics a span {color:var(--bos-cyan)!important;}
+html.bonds-os-preview #page-footer {width:min(1380px,calc(100% - 64px)); margin:32px auto 0; padding:20px 0; border-top:1px solid var(--bos-line); color:var(--bos-muted);}
+html.bonds-os-preview #page-footer a {color:#a8c4ce;}
+
+/* 11 EFFECTS */
+html.bonds-os-preview #page-body [data-bos-node] {transition:transform 180ms,border-color 180ms,box-shadow 180ms;}
+html.bonds-os-preview #page-body [data-bos-node]:hover,html.bonds-os-preview #page-body [data-bos-node]:focus-within {transform:translateY(-2px); border-color:#62dceb99; box-shadow:inset 2px 0 var(--bos-orange),0 8px 24px #0003;}
+html.bonds-os-preview [data-bos-node] a:hover {color:var(--bos-cyan)!important;}
+@media(prefers-reduced-motion:reduce) {html.bonds-os-preview #page-body [data-bos-node] {transition:none; transform:none;}}
+
+/* 12 RESPONSIVE */
+@media(min-width:1600px) {html.bonds-os-preview .bos-home-layout {grid-template-columns:minmax(0,1fr); gap:34px;}}
+@media(max-width:1100px) {
+  html.bonds-os-preview .bos-home-layout {grid-template-columns:minmax(0,1fr); gap:20px;}
+  html.bonds-os-preview .bos-category-desc {display:none;}
+  html.bonds-os-preview #page-body [data-bos-node] {padding:22px 16px 18px 22px;}
+  html.bonds-os-preview .bos-activity {padding:0 10px;}
+}
+@media(max-width:850px) {
+  html.bonds-os-preview .bos-home-layout {grid-template-columns:minmax(0,1fr);}
+  html.bonds-os-preview .bos-activity {position:relative; width:310px; max-width:100%; height:610px; margin:0 auto 16px;}
+  html.bonds-os-preview .bos-feed-status {margin:10px 0;}
+  html.bonds-os-preview .bos-category-desc {display:inline;}
+}
+@media(max-width:650px) {
+  html.bonds-os-preview #page-body,html.bonds-os-preview #page-footer {width:calc(100% - 28px)!important;}
+  html.bonds-os-preview #page-header .navbar {padding:0 14px; margin-top:-12px;}
+  html.bonds-os-preview #page-header ul.navlinks {padding:12px 14px; gap:10px;}
+  html.bonds-os-preview #page-header .navlinks>div:has(li) {gap:2px 12px;}
+  html.bonds-os-preview #page-header .navlinks .mainmenu {font-size:10px;}
+  html.bonds-os-preview #page-header .bos-brand {left:3%; bottom:13%; width:34%; min-width:120px;}
+  html.bonds-os-preview .bos-preview-status {gap:10px; font-size:8px;}
+  html.bonds-os-preview #page-body [data-bos-category] ul.forums {grid-template-columns:minmax(0,1fr);}
+  html.bonds-os-preview .bos-category-desc {font-size:7px; max-width:120px;}
+  html.bonds-os-preview #page-body [data-bos-category] .header h2 {font-size:17px;}
+      html.bonds-os-preview #estatistics .contagiens {gap:8px;}
+  html.bonds-os-preview #estatistics :is(.postinho,.doidos,.novinho) {padding:12px 5px; min-width:0;}
+  html.bonds-os-preview #estatistics .novinho::before {font-size:8px; letter-spacing:0;}
+  html.bonds-os-preview #estatistics .novinho a span {font-size:13px; max-width:9ch;}
+  html.bonds-os-preview #estatistics .whos-online {grid-template-columns:1fr;}
+}
+
+
+/* 13 COMPOSITION / reusable Bonds visual language */
+html.bonds-os-preview {--bos-muted:#94ADB9; --bos-line:#37586a66;}
+html.bonds-os-preview .bos-home-intro {display:grid; grid-template-columns:1.1fr 1fr; gap:48px; align-items:center; padding:36px 0 44px; margin-bottom:12px;}
+html.bonds-os-preview .bos-home-intro h1 {max-width:16ch; font:600 clamp(30px,3.1vw,46px)/1.12 'Exo 2','Segoe UI',sans-serif; letter-spacing:-.04em; margin:14px 0 18px;}
+html.bonds-os-preview .bos-home-intro p {max-width:40ch; font-size:14px; line-height:1.7;}
+html.bonds-os-preview .bos-eyebrow {color:#9eb8c4; letter-spacing:.16em;}
+html.bonds-os-preview .bos-category-nav {display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px;}
+html.bonds-os-preview .bos-category-nav a {display:block; position:relative; padding:17px 20px; border:1px solid #37586a88; border-radius:6px 18px 6px 6px; background:linear-gradient(120deg,#17323e88,#0b202b99); color:#d9edf4; font:12px/1.5 var(--bos-mono); text-decoration:none; transition:border-color .18s,background .18s;}
+html.bonds-os-preview .bos-category-nav a::after {content:'↗'; position:absolute; right:14px; top:14px; color:#6cb2c5;}
+html.bonds-os-preview .bos-category-nav a:hover {border-color:var(--bos-cyan); background:#173540;}
+html.bonds-os-preview .bos-category-nav a:focus-visible {outline:2px solid var(--bos-orange); outline-offset:3px;}
+html.bonds-os-preview .bos-jump-description {display:block; margin-top:6px; color:var(--bos-muted); font:11px/1.5 'Segoe UI',sans-serif;}
+html.bonds-os-preview #page-body .forabg[data-bos-category="2"] {--bos-section:#ABAEE9;}
+html.bonds-os-preview #page-body .forabg[data-bos-category="3"] {--bos-section:#F0BC77;}
+html.bonds-os-preview #page-body .forabg[data-bos-category="4"] {--bos-section:#83CDB8;}
+html.bonds-os-preview .bos-category-index {background:#0c2632; border-color:#3a6576; color:var(--bos-section); font-size:12px;}
+html.bonds-os-preview #page-body [data-bos-category] li.header {border-bottom-color:#37586a66;}
+html.bonds-os-preview #page-body [data-bos-category] .header h2 {letter-spacing:.01em; text-transform:none;}
+html.bonds-os-preview [data-bos-node]::before {content:none;}
+html.bonds-os-preview .bos-card-circuit {position:absolute; inset:0; z-index:1; width:100%; height:100%; opacity:.22; pointer-events:none;}
+html.bonds-os-preview #page-body [data-bos-node] dl.icon {z-index:3;}
+html.bonds-os-preview [data-bos-node] .bos-node-meta {position:relative; margin-bottom:20px!important; align-items:center; font-size:10px; letter-spacing:.1em; color:#9ab8c6;}
+html.bonds-os-preview [data-bos-node] .bos-node-meta>span:first-child {padding:4px 8px; border:1px solid #45667588; border-radius:3px; background:#0a1e28aa;}
+html.bonds-os-preview [data-bos-node] .bos-link-label {display:grid; place-items:center; width:28px; height:28px; border:1px solid #69869566; border-radius:50%; color:var(--bos-section); font-size:17px;}
+html.bonds-os-preview #page-body [data-bos-node] dd.lastpost {margin:4px -28px 0; padding:16px 28px; border-top:1px solid #365a6b88; background:#071720e8; min-height:90px;}
+html.bonds-os-preview #page-body [data-bos-node] .last-info {font-size:11px; line-height:1.65;}
+html.bonds-os-preview #page-body [data-bos-node] .last-info a {font-size:12px;}
+html.bonds-os-preview [data-bos-node] .last-info::before {font-size:8px; color:#87a7b7; letter-spacing:.14em;}
+html.bonds-os-preview #page-body [data-bos-node] .lastpost-avatar {flex-basis:34px;}
+html.bonds-os-preview #page-body [data-bos-node] .lastpost-avatar img {width:34px; height:34px; max-width:34px; max-height:34px; border-radius:9px; border-color:#476978;}
+html.bonds-os-preview #page-body [data-bos-node] .dterm a.gensmall {padding:6px 9px; border-radius:4px; background:#071720aa; color:#bfd3dd; font-size:10px; margin:6px 5px 0 0;}
+/* Art bay: the shape, palette and illustration are one composition. */
+html.bonds-os-preview .bos-partner-window {position:absolute; z-index:0; right:0; top:0; bottom:100px; width:40%; overflow:hidden; pointer-events:none; background:radial-gradient(ellipse at 60% 35%,var(--bos-art-glow,#36928b44),transparent 70%),linear-gradient(140deg,#244a5355,#0b202b); clip-path:polygon(30% 0,100% 0,100% 100%,0 100%,0 35%); mask-image:linear-gradient(90deg,transparent,#000 24%);}
+html.bonds-os-preview .bos-partner-window::before {content:''; position:absolute; inset:24px -34px 10px 12px; border:1px solid #92e1dc22; border-radius:50%; box-shadow:0 0 0 17px #92e1dc03,0 0 0 18px #92e1dc11; transform:rotate(-25deg);}
+html.bonds-os-preview .bos-partner-window::after {content:''; position:absolute; z-index:2; inset:0; background:linear-gradient(0deg,#0b202b 0%,transparent 42%),linear-gradient(90deg,#0b202b66,transparent 50%);}
+html.bonds-os-preview .bos-partner-window .bos-partner-shadow {position:absolute; width:145%; height:100%; max-width:none; right:-25%; bottom:0; object-fit:contain; object-position:50% 50%; opacity:.7; filter:saturate(.45) brightness(.75) contrast(.95);}
+html.bonds-os-preview .bos-partner-caption {position:absolute; z-index:3; right:16px; top:18px; bottom:auto; max-width:110px; color:#b6d3d5; font:8px/1.6 var(--bos-mono); letter-spacing:.1em; text-align:right; opacity:.6;}
+html.bonds-os-preview [data-bos-node].bos-has-partner .dterm {padding-right:33%!important;}
+html.bonds-os-preview #page-body [data-bos-node="4"] {--bos-art-glow:#ba8a414f; background:linear-gradient(115deg,#152d38,#0b202b 65%)!important;}
+html.bonds-os-preview #page-body [data-bos-node="5"] {--bos-art-glow:#5378b666;}
+html.bonds-os-preview #page-body [data-bos-node="6"] {--bos-art-glow:#a48cb34d;}
+html.bonds-os-preview #page-body [data-bos-node="1"] {background:radial-gradient(ellipse at 90% 15%,#97714c22,transparent 70%),linear-gradient(130deg,#162934,#0b1e28)!important;}
+html.bonds-os-preview [data-bos-node="1"] .dterm {padding-right:26%!important;}
+html.bonds-os-preview .bos-scene {position:absolute; z-index:0; right:0; top:0; width:44%; height:calc(100% - 80px); object-fit:cover; pointer-events:none; opacity:.65; mask-image:linear-gradient(90deg,transparent,#000 25%);}
+html.bonds-os-preview [data-bos-kind="human"] .bos-scene,html.bonds-os-preview [data-bos-kind="digital"] .bos-scene {width:100%; height:160px; opacity:.8; mask-image:linear-gradient(0deg,transparent,#000 55%);}
+html.bonds-os-preview #page-body [data-bos-category] li.row[data-bos-kind="human"],html.bonds-os-preview #page-body [data-bos-category] li.row[data-bos-kind="digital"] {padding-top:130px; min-height:410px;}
+html.bonds-os-preview [data-bos-kind="human"] .bos-node-meta,html.bonds-os-preview [data-bos-kind="digital"] .bos-node-meta {margin-bottom:10px!important;}
+html.bonds-os-preview [data-bos-kind="social"] .bos-scene {width:33%; opacity:.35;}
+html.bonds-os-preview #page-body [data-bos-category] li.row[data-bos-kind="social"] {min-height:260px;}
+html.bonds-os-preview [data-bos-kind="social"] .dterm {padding-right:30%!important;}
+/* Community: real counters, member badges and the bounded device inbox. */
+html.bonds-os-preview .bos-community-panel {display:grid; grid-template-columns:minmax(0,1fr) 310px; gap:28px 44px; align-items:start; margin:0 0 36px; padding:32px; border:1px solid #35596a66; border-radius:12px 36px 12px 12px; background:radial-gradient(ellipse at right bottom,#244b5733,transparent 60%),#0a1c27;}
+html.bonds-os-preview .bos-community-panel * {box-sizing:border-box;}
+html.bonds-os-preview .bos-community-heading {grid-column:1/-1; padding-bottom:24px; border-bottom:1px solid var(--bos-line);}
+html.bonds-os-preview .bos-community-heading h2 {font:600 clamp(26px,3vw,36px)/1.2 'Exo 2','Segoe UI',sans-serif; color:var(--bos-text); margin:10px 0; letter-spacing:-.03em;}
+html.bonds-os-preview .bos-community-heading p {font-size:13px; color:#99b2bf; margin:0;}
+html.bonds-os-preview .bos-community-panel #estatistics {margin:0; min-width:0; gap:22px;}
+html.bonds-os-preview .bos-community-panel #estatistics .whos-online {grid-template-columns:1fr; gap:18px;}
+html.bonds-os-preview #estatistics :is(.postinho,.doidos,.novinho)::before,html.bonds-os-preview #estatistics :is(.postinho,.doidos,.novinho)::after,html.bonds-os-preview #estatistics :is(.agora,.horas72)::before,html.bonds-os-preview #estatistics :is(.agora,.horas72)::after {content:none!important;}
+html.bonds-os-preview #estatistics :is(.postinho,.doidos,.novinho) {display:flex; flex-direction:column; justify-content:center; align-items:flex-start; min-width:0; padding:22px 18px; min-height:120px; border:1px solid #3a607066; border-radius:6px 18px 6px 6px; background:#10293688; font:14px/1.5 'Segoe UI',sans-serif; text-align:left;}
+html.bonds-os-preview #estatistics .bos-stat-value {display:block; color:#e1f0f6; font:600 34px/1.1 'Exo 2','Segoe UI',sans-serif; letter-spacing:-.04em; margin-bottom:10px;}
+html.bonds-os-preview #estatistics .bos-stat-label {display:block; color:#99b7c7; font:10px/1.6 var(--bos-mono); text-transform:uppercase; letter-spacing:.04em;}
+html.bonds-os-preview #estatistics .novinho>a {display:block; margin-top:12px; font:600 20px/1.2 'Exo 2','Segoe UI',sans-serif; max-width:100%; overflow-wrap:anywhere; text-transform:none;}
+html.bonds-os-preview #estatistics .novinho>a :is(span,strong) {font:inherit; letter-spacing:inherit; background:none; -webkit-text-fill-color:currentColor;}
+html.bonds-os-preview #estatistics :is(.agora,.horas72) {padding:22px; border:1px solid #35596a66; background:#07172066; border-radius:8px; font:13px/1.7 'Segoe UI',sans-serif; text-transform:none;}
+html.bonds-os-preview #estatistics h3 {margin:0 0 16px; padding:0; border:0; text-transform:none; color:#cde4ef; font:500 16px/1.4 'Exo 2','Segoe UI',sans-serif;}
+html.bonds-os-preview #estatistics .bos-members-body {display:flex; flex-wrap:wrap; gap:7px; align-items:center;}
+html.bonds-os-preview #estatistics .bos-members-body>a {display:inline-flex; align-items:center; padding:5px 9px; border:1px solid #35596a88; border-radius:5px; background:#102b38; color:#bcd5e1!important; font:11px/1.5 'Segoe UI',sans-serif; text-transform:none; overflow-wrap:anywhere; max-width:100%;}
+html.bonds-os-preview #estatistics .bos-members-body>a :is(span,strong) {font:inherit; color:inherit!important; letter-spacing:0; -webkit-text-fill-color:currentColor;}
+html.bonds-os-preview #estatistics .bos-members-body>a:hover {border-color:var(--bos-cyan);}
+html.bonds-os-preview .bos-activity::before {content:''; position:absolute; right:-5px; top:110px; height:47px; width:3px; background:#71828a; border-radius:0 2px 2px 0;}
+html.bonds-os-preview .bos-activity::after {content:''; position:absolute; left:-5px; top:88px; height:66px; width:3px; background:#71828a; border-radius:2px 0 0 2px;}
+html.bonds-os-preview .bos-phone-hardware {position:relative; display:flex; align-items:center; justify-content:center; height:42px; flex:0 0 42px;}
+html.bonds-os-preview .bos-phone-speaker {width:62px; height:5px; border-radius:5px; background:#050a0d; box-shadow:0 1px #697c8555;}
+html.bonds-os-preview .bos-phone-camera {position:absolute; right:38px; width:8px; height:8px; border:2px solid #394d59; background:#07121a; border-radius:50%;}
+html.bonds-os-preview .bos-phone-screen {display:flex; flex:1; flex-direction:column; min-height:0; padding:20px 15px 10px; border:1px solid #41636e; background:radial-gradient(ellipse at top right,#1c455366,transparent 65%),#081820; overflow:hidden;}
+html.bonds-os-preview .bos-phone-scroll {flex:1; min-height:0; overflow-y:auto; overflow-x:hidden; overscroll-behavior:contain; scrollbar-width:thin; scrollbar-color:#427b8c #0b202b; padding:0 8px 8px 3px; margin:0 -5px 0 -3px;}
+html.bonds-os-preview .bos-phone-scroll:focus-visible {outline:2px solid var(--bos-orange); outline-offset:-2px;}
+html.bonds-os-preview .bos-phone-home {flex:0 0 38px; position:relative;}
+html.bonds-os-preview .bos-phone-home::before {content:''; position:absolute; width:48px; height:13px; top:10px; left:50%; transform:translateX(-50%); border:1px solid #687984; border-radius:5px;}
+html.bonds-os-preview .bos-refresh {min-height:36px; border-radius:5px;}
+html.bonds-os-preview .bos-stream-topic {font-size:13px;}
+html.bonds-os-preview .bos-stream-number {color:#779da9;}
+html.bonds-os-preview .user_login_form {display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px; padding:24px; border-radius:8px; font-size:12px;}
+html.bonds-os-preview .user_login_form :is(input[type=text],input[type=password]) {background:#071720; color:var(--bos-text); border:1px solid #456b7b; padding:8px; border-radius:4px; max-width:100%;}
+html.bonds-os-preview .user_login_form input[type=submit] {padding:9px 16px; background:#173c4b; color:#d4eaf2; border:1px solid #456b7b; border-radius:4px; cursor:pointer;}
+@media(max-width:1100px) {
+ html.bonds-os-preview .bos-home-intro {gap:28px;}
+ html.bonds-os-preview #page-body [data-bos-category] li.row[data-bos-node] {padding:26px 22px 0;}
+ html.bonds-os-preview #page-body [data-bos-node] dd.lastpost {margin-left:-22px; margin-right:-22px; padding:15px 22px;}
+ html.bonds-os-preview .bos-community-panel {padding:24px; gap:24px;}
+ html.bonds-os-preview #estatistics .contagiens {grid-template-columns:repeat(2,minmax(0,1fr));}
+ html.bonds-os-preview #estatistics .novinho {grid-column:1/-1; min-height:100px;}
+}
+@media(max-width:850px) {
+ html.bonds-os-preview .bos-home-intro {grid-template-columns:1fr; gap:26px; padding-top:22px;}
+ html.bonds-os-preview .bos-home-intro h1 {max-width:24ch;}
+ html.bonds-os-preview .bos-community-panel {grid-template-columns:1fr;}
+ html.bonds-os-preview .bos-community-panel .bos-activity {margin:4px auto 0;}
+ html.bonds-os-preview .bos-category-desc {display:none;}
+ html.bonds-os-preview [data-bos-node].bos-has-partner .dterm {padding-right:25%!important;}
+ html.bonds-os-preview .bos-partner-window {width:35%; opacity:.8;}
+}
+@media(max-width:650px) {
+ html.bonds-os-preview #page-body .forabg[data-bos-category] {padding:0; margin-bottom:36px;}
+ html.bonds-os-preview #page-body [data-bos-category] li.header {gap:12px;}
+ html.bonds-os-preview #page-body [data-bos-category] .header h2 {font-size:23px;}
+ html.bonds-os-preview .bos-category-nav a {padding:14px 12px; font-size:10px;}
+ html.bonds-os-preview .bos-category-nav a::after {right:10px; top:12px;}
+ html.bonds-os-preview .bos-jump-description {font-size:10px; max-width:16ch;}
+ html.bonds-os-preview #page-body [data-bos-category] li.row[data-bos-node] {padding:24px 20px 0; min-height:320px;}
+ html.bonds-os-preview #page-body [data-bos-node] dd.lastpost {margin-left:-20px; margin-right:-20px; padding:15px 20px;}
+ html.bonds-os-preview .bos-partner-window {width:40%; opacity:.9;}
+ html.bonds-os-preview [data-bos-node].bos-has-partner .dterm {padding-right:30%!important;}
+ html.bonds-os-preview .bos-partner-caption {font-size:7px; right:12px; max-width:80px;}
+ html.bonds-os-preview #page-body [data-bos-category] li.row[data-bos-kind="human"],html.bonds-os-preview #page-body [data-bos-category] li.row[data-bos-kind="digital"] {padding-top:120px;}
+ html.bonds-os-preview .bos-community-panel {padding:22px 16px; gap:22px; border-radius:10px 24px 10px 10px;}
+ html.bonds-os-preview #estatistics :is(.postinho,.doidos,.novinho) {padding:16px 12px; min-height:110px;}
+ html.bonds-os-preview #estatistics :is(.agora,.horas72) {padding:18px 14px;}
+ html.bonds-os-preview #estatistics .bos-stat-label {font-size:9px;}
+ html.bonds-os-preview #estatistics .bos-stat-value {font-size:30px;}
+ html.bonds-os-preview .bos-community-panel .bos-activity {width:100%; max-width:310px;}
+ html.bonds-os-preview .bos-node-description {font-size:13px;}
+ html.bonds-os-preview [data-bos-node="1"] .dterm {padding-right:15%!important;}
+ html.bonds-os-preview [data-bos-kind="social"] .dterm {padding-right:18%!important;}
+ html.bonds-os-preview .user_login_form {align-items:flex-start; flex-direction:column;}
+}
+@media(prefers-reduced-motion:reduce) {
+ html.bonds-os-preview .bos-category-nav a {transition:none;}
+}
+
+/* 14 FORUM-WIDE FOUNDATION — interface only; authored message templates keep their own design. */
+html.bonds-os-preview[data-bos-page]:not([data-bos-page="home"]) #page-header .bos-hero {height:clamp(170px,21vw,280px);}
+html.bonds-os-preview[data-bos-page]:not([data-bos-page="home"]) #page-header .bos-hero-art {height:100%; object-fit:cover; object-position:50% 43%;}
+html.bonds-os-preview[data-bos-page]:not([data-bos-page="home"]) #page-header .bos-brand {width:clamp(180px,25vw,330px); bottom:17%;}
+html.bonds-os-preview[data-bos-page]:not([data-bos-page="home"]) #page-body {margin-top:32px;}
+html.bonds-os-preview #content-container,html.bonds-os-preview #content-container :is(#container,#content,#main),html.bonds-os-preview #main-content {min-width:0; width:100%; float:none; margin:0;}
+html.bonds-os-preview #main-content {box-sizing:border-box;}
+html.bonds-os-preview .bos-page-heading {position:relative; margin:0 0 30px; padding:24px 0 26px; border-bottom:1px solid var(--bos-line);}
+html.bonds-os-preview #page-body .bos-page-heading .bos-page-title {position:static; inset:auto; width:auto; margin:12px 0 18px; padding:0; border:0; background:none; font:600 clamp(28px,3.3vw,44px)/1.18 'Exo 2','Segoe UI',sans-serif; letter-spacing:-.035em; text-transform:none; color:var(--bos-text); -webkit-text-fill-color:currentColor; overflow-wrap:anywhere;}
+html.bonds-os-preview .bos-page-title::after {content:none!important;}
+html.bonds-os-preview .bos-page-title :is(a,span,strong) {font:inherit; color:inherit!important; background:none; -webkit-text-fill-color:currentColor;}
+html.bonds-os-preview #page-body .bos-breadcrumbs {display:flex; align-items:center; flex-wrap:wrap; gap:6px; width:auto; position:static; margin:0; padding:0; border:0; background:none; font:12px/1.6 'Segoe UI',sans-serif; color:#718d9c; text-transform:none;}
+html.bonds-os-preview .bos-breadcrumbs::before,html.bonds-os-preview .bos-breadcrumbs::after {content:none!important;}
+html.bonds-os-preview .bos-breadcrumbs a,html.bonds-os-preview .bos-back-home {color:#9dbfce; background:none; font:12px/1.6 'Segoe UI',sans-serif; -webkit-text-fill-color:currentColor; text-transform:none;}
+html.bonds-os-preview .bos-breadcrumbs a::after {content:none;}
+html.bonds-os-preview :is(.bos-page-heading,.bos-table-scroll,[data-bos-post],#page-body form) :is(a,button,input,select,textarea):focus-visible,html.bonds-os-preview .bos-table-scroll:focus-visible {outline:2px solid var(--bos-orange); outline-offset:3px;}
+html.bonds-os-preview #page-body :is(.topic-actions,.pagination) {position:static; float:none; width:auto; height:auto; min-height:0; margin:16px 0; padding:0; color:var(--bos-muted); font:12px/1.7 'Segoe UI',sans-serif; background:none; border:0;}
+html.bonds-os-preview #page-body .topic-actions {display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between;}
+html.bonds-os-preview #page-body .pagination :is(a,strong) {display:inline-flex; justify-content:center; align-items:center; min-width:30px; min-height:30px; margin:2px; padding:3px 8px; border:1px solid #385b6b; border-radius:5px; background:#102a36; color:#cce0e9;}
+html.bonds-os-preview #page-body .pagination strong {border-color:#74bdce; background:#204554; color:#effbff;}
+html.bonds-os-preview #page-body :is(.topic-actions,.buttons) a {border-radius:5px; color:#bcd9e5;}
+
+/* 15 TOPIC LISTS — status, subject, counts and latest reply remain native nodes. */
+html.bonds-os-preview #page-body .forumbg[data-bos-topics] {width:100%; box-sizing:border-box; margin:24px 0; padding:0; background:#0b202b; border:1px solid #36586a77; border-radius:8px 22px 8px 8px; box-shadow:none; text-transform:none!important; overflow:hidden;}
+html.bonds-os-preview [data-bos-topics] .corners-top,html.bonds-os-preview [data-bos-topics] .corners-bottom {display:none;}
+html.bonds-os-preview [data-bos-topics] ul.topiclist {float:none; width:100%; margin:0; padding:0; background:none;}
+html.bonds-os-preview [data-bos-topics] li.header {height:auto; min-height:0; margin:0; padding:16px 22px; border:0; background:#142e3b!important; color:#bcd6e2;}
+html.bonds-os-preview [data-bos-topics] li.header dl.icon {margin:0; padding:0; background:none!important;}
+html.bonds-os-preview [data-bos-topics] li.header :is(dt,dd) {float:none; width:auto; padding:0!important; margin:0; color:#bcd6e2; font:11px/1.5 var(--bos-mono); text-transform:uppercase; letter-spacing:.08em;}
+html.bonds-os-preview #page-body [data-bos-topics] li.row[data-bos-topic-row] {box-sizing:border-box; width:100%; min-height:0; height:auto; margin:0; padding:22px; border:0; border-top:1px solid #36586a66; border-radius:0; background:none!important; box-shadow:none;}
+html.bonds-os-preview [data-bos-topic-row] dl.icon {display:grid; grid-template-columns:minmax(0,1fr) 65px 65px 220px; align-items:center; gap:16px; margin:0; padding:0; background:none!important; min-height:66px;}
+html.bonds-os-preview [data-bos-topic-row] dl.icon>dd {float:none; position:static; inset:auto; width:auto; height:auto; padding:0; margin:0; border:0; background:none; min-width:0; color:#a2bdca; font:12px/1.6 'Segoe UI',sans-serif;}
+html.bonds-os-preview [data-bos-topic-row] .topic-title-container {display:block;}
+html.bonds-os-preview #page-body [data-bos-topic-row] h2.topic-title {display:block; margin:0 0 7px; border:0; padding:0; background:none; text-transform:none;}
+html.bonds-os-preview #page-body [data-bos-topic-row] a.topictitle {display:inline; position:static; font:600 18px/1.4 'Exo 2','Segoe UI',sans-serif; color:#d5e8f1; background:none; -webkit-text-fill-color:currentColor; overflow-wrap:anywhere; text-transform:none;}
+html.bonds-os-preview [data-bos-topic-row] :is(.span-tab,.span-tab strong,.span-tab span) {font:11px/1.6 'Segoe UI',sans-serif; color:#9eb9c8!important; text-transform:none; background:none; -webkit-text-fill-color:currentColor;}
+html.bonds-os-preview [data-bos-topic-row] :is(dd.posts,dd.views) {display:flex; flex-direction:column; align-items:center; justify-content:center; font:14px/1.5 var(--bos-mono); color:#bce0e9;}
+html.bonds-os-preview [data-bos-topic-row] dd::before {content:none!important;}
+html.bonds-os-preview [data-bos-topic-row] dfn {display:block; position:static; width:auto; height:auto; color:#92afbd; font:9px/1.6 var(--bos-mono); text-transform:uppercase; visibility:visible;}
+html.bonds-os-preview [data-bos-topic-row] dd.lastpost {display:flex; align-items:center; gap:12px; padding-left:18px!important; border-left:1px solid var(--bos-line)!important;}
+html.bonds-os-preview [data-bos-topic-row] .lastpost-avatar {position:static; float:none; display:block; padding:0; flex:0 0 36px;}
+html.bonds-os-preview [data-bos-topic-row] .lastpost-avatar img {position:static; width:36px; height:36px; max-width:36px; max-height:36px; object-fit:cover; border:1px solid #416777; border-radius:9px;}
+html.bonds-os-preview [data-bos-topic-row] .last-info {position:static; float:none!important; min-width:0; width:auto; padding:0; margin:0; background:none; color:#a2beca; font:11px/1.6 'Segoe UI',sans-serif; overflow-wrap:anywhere;}
+html.bonds-os-preview [data-bos-topic-row] .last-info :is(span,strong,a) {font-size:inherit; color:inherit!important; text-transform:none;}
+html.bonds-os-preview .bos-topic-state {display:inline-block; margin:0 0 7px; padding:2px 6px; border:1px solid #a37a4455; border-radius:3px; background:#bd8b3020; color:#e5bf7d; font:8px/1.6 var(--bos-mono); text-transform:uppercase; letter-spacing:.08em;}
+html.bonds-os-preview [data-bos-topic-row]:hover {background:#112b38!important;}
+
+/* 16 MESSAGES — author rail and reading surface, without rewriting authored HTML. */
+html.bonds-os-preview [data-bos-post] {box-sizing:border-box; width:100%; max-width:1380px; margin:0 auto 28px; padding:0; border:1px solid #3a5c6e77; border-radius:10px 24px 10px 10px; background:#0a1c27; box-shadow:0 12px 28px #0002; overflow:hidden; scroll-margin-top:20px;}
+html.bonds-os-preview [data-bos-post]>.inner {display:grid; grid-template-columns:210px minmax(0,1fr); width:100%; padding:0; margin:0;}
+html.bonds-os-preview [data-bos-post]>.inner>.corners-top,html.bonds-os-preview [data-bos-post]>.inner>.corners-bottom,html.bonds-os-preview [data-bos-post]>.inner>.clear {display:none;}
+html.bonds-os-preview [data-bos-post] .postprofile {box-sizing:border-box; position:relative; inset:auto; grid-column:1; float:none; display:flex; flex-direction:column; align-items:stretch; justify-content:flex-start; width:100%; height:auto; min-height:0; margin:0; padding:24px 20px; border:0; border-right:1px solid #3a5c6e66; border-radius:0; background:linear-gradient(165deg,#173643,#0b202b 280px)!important; z-index:1;}
+html.bonds-os-preview [data-bos-post] .postprofile :is(dl,dt,dd) {position:static; float:none; width:auto; max-width:100%; height:auto; margin:0; padding:0; border:0; line-height:1.6;}
+html.bonds-os-preview [data-bos-post] .postprofile dt {display:flex; flex-direction:column; align-items:center; gap:12px; text-align:center;}
+html.bonds-os-preview [data-bos-post] .postprofile dt>br {display:none;}
+html.bonds-os-preview [data-bos-post] .postprofile dt img[loading],html.bonds-os-preview [data-bos-post] .postprofile dt>img {display:block; position:static; inset:auto; width:120px; height:150px; max-width:100%; max-height:150px; margin:0 auto; object-fit:cover; border:1px solid #5b8795; border-radius:8px 20px 8px 8px;}
+html.bonds-os-preview [data-bos-post] .postprofile dt :is(strong,span,a) {position:static!important; inset:auto!important; width:auto!important; max-width:100%; margin:0!important; padding:0; font:600 18px/1.35 'Exo 2','Segoe UI',sans-serif!important; color:#d9edf5!important; text-transform:none; background:none; -webkit-text-fill-color:currentColor; overflow-wrap:anywhere;}
+html.bonds-os-preview [data-bos-post] .postprofile dd {color:#a6c0cc; font:11px/1.7 'Segoe UI',sans-serif;}
+html.bonds-os-preview [data-bos-post] .postprofile dd.digivice {position:static; inset:auto; width:auto; height:auto; margin:16px 0 0; text-align:center;}
+html.bonds-os-preview [data-bos-post] .postprofile dd.digivice img {width:28px; height:28px; object-fit:contain;}
+html.bonds-os-preview [data-bos-post] .postprofile>a:has(.author) {position:static; display:block; width:auto; margin:18px 0 0!important; padding:12px 0 0; border-top:1px solid var(--bos-line); text-align:center; color:#96b6c5; text-transform:none;}
+html.bonds-os-preview [data-bos-post] .postprofile .author {margin:0; padding:0; font:10px/1.7 var(--bos-mono); color:#96b6c5;}
+html.bonds-os-preview [data-bos-post] .profile-icons {position:static!important; float:none; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; width:auto; height:auto; gap:6px; margin:14px 0 0!important; padding:0;}
+html.bonds-os-preview [data-bos-post] .profile-icons li:has(a) {display:block; margin:0;}
+html.bonds-os-preview [data-bos-post] .postbody {box-sizing:border-box; grid-column:2; float:none; clear:none; position:relative; width:100%; min-width:0; margin:0!important; padding:0 30px 28px; border:0; border-radius:0; background:#0b202b; box-shadow:none; color:#cddfe7; z-index:0;}
+html.bonds-os-preview .bos-post-tools {display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; padding:18px 0; margin-bottom:24px; border-bottom:1px solid #385b6b66;}
+html.bonds-os-preview .bos-post-tools a {color:#9cbdcc; font:10px/1.5 var(--bos-mono);}
+html.bonds-os-preview [data-bos-post] .postbody>.content {box-sizing:border-box; width:100%; max-width:100%; overflow-x:auto; overscroll-behavior-x:contain; font:15px/1.85 'Segoe UI',sans-serif; color:#d2e2e9; scrollbar-width:thin; scrollbar-color:#426f82 #0b202b;}
+html.bonds-os-preview [data-bos-post] .postbody>.content img {max-width:100%; height:auto;}
+html.bonds-os-preview [data-bos-post] .postbody>.signature_div {max-width:100%; overflow-x:auto; margin-top:28px; padding-top:18px; border-top:1px solid var(--bos-line);}
+html.bonds-os-preview [data-bos-post] .edicao {margin-top:16px; color:#8eacba; font:10px/1.6 'Segoe UI',sans-serif; text-align:right;}
+html.bonds-os-preview [data-bos-post] .postbody>.content>blockquote,html.bonds-os-preview [data-bos-post] .postbody>.content>dl.codebox {box-sizing:border-box; width:100%; max-width:100%; height:auto; margin:20px 0; padding:18px 22px; border:1px solid #3d6576; border-left:3px solid #6cb2c5; border-radius:6px; background:#061722; color:#c4d9e3; box-shadow:none;}
+html.bonds-os-preview [data-bos-post] .postbody>.content>dl.codebox dd {overflow:auto; max-height:440px;}
+
+/* 17 PANELS, PROFILES AND TABLES */
+html.bonds-os-preview[data-bos-page]:not([data-bos-page="home"]) #page-body .panel {box-sizing:border-box; width:100%; margin:20px 0; padding:24px; border:1px solid #36586a77; border-radius:8px 22px 8px 8px; background:#0b202b; box-shadow:none; color:#bdd3df;}
+html.bonds-os-preview #page-body .panel>.inner {padding:0; margin:0;}
+html.bonds-os-preview #page-body .panel>.inner>.corners-top,html.bonds-os-preview #page-body .panel>.inner>.corners-bottom {display:none;}
+html.bonds-os-preview #page-body .panel :is(h2,h3,.h3) {color:#cce2ed; font:600 18px/1.4 'Exo 2','Segoe UI',sans-serif; background:none; -webkit-text-fill-color:currentColor; border-bottom:1px solid var(--bos-line); padding-bottom:12px; margin:0 0 18px; text-transform:none;}
+html.bonds-os-preview #page-body .panel :is(p,label,dt,dd) {color:#b7cdd9;}
+html.bonds-os-preview #page-body [data-bos-profile]>.inner {display:grid; grid-template-columns:1fr 1fr; gap:28px;}
+html.bonds-os-preview [data-bos-profile] :is(.column1,.column2) {float:none; min-width:0; width:100%; margin:0; padding:0;}
+html.bonds-os-preview #page-body [data-bos-profile] dl.details {box-sizing:border-box; float:none; display:grid; grid-template-columns:120px minmax(0,1fr); gap:12px 18px; width:100%!important; margin:0 0 18px!important; padding:14px; border:1px solid #36586a55; border-radius:6px; background:#081b25;}
+html.bonds-os-preview [data-bos-profile] dl.details :is(dt,dd) {float:none; width:auto; min-width:0; margin:0; padding:0; font:13px/1.7 'Segoe UI',sans-serif; overflow-wrap:anywhere;}
+html.bonds-os-preview .bos-profile-avatar {display:block; width:140px; height:170px; max-width:100%!important; max-height:170px!important; object-fit:cover; border:1px solid #5e8c9f; border-radius:8px 22px 8px 8px;}
+html.bonds-os-preview [data-bos-profile] .field_uneditable img,html.bonds-os-preview [data-bos-profile] dt img {max-width:32px; max-height:32px; vertical-align:middle;}
+html.bonds-os-preview #page-body :is(#cp-main,#cp-menu,#profile-advanced-layout,#profile-advanced-left,#profile-advanced-right) {box-sizing:border-box; min-width:0; max-width:100%; margin:0; padding:0;}
+html.bonds-os-preview .bos-table-scroll {width:100%; max-width:100%; overflow-x:auto; overscroll-behavior-x:contain; margin:20px 0; border:1px solid #36586a88; border-radius:8px; scrollbar-width:thin; scrollbar-color:#426f82 #0b202b;}
+html.bonds-os-preview #page-body table[data-bos-table] {width:100%; min-width:620px; margin:0; padding:0; border:0; border-collapse:collapse; background:#0b202b; color:#c3d9e4; font:13px/1.6 'Segoe UI',sans-serif; text-transform:none;}
+html.bonds-os-preview #page-body table[data-bos-table] :is(th,td) {position:static; padding:14px 16px; border:0; border-bottom:1px solid #36586a66; background:none; color:#c3d9e4; text-align:left; vertical-align:middle;}
+html.bonds-os-preview #page-body table[data-bos-table] th {background:#142f3c; font:10px/1.5 var(--bos-mono); color:#a6c4d3; text-transform:uppercase;}
+html.bonds-os-preview #page-body table[data-bos-table] tr:hover td {background:#102b38;}
+html.bonds-os-preview table[data-bos-table] :is(a,strong,span) {color:inherit;}
+html.bonds-os-preview table[data-bos-table] .avatar img {width:42px; height:42px; max-width:42px; max-height:42px; object-fit:cover; border-radius:9px;}
+html.bonds-os-preview #page-body :is(#tabs,#tabs ul,.tabs,.tabs ul) {display:flex; flex-wrap:wrap; float:none; width:auto; gap:6px; background:none; margin:12px 0; padding:0; border:0;}
+html.bonds-os-preview #page-body #tabs li {float:none; margin:0; padding:0; background:none;}
+html.bonds-os-preview #page-body #tabs a {display:block; padding:10px 14px; background:#102c39; border:1px solid #365c6e; border-radius:5px; color:#c3dce8;}
+html.bonds-os-preview #page-body #tabs .activetab a {border-color:#79c2d4; background:#204756;}
+
+/* 18 FORMS / EDITOR / PRIVATE MESSAGES — preserve submission, names and native editor instances. */
+html.bonds-os-preview #page-body :is(input,select,textarea,button) {box-sizing:border-box; max-width:100%; font-family:'Segoe UI',sans-serif; accent-color:#64c8dd;}
+html.bonds-os-preview #page-body :is(input[type=text],input[type=password],input[type=email],input[type=number],input[type=search],select,textarea.inputbox,textarea[name=message]) {min-height:38px; padding:9px 12px; border:1px solid #426a7e; border-radius:5px; background:#071822; color:#d6e7ef; font-size:13px; cursor:text;}
+html.bonds-os-preview #page-body select {cursor:pointer;}
+html.bonds-os-preview #page-body label {color:#bcd4df; font-size:13px;}
+html.bonds-os-preview #page-body :is(a.button1,a.button2,input.button1,input.button2,button.button2,input[type=submit],input[type=reset]) {display:inline-flex; align-items:center; justify-content:center; min-height:38px; padding:9px 16px!important; border:1px solid #507b8e; border-radius:5px; background:#183c4c; color:#d9edf5!important; font:600 12px/1.5 'Segoe UI',sans-serif; text-shadow:none; cursor:pointer;}
+html.bonds-os-preview #page-body :is(input.button1,input[type=submit]) {border-color:#6aadb9; background:#225260;}
+html.bonds-os-preview #page-body :is(fieldset.fields1,fieldset.fields2) {box-sizing:border-box; width:100%; max-width:100%; border:0; background:none; color:#bdd5e0;}
+html.bonds-os-preview #page-body :is(fieldset.fields1,fieldset.fields2) dl {box-sizing:border-box; display:grid; grid-template-columns:180px minmax(0,1fr); gap:12px; width:100%!important; margin:0 0 18px!important; padding:0!important; border:0; border-radius:0; background:none;}
+html.bonds-os-preview #page-body :is(fieldset.fields1,fieldset.fields2) dl :is(dt,dd) {float:none; width:auto; min-width:0; margin:0!important; padding:0!important; color:#bed5df; font-size:13px;}
+html.bonds-os-preview #page-body :is(fieldset.fields1,fieldset.fields2) dd label {white-space:normal;}
+html.bonds-os-preview #page-body :is(fieldset.fields1,fieldset.fields2) .inputbox {width:100%;}
+html.bonds-os-preview #page-body fieldset.submit-buttons {display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin:24px 0 10px;}
+html.bonds-os-preview #page-body :is(#message-box,#textarea_content,#textarea_content table) {box-sizing:border-box; width:100%!important; min-width:0; max-width:100%; margin:0!important; float:none;}
+html.bonds-os-preview #page-body #message-box textarea {width:100%; min-height:300px; resize:vertical;}
+html.bonds-os-preview #page-body .sceditor-container {box-sizing:border-box; width:100%!important; max-width:100%; min-width:0; background:#e8eef1!important; border:1px solid #517589!important; border-radius:6px; overflow:hidden;}
+html.bonds-os-preview #page-body .sceditor-toolbar {box-sizing:border-box; display:flex; flex-wrap:wrap; justify-content:flex-start; width:100%; border:0; border-bottom:1px solid #a1b5c0; background:#cddbe2!important;}
+html.bonds-os-preview #page-body .sceditor-group {background:#e2e9ed; border-color:#b4c5ce; box-shadow:none;}
+html.bonds-os-preview #page-body .sceditor-container :is(iframe,textarea) {box-sizing:border-box; max-width:100%; background:#f5f7f7!important; color:#192c38;}
+html.bonds-os-preview #page-body #smiley-box {box-sizing:border-box; max-width:100%; background:#102a36; border:1px solid var(--bos-line); border-radius:6px;}
+html.bonds-os-preview #page-body .rolada {box-sizing:border-box; width:min(600px,100%); border:1px solid #446c7c; background:#102a36; box-shadow:none;}
+html.bonds-os-preview #page-body :is(.quickmod,.jumpbox,.vf_jumpbox) {float:none; width:auto; max-width:100%; margin:18px 0; color:#9cb9c8;}
+html.bonds-os-preview #search_menu form[action="/search"] {box-sizing:border-box; width:min(600px,calc(100% - 28px)); height:auto; margin:12vh auto 0; padding:28px; border:1px solid #517789; border-radius:12px; background:#0b202b; color:#c2dce7;}
+html.bonds-os-preview #search_menu .title-overview {margin:0 0 22px; color:#d6e9f1; font-size:25px; background:none; -webkit-text-fill-color:currentColor;}
+html.bonds-os-preview #search_menu .inputbox {background:#071822; color:#d6e7ef; border:1px solid #426a7e; padding:9px;}
+html.bonds-os-preview #page-body :is(dl.faq,dl.faq dd) {color:#bcd3df; font:14px/1.8 'Segoe UI',sans-serif;}
+html.bonds-os-preview #page-body dl.faq dt {color:#d6e9f2; font:600 17px/1.5 'Exo 2',sans-serif; margin:20px 0 8px;}
+
+/* 19 INTERNAL RESPONSIVENESS */
+@media(max-width:1050px) {
+ html.bonds-os-preview [data-bos-topic-row] dl.icon {grid-template-columns:minmax(0,1fr) 50px 50px 180px; gap:12px;}
+ html.bonds-os-preview [data-bos-post]>.inner {grid-template-columns:170px minmax(0,1fr);}
+ html.bonds-os-preview [data-bos-post] .postprofile {padding:22px 16px;}
+ html.bonds-os-preview [data-bos-post] .postbody {padding:0 22px 24px;}
+}
+@media(max-width:760px) {
+ html.bonds-os-preview [data-bos-topic-row] dl.icon {grid-template-columns:1fr 1fr; gap:12px;}
+ html.bonds-os-preview [data-bos-topic-row] dl.icon>dd.dterm {grid-column:1/-1;}
+ html.bonds-os-preview [data-bos-topic-row] :is(dd.posts,dd.views) {flex-direction:row; gap:6px; justify-content:flex-start; align-items:baseline;}
+ html.bonds-os-preview [data-bos-topic-row] dd.lastpost {grid-column:1/-1; padding:12px 0 0!important; border-left:0!important; border-top:1px solid var(--bos-line)!important;}
+ html.bonds-os-preview [data-bos-post]>.inner {grid-template-columns:minmax(0,1fr);}
+ html.bonds-os-preview [data-bos-post] .postprofile {grid-column:1; display:grid; grid-template-columns:1fr; padding:18px; border-right:0; border-bottom:1px solid var(--bos-line);}
+ html.bonds-os-preview [data-bos-post] .postprofile dt {flex-direction:row; justify-content:flex-start; text-align:left;}
+ html.bonds-os-preview [data-bos-post] .postprofile dt img[loading],html.bonds-os-preview [data-bos-post] .postprofile dt>img {width:64px; height:72px; max-height:72px; margin:0; flex:0 0 64px; border-radius:8px 15px 8px 8px;}
+ html.bonds-os-preview [data-bos-post] .postprofile dt :is(strong,span,a) {font-size:16px!important;}
+ html.bonds-os-preview [data-bos-post] .postprofile>a:has(.author) {text-align:left; margin-top:12px!important; padding-top:10px;}
+ html.bonds-os-preview [data-bos-post] .postprofile dd.digivice {text-align:left; margin:8px 0 0;}
+ html.bonds-os-preview [data-bos-post] .postbody {grid-column:1; padding:0 18px 22px;}
+ html.bonds-os-preview #page-body [data-bos-profile]>.inner {grid-template-columns:minmax(0,1fr); gap:20px;}
+ html.bonds-os-preview #page-body :is(fieldset.fields1,fieldset.fields2) dl {grid-template-columns:minmax(0,1fr); gap:8px;}
+}
+@media(max-width:480px) {
+ html.bonds-os-preview #page-body [data-bos-topics] li.row[data-bos-topic-row] {padding:18px 16px;}
+ html.bonds-os-preview #page-body [data-bos-topic-row] a.topictitle {font-size:17px;}
+ html.bonds-os-preview[data-bos-page]:not([data-bos-page="home"]) #page-body .panel {padding:20px 16px;}
+ html.bonds-os-preview #page-body [data-bos-profile] dl.details {grid-template-columns:minmax(0,1fr); gap:6px; padding:12px;}
+ html.bonds-os-preview .bos-page-heading {padding-top:12px; margin-bottom:22px;}
+}
+
+/* Native fixed heights and contrast of legacy authored paper panels. */
+html.bonds-os-preview #page-body .bos-page-heading .bos-page-title {height:auto; min-height:0; display:block;}
+html.bonds-os-preview [data-bos-post]>.inner>div[id]:not(.postprofile):not(.postbody):not(.clear) {position:absolute; width:1px; height:1px; pointer-events:none;}
+html.bonds-os-preview [data-bos-post] .content [data-bos-contrast="light"] {color:#273744;}
+html.bonds-os-preview [data-bos-post] .content [data-bos-contrast="dark"] {color:#d2e2e9;}
+html.bonds-os-preview [data-bos-post] .content [data-bos-contrast="light"] a:not([style*="color"]) {color:#75511c;}
+html.bonds-os-preview [data-bos-topic-row] .span-tab {display:block; width:auto; margin:5px 0 0; padding:0; background:none;}
+html.bonds-os-preview [data-bos-profile] .column1 {border-right:0;}
+html.bonds-os-preview #page-body .forumbg {box-sizing:border-box;width:100%;max-width:100%;padding:0;background:#0b202b;border:1px solid #36586a77;border-radius:8px 22px 8px 8px;box-shadow:none;text-transform:none;}
+html.bonds-os-preview #page-body .forumbg>.inner {box-sizing:border-box;width:100%;max-width:100%;padding:0;margin:0;}
+html.bonds-os-preview #page-body .forumbg>.inner>.corners-top,html.bonds-os-preview #page-body .forumbg>.inner>.corners-bottom {display:none;}
+html.bonds-os-preview #page-body .forumbg>.inner>.bos-table-scroll {border:0;margin:0;}
+html.bonds-os-preview #page-body fieldset {min-width:0;}
+@media(max-width:760px) {
+html.bonds-os-preview [data-bos-post] .postprofile .profile-icons:empty {display:none;}
+html.bonds-os-preview [data-bos-post] .postprofile dd.digivice {margin-top:10px;}
+html.bonds-os-preview #page-body .panel fieldset p {display:flex;flex-wrap:wrap;align-items:center;gap:8px;}
+}
+html.bonds-os-preview #page-body [data-bos-topics] ul.topiclist {display:block;min-width:0;}
+html.bonds-os-preview #page-body [data-bos-topics] li.row[data-bos-topic-row] {min-width:0;}
+html.bonds-os-preview [data-bos-topic-row] .span-tab {position:static;inset:auto;transform:none;}
+html.bonds-os-preview #page-body .onlaine {box-sizing:border-box;position:static;width:100%;max-width:100%;height:auto;min-height:0;margin:18px 0;padding:14px 18px;background:#0b202b;border:1px solid #36586a77;border-radius:6px;color:#9ebac8;font:11px/1.7 'Segoe UI',sans-serif;text-transform:none;}
+html.bonds-os-preview #page-body [data-bos-topic-row] .span-tab {position:static!important;inset:auto!important;transform:none!important;display:block!important;width:auto!important;height:auto!important;margin:5px 0 0!important;padding:0!important;background:none!important;line-height:1.6!important;}
+html.bonds-os-preview[data-bos-page="search"] #page-body fieldset dl {display:grid;grid-template-columns:180px minmax(0,1fr);gap:10px 14px;}
+html.bonds-os-preview[data-bos-page="search"] #page-body fieldset dl :is(dt,dd) {float:none;width:auto;min-width:0;margin:0;}
+html.bonds-os-preview[data-bos-page="search"] #page-body fieldset dl dd {grid-column:2;}
+html.bonds-os-preview[data-bos-page="search"] #page-body fieldset label {white-space:normal;}
+@media(max-width:760px) {
+html.bonds-os-preview[data-bos-page="search"] #page-body fieldset dl {grid-template-columns:minmax(0,1fr);}
+html.bonds-os-preview[data-bos-page="search"] #page-body fieldset dl dd {grid-column:1;}
+}
+html.bonds-os-preview #page-body .forumbg ul.topiclist {display:block;box-sizing:border-box;width:100%;min-width:0;margin:0;padding:0;}
+html.bonds-os-preview #page-body .forumbg li.row {box-sizing:border-box;width:100%;min-width:0;max-width:100%;height:auto;background:#0b202b;color:#bed5df;}
+html.bonds-os-preview #page-body .forumbg li.row:not([data-bos-topic-row]) {padding:20px;}
+html.bonds-os-preview #page-body .forumbg li.row:not([data-bos-topic-row]) dl {width:100%;min-width:0;margin:0;}
+html.bonds-os-preview #page-body [data-bos-profile] :is(h2,h3,.h3) :is(span,strong,a) {font:inherit;color:inherit!important;}
+/* 20 / v10 — chip cards across topic lists, composed author identity and modern message surface. */
+html.bonds-os-preview #page-body .forumbg[data-bos-topics] {border:0;background:none;border-radius:0;overflow:visible;margin:24px 0 32px;}
+html.bonds-os-preview #page-body .forumbg[data-bos-topics]>.inner {background:none;}
+html.bonds-os-preview #page-body .forumbg[data-bos-topics] ul.topiclist:has(li.header) {margin-bottom:14px;}
+html.bonds-os-preview #page-body .forumbg[data-bos-topics] li.header {padding:12px 0;background:none!important;border-bottom:1px solid var(--bos-line);border-radius:0;}
+html.bonds-os-preview #page-body .forumbg[data-bos-topics] ul.topiclist.bg_none {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:stretch;}
+html.bonds-os-preview #page-body .forumbg[data-bos-topics] li.row[data-bos-topic-row] {position:relative;isolation:isolate;display:block;min-width:0;min-height:190px;height:auto;margin:0;padding:24px;border:1px solid #42677888;border-top:2px solid #6eb2be88;border-radius:7px 23px 7px 7px;background:linear-gradient(135deg,#143441,#0a1f2b)!important;box-shadow:0 12px 24px #0002;overflow:hidden;}
+html.bonds-os-preview [data-bos-topic-row]::after {content:'';position:absolute;z-index:-1;inset:0;background:url('./assets/card-circuit.svg') center/100% 100% no-repeat;opacity:.25;pointer-events:none;}
+html.bonds-os-preview [data-bos-topic-row] dl.icon {grid-template-columns:1fr 1fr;gap:14px;min-width:0;}
+html.bonds-os-preview [data-bos-topic-row] dl.icon>dd.dterm {grid-column:1/-1;min-height:76px;}
+html.bonds-os-preview [data-bos-topic-row] :is(dd.posts,dd.views) {flex-direction:row;gap:6px;align-items:baseline;justify-content:flex-start;font-size:12px;}
+html.bonds-os-preview #page-body [data-bos-topic-row] dd.lastpost {grid-column:1/-1;padding:14px 0 0!important;border-left:0!important;border-top:1px solid var(--bos-line)!important;}
+html.bonds-os-preview [data-bos-topic-row] .last-info {line-height:1.6;}
+html.bonds-os-preview #page-body [data-bos-topic-row] a.topictitle {font-size:20px;}
+html.bonds-os-preview [data-bos-post]>.inner {grid-template-columns:294px minmax(0,1fr);}
+html.bonds-os-preview [data-bos-post] .postprofile {display:flex;padding:22px;gap:0;background:linear-gradient(155deg,#183a46,#091d28 480px)!important;}
+html.bonds-os-preview [data-bos-post] .postprofile dt {display:flex;flex-direction:column;align-items:center;gap:16px;}
+html.bonds-os-preview [data-bos-post] .postprofile dt img[loading],html.bonds-os-preview [data-bos-post] .postprofile dt>img {box-sizing:border-box;width:250px!important;height:380px!important;max-width:250px!important;max-height:380px!important;min-width:0;flex:none;margin:0 auto;object-fit:cover;object-position:center;border:1px solid #6999aa;border-radius:8px 24px 8px 8px;box-shadow:0 10px 26px #0004;}
+html.bonds-os-preview [data-bos-post] .postprofile .bos-author-card {box-sizing:border-box;position:relative;width:250px;max-width:100%;padding:18px 14px;border:1px solid #5b819080;border-left:3px solid #89a4ae;border-radius:5px 17px 5px 5px;background:linear-gradient(120deg,#263c46,#102732);text-align:center;box-shadow:inset 0 0 0 4px #071a2533;}
+html.bonds-os-preview [data-bos-post] .postprofile .bos-author-card :is(strong,span,a) {font:600 22px/1.3 'Exo 2','Segoe UI',sans-serif!important;color:#d9e9ef!important;letter-spacing:.015em;}
+html.bonds-os-preview [data-bos-post] .postprofile .bos-author-card .bos-author-role {display:block;margin:10px 0 0!important;font:10px/1.5 var(--bos-mono)!important;text-transform:uppercase;letter-spacing:.18em;color:#9db6c1!important;}
+html.bonds-os-preview [data-bos-post] .postprofile[data-bos-role="narrator"] .bos-author-card {border-color:#b992505c;border-left-color:#e1b867;background:linear-gradient(120deg,#443725,#132a35);}
+html.bonds-os-preview [data-bos-post] .postprofile[data-bos-role="narrator"] .bos-author-card :is(strong,a),html.bonds-os-preview [data-bos-post] .postprofile[data-bos-role="narrator"] .bos-author-role {color:#f0cf8f!important;}
+html.bonds-os-preview [data-bos-post] .postprofile[data-bos-role="player"] .bos-author-card {border-color:#65c8da55;border-left-color:#65c8da;background:linear-gradient(120deg,#173e4f,#102732);}
+html.bonds-os-preview [data-bos-post] .postprofile[data-bos-role="player"] .bos-author-role {color:#82d3e2!important;}
+html.bonds-os-preview [data-bos-post] .postprofile dd:not(.digivice):empty,html.bonds-os-preview [data-bos-post] .postprofile dd:has(>br:only-child) {display:none;}
+html.bonds-os-preview [data-bos-post] .profile-icons:not(:has(a)) {display:none;}
+html.bonds-os-preview .bos-profile-avatar {width:250px!important;height:380px!important;max-width:100%!important;max-height:380px!important;object-fit:cover;}
+/* Message content participates in the new theme, including legacy inline HTML templates. */
+html.bonds-os-preview [data-bos-post] .postbody>.bos-message-content {color:#c6dce7;font:15px/1.9 'Segoe UI',sans-serif;}
+html.bonds-os-preview .bos-message-content :is(table,tbody,tr,td,th) {box-sizing:border-box;max-width:100%!important;color:#c6dce7!important;border-color:#436b7e!important;box-shadow:none!important;border-radius:0!important;}
+html.bonds-os-preview .bos-message-content table {width:100%!important;margin:18px 0!important;padding:18px!important;border-collapse:separate!important;border-spacing:0!important;border:1px solid #42657866!important;border-radius:7px 18px 7px 7px!important;background:#0c2633!important;}
+html.bonds-os-preview .bos-message-content table table {padding:0!important;border:0!important;background:none!important;}
+html.bonds-os-preview .bos-message-content :is(tbody,tr,td) {background:transparent!important;}
+html.bonds-os-preview .bos-message-content [style*="background"],html.bonds-os-preview .bos-message-content [bgcolor] {background:#102e3b!important;color:#c6dce7!important;}
+html.bonds-os-preview .bos-message-content :is(div,span,p,font)[style*="color"] {color:#c6dce7!important;}
+html.bonds-os-preview .bos-message-content :is(h1,h2,h3,h4) {height:auto!important;min-height:0!important;margin:22px 0 12px!important;padding:0 0 12px!important;font-family:'Exo 2','Segoe UI',sans-serif!important;line-height:1.4!important;color:#e3c38b!important;background:none!important;border-bottom:1px solid #4d7384!important;text-transform:none!important;}
+html.bonds-os-preview .bos-message-content :is(td,th)[style*="background"] {padding:12px 16px!important;border-left:3px solid #70bccb!important;}
+html.bonds-os-preview .bos-message-content :is(td,th)[style*="background"] strong {color:#e3c38b!important;}
+html.bonds-os-preview .bos-message-content :is(div,p)[align="justify"] {text-align:left!important;}
+html.bonds-os-preview .bos-message-content a {color:#89d1df!important;text-decoration:underline;text-underline-offset:3px;}
+html.bonds-os-preview .bos-message-content :is(blockquote,dl.codebox) {max-width:100%;background:#071a25!important;border:1px solid #436b7e!important;border-left:3px solid #70bccb!important;color:#c6dce7!important;padding:16px 20px!important;}
+html.bonds-os-preview #estatistics :is(.horas72,.novinho),html.bonds-os-preview [data-bos-page="profile"] #main-content [data-bos-visitors] {display:none!important;}
+@media(max-width:900px) {
+html.bonds-os-preview [data-bos-post]>.inner {grid-template-columns:minmax(0,1fr);}
+html.bonds-os-preview [data-bos-post] .postprofile {grid-column:1;border-right:0;border-bottom:1px solid var(--bos-line);}
+html.bonds-os-preview [data-bos-post] .postprofile dt {flex-direction:column;align-items:center;}
+html.bonds-os-preview [data-bos-post] .postbody {grid-column:1;}
+html.bonds-os-preview [data-bos-post] .postprofile>a:has(.author) {text-align:center;}
+html.bonds-os-preview [data-bos-post] .postprofile dd.digivice {text-align:center;}
+}
+@media(max-width:640px) {
+html.bonds-os-preview #page-body .forumbg[data-bos-topics] ul.topiclist.bg_none {grid-template-columns:minmax(0,1fr);}
+html.bonds-os-preview #page-body [data-bos-topic-row] a.topictitle {font-size:18px;}
+html.bonds-os-preview [data-bos-post] .postbody {padding:0 16px 22px;}
+}
+@media(max-width:360px) {
+html.bonds-os-preview [data-bos-post] .postprofile {padding:16px 12px;}
+html.bonds-os-preview [data-bos-post] .postprofile dt img[loading],html.bonds-os-preview [data-bos-post] .postprofile dt>img {width:min(250px,100%)!important;max-width:100%!important;height:auto!important;aspect-ratio:250/380;}
+}
+
+
+html.bonds-os-preview .bos-message-content td[data-bos-decoration] {display:none!important;}
+html.bonds-os-preview .bos-message-content *:not(i):not(.fa):not(.fas):not(.far) {font-family:inherit!important;}
+
+html.bonds-os-preview [data-bos-post] .bos-message-content [data-bos-surface] {background:#102e3b!important;color:#c6dce7!important;border-color:#436b7e!important;box-shadow:none!important;}
+/* 21 / v10 — compact round avatars, preserved player templates, composed partner art. */
+html.bonds-os-preview [data-bos-post] {position:relative;isolation:isolate;border-top:2px solid #69b7c2aa;border-radius:8px 26px 8px 8px;}
+html.bonds-os-preview [data-bos-post]::after {content:'';position:absolute;z-index:2;top:0;right:0;width:320px;max-width:48%;height:180px;pointer-events:none;opacity:.18;background:url('./assets/card-circuit.svg') top right/100% 100% no-repeat;}
+html.bonds-os-preview [data-bos-post]>.inner {grid-template-columns:210px minmax(0,1fr);}
+html.bonds-os-preview [data-bos-post] .postprofile dt img[loading],html.bonds-os-preview [data-bos-post] .postprofile dt>img {width:120px!important;height:120px!important;max-width:120px!important;max-height:120px!important;aspect-ratio:1;border-radius:50%;object-fit:cover;border:2px solid #76acbc;box-shadow:0 0 0 5px #4f82931a,0 8px 24px #0004;}
+html.bonds-os-preview [data-bos-post] .postprofile .bos-author-card {width:166px;max-width:100%;padding:15px 10px;}
+html.bonds-os-preview [data-bos-post] .postprofile .bos-author-card :is(strong,span,a) {font-size:18px!important;}
+html.bonds-os-preview [data-bos-post] .postprofile .bos-author-card .bos-author-role {font-size:9px!important;}
+html.bonds-os-preview [data-bos-post] .postprofile dd.digivice {display:none!important;}
+html.bonds-os-preview .bos-profile-avatar {width:120px!important;height:120px!important;max-width:120px!important;max-height:120px!important;border-radius:50%;object-fit:cover;}
+html.bonds-os-preview [data-bos-post] .postbody>.content {text-align:justify;}
+html.bonds-os-preview [data-bos-post] .bos-message-content :is(div,p)[align="justify"] {text-align:justify!important;}
+html.bonds-os-preview[data-bos-area="authored"] [data-bos-post] .postbody>.content img {max-width:revert;height:revert;}
+html.bonds-os-preview .bos-partner-window {width:46%;clip-path:polygon(15% 0,100% 0,100% 100%,0 100%,0 25%);mask-image:linear-gradient(90deg,transparent,#000 15%);}
+html.bonds-os-preview .bos-partner-window .bos-partner-shadow {width:125%;right:-30%;object-position:60% 50%;}
+html.bonds-os-preview [data-bos-node="1"] .bos-partner-window {background:radial-gradient(ellipse at 70% 40%,#789e9677,transparent 75%),linear-gradient(140deg,#294b5655,#0b202b);}
+html.bonds-os-preview [data-bos-node="1"] .bos-partner-window .bos-partner-shadow {width:105%;right:-8%;object-position:50% 50%;mix-blend-mode:multiply;opacity:.9;filter:saturate(.6) brightness(1.15) contrast(.96);}
+@media(max-width:900px) {
+html.bonds-os-preview [data-bos-post]>.inner {grid-template-columns:minmax(0,1fr);}
+html.bonds-os-preview [data-bos-post] .postprofile .bos-author-card {width:220px;}
+}
+@media(max-width:640px) {
+html.bonds-os-preview .bos-partner-window {width:43%;}
+}
+
+
+html.bonds-os-preview [data-bos-post] .postbody>.content[data-bos-paper="light"] {color:#171717;}
+html.bonds-os-preview [data-bos-post] .postbody>.content[data-bos-paper="dark"] {color:#d2e2e9;}
+
+html.bonds-os-preview [data-bos-node="1"] .bos-partner-window .bos-partner-shadow {mix-blend-mode:normal;opacity:.7;filter:saturate(.45) brightness(.8) contrast(.95);}
+html.bonds-os-preview [data-bos-post]::after {width:280px;height:76px;opacity:.38;}
+html.bonds-os-preview [data-bos-post] .bos-post-tools {background:linear-gradient(90deg,#21414f55,transparent);border-bottom-color:#5e9cac88;}
+
+/* v10: platform blocks, compact rolls and stable topic navigation. */
+html.bonds-os-preview #page-body [data-bos-sponsored] {box-sizing:border-box;width:100%;max-width:1380px;margin:22px auto;padding:14px 18px;border:1px solid #365767;border-radius:8px;background:#091c26;overflow:hidden;}
+html.bonds-os-preview [data-bos-sponsored]>.inner {display:block;width:100%;margin:0;padding:0;}
+html.bonds-os-preview [data-bos-sponsored] .postprofile {position:static;display:block;float:none;width:auto;height:auto;min-height:0;margin:0 0 10px;padding:0;border:0;border-radius:0;background:none!important;}
+html.bonds-os-preview [data-bos-sponsored] .postprofile :is(dl,dt,strong) {position:static!important;inset:auto!important;display:block;width:auto!important;margin:0!important;padding:0;font:10px/1.5 'Segoe UI',sans-serif!important;letter-spacing:.1em;text-transform:uppercase;color:#91b1bf;}
+html.bonds-os-preview [data-bos-sponsored] :is(.profile-icons,.postprofile dd,.postprofile>a,.corners-top,.corners-bottom,.edicao,.postprofile br) {display:none!important;}
+html.bonds-os-preview [data-bos-sponsored] .postbody {box-sizing:border-box;position:static;float:none;width:100%;margin:0!important;padding:0;border:0;border-radius:0;background:transparent!important;box-shadow:none;}
+html.bonds-os-preview [data-bos-sponsored] .content {margin:0;padding:0;max-width:100%;overflow-x:auto;color:#91b1bf;}
+html.bonds-os-preview [data-bos-post][data-bos-roll] .postbody>.content {text-align:left;}
+html.bonds-os-preview [data-bos-post][data-bos-roll] .postbody>.content>div>img {display:inline-block;width:92px!important;max-width:calc(50% - 20px)!important;height:auto!important;max-height:none;vertical-align:top;object-fit:contain;margin:10px 8px 0 0;}
+html.bonds-os-preview #page-body .pagination {box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:6px;clear:both;max-width:100%;line-height:1.5;}
+html.bonds-os-preview #page-body .pagination>a:first-child {display:inline;min-width:0;min-height:0;margin:0 8px 0 0;padding:0;border:0;background:none;color:#a9c5d1;}
+html.bonds-os-preview #page-body .pagination>a:first-child strong {display:inline;min-width:0;min-height:0;margin:0;padding:0;border:0;background:none;color:inherit;}
+html.bonds-os-preview #page-body .pagination>span {display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;}
+html.bonds-os-preview #page-body .pagination .page-sep {display:none;}
+html.bonds-os-preview #page-body .pagination a[data-bos-arrow] img {display:none;}
+html.bonds-os-preview #page-body .pagination a[data-bos-arrow]::after {content:attr(data-bos-arrow);font-size:18px;}
+html.bonds-os-preview [data-bos-post]::after {display:block;visibility:visible;clear:none;}
+html.bonds-os-preview [data-bos-post] .bos-post-tools {flex-wrap:wrap;gap:10px;min-width:0;}
+html.bonds-os-preview [data-bos-post] .postbody {overflow-wrap:break-word;}
+html.bonds-os-preview #page-footer {clear:both;box-sizing:border-box;max-width:1380px;margin:30px auto 0;padding:20px 0;border-top:1px solid #365767;}
+html.bonds-os-preview #page-footer ul.linklist {display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;}
+html.bonds-os-preview #page-footer ul.linklist li {float:none;max-width:100%;line-height:1.8;}
+@media(max-width:640px){html.bonds-os-preview #page-body .pagination {justify-content:center;}html.bonds-os-preview [data-bos-sponsored] {padding:12px;}html.bonds-os-preview #page-footer {padding:18px 12px;}}
+
+html.bonds-os-preview [data-bos-post] .postbody>.content[data-bos-backing="light"] {background:#f7f1e8;border:1px solid #d7c8ad;border-radius:8px;padding:18px;color:#171717;}
+
+html.bonds-os-preview #page-footer a,html.bonds-os-preview #page-footer a:visited {color:#accbd9!important;font:11px/1.8 'Segoe UI',sans-serif!important;text-decoration:none;}
+html.bonds-os-preview #page-footer a:hover {color:#f2ce8c;text-decoration:underline;}
+html.bonds-os-preview #page-footer a:focus-visible {outline:2px solid #f2ce8c;outline-offset:3px;}
+
+/* Container forum empty-list placeholder, only when real subforums exist. */
+html.bonds-os-preview .forumbg[data-bos-container-empty] {display:none;}
