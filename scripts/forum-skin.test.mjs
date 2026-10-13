@@ -6,11 +6,14 @@ const base=new URL('../site/forum-skin/',import.meta.url),js=await readFile(new 
 test('beta entrypoints parse and contain no local-preview dependencies',async()=>{
  for(const file of ['bonds-os.js','forumeiros-loader.js','forum-bootstrap.js'])new Script(await readFile(new URL(file,base),'utf8'));
  for(const file of ['bonds-os.js','bonds-os.css','forumeiros-loader.js','forum-bootstrap.js','README.md']){
- const s=await readFile(new URL(file,base),'utf8');assert.doesNotMatch(s,/localhost|127\.0\.0\.1|file:\/\/|C:[\\/]|20261012-[1-9](?!\d)|\bv[1-9]\b|revisÃ£o [1-9]\b/i,file);}
+ const s=await readFile(new URL(file,base),'utf8');
+ // These are the author's native post-template classes, not stale skin versions.
+ const skinReferences=s.replace(/db-terminal-v[24](?=-)/g,'db-terminal-native');
+ assert.doesNotMatch(skinReferences,/localhost|127\.0\.0\.1|file:\/\/|C:[\\/]|20261012-[1-9](?!\d)|\bv[1-9]\b|revisÃ£o [1-9]\b/i,file);}
  assert.doesNotMatch(js,/preventDefault|stopPropagation|MutationObserver|\.onsubmit|\.onclick|setInterval/);
 });
 test('every decorative asset exists; all CSS selectors are opt-in scoped',async()=>{
- const assets=await readdir(new URL('assets/',base));const expected=['hero.jpg','bonds-logo.svg','card-circuit.svg','agumon.webp','gabumon.webp','gatomon.webp','jijimon-cutout.webp','human-world.svg','digital-world.svg','bond-core.svg','arquetipo-estrela-v10.webp','community-poster.webp','agumonhakase.webp','terriermon-assistant.webp','community-bond.webp','human-world-v10.webp','digital-world-v10.webp'];
+ const assets=await readdir(new URL('assets/',base));const expected=['hero.jpg','bonds-logo.svg','card-circuit.svg','agumon.webp','gabumon.webp','gatomon.webp','jijimon-cutout.webp','human-world.svg','digital-world.svg','bond-core.svg','arquetipo-estrela-v10.webp','community-poster.webp','agumonhakase.webp','terriermon-assistant.webp','community-bond.webp','human-world-v10.webp','digital-world-v10.webp','arquetipo-coracao-v10.png'];
  assert.deepEqual(assets.filter(n=>!n.endsWith('.md')).sort(),expected.sort());
  for(const [,ref] of css.matchAll(/url\(['"]?(\.\/assets\/[^)'" ]+)/g))await stat(new URL(ref,base));
  for(const selector of css.replace(/\/\*[\s\S]*?\*\//g,'').split('}').map(r=>r.slice(r.lastIndexOf('{',r.lastIndexOf('{')-1)+1)).filter(Boolean)){

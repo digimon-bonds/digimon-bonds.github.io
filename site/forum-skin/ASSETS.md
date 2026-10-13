@@ -26,3 +26,5 @@ Agumonhakase e Terriermon Assistant provêm dos recortes existentes do projeto; 
 ## Public beta — paisagens finais
 
 Anexos finais: digital-world-v10.webp 610 × 242, 151860 bytes; human-world-v10.webp 683 × 244, 254654 bytes. WebP lossless com RGBA idêntico. Estes arquivos do beta3 ainda não publicado foram substituídos antes da primeira implantação pública.
+
+- arquetipo-coracao-v10.png: Coração Gentil, rosto e olhos reparados via image_gen integrada, transparência preservada. Fonte e prompt em ARTE-CORACAO.md.

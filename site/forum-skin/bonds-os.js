@@ -266,6 +266,131 @@
     // Native bot profile/permissions and generated roll HTML remain in the document.
     // Only the displayed identity changes; controls are still moved from the native profile.
   }
+  function safeArtURL(ref) {
+    if(typeof ref!=='string'||!ref.trim())return null;
+    try { var url = new URL(ref, location.origin); return /^https?:$/.test(url.protocol) ? url.href : null; } catch (_) { return null; }
+  }
+  function latestOmegamonContent(doc) {
+    var posts=Array.from(doc.querySelectorAll('.post[id^="p"]')).filter(function(post){return /^p[1-9]\d*$/.test(post.id);}).sort(function(a,b){return Number(b.id.slice(1))-Number(a.id.slice(1));});
+    for(var i=0;i<posts.length;i++) {
+      var name=posts[i].querySelector('.postprofile dt strong'), content=posts[i].querySelector('.postbody > .content');
+      if(name && name.textContent.trim().toLowerCase()==='omegamon' && content && !rollActor(content))return content;
+    }
+    return null;
+  }
+  function topicBanner(doc) {
+    // Latest narrative from Omegamon; technical dice posts never supply a cover.
+    var content=latestOmegamonContent(doc);if(!content)return null;
+    var header=content.querySelector('.db-terminal-v2-header img');
+    if(header && safeArtURL(header.getAttribute('src')))return safeArtURL(header.getAttribute('src'));
+    var project=content.querySelector('[data-db-project]');
+    if(project)try{var data=JSON.parse(project.getAttribute('data-db-project'));if(safeArtURL(data.image))return safeArtURL(data.image);}catch(_){}
+    var explicit = content.querySelector('[data-topic-banner]');
+    if (explicit) {
+      var declared = explicit.getAttribute('data-topic-banner') || explicit.getAttribute('src');
+      if (safeArtURL(declared)) return safeArtURL(declared);
+    }
+    var candidates = Array.from(content.querySelectorAll('img,[style]')).slice(0,80);
+    for (var i=0;i<candidates.length;i++) {
+      var node=candidates[i];
+      if (node.closest('blockquote,.codebox,.signature,iframe,.db-terminal-v4-hud')) continue;
+      var background = node.style && node.style.backgroundImage;
+      var bg = background && background.match(/url\(["']?(.*?)["']?\)/);
+      if (bg && safeArtURL(bg[1])) return safeArtURL(bg[1]);
+      if (node.tagName !== 'IMG') continue;
+      var w=node.getAttribute('width')||node.style.width||'',h=node.getAttribute('height')||node.style.height||'';
+      var width=/%|vw|em/.test(w)?NaN:parseFloat(w),height=/%|vh|em/.test(h)?NaN:parseFloat(h);
+      var ref=node.getAttribute('src');
+      if (!ref || /(?:smileys|avatars|\/smiles\/|\/icon_|empty\.gif)/i.test(ref) || width>0&&width<200 || height>0&&width>0&&width/height<1.35) continue;
+      if (safeArtURL(ref)) return safeArtURL(ref);
+    }
+    return null;
+  }
+  async function readTopicBanner(url,cache) {
+    var current=new URL(url.href), doc=await readPage(current,cache), seen=new Set();
+    function pages(){return Array.from(doc.querySelectorAll('.pagination a[href]')).map(function(a){return topicURL(a.getAttribute('href'));}).filter(function(u){return u&&topicKey(u)===topicKey(current);});}
+    var last=pages().sort(function(a,b){return pageOffset(b)-pageOffset(a);})[0];
+    if(last&&pageOffset(last)>pageOffset(current)){current=last;current.hash='';doc=await readPage(current,cache);}
+    while(!seen.has(pageOffset(current))) {
+      seen.add(pageOffset(current));
+      if(latestOmegamonContent(doc))return topicBanner(doc);
+      var previous=pages().filter(function(u){return pageOffset(u)<pageOffset(current);}).sort(function(a,b){return pageOffset(b)-pageOffset(a);})[0];
+      if(!previous)return null;
+      current=previous;current.hash='';doc=await readPage(current,cache);
+    }
+    return null;
+  }
+
+  function enhanceTopicArtwork(main) {
+    var rows=Array.from(main.querySelectorAll('[data-bos-topic-row]'));
+    if (!rows.length) return;
+    var paths=Array.from(main.querySelectorAll('.diretorio a')).map(function(a){return a.getAttribute('href')||'';}).join(' ');
+    paths+=' '+(document.body.getAttribute('data-bos-source')||location.href);
+    var fallback=/\/f3(?:-|\b)|mundo-digital/i.test(paths)?'digital-world-v10.webp':/\/f(?:2|15|16)(?:-|\b)|mundo-humano/i.test(paths)?'human-world-v10.webp':null;
+    function apply(row,ref) {
+      var url=safeArtURL(ref); if(!url)return;
+      row.style.setProperty('--bos-topic-art','url('+JSON.stringify(url)+')'); row.dataset.bosTopicArt='';
+    }
+    rows.forEach(function(row){if(fallback)apply(row,ASSETS+fallback);});
+    var queue=[], pending=0, cache=new Map();
+    function pump() {
+      while(pending<2 && queue.length) {
+        var item=queue.shift(); pending++;
+        (function(item){
+          readTopicBanner(item.url,cache).then(function(art){if(art)apply(item.row,art);}).catch(function(){/* Keep the circuit cover when a topic is unavailable. */}).finally(function(){pending--;pump();});
+        })(item);
+      }
+    }
+    function enqueue(row) {
+      if(row.hasAttribute('data-bos-art-requested'))return;
+      row.dataset.bosArtRequested='';
+      var link=row.querySelector('a.topictitle');
+      if(!link)return;
+      var url=topicURL(link.getAttribute('href')); if(!url)return;
+      var latest=Array.from(row.querySelectorAll('.lastpost a[href], .pagination a[href]')).map(function(a){return topicURL(a.getAttribute('href'));}).filter(function(u){return u&&topicKey(u)===topicKey(url);}).sort(function(a,b){return pageOffset(b)-pageOffset(a);})[0];
+      if(latest&&pageOffset(latest)>pageOffset(url))url=latest;url.hash='';url.search='';
+      queue.push({row:row,url:url});pump();
+    }
+    function begin() {
+      if(typeof IntersectionObserver==='function') {
+        var observer=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){observer.unobserve(entry.target);enqueue(entry.target);}});},{rootMargin:'250px'});
+        rows.forEach(function(row){observer.observe(row);});
+      } else rows.slice(0,12).forEach(enqueue);
+    }
+    function schedule(){if(typeof requestIdleCallback==='function')requestIdleCallback(begin,{timeout:2000});else setTimeout(begin,250);}
+    if(document.readyState==='complete')schedule();else window.addEventListener('load',schedule,{once:true});
+  }
+  function enhanceCatalog(content) {
+    var source=document.body.getAttribute('data-bos-source')||location.href, path=new URL(source,location.origin).pathname;
+    var type=/^\/t14(?:p\d+)?(?:-|$)/.test(path)?'digimon':/^\/t19(?:p\d+)?(?:-|$)/.test(path)?'archetype':null;
+    if(!type)return;
+    var cards=Array.from(content.querySelectorAll('table')).filter(function(table){
+      if(table.hasAttribute('data-bos-catalog-card'))return false;
+      var rows=table.querySelectorAll(':scope > tbody > tr'), image=table.querySelector('img');
+      return type==='digimon'?rows.length===2 && rows[0].cells.length===1 && rows[0].cells[0].colSpan===2 && !!image && /Estágio:/.test(table.textContent):rows.length===1 && rows[0].cells.length===2 && !!rows[0].cells[1].querySelector('img') && /Habilidade de Arquétipo/.test(rows[0].cells[0].textContent);
+    });
+    if(!cards.length)return;
+    var grid=make('div','bos-catalog-grid');grid.dataset.bosCatalog=type;cards[0].before(grid);
+    cards.forEach(function(card,index){
+      card.dataset.bosCatalogCard=type;card.dataset.bosCatalogIndex=String(index+1).padStart(2,'0');
+      var rows=card.querySelectorAll(':scope > tbody > tr'), image=card.querySelector('img'), cell=image.closest('td');
+      cell.dataset.bosCatalogImage=''; image.loading='lazy';image.decoding='async';
+      var heading=type==='digimon'?rows[0].cells[0]:rows[0].cells[0].querySelector('table');
+      heading.dataset.bosCatalogTitle='';card.setAttribute('aria-label',heading.textContent.trim());
+      if(type==='digimon'){
+        var colors={Fogo:'#e9a66c',Água:'#67cbd6',Luz:'#e8ce83',Vento:'#9acda7',Metal:'#a8bfcf',Elétrico:'#e1cc65',Terra:'#c8a27a',Madeira:'#91c58a',Escuridão:'#bd9dde'};
+        var match=card.textContent.match(/Elemento:\s*(Fogo|Água|Luz|Vento|Metal|Elétrico|Terra|Madeira|Escuridão)/);
+        if(match)card.style.setProperty('--bos-entry-accent',colors[match[1]]);
+      } else {
+        var ability=Array.from(card.querySelectorAll('table')).find(function(t){return t!==heading&&/Ganhe Vantagem/.test(t.textContent);});
+        if(ability)ability.dataset.bosCatalogAbility='';
+      }
+      var next=card.nextSibling;
+      while(next&&(next.nodeName==='BR'||next.nodeType===3&&!next.textContent.trim())){var discard=next;next=next.nextSibling;discard.remove();}
+      grid.appendChild(card);
+    });
+  }
+
   function enhanceInteriors(kind) {
     var main = document.querySelector('#main-content'); if (!main || kind === 'home') return;
     var systems = isSystemsPage(Array.from(main.querySelectorAll('.diretorio a')).map(function(a){return a.getAttribute('href')||'';}));
@@ -312,6 +437,7 @@
         if (term && (locked || important)) term.prepend(make('span','bos-topic-state',important ? 'Importante' : 'Bloqueado'));
       });
     });
+    enhanceTopicArtwork(main);
     // Platform-generated blocks must never fall back to the legacy profile frame.
     main.querySelectorAll('.post').forEach(function(post){
       if(post.id === 'p0' && post.querySelector('.akcelo-wrapper, [id^="taboola-"], [id^="Forumactif_"]')) post.dataset.bosSponsored='';
@@ -368,6 +494,7 @@
         content.classList.add('bos-message-content');
         // Approved repair for this single Systems illustration; never touch player images.
         content.querySelectorAll('img[src="https://i.ibb.co/jPhxc34Z/image-removebg-preview-19.png"]').forEach(function(img){img.src=ASSETS+'arquetipo-estrela-v10.webp';});
+        content.querySelectorAll('img[src="https://i.ibb.co/PzDfTbwR/image-removebg-preview-14.png"]').forEach(function(img){img.src=ASSETS+'arquetipo-coracao-v10.png';});
         content.querySelectorAll('*').forEach(function(surface){
           if(/^(IMG|SVG|PATH|VIDEO|IFRAME)$/.test(surface.tagName))return;
           var paint=getComputedStyle(surface), rgba=paint.backgroundColor.match(/[\d.]+/g);
@@ -393,6 +520,7 @@
         var bg=luminance(rgb), fg=luminance(ink), ratio=(Math.max(bg,fg)+.05)/(Math.min(bg,fg)+.05);
         if(ratio<4.5) surface.dataset.bosContrast = bg>.4?'light':'dark';
       });
+      if(content && systems) enhanceCatalog(content);
       var tools = make('nav','bos-post-tools'); tools.setAttribute('aria-label','Navegação da mensagem ' + id);
       var permalink = make('a','','Mensagem #' + id); permalink.href = '#' + id;
       permalink.className='bos-post-permalink';
@@ -415,6 +543,7 @@
   }
 
   function enhance() {
+    document.querySelectorAll('#page-header a[href], .topomenu a[href]').forEach(function(link){if(/discord/i.test(link.textContent))link.href='https://discord.gg/U3dQqZJFw';});
     var count = document.querySelectorAll('#page-body .forabg ul.forums').length;
     var kind = pageKind(document.body.getAttribute('data-bos-source') || location.href, count >= 4 && !document.querySelector('.page-title'));
     document.documentElement.dataset.bosPage = kind;

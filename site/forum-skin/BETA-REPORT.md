@@ -1,6 +1,6 @@
 # BONDS OS v10 — PUBLIC BETA PREP
 
-Versão: 20261013-10-public-beta4. Instalação no painel não executada.
+Versão: 20261013-10-public-beta5. Instalação no painel não executada.
 
 ## Escopo
 
@@ -43,3 +43,13 @@ Durante bootstrap/loading, #wrap fica transparente e sem interação, deixando a
 ## Telefone sem rolagens — public-beta4
 
 Posts automáticos de dados reconhecidos pelo preâmbulo e estrutura nativos são excluídos antes da ordenação/limite do feed. Posts comuns do narrador e templates de jogadores continuam elegíveis. A exibição e identidade de rolagens dentro dos tópicos permanecem intactas.
+
+## Cards e ilustração — public-beta5
+
+Convite Discord atualizado para https://discord.gg/U3dQqZJFw. Digibank (t14) separada em 75 cards nas capturas, cores por elemento, imagens e circuitos; Personagens Humanos (t19) com 14 cards de arquétipos e destaque de habilidade. Reparo de Coração Gentil em PNG transparente (ARTE-CORACAO.md). Apenas Sistemas recebe reorganização do conteúdo.
+
+Capa de tópico: último post narrativo de Omegamon, ignorando mensagens automáticas de rolagem. A busca começa pela página da última mensagem, confirma a última paginação e recua quando não encontra narrativa do autor. Prioriza .db-terminal-v2-header img do template enviado e depois o campo image de data-db-project; não usa enemyImage ou avatares. Sem imagem no último post, mantém a composição temática. Duas buscas simultâneas, somente cards próximos da tela, sem polling e sem persistir conteúdo entre sessões. Templates permanecem intactos.
+
+Validação no navegador: 75 Digimon/14 arquétipos; 390px sem overflow global (scrollWidth 382); template narrativo #474 preservado e banner XZVp8vwH reconhecido após ler página p25. Outros 27 templates de jogadores preservados na captura de exemplo. Bootstrap public-beta4 mantido sem alteração; revisão do loader atualizada para public-beta5.
+
+Validação final desta revisão: 179 testes locais passaram; build de produção concluído. O bootstrap não mudou nesta revisão.

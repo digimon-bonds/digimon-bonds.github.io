@@ -714,3 +714,42 @@ html.bonds-os-preview #page-body .rolada #list_dice td:has(.dice-option:nth-chil
 html.bonds-os-preview #page-body .rolada #list_dice td:has(.dice-option:nth-child(2).selected) input[name^="nb_rolls_"] {left:50%;}
 html.bonds-os-preview #page-body .rolada #list_dice td:has(.dice-option:nth-child(3).selected) input[name^="nb_rolls_"] {left:calc(50% + var(--bos-dice-step));}
 @media(max-width:700px){html.bonds-os-preview #page-body .rolada #list_dice td {--bos-dice-step:63px;}}
+/* Catalogs: approved Systems templates, with independent circuit cards. */
+html.bonds-os-preview #page-body .bos-catalog-grid {display:grid;grid-template-columns:minmax(0,1fr);gap:24px;margin:24px 0;}
+html.bonds-os-preview #page-body .bos-catalog-grid[data-bos-catalog="digimon"] {grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;}
+html.bonds-os-preview #page-body .bos-message-content table[data-bos-catalog-card] {--bos-entry-accent:#7dccd5;position:relative;isolation:isolate;display:block;width:100%!important;min-width:0;margin:0!important;padding:0!important;border:1px solid #4b7d8b!important;border-top:2px solid var(--bos-entry-accent)!important;border-radius:8px 24px 8px 8px!important;background:linear-gradient(135deg,#173846,#0b212d)!important;box-shadow:0 12px 28px #0003!important;overflow:hidden;}
+html.bonds-os-preview #page-body table[data-bos-catalog-card]::before {content:attr(data-bos-catalog-index);position:absolute;right:18px;top:13px;color:var(--bos-entry-accent);font:10px/1.6 var(--bos-mono);letter-spacing:.12em;opacity:.8;}
+html.bonds-os-preview #page-body table[data-bos-catalog-card]::after {content:'';position:absolute;inset:0;z-index:-1;background:url('./assets/card-circuit.svg') center/100% 100% no-repeat;opacity:.18;pointer-events:none;}
+html.bonds-os-preview #page-body .bos-message-content table[data-bos-catalog-card]>tbody {display:block;background:none!important;}
+html.bonds-os-preview #page-body .bos-message-content table[data-bos-catalog-card] :is(td,th) {width:auto!important;border:0!important;background:transparent!important;}
+html.bonds-os-preview #page-body .bos-message-content table[data-bos-catalog-card="digimon"]>tbody>tr:first-child {display:block;padding:17px 46px 15px 18px;border-bottom:1px solid #59869655;}
+html.bonds-os-preview #page-body .bos-message-content table[data-bos-catalog-card="digimon"]>tbody>tr:first-child>td {display:block;padding:0!important;border:0!important;background:transparent!important;}
+html.bonds-os-preview #page-body [data-bos-catalog-title] :is(strong,span) {font:600 18px/1.3 'Exo 2','Segoe UI',sans-serif!important;letter-spacing:.02em;color:var(--bos-entry-accent)!important;}
+html.bonds-os-preview #page-body .bos-message-content table[data-bos-catalog-card="digimon"]>tbody>tr:last-child {display:grid;grid-template-columns:minmax(0,1fr) 108px;align-items:start;gap:14px;padding:20px 18px;}
+html.bonds-os-preview #page-body .bos-message-content table[data-bos-catalog-card="digimon"]>tbody>tr:last-child>td {display:block;padding:0!important;min-width:0;font-size:13px;line-height:1.85;}
+html.bonds-os-preview #page-body .bos-message-content table[data-bos-catalog-card] td[data-bos-catalog-image] {display:flex;align-items:center;justify-content:center;align-self:start;width:100%!important;padding:14px 8px!important;border:1px solid #537e9055!important;border-radius:6px 18px 6px 6px!important;background:radial-gradient(ellipse at center,#31576b88,#102731)!important;overflow:hidden;}
+html.bonds-os-preview #page-body .bos-message-content [data-bos-catalog-image] img {display:block;width:100%!important;max-width:100%!important;max-height:220px!important;height:auto!important;object-fit:contain;filter:drop-shadow(0 8px 8px #0004);}
+html.bonds-os-preview #page-body .bos-message-content table[data-bos-catalog-card] div[align="justify"] {text-align:justify!important;}
+html.bonds-os-preview #page-body .bos-message-content table[data-bos-catalog-card] strong {color:#dcebf0;}
+html.bonds-os-preview #page-body .bos-message-content table[data-bos-catalog-card="archetype"]>tbody>tr {display:grid;grid-template-columns:minmax(0,1fr) 180px;gap:28px;align-items:start;padding:26px;}
+html.bonds-os-preview #page-body .bos-message-content table[data-bos-catalog-card="archetype"]>tbody>tr>td {display:block;min-width:0;padding:0!important;font-size:14px;line-height:1.9;}
+html.bonds-os-preview #page-body .bos-message-content table[data-bos-catalog-card="archetype"] table[data-bos-catalog-title] {margin:0 32px 18px 0!important;padding:0 0 14px!important;border:0!important;border-bottom:1px solid #59869666!important;border-radius:0!important;background:none!important;}
+html.bonds-os-preview #page-body .bos-message-content table[data-bos-catalog-card="archetype"] table[data-bos-catalog-title] td {padding:0!important;}
+html.bonds-os-preview #page-body .bos-message-content table[data-bos-catalog-card="archetype"] table[data-bos-catalog-ability] {margin:16px 0!important;padding:16px 18px!important;border:1px solid #62dceb33!important;border-left:3px solid #6bcbd6!important;border-radius:4px 14px 4px 4px!important;background:#173d4b!important;}
+html.bonds-os-preview #page-body .bos-message-content table[data-bos-catalog-card="archetype"] table[data-bos-catalog-ability] td {padding:0!important;}
+html.bonds-os-preview #page-body .bos-message-content table[data-bos-catalog-card="archetype"] [data-bos-catalog-image] img {max-height:350px!important;}
+/* Topic covers: scenery merges into the circuit surface beneath readable text. */
+html.bonds-os-preview #page-body .forumbg[data-bos-topics] li.row[data-bos-topic-row] {border-color:#497b8b99;border-top-color:#78c7d3aa;transition:border-color .2s,box-shadow .2s;background:radial-gradient(ellipse at 90% 0,#265b6b88,transparent 65%),linear-gradient(135deg,#143441,#0a1f2b)!important;}
+html.bonds-os-preview #page-body [data-bos-topic-row][data-bos-topic-art]::before {content:'';position:absolute;inset:0;z-index:-2;background-image:linear-gradient(90deg,#102d3af5 8%,#102d3ab3 48%,#0a1f2b55 100%),linear-gradient(0deg,#0a1f2b 0%,#0a1f2b00 85%),var(--bos-topic-art);background-position:center;background-size:cover;background-repeat:no-repeat;opacity:.8;pointer-events:none;}
+html.bonds-os-preview #page-body [data-bos-topic-row]::after {opacity:.37;}
+html.bonds-os-preview #page-body .forumbg li.row[data-bos-topic-row]:is(:hover,:focus-within) {border-color:#72bac8;box-shadow:0 14px 30px #0004,0 0 0 1px #62dceb22;}
+html.bonds-os-preview #page-body [data-bos-topic-row] .dterm {min-height:76px;}
+html.bonds-os-preview #page-body [data-bos-topic-row] .pagination {margin:12px 0 0;}
+@media(max-width:1100px){html.bonds-os-preview #page-body .bos-catalog-grid[data-bos-catalog="digimon"] {grid-template-columns:minmax(0,1fr);}}
+@media(max-width:640px){
+html.bonds-os-preview #page-body .bos-message-content table[data-bos-catalog-card="archetype"]>tbody>tr {grid-template-columns:minmax(0,1fr);gap:20px;padding:20px 16px;}
+html.bonds-os-preview #page-body .bos-message-content table[data-bos-catalog-card="archetype"] td[data-bos-catalog-image] {grid-row:1;width:150px!important;justify-self:center;}
+html.bonds-os-preview #page-body .bos-message-content table[data-bos-catalog-card="archetype"] [data-bos-catalog-image] img {max-height:230px!important;}
+html.bonds-os-preview #page-body .bos-message-content table[data-bos-catalog-card="digimon"]>tbody>tr:last-child {grid-template-columns:minmax(0,1fr) 90px;gap:12px;padding:16px 14px;}
+}
+@media(prefers-reduced-motion:reduce){html.bonds-os-preview #page-body .forumbg li.row[data-bos-topic-row] {transition:none;}}

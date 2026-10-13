@@ -1,6 +1,6 @@
 # Instalar BONDS OS — beta pública controlada
 
-Versão: 20261013-10-public-beta4. A instalação é manual; esta entrega não alterou o painel. Depois de instalar, visitantes sem preferência recebem a Skin 2.0.
+Versão: 20261013-10-public-beta5. A instalação é manual; esta entrega não alterou o painel. Depois de instalar, visitantes sem preferência recebem a Skin 2.0.
 
 ## Antes de começar
 
@@ -73,3 +73,7 @@ Nesta revisão é necessário substituir uma vez o bootstrap existente pelo bloc
 ## Correção do frame de transição
 
 A revisão public-beta3 oculta o invólucro nativo durante as duas etapas do carregamento. A mudança no bootstrap é necessária porque o logo antigo aparece antes de o loader remoto chegar. Substitua somente o bootstrap BONDS OS existente; não altere o CSS clássico, templates ou App.
+
+## Atualização public-beta5
+
+Se já instalou o bootstrap public-beta4 com proteção do frame inicial, mantenha-o. Esta revisão altera somente os recursos hospedados e a chave CSS/JS do loader. O loader já armazenado em cache pode levar alguns minutos para atualizar; Ctrl+F5 força a revalidação no navegador em uso. Não crie outro bootstrap.
