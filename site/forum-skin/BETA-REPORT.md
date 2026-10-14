@@ -1,6 +1,6 @@
 # BONDS OS v10 — PUBLIC BETA PREP
 
-Versão: 20261013-10-public-beta8. Instalação no painel não executada.
+Versão: 20261014-10-public-beta9. Instalação no painel não executada.
 
 ## Escopo
 
@@ -78,3 +78,12 @@ Verificação: Humanos, Mecânicas e Digimon com prosa de 566px no viewport de 1
 ## Telefone / Ogremon — public-beta8
 
 Removida a frase explicativa abaixo de Atualizar no telefone. O status de sucesso fica vazio e não ocupa espaço; carregamento, lista parcial e falha continuam informados. Ogremon em pixel art no canto superior direito do visor, com imagem transparente, espaço reservado de 68px e carregamento tardio. Referência e prompt documentados em assets/OGREMON-PHONE.md. Bootstrap mantido.
+
+
+## Apoie o Bonds — public-beta9
+
+Banner original como botão à direita da abertura da página inicial. Modal nativo responsivo com cores azul-escuro, creme e dourado, QR oficial, contribuição de valor livre, confirmação discreta de cópia e fechamento por botão, Escape e fundo externo. A função não chama serviços de pagamento nem transmite o Pix por requisições.
+
+A constante BONDS_PIX_CODE mantém os 203 caracteres fornecidos. O QR original foi decodificado offline e corresponde exatamente ao payload. A cópia foi lida no próprio navegador de teste e comparada por SHA-256. Banner e QR mantidos byte a byte. A hospedagem dos arquivos estáticos no GitHub Pages foi explicitamente autorizada pelo usuário. O Pix não é enviado a APIs ou processadores de pagamento. Bootstrap não alterado.
+
+Validação final: 189 testes aprovados. QR decodificado nas capturas de 1280px, 390px e 320px, sempre idêntico ao payload original. Botão de fechar permanece visível durante a rolagem em telas baixas; Escape restaura o foco ao banner. Cópia confirmada por leitura e hash no próprio contexto do navegador.

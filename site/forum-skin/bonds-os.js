@@ -6,6 +6,7 @@
   var scriptURL = document.currentScript && document.currentScript.src;
   var ASSETS = new URL('assets/', scriptURL || 'https://digimon-bonds.github.io/forum-skin/bonds-os.js').href;
   var LIMIT = 10;
+  const BONDS_PIX_CODE = '00020126920014BR.GOV.BCB.PIX0136a9d8f24e-ab03-40ab-9d32-f69d721a9a320230Obrigado por apoiar o Projeto!5204000053039865802BR5925MATEUS ALVES OLIVEIRA DE 6009SAO PAULO622605223LchhslHDQDzAlZaKoeuvF6304EA57';
   var descriptions = {
     4: ['Regras, mecânicas e informações para começar sua jornada.'],
     1: ['Histórias, registros e acontecimentos do universo Bonds.'],
@@ -20,6 +21,59 @@
     var node = document.createElement(tag); node.className = className;
     if (text) node.textContent = text;
     return node;
+  }
+  async function copyPixCode(container) {
+    try {
+      if(navigator.clipboard&&typeof navigator.clipboard.writeText==='function'){
+        await navigator.clipboard.writeText(BONDS_PIX_CODE);return true;
+      }
+    } catch (_) { /* Fall back to a local selection when clipboard access is unavailable. */ }
+    var buffer=make('textarea','bos-support-copy-buffer'),previous=document.activeElement;
+    buffer.value=BONDS_PIX_CODE;buffer.readOnly=true;buffer.tabIndex=-1;buffer.setAttribute('aria-hidden','true');
+    container.appendChild(buffer);
+    try {buffer.select();return document.execCommand('copy');}
+    catch (_) {return false;}
+    finally {buffer.remove();if(previous&&typeof previous.focus==='function')previous.focus();}
+  }
+  function addSupport(intro) {
+    if(document.querySelector('#bos-support-dialog'))return;
+    var trigger=make('button','bos-support-trigger');trigger.type='button';
+    trigger.setAttribute('aria-label','Apoie o Bonds');trigger.setAttribute('aria-haspopup','dialog');trigger.setAttribute('aria-controls','bos-support-dialog');
+    var banner=make('img','');banner.src=ASSETS+'apoie-bonds-banner.png';banner.alt='';banner.width=2172;banner.height=724;banner.decoding='async';trigger.appendChild(banner);intro.appendChild(trigger);
+    var dialog=make('dialog','bos-support-dialog');dialog.id='bos-support-dialog';
+    dialog.setAttribute('aria-labelledby','bos-support-title');dialog.setAttribute('aria-describedby','bos-support-description');
+    var close=make('button','bos-support-close','×');close.type='button';close.autofocus=true;close.setAttribute('aria-label','Fechar Apoie o Bonds');
+    var top=make('div','bos-support-banner'),art=banner.cloneNode(true);top.appendChild(art);
+    var body=make('div','bos-support-body'),title=make('h2','','O seu apoio ajuda o Digimon Bonds a continuar evoluindo!');title.id='bos-support-title';
+    var thanks=make('p','bos-support-description','Escolha o valor no seu app bancário. Obrigado por fazer parte dessa jornada!');thanks.id='bos-support-description';
+    var payment=make('div','bos-support-payment'),label=make('h3','bos-support-pix-label','QR CODE PIX');
+    var qr=make('img','bos-support-qr');qr.src=ASSETS+'apoie-bonds-pix-qr.png';qr.alt='QR Code Pix oficial para apoiar o Digimon Bonds';qr.width=732;qr.height=732;qr.decoding='async';
+    var key=make('p','bos-support-key','a9d8f24e-ab03-40ab-9d32-f69d721a9a32');key.setAttribute('aria-label','Chave Pix aleatória');
+    var copy=make('button','bos-support-copy','COPIAR CÓDIGO PIX');copy.type='button';
+    var status=make('p','bos-support-status');status.setAttribute('role','status');status.setAttribute('aria-live','polite');
+    var manual=make('details','bos-support-manual'),summary=make('summary','','Ver código Pix Copia e Cola');manual.hidden=true;
+    var code=make('textarea','bos-support-code');code.value=BONDS_PIX_CODE;code.readOnly=true;code.setAttribute('aria-label','Código Pix Copia e Cola completo');code.spellcheck=false;
+    manual.append(summary,code);payment.append(label,qr,key,copy,status,manual);body.append(title,thanks,payment);
+    var scroller=make('div','bos-support-scroll');scroller.append(top,body);dialog.append(close,scroller);document.body.appendChild(dialog);
+    var clearStatus;
+    trigger.addEventListener('click',function(){status.textContent='';manual.open=false;manual.hidden=true;dialog.showModal();scroller.scrollTop=0;});
+    close.addEventListener('click',function(){dialog.close();});
+    dialog.addEventListener('click',function(event){
+      if(event.target!==dialog)return;
+      var box=dialog.getBoundingClientRect();
+      if(event.clientX<box.left||event.clientX>box.right||event.clientY<box.top||event.clientY>box.bottom)dialog.close();
+    });
+    dialog.addEventListener('close',function(){clearTimeout(clearStatus);status.textContent='';trigger.focus();});
+    copy.addEventListener('click',async function(){
+      copy.disabled=true;clearTimeout(clearStatus);
+      try {
+        if(await copyPixCode(dialog)){
+          status.textContent='Código Pix copiado!';clearStatus=setTimeout(function(){status.textContent='';},5000);
+        } else {
+          manual.hidden=false;manual.open=true;status.textContent='Selecione o código abaixo e copie pelo seu dispositivo.';code.focus();code.select();
+        }
+      } finally {copy.disabled=false;}
+    });
   }
   function topicURL(ref) {
     try {
@@ -658,7 +712,7 @@
       intro.append(make('span', 'bos-eyebrow', 'DIGIMON BONDS / COMMUNITY NETWORK'), make('h1', '', 'Nossos mundos estão conectados.'), make('p', '', 'Encontre seu parceiro e atravesse a fronteira.'));
       var welcome = make('div', 'bos-welcome-copy');
       while (intro.firstChild) welcome.appendChild(intro.firstChild);
-      intro.appendChild(welcome); layout.before(intro); addActivity(aside);
+      intro.appendChild(welcome); addSupport(intro); layout.before(intro); addActivity(aside);
       if (statistics) {
         var poster = make('figure','bos-community-art bos-community-scene'), posterImage=make('img','');
         posterImage.src=ASSETS+'community-bond.webp'; posterImage.alt='Um digiescolhido e seu parceiro Digimon juntos na cidade';

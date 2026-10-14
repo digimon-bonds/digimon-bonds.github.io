@@ -103,6 +103,56 @@ html.bonds-os-preview .bos-feed-status {margin:10px 0 14px; color:#91adb9; font:
 html.bonds-os-preview .bos-feed-status:empty {display:none;}
 html.bonds-os-preview .bos-activity-head {position:relative;min-height:64px;box-sizing:border-box;padding-right:78px;margin-bottom:8px;}
 html.bonds-os-preview .bos-phone-mascot {position:absolute;right:-4px;top:-8px;width:68px;height:68px;object-fit:contain;image-rendering:pixelated;pointer-events:none;}
+
+/* Voluntary support: original banner and official QR, entirely local UI. */
+html.bonds-os-preview .bos-home-intro:has(.bos-support-trigger) {grid-template-columns:minmax(0,1fr) minmax(260px,400px);gap:32px;align-items:start;}
+html.bonds-os-preview .bos-support-trigger {display:block;align-self:start;justify-self:end;width:100%;max-width:400px;padding:0;margin:0;border:0;background:transparent;cursor:pointer;line-height:0;border-radius:14px;transition:transform .18s;}
+html.bonds-os-preview .bos-support-trigger img {display:block;width:100%;height:auto;mix-blend-mode:screen;}
+html.bonds-os-preview .bos-support-trigger:hover {transform:translateY(-2px);}
+html.bonds-os-preview .bos-support-trigger:focus-visible {outline:2px solid #ffd477;outline-offset:5px;}
+html.bonds-os-preview:has(.bos-support-dialog[open]) {overflow:hidden;}
+html.bonds-os-preview .bos-support-dialog {box-sizing:border-box;position:fixed;inset:0;width:min(720px,calc(100% - 32px));max-width:720px;height:fit-content;max-height:calc(100dvh - 32px);margin:auto;padding:0;border:2px solid #ecc368;border-radius:26px;background:#0c1c32;color:#14243a;box-shadow:0 24px 80px #0009,inset 0 0 0 3px #e0ba6344;overflow:hidden;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#c7a45c #0c1c32;font:14px/1.6 'Segoe UI',sans-serif;}
+html.bonds-os-preview .bos-support-scroll {max-height:calc(100dvh - 36px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#c7a45c #0c1c32;}
+html.bonds-os-preview .bos-support-dialog::backdrop {background:#030b18d9;backdrop-filter:blur(4px);}
+html.bonds-os-preview .bos-support-dialog * {box-sizing:border-box;}
+html.bonds-os-preview .bos-support-close {position:absolute;top:9px;right:9px;z-index:3;display:grid;place-items:center;width:40px;height:40px;padding:0;border:1px solid #f0ca76;border-radius:50%;background:#122237;color:#ffe0a0;font:30px/1 'Segoe UI',sans-serif;cursor:pointer;}
+html.bonds-os-preview .bos-support-close:focus-visible,html.bonds-os-preview .bos-support-copy:focus-visible {outline:3px solid #65c8e0;outline-offset:3px;}
+html.bonds-os-preview .bos-support-banner {position:relative;isolation:isolate;padding:12px 36px 4px;border-bottom:2px solid #d9ae55;background:linear-gradient(125deg,#172d45,#081628);}
+html.bonds-os-preview .bos-support-banner::before {content:'';position:absolute;inset:0;z-index:-1;opacity:.22;background:url('./assets/card-circuit.svg') center/cover no-repeat;pointer-events:none;}
+html.bonds-os-preview .bos-support-banner img {display:block;width:100%;max-height:140px;height:auto;object-fit:contain;mix-blend-mode:screen;}
+html.bonds-os-preview .bos-support-body {position:relative;isolation:isolate;padding:14px 28px 18px;text-align:center;background:radial-gradient(ellipse at center,#fffdf6,#f9eed7);}
+html.bonds-os-preview .bos-support-body::before {content:'';position:absolute;inset:0;z-index:-1;opacity:.12;background:url('./assets/card-circuit.svg') center/100% 100% no-repeat;filter:sepia(1);pointer-events:none;}
+html.bonds-os-preview .bos-support-body h2 {height:auto;margin:0 auto 6px;max-width:570px;color:#12243c;background:none;font:700 20px/1.35 'Exo 2','Segoe UI',sans-serif;letter-spacing:0;text-transform:none;}
+html.bonds-os-preview .bos-support-description {margin:0 auto 12px;max-width:620px;color:#566171;font:13px/1.6 'Segoe UI',sans-serif;}
+html.bonds-os-preview .bos-support-payment {position:relative;max-width:430px;margin:0 auto;padding:10px 18px;border:1px solid #deb15b;border-radius:10px 24px 10px 24px;background:#fffaf0c9;box-shadow:inset 0 0 0 4px #e7bf7033;}
+html.bonds-os-preview .bos-support-pix-label {width:max-content;max-width:100%;margin:0 auto 10px;padding:4px 30px;border:1px solid #d8ab50;border-radius:4px 14px 4px 14px;background:linear-gradient(100deg,#19384c,#0a1a31);color:#ffe3a1;font:700 16px/1.3 'Exo 2','Segoe UI',sans-serif;letter-spacing:.04em;}
+html.bonds-os-preview .bos-support-qr {display:block;width:244px;height:auto;max-width:100%;margin:0 auto;background:#fff;border:0;border-radius:0;image-rendering:pixelated;}
+html.bonds-os-preview .bos-support-key {margin:8px 0;padding:5px 10px;border:1px solid #e5bd77;border-radius:5px;background:#f7ecda;color:#5f4b2b;font:11px/1.5 var(--bos-mono);overflow-wrap:anywhere;}
+html.bonds-os-preview .bos-support-copy {display:block;width:100%;min-height:42px;margin:0;padding:9px 12px;border:2px solid #dfb461;border-radius:8px 20px 8px 20px;background:linear-gradient(135deg,#193c51,#081a30);box-shadow:inset 0 0 0 2px #f7d18322;color:#ffe2a0;font:700 13px/1.5 'Exo 2','Segoe UI',sans-serif;letter-spacing:.035em;cursor:pointer;}
+html.bonds-os-preview .bos-support-copy:hover {background:#244c61;}
+html.bonds-os-preview .bos-support-copy:disabled {opacity:.65;cursor:wait;}
+html.bonds-os-preview .bos-support-status {min-height:18px;margin:5px 0 0;color:#316044;font:12px/1.5 'Segoe UI',sans-serif;}
+html.bonds-os-preview .bos-support-status:empty {visibility:hidden;}
+html.bonds-os-preview .bos-support-manual {margin-top:9px;color:#5e573f;font:11px/1.5 'Segoe UI',sans-serif;}
+html.bonds-os-preview .bos-support-manual summary {cursor:pointer;text-decoration:underline;text-underline-offset:3px;}
+html.bonds-os-preview .bos-support-code {display:block;width:100%;min-height:100px;margin-top:8px;padding:10px;border:1px solid #be9b60;border-radius:5px;background:#fff;color:#17283a;font:11px/1.5 var(--bos-mono);resize:vertical;overflow-wrap:anywhere;}
+html.bonds-os-preview .bos-support-copy-buffer {position:fixed;left:-9999px;top:0;opacity:0;}
+@media(max-width:760px){
+html.bonds-os-preview .bos-home-intro:has(.bos-support-trigger) {grid-template-columns:minmax(0,1fr);gap:24px;}
+html.bonds-os-preview .bos-support-trigger {justify-self:end;max-width:350px;}
+}
+@media(max-width:440px){
+html.bonds-os-preview .bos-support-dialog {width:calc(100% - 20px);max-height:calc(100dvh - 20px);border-radius:18px;}
+html.bonds-os-preview .bos-support-scroll {max-height:calc(100dvh - 24px);}
+html.bonds-os-preview .bos-support-banner {padding:24px 12px 8px;}
+html.bonds-os-preview .bos-support-close {width:34px;height:34px;top:6px;right:6px;font-size:26px;}
+html.bonds-os-preview .bos-support-body {padding:16px 14px;}
+html.bonds-os-preview .bos-support-body h2 {font-size:18px;}
+html.bonds-os-preview .bos-support-description {font-size:12px;margin-bottom:14px;}
+html.bonds-os-preview .bos-support-payment {padding:10px 8px;}
+html.bonds-os-preview .bos-support-key {font-size:10px;}
+}
+@media(prefers-reduced-motion:reduce){html.bonds-os-preview .bos-support-trigger {transition:none;}}
 html.bonds-os-preview .bos-post-stream {list-style:none; margin:0; padding:0;}
 html.bonds-os-preview .bos-stream-entry {display:flex; gap:12px; padding:17px 0; border-top:1px solid var(--bos-line);}
 html.bonds-os-preview .bos-stream-number {padding-top:2px; color:#3c6576; font:10px var(--bos-mono);}

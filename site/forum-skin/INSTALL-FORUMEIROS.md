@@ -1,6 +1,6 @@
 # Instalar BONDS OS — beta pública controlada
 
-Versão: 20261013-10-public-beta8. A instalação é manual; esta entrega não alterou o painel. Depois de instalar, visitantes sem preferência recebem a Skin 2.0.
+Versão: 20261014-10-public-beta9. A instalação é manual; esta entrega não alterou o painel. Depois de instalar, visitantes sem preferência recebem a Skin 2.0.
 
 ## Antes de começar
 
@@ -87,3 +87,8 @@ Mantenha o bootstrap atual. Esta revisão restringe capas aos mundos e protege a
 ## Atualização public-beta7
 
 Refinamento do template de leitura em Sistemas e destaque dos nomes dos arquétipos. Mantenha o bootstrap instalado. A revisão do loader atualiza as URLs de CSS e JavaScript.
+
+
+## Atualização public-beta9
+
+Apoie o Bonds: banner clicável na página inicial e modal com QR Pix oficial, valor livre e cópia local do código completo. Hospedagem estática autorizada. Não há processamento de pagamentos nem uso de serviços de pagamento externos. Mantenha o bootstrap instalado.
