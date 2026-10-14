@@ -15,11 +15,11 @@ export function initCommandOverlay(){
  const context=document.createElement('div');context.id='commandContext';context.className='command-context';context.setAttribute('aria-label','Participantes da cena');panel.querySelector('.command-deck-heading').after(context);
  const support=panel.querySelector('.command-support'),inventory=document.createElement('details');inventory.className='command-inventory';
  const summary=document.createElement('summary');summary.textContent='RECURSOS DA DUPLA';support.before(inventory);inventory.append(summary,support);
- dialog.append(panel);
+ document.querySelector('#actionDialog').addEventListener('close',()=>{const popup=document.querySelector('#actionDialog');if(popup.open)return;popup.classList.remove('action-balloon');popup.removeAttribute('style');});panel.addEventListener('click',event=>{if(event.target.closest('.command-option'))document.querySelector('#actionDialog').close();},true);document.querySelector('#actionDialog').addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();event.stopPropagation();event.currentTarget.close();}});dialog.append(panel);const flowStatus=document.createElement('p');flowStatus.id='commandFlowStatus';flowStatus.setAttribute('role','alert');panel.querySelector('.command-deck-heading').after(flowStatus);
  launch.addEventListener('click',openCommands);close.addEventListener('click',closeCommands);
  dialog.addEventListener('click',event=>{if(event.target!==dialog)return;const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)closeCommands();});
  dialog.addEventListener('close',()=>{launch.setAttribute('aria-expanded','false');document.body.classList.remove('commands-open');launch.focus({preventScroll:true});});
- document.addEventListener('keydown',event=>{if(event.key==='Escape'&&dialog.open&&!document.querySelector('dialog[open]:not(#commandDialog)')){event.preventDefault();closeCommands();}});
+ document.addEventListener('keydown',event=>{if(event.key==='Escape'&&document.querySelector('#commandPanel').getAttribute('aria-busy')!=='true'&&dialog.open&&!document.querySelector('dialog[open]:not(#commandDialog)')){event.preventDefault();closeCommands();}});
  window.addEventListener('resize',fitAboveCards);
 }
 function fitAboveCards(){
@@ -35,11 +35,11 @@ export function openCommands(){
  fitAboveCards();
  document.querySelector('#closeCommands').focus({preventScroll:true});
 }
-export function closeCommands(){document.querySelector('#commandDialog')?.close();}
+export function closeCommands(){if(document.querySelector('#commandPanel').getAttribute('aria-busy')==='true')return;document.querySelector('#actionDialog')?.close();document.querySelector('#commandDialog')?.close();}
 export function syncCommandOverlay({state,actor,busy}){
  const launch=document.querySelector('#openCommands');launch.disabled=busy||!actor;
  const incoming=actor&&state.pending?.context?.targetId===actor.id;
- document.querySelector('#commandCue').textContent=incoming?'ATAQUE RECEBIDO · REAGIR':state.pending?'ROLAGEM EM ANDAMENTO':'CONTROLE DE COMBATE';
+ document.querySelector('#commandCue').textContent=incoming?'ATAQUE RECEBIDO · REAGIR':state.pending?(state.pending.attackConfirmed===false?'REVISAR ROLAGEM':'RESOLUÇÃO PENDENTE'):'CONTROLE DE COMBATE';
  launch.classList.toggle('reaction-ready',!!incoming);
  if(!actor)closeCommands();
  fitAboveCards();
@@ -54,3 +54,18 @@ export function syncCommandOverlay({state,actor,busy}){
 
 // Compact pixel lettering stays crisp without loading an additional font.
 function actionScreen(){const glyphs=['01110/10001/10001/11111/10001/10001/10001','01111/10000/10000/10000/10000/10000/01111','01110/10001/10001/11111/10001/10001/10001','01110/10001/10001/10001/10001/10001/01110'];let pixels='';glyphs.forEach((glyph,i)=>glyph.split('/').forEach((row,y)=>[...row].forEach((cell,x)=>{if(cell==='1')pixels+=`<rect x="${i*7+x}" y="${y+3}" width=".86" height=".86"/>`;})));for(const [x,y] of [[9,10],[8,11],[15,1],[16,0],[17,1],[18,0]])pixels+=`<rect x="${x}" y="${y}" width=".86" height=".86"/>`;return '<span class="action-lcd" aria-hidden="true"><svg class="action-lettering" viewBox="0 0 26 12" fill="currentColor" focusable="false">'+pixels+'</svg></span>';}
+
+// A non-modal callout keeps the command wheel and arena in place.
+export function showActionBalloon(kind){
+ const popup=document.querySelector('#actionDialog');
+ if(!['attack','signature','human-attack','dodge'].includes(kind)){popup.classList.remove('action-balloon');popup.removeAttribute('style');popup.showModal();return;}
+ openCommands();
+ document.querySelector('#commandDialog').append(popup);
+ popup.classList.add('action-balloon');
+ const anchor=document.querySelector(kind==='human-attack'?'#humanAttack':kind==='dodge'?'#commandDecision':`[data-action="${kind}"]`);
+ const bounds=anchor.getBoundingClientRect(),width=Math.min(440,innerWidth-32);
+ const left=bounds.right+16+width<innerWidth?bounds.right+16:Math.max(16,bounds.left-width-16);
+ popup.style.width=width+'px';popup.style.left=Math.min(left,innerWidth-width-16)+'px';popup.style.top=Math.max(16,Math.min(bounds.top-24,innerHeight-580))+'px';
+ popup.style.maxHeight='calc(100dvh - '+(parseFloat(popup.style.top)+16)+'px)';
+ popup.show();popup.querySelector('select,input,button')?.focus({preventScroll:true});
+}

@@ -76,3 +76,16 @@ body.commands-open .arena,body.commands-open .arena:has(.multiple){height:1000px
 .arena-action .action-lcd:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 49%,#6ddbd508 50%,transparent 51%) 0 0/8px 8px,repeating-linear-gradient(0deg,#020e1838 0 1px,transparent 1px 3px);pointer-events:none}
 .arena-action .action-lettering{position:relative;width:80%;height:auto;max-height:33px;filter:drop-shadow(0 0 3px #66d8de99);transform:translateY(-1px)}
 @media(max-width:600px){.arena-frame .arena-action{top:-32px}.arena-action .action-lcd{border-radius:5px}.arena-action .action-lettering{max-height:26px}}
+
+/* Stable command flow: configuration and dice stay over the same console. */
+#actionDialog.action-balloon{position:fixed;inset:auto;margin:0;padding:22px;z-index:30;border:1px solid #7edee8;border-radius:5px 20px 5px 20px;background:linear-gradient(145deg,#143846,#081d2b 75%);color:#e1f5fa;box-shadow:0 18px 65px #000b,0 0 24px #60dce52b;overflow:auto;animation:callout-in .16s ease-out}
+#actionDialog.action-balloon h2{font-size:18px;margin:12px 0 18px}#actionDialog.action-balloon label{margin:12px 0}#actionDialog.action-balloon .config-preview{font-size:11px;line-height:1.6}#actionDialog.action-balloon .target-card{min-width:130px;padding:9px!important}#actionDialog.action-balloon .target-card img{width:38px;height:44px}
+#commandDialog #diceOverlay{position:fixed;z-index:40;inset:0;transform:none;width:100%;height:100dvh;max-width:none;border:0;border-radius:0;background:#03131ddd;backdrop-filter:blur(3px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding:24px;pointer-events:auto}
+#commandDialog #diceOverlay[hidden]{display:none}#commandDialog #overlayCaption{color:#91e7ef;letter-spacing:3px}#commandDialog #overlayResult{font-size:20px;color:#ffe0a1;text-align:center}#commandDialog #overlayDice{max-width:80%;flex-wrap:wrap;justify-content:center}
+.accept-roll-cue{animation:accept-pulse 1.5s ease-in-out infinite;outline-offset:4px}#commandDecision:has(.accept-roll-cue){border-color:#eac376}
+@keyframes accept-pulse{50%{box-shadow:0 0 23px #ffc76566;filter:brightness(1.15)}}@keyframes callout-in{from{opacity:0;translate:0 6px}to{opacity:1;translate:0 0}}
+@media(max-width:600px){#actionDialog.action-balloon{left:16px!important;top:24px!important;width:calc(100% - 32px)!important;max-height:calc(100dvh - 48px)!important;padding:18px}#commandDialog #overlayResult{font-size:16px}}
+@media(prefers-reduced-motion:reduce){.accept-roll-cue,#actionDialog.action-balloon{animation:none}.accept-roll-cue{outline:2px solid #ffe0a1}}
+#commandFlowStatus:empty{display:none}#commandFlowStatus{margin:12px 20px;padding:12px;border:1px solid #efad76;background:#352722;color:#ffdab9;font:13px/1.5 Arial,sans-serif}
+
+#actionDialog.action-balloon .dialog-actions{position:sticky;bottom:-22px;background:#0b2432;padding:14px 0;margin:12px 0 -22px;border-top:1px solid #6996a555;z-index:2}#actionDialog.action-balloon .dialog-actions button{padding:12px;font-size:11px}
