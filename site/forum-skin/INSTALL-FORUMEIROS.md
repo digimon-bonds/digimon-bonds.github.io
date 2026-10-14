@@ -1,6 +1,6 @@
 # Instalar BONDS OS — beta pública controlada
 
-Versão: 20261013-10-public-beta7. A instalação é manual; esta entrega não alterou o painel. Depois de instalar, visitantes sem preferência recebem a Skin 2.0.
+Versão: 20261013-10-public-beta8. A instalação é manual; esta entrega não alterou o painel. Depois de instalar, visitantes sem preferência recebem a Skin 2.0.
 
 ## Antes de começar
 

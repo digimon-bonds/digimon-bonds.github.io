@@ -104,6 +104,7 @@
   function addActivity(aside) {
     var head = make('div', 'bos-activity-head');
     head.append(make('span', 'bos-eyebrow', 'DIGITAL LINK / INBOX'), make('h2', '', 'Últimos posts'));
+    var mascot=make('img','bos-phone-mascot');mascot.src=ASSETS+'ogremon-phone-v10.png';mascot.alt='';mascot.width=68;mascot.height=68;mascot.loading='lazy';mascot.decoding='async';head.appendChild(mascot);
     var refresh = make('button', 'bos-refresh', 'Atualizar ↻'); refresh.type = 'button';
     var status = make('p', 'bos-feed-status', 'Carregando as mensagens recentes…'); status.setAttribute('role', 'status');
     var list = make('ol', 'bos-post-stream');
@@ -136,7 +137,7 @@
       try {
         var snapshot = document.querySelector('#bos-recent-snapshot');
         if (snapshot) {
-          render(JSON.parse(snapshot.textContent)); status.textContent = 'Amostra pública capturada para esta prévia local.';
+          render(JSON.parse(snapshot.textContent)); status.textContent = '';
           fallback.open = false; return;
         }
         var cache = new Map(); // Per update only: never reuse another login/session's content.
@@ -157,7 +158,7 @@
         await Promise.all([worker(), worker(), worker()]);
         if (!collected.length) throw new Error('Nenhuma mensagem acessível');
         render(collected); fallback.open = false;
-        status.textContent = errors ? 'Lista parcial: alguns tópicos não responderam. Tente atualizar.' : 'Cada mensagem é uma entrada, inclusive no mesmo tópico.';
+        status.textContent = errors ? 'Lista parcial: alguns tópicos não responderam. Tente atualizar.' : '';
       } catch (_) {
         status.textContent = 'Não foi possível atualizar os posts. Os assuntos do fórum continuam disponíveis abaixo.';
         fallback.open = true;

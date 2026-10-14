@@ -100,6 +100,9 @@ html.bonds-os-preview .bos-activity h2 {margin:5px 0 12px; color:var(--bos-text)
 html.bonds-os-preview .bos-refresh {display:block; padding:6px 10px; min-height:32px; border:1px solid var(--bos-line); border-radius:3px; background:#102a36; color:var(--bos-cyan); font:10px var(--bos-mono); cursor:pointer;}
 html.bonds-os-preview .bos-refresh:disabled {opacity:.45; cursor:wait;}
 html.bonds-os-preview .bos-feed-status {margin:10px 0 14px; color:#91adb9; font:10px/1.6 'Segoe UI',sans-serif;}
+html.bonds-os-preview .bos-feed-status:empty {display:none;}
+html.bonds-os-preview .bos-activity-head {position:relative;min-height:64px;box-sizing:border-box;padding-right:78px;margin-bottom:8px;}
+html.bonds-os-preview .bos-phone-mascot {position:absolute;right:-4px;top:-8px;width:68px;height:68px;object-fit:contain;image-rendering:pixelated;pointer-events:none;}
 html.bonds-os-preview .bos-post-stream {list-style:none; margin:0; padding:0;}
 html.bonds-os-preview .bos-stream-entry {display:flex; gap:12px; padding:17px 0; border-top:1px solid var(--bos-line);}
 html.bonds-os-preview .bos-stream-number {padding-top:2px; color:#3c6576; font:10px var(--bos-mono);}

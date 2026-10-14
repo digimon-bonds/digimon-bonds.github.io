@@ -1,6 +1,6 @@
 # BONDS OS v10 — PUBLIC BETA PREP
 
-Versão: 20261013-10-public-beta7. Instalação no painel não executada.
+Versão: 20261013-10-public-beta8. Instalação no painel não executada.
 
 ## Escopo
 
@@ -73,3 +73,8 @@ Os posts narrativos da conta Omegamon em Sistemas recebem uma superfície de lei
 Os 14 arquétipos usam nomes em dourado claro, fonte de 22px/700, cabeçalho próprio com índice e cards de habilidade mais definidos. No celular, títulos de 20px e descrições alinhadas à esquerda. A edição se aplica ao template de Sistemas; posts autorais nos mundos continuam preservados. Bootstrap inalterado.
 
 Verificação: Humanos, Mecânicas e Digimon com prosa de 566px no viewport de 1280px; 14 arquétipos sem overflow a 390px; 75 entradas Digibank sem overflow interno. Testes completos e verificação HTTPS acompanham a publicação.
+
+
+## Telefone / Ogremon — public-beta8
+
+Removida a frase explicativa abaixo de Atualizar no telefone. O status de sucesso fica vazio e não ocupa espaço; carregamento, lista parcial e falha continuam informados. Ogremon em pixel art no canto superior direito do visor, com imagem transparente, espaço reservado de 68px e carregamento tardio. Referência e prompt documentados em assets/OGREMON-PHONE.md. Bootstrap mantido.

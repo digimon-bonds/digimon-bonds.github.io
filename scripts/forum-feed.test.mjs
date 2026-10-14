@@ -66,7 +66,7 @@ function activityEnvironment(idle=true){
  const made=[],timers=new Map(),events={},idleTasks=new Map();let id=0;
  function node(tag,cls='',text=''){const n={tag,className:cls,textContent:text,children:[],handlers:{},attrs:{},append(...nodes){this.children.push(...nodes)},appendChild(n){this.append(n)},setAttribute(k,v){this.attrs[k]=v},removeAttribute(k){delete this.attrs[k]},replaceChildren(...n){this.children=n},addEventListener(k,fn){this.handlers[k]=fn}};made.push(n);return n;}
  let resolveRead,reads=0;const pending=new Promise(resolve=>resolveRead=resolve);
- const c={make:node,newest:x=>x,document:{readyState:'loading',querySelector:()=>null},window:{addEventListener(k,fn){events[k]=fn}},setTimeout(fn){const n=++id;timers.set(n,fn);return n},clearTimeout(n){timers.delete(n)},Map,Promise,URL,location:{origin:'https://digimonbonds.forumeiros.com'},readPage:()=>{reads++;return pending},topicsFrom:()=>[],api:{}};
+ const c={ASSETS:"https://digimon-bonds.github.io/forum-skin/assets/",make:node,newest:x=>x,document:{readyState:'loading',querySelector:()=>null},window:{addEventListener(k,fn){events[k]=fn}},setTimeout(fn){const n=++id;timers.set(n,fn);return n},clearTimeout(n){timers.delete(n)},Map,Promise,URL,location:{origin:'https://digimonbonds.forumeiros.com'},readPage:()=>{reads++;return pending},topicsFrom:()=>[],api:{}};
  if(idle){c.requestIdleCallback=(fn,opts)=>{assert.equal(opts.timeout,2000);const n=++id;idleTasks.set(n,fn);return n};c.cancelIdleCallback=n=>idleTasks.delete(n)}
  runInNewContext(source.slice(source.indexOf('  function addActivity('),source.indexOf('  function profileKind('))+'api.addActivity=addActivity;',c);
  c.api.addActivity(node('aside'));return {made,timers,events,idleTasks,get reads(){return reads},resolveRead};
