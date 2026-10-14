@@ -1,3 +1,4 @@
+import {setBattleLayer,closeBattleDrawers} from './battle-screen.mjs';
 import {renderDigivice,deviceDefaults} from '/creator/digivices.js';
 import {currentForm,markers} from './engine.mjs';
 
@@ -23,23 +24,23 @@ export function initCommandOverlay(){
  window.addEventListener('resize',fitAboveCards);
 }
 function fitAboveCards(){
- const dialog=document.querySelector('#commandDialog');if(!dialog.open)return;
+ const dialog=document.querySelector('#commandDialog');if(document.body.classList.contains('game-screen')){dialog.style.removeProperty('max-height');return;}if(!dialog.open)return;
  const frame=document.querySelector('.arena-frame').getBoundingClientRect();
  const cards=[...document.querySelectorAll('.combatant-dock')].map(node=>node.getBoundingClientRect().top);
  if(cards.length)dialog.style.maxHeight=Math.max(200,Math.min(...cards)-frame.top-parseFloat(getComputedStyle(dialog).top)-24)+'px';
 }
 export function openCommands(){
  const dialog=document.querySelector('#commandDialog'),launch=document.querySelector('#openCommands');
- if(dialog.open||launch.disabled)return;
+ if(launch.disabled)return;closeBattleDrawers();setBattleLayer('commands');if(dialog.open)return;
  dialog.show();document.body.classList.add('commands-open');launch.setAttribute('aria-expanded','true');
  fitAboveCards();
  document.querySelector('#closeCommands').focus({preventScroll:true});
 }
-export function closeCommands(){if(document.querySelector('#commandPanel').getAttribute('aria-busy')==='true')return;document.querySelector('#actionDialog')?.close();document.querySelector('#commandDialog')?.close();}
+export function closeCommands(){if(document.querySelector('#commandPanel').getAttribute('aria-busy')==='true')return;document.querySelector('#actionDialog')?.close();document.querySelector('#commandDialog')?.close();setBattleLayer('arena');}
 export function syncCommandOverlay({state,actor,busy}){
  const launch=document.querySelector('#openCommands');launch.disabled=busy||!actor;
  const incoming=actor&&state.pending?.context?.targetId===actor.id;
- document.querySelector('#commandCue').textContent=incoming?'ATAQUE RECEBIDO · REAGIR':state.pending?(state.pending.attackConfirmed===false?'REVISAR ROLAGEM':'RESOLUÇÃO PENDENTE'):'CONTROLE DE COMBATE';
+ document.querySelector('#commandCue').textContent=busy?'ROLANDO DADOS':incoming?'ATAQUE RECEBIDO · REAGIR':state.pending?(state.pending.attackConfirmed===false?'REVISAR ROLAGEM':'RESOLUÇÃO PENDENTE'):'CONTROLE DE COMBATE';
  launch.classList.toggle('reaction-ready',!!incoming);
  if(!actor)closeCommands();
  fitAboveCards();
@@ -59,8 +60,8 @@ function actionScreen(){const glyphs=['01110/10001/10001/11111/10001/10001/10001
 export function showActionBalloon(kind){
  const popup=document.querySelector('#actionDialog');
  if(!['attack','signature','human-attack','dodge'].includes(kind)){popup.classList.remove('action-balloon');popup.removeAttribute('style');popup.showModal();return;}
- openCommands();
- document.querySelector('#commandDialog').append(popup);
+ openCommands();setBattleLayer('configure');
+ document.querySelector('.arena-frame').append(popup);
  popup.classList.add('action-balloon');
  const anchor=document.querySelector(kind==='human-attack'?'#humanAttack':kind==='dodge'?'#commandDecision':`[data-action="${kind}"]`);
  const bounds=anchor.getBoundingClientRect(),width=Math.min(440,innerWidth-32);
