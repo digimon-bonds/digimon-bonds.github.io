@@ -20,7 +20,7 @@ function environment(search='',stored=null,blocked=false,session=null,sessionBlo
  doc={readyState:'complete',documentElement:node('html'),head:node('head'),body:node('body'),createElement:node,
   getElementById(id){function walk(n){if(n.id===id)return n;for(const c of n.children){const found=walk(c);if(found)return found}}return walk(doc.head)||walk(doc.body)},
   addEventListener(k,fn){if(!events.has(k))events.set(k,new Set());events.get(k).add(fn)},removeEventListener(k,fn){events.get(k)?.delete(fn)}};
- const location={search,href:'https://digimonbonds.forumeiros.com/t1-topic'+search,reload(){state.reloads++},replace(url){state.replaced=url}};
+ const location={search,href:'https://digimonbonds.forumeiros.com/'+search,reload(){state.reloads++},replace(url){state.replaced=url}};
  const context={URL,URLSearchParams,encodeURIComponent,document:doc,location,console:{warn(){}},
  history:{replaceState(a,b,url){location.href=url;location.search=new URL(url).search}},
  localStorage:{getItem(){if(blocked)throw Error();return state.stored},setItem(k,v){if(blocked)throw Error();state.stored=v}},
@@ -45,3 +45,11 @@ test('keyboard arrows, Escape and outside pointer close the independent popover'
 test('existing App node and its listener stay intact in either skin',()=>{for(const version of ['1','2']){const e=environment('',version);const app=e.doc.createElement('button');app.id='db-app-button';app.textContent='DIGIMON BONDS APP';let clicked=0;app.addEventListener('click',()=>clicked++);e.doc.body.appendChild(app);e.run();assert.equal(e.get('db-app-button'),app);app.emit('click');assert.equal(clicked,1);assert.equal(app.textContent,'DIGIMON BONDS APP')}});
 test('bootstrap is small, deduplicated, respects classic and restores paint on transport failure',()=>{assert(Buffer.byteLength(bootstrap)<2000);assert(!bootstrap.includes('Date.now'));for(const p of ['1','2']){const e=environment('',p);e.run(bootstrap);e.run(bootstrap);assert.equal(e.doc.head.children.filter(n=>n.id==='bonds-os-loader').length,1);assert.equal(e.doc.documentElement.classList.contains('bonds-bootstrap-loading'),p==='2');e.get('bonds-os-loader').onerror();assert.equal(e.doc.documentElement.classList.values.size,0);assert(!e.get('bonds-bootstrap-critical'));assert.equal(e.state.stored,p)}});
 test('cancelled late bootstrap loader cannot initialize a new layer',()=>{const e=environment();e.run(bootstrap);const loader=e.get('bonds-os-loader');const [{fn,ms}]=e.timers.values();assert.equal(ms,12000);fn();e.doc.currentScript=loader;e.run();assert(!e.css);assert(!e.get('bonds-skin-switcher'));assert.equal(e.doc.documentElement.classList.values.size,0)});
+
+
+test('selector is in document flow below the home header and absent on other pages',()=>{
+ const home=environment();const header=home.doc.createElement('header');header.id='page-header';home.doc.body.appendChild(header);home.run();
+ assert.equal(home.get('bonds-skin-switcher').parent,header);
+ const styles=home.get('bonds-skin-switcher-style').textContent;assert.match(styles,/#bonds-skin-switcher\{position:relative/);assert.doesNotMatch(styles,/#bonds-skin-switcher\{position:(fixed|sticky)/);
+ for(const path of ['/t89-att-shirogane-kai','/f4-sistemas','/post','/search']){const topic=environment();topic.context.location.href='https://digimonbonds.forumeiros.com'+path;topic.run();assert(!topic.get('bonds-skin-switcher'));assert(topic.css);assert(topic.get('bonds-skin-switcher-style').textContent.includes('Configurações de cookies'));}
+});

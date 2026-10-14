@@ -3,7 +3,7 @@
   'use strict';
   if(document.currentScript && document.currentScript.dataset.bondsCancelled==='1')return;
   var BASE_URL = 'https://digimon-bonds.github.io/forum-skin/';
-  var VERSION = '20261014-10-public-beta10';
+  var VERSION = '20261014-10-public-beta11';
   var root=document.documentElement, storageKey='bondsSkinVersion', failKey='bondsSkinFailsafe';
   if (document.getElementById('bonds-skin-switcher-style')) return;
   var flag=new URLSearchParams(location.search).get('bondsos'), preference='2', failedSession='';
@@ -22,7 +22,7 @@
     var node=document.createElement(tag); node.className=className||''; if(text)node.textContent=text; return node;
   }
   var selectorStyle=element('style'); selectorStyle.id='bonds-skin-switcher-style';
-  selectorStyle.textContent='#bonds-skin-switcher{position:fixed;top:12px;right:12px;z-index:2147482000;font:11px/1.5 "Segoe UI",sans-serif;color:#dcecf2;box-sizing:border-box}#bonds-skin-switcher *{box-sizing:border-box}#bonds-skin-switcher button{position:static;float:none;height:auto;margin:0;text-transform:none;letter-spacing:0;cursor:pointer;font:inherit;color:inherit;box-shadow:none}#bonds-skin-switcher-trigger{display:flex;align-items:center;gap:8px;min-height:34px;padding:8px 11px;background:#102735;border:1px solid #597b89;border-left:3px solid #e3b76d;border-radius:4px 10px 4px 4px;font-size:10px!important;letter-spacing:.06em!important;box-shadow:0 4px 16px #0004!important}#bonds-skin-switcher-trigger:after{content:"⌄";color:#e3b76d}#bonds-skin-menu{position:absolute;top:calc(100% + 8px);right:0;width:228px;max-width:calc(100vw - 24px);padding:10px;background:#0b202d;border:1px solid #527480;border-radius:6px 15px 6px 6px;box-shadow:0 14px 30px #0006}#bonds-skin-menu[hidden]{display:none!important}#bonds-skin-menu .bonds-skin-heading{margin:0;padding:2px 7px 8px;color:#91b4c3;font-size:9px;letter-spacing:.14em}#bonds-skin-menu button{display:block;width:100%;padding:10px 12px;text-align:left;border:1px solid transparent;border-radius:4px;background:transparent}#bonds-skin-menu button[aria-checked="true"]{background:#193b49;border-color:#7cb8c5}#bonds-skin-menu button:before{content:"○";display:inline-block;width:18px;color:#8db5c4}#bonds-skin-menu button[aria-checked="true"]:before{content:"●";color:#e3b76d}#bonds-skin-menu button span{display:block;padding-left:18px;color:#9fbcc8;font-size:10px}#bonds-skin-menu button:hover{background:#204656}#bonds-skin-switcher button:focus-visible{outline:2px solid #e3b76d;outline-offset:3px}#bonds-skin-status{margin:8px 7px 2px;color:#e5c18b;font-size:10px}#bonds-skin-status:empty{display:none}@media(max-width:600px){#bonds-skin-switcher{top:8px;right:8px}#bonds-skin-switcher-trigger{font-size:9px!important;padding:7px 8px;min-height:32px}}';
+  selectorStyle.textContent='[aria-label="Configurações de cookies"],[title="Configurações de cookies"]{display:none!important}#bonds-skin-switcher{position:relative;display:flex;justify-content:flex-end;width:calc(100% - 64px);max-width:1380px;margin:12px auto 0;z-index:1000;font:11px/1.5 "Segoe UI",sans-serif;color:#dcecf2;box-sizing:border-box}#bonds-skin-switcher *{box-sizing:border-box}#bonds-skin-switcher button{position:static;float:none;height:auto;margin:0;text-transform:none;letter-spacing:0;cursor:pointer;font:inherit;color:inherit;box-shadow:none}#bonds-skin-switcher-trigger{display:flex;align-items:center;gap:8px;min-height:34px;padding:8px 11px;background:#102735;border:1px solid #597b89;border-left:3px solid #e3b76d;border-radius:4px 10px 4px 4px;font-size:10px!important;letter-spacing:.06em!important;box-shadow:0 4px 16px #0004!important}#bonds-skin-switcher-trigger:after{content:"⌄";color:#e3b76d}#bonds-skin-menu{position:absolute;top:calc(100% + 8px);right:0;width:228px;max-width:calc(100vw - 24px);padding:10px;background:#0b202d;border:1px solid #527480;border-radius:6px 15px 6px 6px;box-shadow:0 14px 30px #0006}#bonds-skin-menu[hidden]{display:none!important}#bonds-skin-menu .bonds-skin-heading{margin:0;padding:2px 7px 8px;color:#91b4c3;font-size:9px;letter-spacing:.14em}#bonds-skin-menu button{display:block;width:100%;padding:10px 12px;text-align:left;border:1px solid transparent;border-radius:4px;background:transparent}#bonds-skin-menu button[aria-checked="true"]{background:#193b49;border-color:#7cb8c5}#bonds-skin-menu button:before{content:"○";display:inline-block;width:18px;color:#8db5c4}#bonds-skin-menu button[aria-checked="true"]:before{content:"●";color:#e3b76d}#bonds-skin-menu button span{display:block;padding-left:18px;color:#9fbcc8;font-size:10px}#bonds-skin-menu button:hover{background:#204656}#bonds-skin-switcher button:focus-visible{outline:2px solid #e3b76d;outline-offset:3px}#bonds-skin-status{margin:8px 7px 2px;color:#e5c18b;font-size:10px}#bonds-skin-status:empty{display:none}@media(max-width:600px){#bonds-skin-switcher{width:calc(100% - 32px);margin-top:10px}#bonds-skin-switcher-trigger{font-size:9px!important;padding:7px 8px;min-height:32px}}';
   document.head.appendChild(selectorStyle);
   function update() {
     options.forEach(function(option){option.setAttribute('aria-checked',String(option.dataset.version===effective));});
@@ -40,7 +40,7 @@
     location.reload();
   }
   function mount() {
-    if(wrapper || !document.body)return;
+    if(wrapper || !document.body || !/^\/(?:index\.(?:php|htm|html))?$/.test(new URL(location.href).pathname))return;
     wrapper=element('div'); wrapper.id='bonds-skin-switcher';
     trigger=element('button','','VERSÃO DA SKIN'); trigger.id='bonds-skin-switcher-trigger'; trigger.type='button';
     trigger.setAttribute('aria-haspopup','menu'); trigger.setAttribute('aria-expanded','false'); trigger.setAttribute('aria-controls','bonds-skin-menu');
@@ -63,7 +63,7 @@
     });
     document.addEventListener('keydown',function(event){if(event.key==='Escape'&&!menu.hidden){closeMenu(true);}});
     document.addEventListener('pointerdown',function(event){if(!menu.hidden&&!wrapper.contains(event.target))closeMenu(false);});
-    wrapper.append(trigger,menu); document.body.appendChild(wrapper); update();
+    wrapper.append(trigger,menu); (document.getElementById('page-header')||document.body).appendChild(wrapper); update();
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
   function clearBridge() {
