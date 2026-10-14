@@ -24,7 +24,9 @@ export async function prepareForumPost(input,status=()=>{},snapshots){
    host.querySelectorAll('button,figcaption').forEach(el=>el.remove());
    const img=host.querySelector('.digivice-lcd img');
    if(img)await loadPartnerImage(img,partnerVisual(f).image,url=>apiURL('/api/partner-image?url='+encodeURIComponent(url)));
-   const blob=await globalThis.htmlToImage.toBlob(host.querySelector('.digivice-display'),{width:640,height:640,pixelRatio:1,skipFonts:true,backgroundColor:'transparent'});
+   // Proxy URLs share a pathname; their query identifies the actual partner.
+   // Keep it in the rasterizer cache key so independent forms cannot reuse art.
+   const blob=await globalThis.htmlToImage.toBlob(host.querySelector('.digivice-display'),{width:640,height:640,pixelRatio:1,skipFonts:true,includeQueryParams:true,backgroundColor:'transparent'});
    if(!blob)throw Error('Não foi possível gerar a imagem do Digivice.');
    status('Publicando imagem // '+(f.unlocked?f.name:'ACCESS LOCKED'));
    const res=await fetch(apiURL('/api/digivice-images'),{method:'POST',headers:{'Content-Type':'image/png'},body:blob});
