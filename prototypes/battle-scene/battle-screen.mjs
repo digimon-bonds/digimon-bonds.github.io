@@ -41,7 +41,7 @@ export function openBattleDrawer(id){
  dialog.show();$('#screen-'+id).setAttribute('aria-expanded','true');dialog.querySelector('header button').focus({preventScroll:true});
 }
 export function closeBattleDrawers(){for(const dialog of document.querySelectorAll('.screen-drawer[open]'))dialog.close();}
-export function syncBattleScreen({state,mode,actor,busy}){
+export function syncBattleScreen({state,mode,actor,busy,savingAttack=false}){
  const narrator=mode==='narrator';$('#screen-scene').hidden=!narrator;
  if(narrator){const label=document.createElement('b'),switcher=document.createElement('button');label.textContent=actor?'CONTROLANDO // '+currentForm(actor).name:'ADICIONE PARTICIPANTES';switcher.textContent='TROCAR';switcher.disabled=busy;switcher.onclick=()=>openBattleDrawer('participants');$('#controlledBanner').replaceChildren(label,switcher);}
  if(!narrator)$('#drawer-scene').close();
@@ -63,6 +63,7 @@ export function syncBattleScreen({state,mode,actor,busy}){
  // Reveal the selector automatically only when no participant has been chosen.
  if(actor||narrator)selectionPrompted=false;
  if(!narrator&&!actor&&!busy&&!selectionPrompted){selectionPrompted=true;openBattleDrawer('participants');}
- $('#screenReview').hidden=busy||!state.pending&&!state.resourceSurvival&&$('#incomingBanner').hidden;
- $('#openCommands').setAttribute('aria-label',busy?'Rolagem em andamento':'AÇÃO — Abrir controle de combate');
+ $('#screenReview').hidden=busy&&!savingAttack||!state.pending&&!state.resourceSurvival&&$('#incomingBanner').hidden;
+ if(savingAttack)$('#commandCue').textContent='CONFIRMANDO ATAQUE';
+ $('#openCommands').setAttribute('aria-label',savingAttack?'Confirmando ataque':busy?'Rolagem em andamento':'AÇÃO — Abrir controle de combate');
 }
