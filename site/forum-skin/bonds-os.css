@@ -106,9 +106,9 @@ html.bonds-os-preview .bos-phone-mascot {position:absolute;right:-4px;top:-8px;w
 
 /* Voluntary support: original banner and official QR, entirely local UI. */
 html.bonds-os-preview .bos-home-intro:has(.bos-support-trigger) {grid-template-columns:minmax(0,1fr) minmax(260px,400px);gap:32px;align-items:start;}
-html.bonds-os-preview .bos-support-trigger {display:block;align-self:start;justify-self:end;width:100%;max-width:400px;padding:0;margin:0;border:0;background:transparent;cursor:pointer;line-height:0;border-radius:14px;transition:transform .18s;}
-html.bonds-os-preview .bos-support-trigger img {display:block;width:100%;height:auto;mix-blend-mode:screen;}
-html.bonds-os-preview .bos-support-trigger:hover {transform:translateY(-2px);}
+html.bonds-os-preview .bos-support-trigger {display:block;align-self:start;justify-self:end;width:100%;max-width:400px;padding:0;margin:0;border:0;background:transparent!important;box-shadow:none!important;mix-blend-mode:screen;cursor:pointer;line-height:0;border-radius:14px;transition:transform .18s;}
+html.bonds-os-preview .bos-support-trigger img {display:block;width:100%;height:auto;}
+html.bonds-os-preview .bos-support-trigger:hover {background:transparent!important;border-color:transparent!important;box-shadow:none!important;transform:translateY(-2px);filter:brightness(1.06);}
 html.bonds-os-preview .bos-support-trigger:focus-visible {outline:2px solid #ffd477;outline-offset:5px;}
 html.bonds-os-preview:has(.bos-support-dialog[open]) {overflow:hidden;}
 html.bonds-os-preview .bos-support-dialog {box-sizing:border-box;position:fixed;inset:0;width:min(720px,calc(100% - 32px));max-width:720px;height:fit-content;max-height:calc(100dvh - 32px);margin:auto;padding:0;border:2px solid #ecc368;border-radius:26px;background:#0c1c32;color:#14243a;box-shadow:0 24px 80px #0009,inset 0 0 0 3px #e0ba6344;overflow:hidden;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#c7a45c #0c1c32;font:14px/1.6 'Segoe UI',sans-serif;}
