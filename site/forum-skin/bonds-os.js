@@ -385,6 +385,22 @@
     }
     return null;
   }
+  var topicArtStorageKey='bondsTopicArtworkV2';
+  function cachedTopicArt(key,stamp) {
+    try {
+      var entry=JSON.parse(sessionStorage.getItem(topicArtStorageKey)||'{}')[key];
+      return entry&&entry.stamp===stamp&&Date.now()-entry.time<900000?entry:null;
+    } catch (_) { return null; }
+  }
+  function saveTopicArt(key,stamp,art) {
+    try {
+      var entries=JSON.parse(sessionStorage.getItem(topicArtStorageKey)||'{}');
+      entries[key]={stamp:stamp,art:safeArtURL(art),time:Date.now()};
+      var keys=Object.keys(entries).sort(function(a,b){return entries[b].time-entries[a].time;});
+      keys.slice(100).forEach(function(id){delete entries[id];});
+      sessionStorage.setItem(topicArtStorageKey,JSON.stringify(entries));
+    } catch (_) {}
+  }
   function enhanceTopicArtwork(main) {
     var rows=Array.from(main.querySelectorAll('[data-bos-topic-row]'));
     if (!rows.length) return;
@@ -396,13 +412,12 @@
       var url=safeArtURL(ref); if(!url)return;
       row.style.setProperty('--bos-topic-art','url('+JSON.stringify(url)+')'); row.dataset.bosTopicArt='';
     }
-    rows.forEach(function(row){if(fallback)apply(row,ASSETS+fallback);});
     var queue=[], pending=0, cache=new Map();
     function pump() {
-      while(pending<2 && queue.length) {
+      while(pending<4 && queue.length) {
         var item=queue.shift(); pending++;
         (function(item){
-          readTopicBanner(item.url,cache).then(function(art){if(art)apply(item.row,art);}).catch(function(){/* Keep the circuit cover when a topic is unavailable. */}).finally(function(){pending--;pump();});
+          readTopicBanner(item.url,cache).then(function(art){saveTopicArt(item.key,item.stamp,art);if(art)apply(item.row,art);}).catch(function(){/* Keep the circuit cover when a topic is unavailable. */}).finally(function(){pending--;pump();});
         })(item);
       }
     }
@@ -414,7 +429,10 @@
       var url=topicURL(link.getAttribute('href')); if(!url)return;
       var latest=Array.from(row.querySelectorAll('.lastpost a[href], .pagination a[href]')).map(function(a){return topicURL(a.getAttribute('href'));}).filter(function(u){return u&&topicKey(u)===topicKey(url);}).sort(function(a,b){return pageOffset(b)-pageOffset(a);})[0];
       if(latest&&pageOffset(latest)>pageOffset(url))url=latest;url.hash='';url.search='';
-      queue.push({row:row,url:url});pump();
+      var lastPost=row.querySelector('.lastpost'), stamp=lastPost?lastPost.textContent.trim()+'|'+Array.from(lastPost.querySelectorAll('a[href]')).map(function(a){return a.getAttribute('href');}).join('|'):url.href;
+      var key=topicKey(url), saved=cachedTopicArt(key,stamp);
+      if(saved){if(saved.art)apply(row,saved.art);return;}
+      queue.push({row:row,url:url,key:key,stamp:stamp});pump();
     }
     function begin() {
       if(typeof IntersectionObserver==='function') {
@@ -422,8 +440,8 @@
         rows.forEach(function(row){observer.observe(row);});
       } else rows.slice(0,12).forEach(enqueue);
     }
-    function schedule(){if(typeof requestIdleCallback==='function')requestIdleCallback(begin,{timeout:2000});else setTimeout(begin,250);}
-    if(document.readyState==='complete')schedule();else window.addEventListener('load',schedule,{once:true});
+    // Observe visible cards now; unrelated images and ads must not delay artwork.
+    begin();
   }
   function enhanceCatalog(content) {
     var source=document.body.getAttribute('data-bos-source')||location.href, path=new URL(source,location.origin).pathname;

@@ -793,7 +793,7 @@ html.bonds-os-preview #page-body .bos-message-content table[data-bos-catalog-car
 html.bonds-os-preview #page-body .bos-message-content table[data-bos-catalog-card="archetype"] [data-bos-catalog-image] img {max-height:350px!important;}
 /* Topic covers: scenery merges into the circuit surface beneath readable text. */
 html.bonds-os-preview #page-body .forumbg[data-bos-topics] li.row[data-bos-topic-row] {border-color:#497b8b99;border-top-color:#78c7d3aa;transition:border-color .2s,box-shadow .2s;background:radial-gradient(ellipse at 90% 0,#265b6b88,transparent 65%),linear-gradient(135deg,#143441,#0a1f2b)!important;}
-html.bonds-os-preview #page-body [data-bos-topic-row][data-bos-topic-art]::before {content:'';position:absolute;inset:0;z-index:-2;background-image:linear-gradient(90deg,#102d3af5 8%,#102d3ab3 48%,#0a1f2b55 100%),linear-gradient(0deg,#0a1f2b 0%,#0a1f2b00 85%),var(--bos-topic-art);background-position:center;background-size:cover;background-repeat:no-repeat;opacity:.8;pointer-events:none;}
+html.bonds-os-preview #page-body [data-bos-topic-row][data-bos-topic-art]::before {content:'';position:absolute;right:0;bottom:0;width:64%;height:64%;z-index:-2;background-image:linear-gradient(90deg,#102d3a 0%,#102d3a99 20%,#102d3a00 60%),linear-gradient(180deg,#102d3a 0%,#102d3a88 20%,#102d3a00 65%),var(--bos-topic-art);background-position:center;background-size:cover;background-repeat:no-repeat;opacity:.68;pointer-events:none;}
 html.bonds-os-preview #page-body [data-bos-topic-row]::after {opacity:.37;}
 html.bonds-os-preview #page-body .forumbg li.row[data-bos-topic-row]:is(:hover,:focus-within) {border-color:#72bac8;box-shadow:0 14px 30px #0004,0 0 0 1px #62dceb22;}
 html.bonds-os-preview #page-body [data-bos-topic-row] .dterm {min-height:76px;}

@@ -59,3 +59,27 @@ test('banner extraction skips avatars, portraits, quotes and rejects an invalid 
  const background={tagName:'DIV',style:{backgroundImage:'url("https://images.example/css-banner.jpg")'},closest:()=>null};
  assert.equal(topicBanner(doc([post(1,'Omegamon',[background])])),'https://images.example/css-banner.jpg');
 });
+
+
+test('topic art cache reuses the exact latest-post stamp and expires or invalidates on new posts',()=>{
+ let now=1000,stored='{}';const c={api:{},Date:{now:()=>now},safeArtURL,sessionStorage:{getItem:()=>stored,setItem:(key,value)=>{stored=value;}}};
+ runInNewContext(source.slice(source.indexOf('  var topicArtStorageKey='),source.indexOf('  function enhanceTopicArtwork('))+'Object.assign(api,{cachedTopicArt,saveTopicArt});',c);
+ c.api.saveTopicArt('58','post-486','https://images.example/banner.jpg');
+ assert.equal(c.api.cachedTopicArt('58','post-486').art,'https://images.example/banner.jpg');
+ assert.equal(c.api.cachedTopicArt('58','post-487'),null);
+ now+=900001;assert.equal(c.api.cachedTopicArt('58','post-486'),null);
+ c.api.saveTopicArt('89','no-art',null);assert.equal(c.api.cachedTopicArt('89','no-art').art,null);
+ for(let i=0;i<105;i++){now++;c.api.saveTopicArt(String(i),'post','https://images.example/banner.jpg');}
+ assert.equal(Object.keys(JSON.parse(stored)).length,100);
+ c.sessionStorage.getItem=()=>{throw Error('Storage disabled');};assert.equal(c.api.cachedTopicArt('58','post-486'),null);assert.doesNotThrow(()=>c.api.saveTopicArt('58','post','https://images.example/banner.jpg'));
+});
+
+test('cards start without a generic world image and do not wait for page load',async()=>{
+ const fn=source.slice(source.indexOf('  function enhanceTopicArtwork('),source.indexOf('  function enhanceCatalog('));
+ assert.doesNotMatch(fn,/apply\(row,ASSETS\+fallback\)/);
+ assert.doesNotMatch(fn,/requestIdleCallback|addEventListener\('load'/);
+ assert.match(fn,/begin\(\);/);assert.match(fn,/cachedTopicArt\(key,stamp\)/);
+ const css=await readFile(new URL('../site/forum-skin/bonds-os.css',import.meta.url),'utf8');
+ const rule=css.split('[data-bos-topic-row][data-bos-topic-art]::before')[1].split('}')[0];
+ assert.match(rule,/right:0;bottom:0;width:64%;height:64%/);assert.doesNotMatch(rule,/inset:0/);
+});
