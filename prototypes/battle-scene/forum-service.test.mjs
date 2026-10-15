@@ -12,7 +12,7 @@ test('public forum reads use a redirect mode supported by the production worker'
 test('all approved pages and each reimport read current data, without cached sheet snapshots',async()=>{
  const original=globalThis.fetch;let version=1;const requests=[];
  globalThis.fetch=async(url,options)=>{
-  assert.equal(options.cache,'no-store');assert.equal(options.cf.cacheTtl,0);requests.push(String(url));
+  assert.equal(options.cache,'no-store');assert.equal(options.cf?.cacheTtl,undefined);requests.push(String(url));
   const path=new URL(url).pathname;
   if(path==='/f9-fichas-aprovadas')return new Response('<a class="topictitle" href="/t1-kai">Kai</a><a href="/f9p30-fichas-aprovadas">2</a><a href="https://evil.example/f9p60-fichas-aprovadas">Não</a>');
   if(path==='/f9p30-fichas-aprovadas')return new Response('<a class="topictitle" href="/t2-umi">Umi</a><a href="/f9-fichas-aprovadas">1</a>');
