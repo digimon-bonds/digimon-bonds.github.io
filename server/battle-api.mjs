@@ -16,9 +16,10 @@ export async function battleAPI(request,bucket,{narratorPasswordHash=passwordHas
  const narratorToken=fromGitHub(request)?(request.headers.get('Authorization')||'').replace(/^Bearer /,''):cookie(request,'bonds_narrator');
  const session=/^[a-f0-9]{64}$/.test(narratorToken)?await bucket.get('battle/sessions/'+narratorToken):null;
  const authorized=!!session&&(await session.json()).expires>Date.now();
- if(request.method==='POST'&&!trusted(request))return json({error:'Origem inválida.'},403);
+ const narratorGate=authorized;
+ if(['POST','DELETE'].includes(request.method)&&!trusted(request))return json({error:'Origem inválida.'},403);
  if(route==='/api/narrator'){
-  if(request.method==='GET')return json({authorized});
+  if(request.method==='GET')return json({authorized,capabilities:{sceneDeletion:narratorGate}});
   if(request.method!=='POST')return json({error:'Método indisponível.'},405);
   const remote=request.headers.get('CF-Connecting-IP')||'local',rateKey='battle/attempts/'+remote;
   const attempts=await bucket.get(rateKey);const rate=attempts?await attempts.json():{count:0,until:Date.now()+60000};
@@ -34,9 +35,15 @@ export async function battleAPI(request,bucket,{narratorPasswordHash=passwordHas
   try{return json(route.endsWith('/sheets')?{sheets:await listApproved()}:await readApproved(url.searchParams.get('path')));}catch(error){return json({error:error.message},502);}
  }
  if(route==='/api/scenes'){
-  if(!authorized)return json({error:'Entre com a senha do narrador.'},403);
-  if(request.method==='GET'){const scenes=[];let cursor;do{const page=await bucket.list({prefix:'battle/cards/',cursor});for(const object of page.objects){const card=await bucket.get(object.key);if(card)scenes.push(await card.json());}cursor=page.truncated?page.cursor:undefined;}while(cursor);return json({scenes:scenes.sort((a,b)=>b.updatedAt-a.updatedAt)});}
+  if(request.method==='DELETE'){
+   if(!narratorGate)return json({error:'Somente a sessão autenticada do Narrador Omegamon pode excluir cenas.'},403);
+   const id=url.searchParams.get('id');if(!validSceneId(id))return json({error:'ID de cena inválido.'},400);
+   const key='battle/scenes/'+id;if(!await bucket.get(key))return json({error:'Cena não encontrada.'},404);
+   await bucket.delete([key,'battle/cards/'+id]);return json({deleted:true,id});
+  }
+  if(request.method==='GET'){const scenes=[];let cursor;do{const page=await bucket.list({prefix:'battle/cards/',cursor});for(const object of page.objects){const card=await bucket.get(object.key);if(card)scenes.push(await card.json());}cursor=page.truncated?page.cursor:undefined;}while(cursor);return json({scenes:scenes.sort((a,b)=>b.updatedAt-a.updatedAt),capabilities:{sceneDeletion:narratorGate}});}
   if(request.method!=='POST')return json({error:'Método indisponível.'},405);
+  if(!authorized)return json({error:'Entre como narrador.'},403);
   const input=await body(request),id=crypto.randomUUID(),data=nameScene(newSceneData(emptyBattle()),input.name);
   await bucket.put('battle/scenes/'+id,JSON.stringify(data));await bucket.put('battle/cards/'+id,JSON.stringify(sceneCard(id,data)));return json({id},201);
  }

@@ -1,3 +1,4 @@
+import {canManageScenes,canDeleteScene,deletePersistentScene} from './scene-management.mjs';
 import {initForumIdentity,getForumUser,getForumConnection,getForumOwners,subscribeForumIdentity,requestForumOwners} from '/creator/forum-identity.js';
 import {canControlForumParticipant,hydrateParticipantOwners} from '/creator/forum-owner.js';
 initForumIdentity();
@@ -28,7 +29,8 @@ initCommandWheel();initCommandOverlay();initBattleScreen();
 const modes={normal:'Normal · 4+',advantage:'Vantagem · 3+',disadvantage:'Desvantagem · 5+'};
 let restored;try{const response=await apiFetch(sceneEndpoint);if(!response.ok)throw Error();restored=await response.json();}catch{document.querySelectorAll('button').forEach(b=>b.disabled=true);$('#commandFlowStatus').textContent='Não foi possível carregar a cena salva. Reconecte ao servidor; nenhuma ação foi liberada.';$('#feedback').textContent='Não foi possível carregar a cena salva. Reconecte ao servidor; nenhuma ação foi liberada.';throw Error('Servidor da cena indisponível.');}
 const serverDigivice=restored.capabilities?.digivice===true;
-$('#deleteScene').disabled=restored.capabilities?.sceneDeletion!==true;$('#deleteScene').title=$('#deleteScene').disabled?'Exclusão aguardando atualização do servidor.':'';
+$('#deleteScene').hidden=true;
+let serverSceneDeletion=false;
 let state=restored.state,revision=restored.revision,busy=false,formContext=null,savingAttack=false;
 let currentForumUser=getForumUser();const mayControlForum=actor=>canControlForumParticipant(actor,currentForumUser);
 let refreshAbort=null,resolutionOwner=null,inspectedResolution=null,freezeResolution=false;
@@ -60,7 +62,10 @@ function renderTeams(){
  for(const side of ['ally','enemy']){const actors=state.actors.filter(a=>a.side===side),team=$('#'+side+'Team');team.classList.toggle('multiple',actors.length>1);const ids=actors.map(a=>a.id).join(',');if(team.dataset.roster!==ids){team.dataset.roster=ids;team.innerHTML=actors.map(a=>`<div class="combatant ${side}" id="${a.id}Combatant"><div class="combatant-dock"><div class="combatant-label" id="${a.id}Hud"></div><button class="unit-select" data-unit="${a.id}">CONTROLAR</button></div><div class="sprite-anchor" id="${a.id}"><div class="sprite-position"><img class="sprite" alt="" draggable="false"></div></div><div class="ground-ring" aria-hidden="true"></div></div>`).join('');team.querySelectorAll('.sprite-anchor').forEach(node=>{node.onclick=()=>{const target=engine.actorById(state,node.id);if(target.side!==selectedActor().side&&target.hp&&canControl(selectedActor().id)&&selectedActor().remaining&&!busy)openAction('attack','Atacar',target.id);};});team.querySelectorAll('[data-unit]').forEach(b=>b.onclick=()=>{if(!canChoose(state,viewMode,playerId,b.dataset.unit,busy,mayControlForum))return;inspectedResolution=null;if(viewMode==='narrator'){$('#operator').value=b.dataset.unit;render();openCommands();}else if(playerId===b.dataset.unit){render();openCommands();}else choosePlayer(b.dataset.unit);});}for(const a of actors)$('#'+a.id+'Combatant').classList.toggle('selected',a.id===fieldValue('operator'));}
 }
 function rebuildSelectors(){for(const id of ['operator','labActor']){const previous=fieldValue(id);$('#'+id).innerHTML=state.actors.map(a=>option(a.id,(a.side==='ally'?'ALIADO':'NPC')+' // '+engine.currentForm(a).name)).join('');$('#'+id).value=state.actors.some(a=>a.id===previous)?previous:state.actors[0]?.id||'';}}
-function render(){hydrateParticipantOwners(state,getForumOwners());const owner=selectedActor()?.id;if(owner!==resolutionOwner){resolutionOwner=owner;inspectedResolution=null;}const resolutionId=preferredResolution(state,owner,inspectedResolution);if(!freezeResolution&&resolutionId&&resolutionId!==state.activeResolutionId)state=engine.selectResolution(state,resolutionId);renderTeams();
+function render(){hydrateParticipantOwners(state,getForumOwners());
+ document.querySelector('[data-view="narrator"]').hidden=currentForumUser?.forumUserId!=='1';
+ $('#deleteScene').hidden=!canDeleteScene(currentForumUser,narratorAuthorized,viewMode);$('#deleteScene').disabled=busy||!serverSceneDeletion;
+const owner=selectedActor()?.id;if(owner!==resolutionOwner){resolutionOwner=owner;inspectedResolution=null;}const resolutionId=preferredResolution(state,owner,inspectedResolution);if(!freezeResolution&&resolutionId&&resolutionId!==state.activeResolutionId)state=engine.selectResolution(state,resolutionId);renderTeams();
  const hasActor=!!selectedActor();
  $('#commandPanel').hidden=!hasActor;$('#openLab').disabled=busy||!hasActor;$('#editResources').disabled=busy||!hasActor;$('#removeActor').disabled=busy||!hasActor;
  if(!hasActor){
@@ -244,10 +249,10 @@ for(const [label,end] of [['← VER ALIADOS',false],['VER INIMIGOS →',true]]){
 const formationHint=document.createElement('small');formationHint.textContent='Use a barra horizontal da arena para percorrer equipes maiores.';formationViews.append(formationHint);$('#arena').after(formationViews);
 rebuildSelectors();if(playerId&&state.actors.some(a=>a.id===playerId))$('#operator').value=playerId;applyScenePresentation();render();
 
-function switchView(mode){viewMode=mode;if(mode==='player')$('#operator').value=playerId||state.actors.find(a=>a.side==='ally')?.id||'';render();message(mode==='player'?'JOGADOR // Controle somente sua dupla.':'NARRADOR // Scene Control disponível.');}
-document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',async()=>{if(busy)return;if(b.dataset.view==='narrator'&&!narratorAuthorized){try{const response=await apiFetch('/api/narrator');narratorAuthorized=(await response.json()).authorized===true;}catch{}if(!narratorAuthorized){$('#narratorPassword').value='';setText('narratorError','');$('#narratorDialog').showModal();return;}}switchView(b.dataset.view);}));
+function switchView(mode){if(mode==='narrator'&&!canManageScenes(currentForumUser,narratorAuthorized))return;viewMode=mode;if(mode==='player')$('#operator').value=playerId||state.actors.find(a=>a.side==='ally')?.id||'';render();message(mode==='player'?'JOGADOR // Controle somente sua dupla.':'NARRADOR // Scene Control disponível.');}
+document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',async()=>{if(busy)return;if(b.dataset.view==='narrator'&&currentForumUser?.forumUserId!=='1')return;if(b.dataset.view==='narrator'&&!narratorAuthorized){try{const response=await apiFetch('/api/narrator');const access=await response.json();narratorAuthorized=access.authorized===true;serverSceneDeletion=access.capabilities?.sceneDeletion===true;}catch{}if(!narratorAuthorized){$('#narratorPassword').value='';setText('narratorError','');$('#narratorDialog').showModal();return;}}switchView(b.dataset.view);}));
 $('#cancelNarrator').onclick=()=>$('#narratorDialog').close();$('#narratorDialog').addEventListener('close',()=>{$('#narratorPassword').value='';});
-$('#narratorForm').onsubmit=async e=>{e.preventDefault();$('#unlockNarrator').disabled=true;try{const response=await apiFetch('/api/narrator',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:fieldValue('narratorPassword')})});const result=await response.json();if(!response.ok||!result.authorized)throw Error(result.error||'Não foi possível liberar o acesso.');narratorAuthorized=true;$('#narratorPassword').value='';$('#narratorDialog').close();switchView('narrator');}catch(error){setText('narratorError',error.message);}finally{$('#unlockNarrator').disabled=false;}};
+$('#narratorForm').onsubmit=async e=>{e.preventDefault();$('#unlockNarrator').disabled=true;try{const response=await apiFetch('/api/narrator',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:fieldValue('narratorPassword')})});const result=await response.json();if(!response.ok||!result.authorized)throw Error(result.error||'Não foi possível liberar o acesso.');narratorAuthorized=true;const access=await (await apiFetch('/api/narrator')).json();serverSceneDeletion=access.capabilities?.sceneDeletion===true;$('#narratorPassword').value='';$('#narratorDialog').close();switchView('narrator');}catch(error){setText('narratorError',error.message);}finally{$('#unlockNarrator').disabled=false;}};
 
 $('#toggleResult').addEventListener('click',()=>{const hidden=$('#resolutionPanel').classList.toggle('folded');$('#toggleResult').textContent=hidden?'VER RESULTADO':'RECOLHER RESULTADO';});
 
@@ -286,18 +291,17 @@ $('#renameScene').addEventListener('click',()=>{if(busy)return;$('#newSceneName'
 $('#cancelSceneName').addEventListener('click',()=>$('#sceneNameDialog').close());
 $('#sceneNameForm').addEventListener('submit',async event=>{event.preventDefault();const name=$('#newSceneName').value.trim();if(!name)return;$('#sceneNameDialog').close();await run(cmd('presentation',{name}),'NOME DA CENA ATUALIZADO');});
 $('#deleteScene').addEventListener('click',async()=>{
- if(busy||!sceneId)return;
- if(!await confirmation('Excluir a cena “'+state.scene.name+'”? Ela sairá da lista de cenas abertas. O histórico será arquivado no servidor.',{confirm:'EXCLUIR CENA'}))return;
- busy=true;$('#deleteScene').disabled=true;
- try{const response=await apiFetch(sceneEndpoint,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({revision})});
- if(!response.ok){const data=await response.json().catch(()=>({}));throw Error(response.status===405?'A exclusão ainda depende da atualização do servidor. Nenhuma cena foi excluída.':data.error||'Não foi possível excluir a cena.');}
- location.href='scenes.html';
- }catch(error){report(error);}finally{busy=false;$('#deleteScene').disabled=false;render();}
+ if(busy||!sceneId||viewMode!=='narrator'||!canManageScenes(currentForumUser,narratorAuthorized)||!serverSceneDeletion)return;
+ if(!await confirmation('Excluir definitivamente a cena ‘'+state.scene.name+'’?',{confirm:'EXCLUIR',cancel:'CANCELAR'}))return;
+ if(!canManageScenes(currentForumUser,narratorAuthorized))return;
+ busy=true;render();
+ try{await deletePersistentScene(sceneId,apiFetch);location.href='scenes.html';}
+ catch(error){report(error);}finally{busy=false;render();}
 });
 
 // Forum identity is ephemeral and comes only from the existing parent overlay.
 const requestedOwnerURLs=new Set();
 function requestMissingOwners(){if(!['verified','guest'].includes(getForumConnection()))return;const urls=state.actors.filter(a=>a.source?.url&&!a.ownerForumUserId&&!requestedOwnerURLs.has(a.source.url)).map(a=>a.source.url);urls.forEach(url=>requestedOwnerURLs.add(url));if(urls.length)requestForumOwners(urls).then(()=>render());}
-subscribeForumIdentity(user=>{currentForumUser=user;hydrateParticipantOwners(state,getForumOwners());if(viewMode==='player'&&playerId&&!mayControlForum(state.actors.find(a=>a.id===playerId)))playerId=null;render();requestMissingOwners();});
+subscribeForumIdentity(user=>{currentForumUser=user;if(viewMode==='narrator'&&user?.forumUserId!=='1'){narratorAuthorized=false;switchView('player');}hydrateParticipantOwners(state,getForumOwners());if(viewMode==='player'&&playerId&&!mayControlForum(state.actors.find(a=>a.id===playerId)))playerId=null;render();requestMissingOwners();});
 currentForumUser=getForumUser();if(viewMode==='player'&&playerId&&!mayControlForum(state.actors.find(a=>a.id===playerId)))playerId=null;
 render();requestMissingOwners();

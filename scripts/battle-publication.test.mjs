@@ -4,12 +4,12 @@ import {battleAPI as handleBattleAPI} from '../server/battle-api.mjs';
 const testPassword='test-only-secret';
 const testHash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(testPassword))),b=>b.toString(16).padStart(2,'0')).join('');
 const battleAPI=(request,bucket)=>handleBattleAPI(request,bucket,{narratorPasswordHash:testHash});
-function memoryBucket(){const objects=new Map();let revision=0;return {objects,async get(key){const value=objects.get(key);return value?{etag:value.etag,json:async()=>JSON.parse(value.text)}:null;},async put(key,text,options={}){if(options.onlyIf&&objects.get(key)?.etag!==options.onlyIf.etagMatches)return null;const value={text,etag:String(++revision)};objects.set(key,value);return value;},async list({prefix}){return {objects:[...objects.keys()].filter(key=>key.startsWith(prefix)).map(key=>({key})),truncated:false};}};}
+function memoryBucket(){const objects=new Map();let revision=0;return {objects,async get(key){const value=objects.get(key);return value?{etag:value.etag,json:async()=>JSON.parse(value.text)}:null;},async put(key,text,options={}){if(options.onlyIf&&objects.get(key)?.etag!==options.onlyIf.etagMatches)return null;const value={text,etag:String(++revision)};objects.set(key,value);return value;},async delete(keys){for(const key of Array.isArray(keys)?keys:[keys])objects.delete(key);},async list({prefix}){return {objects:[...objects.keys()].filter(key=>key.startsWith(prefix)).map(key=>({key})),truncated:false};}};}
 const origin='https://battle.example';
 function request(path,{cookie='',body,originHeader=origin}={}){return new Request(origin+path,{method:body?'POST':'GET',headers:{cookie,origin:originHeader,'Content-Type':'application/json'},...(body?{body:JSON.stringify(body)}:{})});}
 test('published battle API gates the directory and creates independent persistent scenes',async()=>{
  const bucket=memoryBucket();
- assert.equal((await battleAPI(request('/api/scenes'),bucket)).status,403);
+ assert.equal((await battleAPI(request('/api/scenes'),bucket)).status,200);
  assert.equal((await battleAPI(request('/api/narrator',{body:{password:'wrong'}}),bucket)).status,401);
  const login=await battleAPI(request('/api/narrator',{body:{password:testPassword}}),bucket);
  assert.equal(login.status,200);assert.match(login.headers.get('Set-Cookie'),/HttpOnly; Secure/);
@@ -62,4 +62,57 @@ test('empty scenes preserve setup and accept/remove their first NPC without phan
  const withNpc=createNpc(saved.state,{name:'Teste NPC',image:'https://example.com/npc.png',attributes:{power:3,heart:3,intelligence:3,agility:3},hp:8,element:'Fogo',digitalAttribute:'Data',stage:'rookie',qualities:[],attacks:[]});
  assert.equal(withNpc.actors.length,1);assert.equal(withNpc.humans.length,0);assert.equal(withNpc.actors[0].forms.rookie.name,'Teste NPC');
  const empty=removeParticipant(withNpc,withNpc.actors[0].id);assert.deepEqual(empty.actors,[]);assert.equal(empty.scene.background,saved.state.scene.background);
+});
+
+import {canManageScenes,canDeleteScene,deleteSceneCard,deletePersistentScene} from '../prototypes/battle-scene/scene-management.mjs';
+test('scene deletion requires existing narrator session and removes both persistent objects',async()=>{
+ const bucket=memoryBucket();const login=await battleAPI(request('/api/narrator',{body:{password:testPassword}}),bucket),cookie=login.headers.get('Set-Cookie').split(';')[0];
+ const {id}=await (await battleAPI(request('/api/scenes',{cookie,body:{name:'Apagar definitivamente'}}),bucket)).json();
+ const del=(sceneId,auth=cookie,source=origin)=>battleAPI(new Request(origin+'/api/scenes?id='+encodeURIComponent(sceneId),{method:'DELETE',headers:{cookie:auth,origin:source}}),bucket);
+ assert.equal((await del(id,'')).status,403);assert(bucket.objects.has('battle/scenes/'+id));
+ assert.equal((await del(id,cookie,'https://foreign.example')).status,403);
+ assert.equal((await del('../scenes/other')).status,400);
+ assert.equal((await del('12345678-1234-1234-1234-123456789012')).status,404);
+ assert.equal((await del(id)).status,200);
+ assert.equal(bucket.objects.has('battle/scenes/'+id),false);assert.equal(bucket.objects.has('battle/cards/'+id),false);
+ assert.equal((await del(id)).status,404);
+ const listed=await (await battleAPI(request('/api/scenes'),bucket)).json();assert.equal(listed.scenes.length,0);assert.equal(listed.capabilities.sceneDeletion,false);
+ const access=await (await battleAPI(request('/api/narrator',{cookie}),bucket)).json();assert.equal(access.capabilities.sceneDeletion,true);
+});
+test('expired and fabricated narrator sessions cannot delete scenes',async()=>{
+ const bucket=memoryBucket(),session='b'.repeat(64);await bucket.put('battle/sessions/'+session,JSON.stringify({expires:Date.now()-1}));
+ for(const cookie of ['bonds_narrator='+session,'bonds_narrator='+'a'.repeat(64)])assert.equal((await battleAPI(new Request(origin+'/api/scenes?id=12345678-1234-1234-1234-123456789012',{method:'DELETE',headers:{origin,cookie}}),bucket)).status,403);
+});
+test('only Omegamon with narrator authorization sees management controls',()=>{
+ assert.equal(canManageScenes({forumUserId:'1'},true),true);
+ assert.equal(canManageScenes({forumUserId:'1'},false),false);
+ assert.equal(canManageScenes({forumUserId:'36',forumUsername:'Omegamon'},true),false);
+ assert.equal(canManageScenes(null,true),false);
+});
+test('client deletion targets persistent directory endpoint and propagates failures',async()=>{
+ let called;await deletePersistentScene('scene-id',async(path,options)=>{called={path,options};return new Response(null,{status:204});});
+ assert.equal(called.path,'/api/scenes?id=scene-id');assert.equal(called.options.method,'DELETE');
+ await assert.rejects(deletePersistentScene('scene-id',async()=>Response.json({error:'Negado'},{status:403})),/Negado/);
+});
+
+test('delete button belongs exclusively to authorized Omegamon narrator tab',()=>{
+ assert.equal(canDeleteScene({forumUserId:'1'},true,'narrator'),true);
+ assert.equal(canDeleteScene({forumUserId:'1'},true,'player'),false);
+ assert.equal(canDeleteScene({forumUserId:'1'},false,'narrator'),false);
+ assert.equal(canDeleteScene({forumUserId:'2'},true,'narrator'),false);
+});
+test('card is removed only after persistent deletion succeeds, without reload',async()=>{
+ let removed=false,finish;const card={remove(){removed=true;}};
+ const action=deleteSceneCard({id:'id'},card,()=>new Promise(resolve=>finish=resolve));
+ assert.equal(removed,false);finish(new Response(null,{status:204}));await action;assert.equal(removed,true);
+ removed=false;await assert.rejects(deleteSceneCard({id:'id'},card,async()=>Response.json({error:'Falha'},{status:500})),/Falha/);assert.equal(removed,false);
+});
+test('worker preflight permits DELETE and rejects foreign origins',async()=>{
+ const {readFile}=await import('node:fs/promises');
+ let source=await readFile(new URL('../server/worker.js',import.meta.url),'utf8');
+ source=source.replace("import {env} from 'cloudflare:workers';",'const env={};').replace("'./battle-api.mjs'",JSON.stringify(new URL('../server/battle-api.mjs',import.meta.url).href)).replace("'./sheet-document.js'",JSON.stringify(new URL('../server/sheet-document.js',import.meta.url).href));
+ const {default:worker}=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
+ const response=await worker.fetch(new Request(origin+'/api/scenes',{method:'OPTIONS',headers:{origin:'https://digimon-bonds.github.io','Access-Control-Request-Method':'DELETE'}}));
+ assert.equal(response.status,204);assert.equal(response.headers.get('Access-Control-Allow-Methods'),'GET, POST, DELETE, OPTIONS');
+ assert.equal((await worker.fetch(new Request(origin+'/api/scenes',{method:'OPTIONS',headers:{origin:'https://foreign.example'}}))).status,403);
 });
