@@ -20,7 +20,8 @@ export function renderInterface({state,mode,playerId,busy,choose,currentUser=nul
  document.querySelectorAll('[data-view]').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.view===mode));b.disabled=busy||!!state.pending&&b.dataset.view===mode;});
  $('#controlPicker').hidden=narrator||!!actor;
  const lock=actor&&controlLocked(state,actor.id);
- $('#controlledBanner').innerHTML=narrator?'NARRATOR // CONTROLE LOCAL DA CENA':actor?`<small>CONTROLANDO</small><b>${esc(currentForm(actor).name)} // ${esc(human?.name)}</b><button id="changeControlled" ${lock||busy?'disabled':''}>${lock?'🔒 CONTROLE BLOQUEADO NESTA RODADA':'TROCAR PARTICIPANTE'}</button>`:'Escolha um aliado para iniciar seu turno.';
+ $('#controlledBanner').hidden=!narrator&&!actor;
+ $('#controlledBanner').innerHTML=narrator?'NARRATOR // CONTROLE LOCAL DA CENA':actor?`<small>CONTROLANDO</small><b>${esc(currentForm(actor).name)} // ${esc(human?.name)}</b><button id="changeControlled" ${lock||busy?'disabled':''}>${lock?'🔒 CONTROLE BLOQUEADO NESTA RODADA':'TROCAR PARTICIPANTE'}</button>`:'';
  $('#changeControlled')?.addEventListener('click',()=>choose(null));
  $('#playerChoices').innerHTML=state.actors.filter(a=>a.side==='ally'&&a.controller==='player'&&mayControl(a)).map(a=>{const h=state.humans.find(h=>h.pairId===a.pairId),f=currentForm(a);return `<button data-player-choice="${esc(a.id)}"><img src="${esc(f.image)}" alt=""><b>${esc(f.name)}</b><span>${esc(h?.name)}</span>${chip(STAGES[f.stage].label,'stage')}</button>`;}).join('');
  $('#playerChoices').querySelectorAll('button').forEach(b=>{b.disabled=!canChoose(state,mode,playerId,b.dataset.playerChoice,busy,mayControl);b.onclick=()=>choose(b.dataset.playerChoice);});

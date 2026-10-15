@@ -1,4 +1,5 @@
 import {expireProtocols} from './digivice.mjs';
+import {highestForm} from './evolution.mjs';
 import {roundStatus,partnershipStatus} from './round-status.mjs';
 export {roundStatus,partnershipStatus} from './round-status.mjs';
 // Resolution queue and live scene membership wrap the existing combat engine.
@@ -10,7 +11,21 @@ export function exampleBattle(){const s=core.initialBattle();s.actors.forEach((a
 export function emptyBattle(){const s=exampleBattle();s.actors=[];s.humans=[];s.pairs=[];s.log=[];s.scene={name:'Nova cena',environment:'grid',background:null,audio:false};return s;}
 export const pendingResolutions=s=>(s.resolutions||[]).filter(r=>r.pending);
 export const entityPending=(s,id)=>pendingResolutions(s).some(r=>(r.pending.context?.actorId||r.pending.entityId)===id);
-export function importParticipant(s,data){if(s.actors.some(a=>a.source?.url===data.source.url))throw Error('Esta ficha já está na cena.');const n=addParticipant(s,'ally'),a=n.actors.at(-1),h=n.humans.find(h=>h.pairId===a.pairId),p=core.pairOf(n,a);Object.assign(a,{forms:structuredClone(data.forms),formId:'rookie',hp:data.hp,uses:{rookie:data.forms.rookie.attributes.intelligence},source:data.source,ownerForumUserId:data.ownerForumUserId||data.source?.ownerForumUserId||null,ownerForumUsername:data.ownerForumUsername||data.source?.ownerForumUsername||'',importWarnings:data.warnings,highestReached:Object.keys(data.forms).length===1});Object.assign(h,structuredClone(data.human));Object.assign(p,{level:data.level,bond:data.bond});n.log.at(-1).summary=`${h.name} / ${core.currentForm(a).name}: ficha pública importada para esta sessão.`;return n;}
+export function importParticipant(s,data){if(s.actors.some(a=>a.source?.url===data.source.url))return refreshParticipant(s,data);const n=addParticipant(s,'ally'),a=n.actors.at(-1),h=n.humans.find(h=>h.pairId===a.pairId),p=core.pairOf(n,a);Object.assign(a,{forms:structuredClone(data.forms),formId:'rookie',hp:data.hp,uses:{rookie:data.forms.rookie.attributes.intelligence},source:data.source,ownerForumUserId:data.ownerForumUserId||data.source?.ownerForumUserId||null,ownerForumUsername:data.ownerForumUsername||data.source?.ownerForumUsername||'',importWarnings:data.warnings,highestReached:Object.keys(data.forms).length===1});Object.assign(h,structuredClone(data.human));Object.assign(p,{level:data.level,bond:data.bond});n.log.at(-1).summary=`${h.name} / ${core.currentForm(a).name}: ficha pública importada para esta sessão.`;return n;}
+export function refreshParticipant(s,data){
+ if(s.pending||pendingResolutions(s).length||s.resourceSurvival)throw Error('Conclua as resoluções pendentes antes de atualizar uma ficha.');
+ const n=structuredClone(s),a=n.actors.find(a=>a.source?.url===data.source.url);if(!a)throw Error('Esta ficha não está na cena.');
+ const h=n.humans.find(h=>h.pairId===a.pairId),p=core.pairOf(n,a);if(!h||!p)throw Error('Dupla incompleta; a cena foi preservada.');
+ if(!data.forms[a.formId]?.unlocked)throw Error('A forma em uso não está na ficha atual. Retorne ao Novato antes de importar novamente.');
+ const owner=data.ownerForumUserId||data.source?.ownerForumUserId?{ownerForumUserId:data.ownerForumUserId||data.source.ownerForumUserId,ownerForumUsername:data.ownerForumUsername||data.source.ownerForumUsername||''}:{ownerForumUserId:a.ownerForumUserId,ownerForumUsername:a.ownerForumUsername};
+ const previousHighest=highestForm(a);
+ Object.assign(a,{forms:structuredClone(data.forms),source:{...data.source,...owner},importWarnings:structuredClone(data.warnings),...owner});
+ // Refresh sheet definitions only. Combat resources, uses, conditions, IDs,
+ // selected form, action counters and device usage belong to the current scene.
+ for(const key of ['name','image','player','characteristics','talents','devices'])h[key]=structuredClone(data.human[key]);Object.assign(h,owner);p.level=data.level;
+ if(previousHighest!==highestForm(a))a.highestReached=a.formId===highestForm(a);
+ n.log.push({id:n.log.length+1,round:n.round,kind:'sheet',actorId:a.id,summary:h.name+': ficha pública atualizada; recursos e ações da batalha preservados.'});return n;
+}
 export function cancelResolution(s,id){const n=structuredClone(s),entry=n.resolutions.find(r=>r.id===id);if(!entry?.pending)throw Error('Resolução indisponível');entry.result={...entry.pending,kind:'canceled',summary:'Resolução cancelada pelo Narrador. A ação e os recursos gastos não são devolvidos.'};entry.pending=null;n.log.push({id:n.log.length+1,round:n.round,kind:'canceled',actorId:entry.result.context?.actorId||entry.result.entityId,summary:entry.result.summary});if(n.activeResolutionId===id){n.pending=null;n.result=entry.result;}return n;}
 const queue=s=>structuredClone(s.resolutions||[]);
 function start(s,fn,id,continuation=false){if(entityPending(s,id)&&!continuation)throw Error('Este participante ainda tem uma ação aguardando resolução');const n=fn({...s,pending:null});n.resolutions=queue(s);if(n.pending){const entry={id:'action-'+(n.log.length),round:n.round,pending:structuredClone(n.pending),result:null};n.resolutions.push(entry);n.activeResolutionId=entry.id;}else{n.pending=s.pending;n.activeResolutionId=s.activeResolutionId;}return n;}

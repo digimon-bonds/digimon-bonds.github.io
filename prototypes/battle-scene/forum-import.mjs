@@ -26,18 +26,19 @@ export function parsePublicSheet(html,source){
  const doc=new DOMParser().parseFromString(html,'text/html');
  const posts=[...doc.querySelectorAll('.postbody')];
  for(const post of posts){
-  let s=restoreEmbeddedCode(post.outerHTML);
+  let s;
   const inferred=[];
-  if(!s){let raw=toBBCode(post);
+  {let raw=toBBCode(post);
    // A few public sheets leave the species label blank but identify the species
    // unambiguously with its official Reference Book image. Expose that inference.
    raw=raw.replace(/\[spoiler=NOVATO\s*\/\s*ROOKIE\]([\s\S]*?)\[\/spoiler\]/i,(whole,body)=>{if(/\[b\]Nome:\[\/b\]\s*(?=\[b\])/i.test(body)){const file=body.match(/https:\/\/digimon\.net\/cimages\/digimon\/([\w-]+)\.(?:jpg|png)/i)?.[1];const matches=file?selectableSpecies('rookie').filter(d=>speciesKey(d.name)===speciesKey(file)):[];if(matches.length===1){body=body.replace(/(\[b\]Nome:\[\/b\])\s*(?=\[b\])/i,'$1 '+matches[0].name+'\n');inferred.push('Nome da espécie ausente: '+matches[0].name+' identificado pela imagem oficial; confira.');}}return '[spoiler=NOVATO / ROOKIE]'+body+'[/spoiler]';});
    s=recoverTableCharacter(raw);}
+  if(!s)s=restoreEmbeddedCode(post.outerHTML);
   if(!s&&post.querySelector('#preview'))s=recoverLegacySheet(post.innerHTML);
   if(!s)continue;
   const p=progress(s),forms={};if(!p.devices.length)p.devices=readDeviceSlots(toBBCode(post).replace(/\[\/(?:td|tr)\]/gi,'\n').replace(/\[[^\]]*\]/g,''));for(const [stage,f] of Object.entries(s.digimonForms||{}))if(f.unlocked)forms[stage]=projectedForm(s,stage,p);
   const normalized={...s,digimonForms:forms};for(const [stage,f] of Object.entries(forms)){f.name=displayName(f.name,selectableSpecies(stage).map(d=>d.name));f.element=normalizeElement(f.element);for(const a of f.signatureAttacks)a.element=normalizeElement(a.element);}
-  const owner=extractSheetOwner(doc,post);if(!owner.ownerForumUserId)throw Error('Não foi possível identificar o ID do autor desta ficha no fórum. Nenhum participante foi adicionado.');const result=adaptSheet(normalized,p,bonuses(p),{...source,...owner});result.warnings.push(...inferred);return result;
+  const owner=extractSheetOwner(doc,post);if(!owner.ownerForumUserId)inferred.push('O fórum não informa o ID do autor desta ficha. O controle não será concedido a nenhum jogador por nome; somente Omegamon poderá controlá-la até o ID ser identificado.');const result=adaptSheet(normalized,p,bonuses(p),{...source,...owner});result.warnings.push(...inferred);return result;
  }
  throw Error('Formato desta ficha ainda não reconhecido. A cena foi preservada; confira a ficha no fórum.');
 }

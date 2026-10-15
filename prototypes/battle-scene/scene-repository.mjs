@@ -61,7 +61,7 @@ export function createSceneRepository(initial,save){
    }else{
     let current=next.state;if(resolutionId)current=e.selectResolution(current,resolutionId);
     if(current.resourceSurvival&&command!=='resourceSurvival')throw Error('Decida sobre Força para Lutar antes de continuar.');
-    const before=current;
+    const before=current,refreshingSheet=command==='importParticipant'&&current.actors.some(a=>a.source?.url===args[0]?.source?.url);
     current=applySceneCommand(current,command,args,{narrator,actorId:client.actorId});
     for(const unit of [...current.actors,...current.humans]){
      const old=e.entityById(before,unit.id);
@@ -71,8 +71,9 @@ export function createSceneRepository(initial,save){
       else current.log.push({id:current.log.length+1,round:current.round,kind:'knockout',actorId:unit.id,summary:e.entityName(old)+' está fora de batalha!'});
      }
     }
-    next.state=current.resourceSurvival?current:advanceCompletedRound(current,next.maintenance);
-    if(['configureLab','createNpc','importParticipant','removeParticipant','presentation'].includes(command))next.baseline=structuredClone(next.state);
+    next.state=current.resourceSurvival||refreshingSheet?current:advanceCompletedRound(current,next.maintenance);
+    if(refreshingSheet)next.baseline=e.refreshParticipant(next.baseline,args[0]);
+    else if(['configureLab','createNpc','importParticipant','removeParticipant','presentation'].includes(command))next.baseline=structuredClone(next.state);
    }
    next.revision++;next.receipts[key]=true;
    await write(next);return snapshot(token);
