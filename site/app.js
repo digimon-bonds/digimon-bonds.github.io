@@ -1,3 +1,5 @@
+import {initForumIdentity} from './forum-identity.js';
+initForumIdentity();
 import {mountDigibank} from './digibank.js';
 import {capacitySuggestions} from './update-catalog.js';
 import {organizeEditor} from './editor-layout.js';

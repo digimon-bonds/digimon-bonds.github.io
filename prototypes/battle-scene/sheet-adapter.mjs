@@ -1,3 +1,4 @@
+import {ownerFields} from '../../site/forum-owner.js';
 import {normalizeDevices} from './digivice.mjs';
 import {displayName} from './display-names.mjs';
 import {ELEMENTS,markers} from './rules.mjs';
@@ -6,7 +7,7 @@ const key=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLow
 const supported=new Set(['eficiente','pesado','atordoador','venenoso','enfraquecedor','quebra-bloqueio','desorientador','imobilizador']);
 const safeImage=s=>/^https?:\/\//i.test(s||'')?s:'';
 export function adaptSheet(s,p,b,source){
- const warnings=[],forms={};
+ const warnings=[],forms={},owner=ownerFields(source);
  const element=value=>{const name=['Água','Gelo','Água/Gelo'].some(v=>key(v)===key(value))?'Água/Gelo':ELEMENTS.find(v=>key(v)===key(value));if(!name)throw Error('Elemento não reconhecido nesta ficha: '+value);return name;};
  for(const [id,f] of Object.entries(s.digimonForms||{}))if(f.unlocked){
   const attrs=Object.fromEntries(Object.entries({power:'poder',heart:'coracao',intelligence:'inteligencia',agility:'agilidade'}).map(([a,v])=>[a,Number(f.attributes[v])]));
@@ -16,7 +17,7 @@ export function adaptSheet(s,p,b,source){
   if(!safeImage(f.image))warnings.push(f.name+': sem imagem pública reconhecida; substitua o PNG no LAB.');
  }
  if(!forms.rookie)throw Error('Ficha sem forma Novato reconhecida.');
- const human={devices:normalizeDevices(p.devices),name:displayName(s.name),image:safeImage(s.humanImage),player:displayName(s.player),characteristics:{body:Number(s.human.corpo),mind:Number(s.human.mente),presence:Number(s.human.presenca)},talents:p.talents.filter(t=>t.name).map((t,i)=>({id:'talent-'+i,name:displayName(t.name),rank:t.rank})),energy:p.energy};
+ const human={...owner,devices:normalizeDevices(p.devices),name:displayName(s.name),image:safeImage(s.humanImage),player:displayName(s.player),characteristics:{body:Number(s.human.corpo),mind:Number(s.human.mente),presence:Number(s.human.presenca)},talents:p.talents.filter(t=>t.name).map((t,i)=>({id:'talent-'+i,name:displayName(t.name),rank:t.rank})),energy:p.energy};
  if(Object.values(human.characteristics).some(v=>!Number.isInteger(v)||v<1||v>12))throw Error('Características do Humano incompletas.');
- return {forms,human,level:p.level,bond:p.bond,hp:Math.min(p.pv,markers(forms.rookie).hp),warnings:[...new Set(warnings)],source};
+ return {...owner,forms,human,level:p.level,bond:p.bond,hp:Math.min(p.pv,markers(forms.rookie).hp),warnings:[...new Set(warnings)],source:{...source,...owner}};
 }

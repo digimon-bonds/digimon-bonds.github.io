@@ -1,3 +1,4 @@
+import {extractSheetOwner} from '/creator/forum-owner.js';
 import {readDeviceSlots} from './digivice.mjs';
 import {displayName} from './display-names.mjs';
 import {recoverTableCharacter} from '/creator/table-import.js';
@@ -36,7 +37,7 @@ export function parsePublicSheet(html,source){
   if(!s)continue;
   const p=progress(s),forms={};if(!p.devices.length)p.devices=readDeviceSlots(toBBCode(post).replace(/\[\/(?:td|tr)\]/gi,'\n').replace(/\[[^\]]*\]/g,''));for(const [stage,f] of Object.entries(s.digimonForms||{}))if(f.unlocked)forms[stage]=projectedForm(s,stage,p);
   const normalized={...s,digimonForms:forms};for(const [stage,f] of Object.entries(forms)){f.name=displayName(f.name,selectableSpecies(stage).map(d=>d.name));f.element=normalizeElement(f.element);for(const a of f.signatureAttacks)a.element=normalizeElement(a.element);}
-  const result=adaptSheet(normalized,p,bonuses(p),source);result.warnings.push(...inferred);return result;
+  const owner=extractSheetOwner(doc,post);if(!owner.ownerForumUserId)throw Error('Não foi possível identificar o ID do autor desta ficha no fórum. Nenhum participante foi adicionado.');const result=adaptSheet(normalized,p,bonuses(p),{...source,...owner});result.warnings.push(...inferred);return result;
  }
  throw Error('Formato desta ficha ainda não reconhecido. A cena foi preservada; confira a ficha no fórum.');
 }

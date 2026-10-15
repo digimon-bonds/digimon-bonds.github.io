@@ -41,19 +41,20 @@ export function openBattleDrawer(id){
  dialog.show();$('#screen-'+id).setAttribute('aria-expanded','true');dialog.querySelector('header button').focus({preventScroll:true});
 }
 export function closeBattleDrawers(){for(const dialog of document.querySelectorAll('.screen-drawer[open]'))dialog.close();}
-export function syncBattleScreen({state,mode,actor,busy,savingAttack=false}){
+export function syncBattleScreen({state,mode,actor,busy,savingAttack=false,currentUser=null,mayControl=()=>true,forumConnection='pending'}){
  const narrator=mode==='narrator';$('#screen-scene').hidden=!narrator;
- if(narrator){const label=document.createElement('b'),switcher=document.createElement('button');label.textContent=actor?'CONTROLANDO // '+currentForm(actor).name:'ADICIONE PARTICIPANTES';switcher.textContent='TROCAR';switcher.disabled=busy;switcher.onclick=()=>openBattleDrawer('participants');$('#controlledBanner').replaceChildren(label,switcher);}
+ if(narrator){const label=document.createElement('b'),switcher=document.createElement('button');label.textContent=actor?(mayControl(actor)?'CONTROLANDO // ':'VISUALIZANDO // ')+currentForm(actor).name:'ADICIONE PARTICIPANTES';switcher.textContent='TROCAR';switcher.disabled=busy;switcher.onclick=()=>openBattleDrawer('participants');$('#controlledBanner').replaceChildren(label,switcher);}
  if(!narrator)$('#drawer-scene').close();
  const pending=(state.resolutions||[]).filter(entry=>entry.pending);
  $('#screen-resolutions').textContent='Resoluções'+(pending.length?' · '+pending.length:'');
  $('#screen-resolutions').classList.toggle('has-pending',pending.length>0);
  document.querySelectorAll('.battle-tools button').forEach(button=>button.disabled=busy);
+ let identity=$('#forumIdentityStatus');if(!identity){identity=document.createElement('small');identity.id='forumIdentityStatus';$('.battle-hud').append(identity);}identity.textContent=currentUser?'FÓRUM // '+currentUser.forumUsername:forumConnection==='pending'?'Identificando usuário…':forumConnection==='guest'?'Entre no fórum para ativar seu Link':'Abra pelo App do fórum para ativar seu Link';
  const roster=$('#screenParticipantList'),eligible=state.actors.filter(unit=>narrator||unit.side==='ally'&&unit.controller==='player').sort((a,b)=>Number(a.side==='enemy')-Number(b.side==='enemy'));
  roster.replaceChildren(...eligible.map(unit=>{
-  const form=currentForm(unit),button=document.createElement('button'),img=document.createElement('img'),info=document.createElement('span'),name=document.createElement('b'),status=document.createElement('small');
-  img.src=form.image;img.alt='';name.textContent=form.name;status.textContent=(unit.side==='ally'?'Aliado':'Inimigo')+' · PV '+unit.hp+' / '+markers(form).hp;info.append(name,status);button.append(img,info);button.className='screen-participant '+unit.side;button.setAttribute('aria-pressed',String(unit.id===actor?.id));
-  const native=$('[data-unit="'+CSS.escape(unit.id)+'"]');button.disabled=busy||!native||native.disabled;button.addEventListener('click',()=>{native.click();$('#drawer-participants').close();});return button;
+  const form=currentForm(unit),button=document.createElement(mayControl(unit)?'button':'div'),img=document.createElement('img'),info=document.createElement('span'),name=document.createElement('b'),status=document.createElement('small');
+  img.src=form.image;img.alt='';name.textContent=form.name;status.textContent=(unit.side==='ally'?'Aliado':'Inimigo')+' · PV '+unit.hp+' / '+markers(form).hp;info.append(name,status);button.append(img,info);button.className='screen-participant '+unit.side;if(mayControl(unit))button.setAttribute('aria-pressed',String(unit.id===actor?.id));else status.textContent+=' · AGUARDANDO JOGADOR';
+  const native=$('[data-unit="'+CSS.escape(unit.id)+'"]');button.disabled=busy||!native||native.disabled;if(mayControl(unit))button.addEventListener('click',()=>{native.click();$('#drawer-participants').close();});return button;
  }));
  for(const unit of state.actors){
   const reactions=pending.filter(entry=>{const p=entry.pending;if(p.kind!=='attack'||p.attackConfirmed===false||p.dodge)return false;return p.context.targetId===unit.id||state.humans.some(h=>h.id===p.context.targetId&&h.pairId===unit.pairId);});
@@ -62,7 +63,7 @@ export function syncBattleScreen({state,mode,actor,busy,savingAttack=false}){
  }
  // Reveal the selector automatically only when no participant has been chosen.
  if(actor||narrator)selectionPrompted=false;
- if(!narrator&&!actor&&!busy&&!selectionPrompted){selectionPrompted=true;openBattleDrawer('participants');}
+ if(!narrator&&!actor&&!busy&&!selectionPrompted&&eligible.some(mayControl)){selectionPrompted=true;openBattleDrawer('participants');}
  $('#screenReview').hidden=busy&&!savingAttack||!state.pending&&!state.resourceSurvival&&$('#incomingBanner').hidden;
  if(savingAttack)$('#commandCue').textContent='CONFIRMANDO ATAQUE';
  $('#openCommands').setAttribute('aria-label',savingAttack?'Confirmando ataque':busy?'Rolagem em andamento':'AÇÃO — Abrir controle de combate');
