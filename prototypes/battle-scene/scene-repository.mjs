@@ -1,3 +1,4 @@
+import {hydrateNpcLevels} from './combat-level.mjs';
 import * as e from './scene-engine.mjs';
 import {advanceCompletedRound} from './auto-round.mjs';
 import {controlLocked,canOperate} from './interface-policy.mjs';
@@ -33,7 +34,7 @@ export function applySceneCommand(s,command,args,context){
 
 export function newSceneData(state=e.exampleBattle()){return {revision:0,state,baseline:structuredClone(state),clients:{},maintenance:{},receipts:{}};}
 export function createSceneRepository(initial,save){
- let data=structuredClone(initial);
+ let data=structuredClone(initial);hydrateNpcLevels(data.state);hydrateNpcLevels(data.baseline);
  let tail=Promise.resolve();
  const write=async next=>{await save(next);data=next;};
  const serial=fn=>{const result=tail.then(fn);tail=result.catch(()=>{});return result;};
@@ -75,6 +76,7 @@ export function createSceneRepository(initial,save){
     if(refreshingSheet)next.baseline=e.refreshParticipant(next.baseline,args[0]);
     else if(['configureLab','createNpc','importParticipant','removeParticipant','presentation'].includes(command))next.baseline=structuredClone(next.state);
    }
+   if(command==='adjustResources'&&args[0]?.npcLevel!==undefined){const actor=next.baseline.actors.find(a=>a.id===args[0].actorId);if(actor&&!actor.pairId)actor.npcLevel=args[0].npcLevel;}
    next.revision++;next.receipts[key]=true;
    await write(next);return snapshot(token);
   })

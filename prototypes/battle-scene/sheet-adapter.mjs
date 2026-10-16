@@ -4,7 +4,7 @@ import {displayName} from './display-names.mjs';
 import {ELEMENTS,markers} from './rules.mjs';
 import {sheetSprite} from './sheet-art.mjs';
 const key=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[.\s]+$/,'').trim();
-const supported=new Set(['eficiente','pesado','atordoador','venenoso','enfraquecedor','quebra-bloqueio','desorientador','imobilizador']);
+const supported=new Set(['eficiente','pesado','atordoador','venenoso','enfraquecedor','quebra-bloqueio','desorientador','imobilizador','vampirismo']);
 const safeImage=s=>/^https?:\/\//i.test(s||'')?s:'';
 export function adaptSheet(s,p,b,source){
  const warnings=[],forms={},owner=ownerFields(source);

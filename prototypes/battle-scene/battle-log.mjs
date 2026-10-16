@@ -7,6 +7,6 @@ export function battleLogEntries(state){
   const action=`${c.actor.name} usou ${move} em ${c.target.name}`;
   const damage=e.actualDamage??Math.max(0,e.hpBefore-e.hpAfter);
   const resource=c.targetType==='human'?'Energia':'PV';
-  return {...e,summary:e.hit?`${action} e tirou ${damage} de ${resource}.`:`${action} e errou.`};
+  return {...e,summary:e.hit?`${action} e tirou ${damage} de ${resource}.${e.healing?' Vampirismo: recuperou '+e.healing+' PV.':''}`:`${action} e errou.`};
  });
 }
