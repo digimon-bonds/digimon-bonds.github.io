@@ -78,3 +78,18 @@ Usos, ação consumida e bônus pendentes são persistidos pelo repositório. Re
 A Galeria fica em `archive/galeria/index.html`, sem card na página inicial. O editor pesquisa qualquer nome do Digibank, sem elementos de imagem nos resultados; apenas o item selecionado solicita a arte, priorizando o recorte transparente quando disponível. A cena não pré-carrega a galeria inteira. O botão AÇÃO reutiliza a ilustração e as cores padrão do Digivice das fichas.
 
 A apresentação dos dados dura aproximadamente 400 ms, sem revelação sequencial por dado. O resultado continua vindo do servidor e sendo persistido antes da animação. A atualização periódica não sobrepõe requisições nem roda com a página oculta. O editor de assinatura apresenta os efeitos do catálogo: os já implementados são automáticos; os demais são conservados como `sourceEffects`, identificados como aplicação manual pelo Narrador, sem efeito automático inventado.
+
+
+## Automações de Assinatura — 16/10/2026
+
+Releitura dos tópicos t6-03-digimon, t18-05-combate, t8-04-lacos e t4-01-mecanicas-basicas em 16/10/2026. Os 15 efeitos são reconhecidos em conjunto; Eficiente, Sobrecarregado e alvos adicionais compõem uma única cobrança persistida na declaração. Segura Essa só pode ser usado com o estoque normal zerado. Sobrecarregado e os alvos adicionais exigem Usos disponíveis; PL não criam estoque para esses acréscimos.
+
+Ataque Múltiplo gera reações independentes a uma única sequência de faces. Decisão explícita do usuário: a contagem dos sucessos considera separadamente a relação elemental contra cada alvo (limiar 3, 4 ou 5 nas mesmas faces). Forçar repete as faces uma vez para todo o ataque, sem nova cobrança de Usos; cada defensor força apenas sua própria Esquiva. Esse efeito é separado da ação adicional Multi-Attack por 2 PL. Os efeitos direcionados da técnica ficam restritos a um destinatário escolhido entre os alvos; acertar os demais continua causando o dano normal.
+
+Atordoador, Enfraquecedor, Quebra-bloqueio, Venenoso e Explosivo têm escolhas explícitas. Desorientador, Imobilizador, Pesado e Vampirismo são automáticos nas condições indicadas. Venenoso pode afetar somente um alvo por combate para o aplicador; o dano periódico usa o Poder registrado ao envenenar, ocorre ao fim de cada Ação e permanece até o fim do combate. Imobilizado ainda exige arbitragem narrativa sobre o que necessita de movimento: o software aplica a condição sem inferir o texto da ação.
+
+Curativo usa Atributo + Qualidade + dados adicionais permitidos, sem somar o Rank à pool: o Rank soma à cura junto dos Sucessos. Cura não supera os PV máximos nem ressuscita; não exige Esquiva. Animador não rola dados e dá Estimulado a até a Inteligência (máximo de usos) da forma, preservando a condição no próprio aplicador até sua próxima Ação. Ambos usam a Ação do Digimon e o consumo normal da técnica (incluindo Eficiente quando houver).
+
+Explosivo aguarda o Narrador indicar os inimigos próximos. O alvo atingido sofre metade do dano; cada colateral recebe dano direto igual ao Nível de Laço do atacante, sem inventar Esquiva ou novos dados. Cada colateral conserva seu aceite e eventual Força para Lutar. Recursos, rolagem compartilhada e escolhas sobrevivem à recarga. Frações de dano continuam arredondadas para cima, conforme a decisão preexistente do laboratório.
+
+O frontend exige capabilities.signatureEffects do backend atualizado para não submeter configurações novas a um motor antigo. Fichas antigas que descartaram os Elementos adicionais precisam ser atualizadas pelo importador existente, que agora conserva os detalhes dos efeitos.

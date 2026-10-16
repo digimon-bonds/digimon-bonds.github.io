@@ -12,6 +12,7 @@ export function applySceneCommand(s,command,args,context){
  const pending=s.pending;
  switch(command){
   case 'resourceSurvival':{const offer=s.resourceSurvival;if(!offer)throw Error('Decisão indisponível.');own(offer.id);const n=structuredClone(s),unit=e.entityById(n,offer.id),pair=e.pairOf(n,unit);if(args[0]){if(!pair||pair.bond<3)throw Error('São necessários 3 PL.');pair.bond-=3;if(unit.characteristics)unit.energy=1;else{unit.hp=1;unit.formId=offer.formId;delete unit.conditions.incapacitated;}n.log.push({id:n.log.length+1,round:n.round,kind:'survival',actorId:unit.id,summary:offer.name+' usou Força para Lutar: −3 PL, permaneceu com 1.'});}else n.log.push({id:n.log.length+1,round:n.round,kind:'knockout',actorId:unit.id,summary:offer.name+' está fora de batalha!'});delete n.resourceSurvival;return n;}
+  case 'setExplosionTargets':admin();return e.setExplosionTargets(s,args[0]);
   case 'beginAttack':if(!narrator&&args[0].mode&&args[0].mode!=='normal')throw Error('Circunstância exige o Narrador.');own(args[0].actorId);return e.beginAttack(s,{...args[0],staged:true,rescueEnabled:false});
   case 'genericTest':own(args[0].entityId);if(!narrator&&(args[0].mode!=='normal'||args[0].difficulty!==2))throw Error('Circunstância e dificuldade exigem o Narrador.');return e.genericTest(s,args[0]);
   case 'rollDodge':if(!narrator&&args[0].mode&&args[0].mode!=='normal')throw Error('Circunstância exige o Narrador.');own(pending?.context.targetId);return e.rollDodge(s,{...args[0],rescueEnabled:false});
@@ -38,7 +39,7 @@ export function createSceneRepository(initial,save){
  let tail=Promise.resolve();
  const write=async next=>{await save(next);data=next;};
  const serial=fn=>{const result=tail.then(fn);tail=result.catch(()=>{});return result;};
- const snapshot=token=>({capabilities:{digivice:true},state:structuredClone(data.state),revision:data.revision,actorId:data.clients[token]?.actorId||null,maintenance:structuredClone(data.maintenance)});
+ const snapshot=token=>({capabilities:{digivice:true,signatureEffects:true},state:structuredClone(data.state),revision:data.revision,actorId:data.clients[token]?.actorId||null,maintenance:structuredClone(data.maintenance)});
  return {
   read:token=>serial(()=>snapshot(token)),
   execute:(token,request,narrator=false)=>serial(async()=>{
