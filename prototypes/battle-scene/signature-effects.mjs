@@ -4,7 +4,10 @@ export const OPTIONAL_EFFECTS=['atordoador','enfraquecedor','quebra-bloqueio','v
 export const effectsOf=signature=>[...new Set([...(signature?.effects||[]),...(signature?.sourceEffects||[]),signature?.effect].map(effectId).filter(Boolean))];
 export const hasEffect=(signature,effect)=>effectsOf(signature).includes(effect);
 export function effectTargetKey(signature,effect,targetId){return effect==='venenoso'?'venenoso':effect==='atordoador'?effect+':'+targetId:signature.id+':'+targetId+':'+effect;}
-export const effectAvailable=(actor,signature,effect,targetId)=>!['atordoador','desorientador','enfraquecedor','quebra-bloqueio','venenoso'].includes(effect)||!(actor.effectTargets||[]).includes(effectTargetKey(signature,effect,targetId));
+export function effectAvailable(actor,signature,effect,targetId){
+ const receipts=actor.effectTargets||[];if(effect==='venenoso'&&receipts.some(key=>key==='venenoso'||key.startsWith('venenoso:')))return false;
+ return !['atordoador','desorientador','enfraquecedor','quebra-bloqueio','venenoso'].includes(effect)||!receipts.includes(effectTargetKey(signature,effect,targetId));
+}
 export const optionalEffects=(actor,signature,targetId)=>effectsOf(signature).filter(effect=>OPTIONAL_EFFECTS.includes(effect)&&effectAvailable(actor,signature,effect,targetId));
 export function signatureElements(signature){return [...new Set([signature?.element,...(hasEffect(signature,'multi-elemento')?[...(signature?.elements||[]),...(signature?.effectDetails||[]).filter(e=>effectId(e)==='multi-elemento').map(e=>e.element)]:[])].filter(Boolean))];}
 export function signatureUsePlan(actor,signature,{targets=1,overload=0,extraUse=false}={}){

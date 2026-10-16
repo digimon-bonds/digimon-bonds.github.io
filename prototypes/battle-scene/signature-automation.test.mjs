@@ -77,3 +77,9 @@ test('poison and stimulation affect human actions too, without spending the part
  let s=fixture([]);s.humans[0].conditions={poisoned:{power:2},stimulated:{}};const before=s.humans[0].energy;
  s=e.beginAttack(s,{actorId:'human-1',entityType:'human',targetId:'enemy',attribute:'body'},()=>.7);assert.equal(s.pending.attack.mode,'advantage');s=e.rollDodge(s,{},()=>0);s=e.acceptResult(s);assert.equal(s.humans[0].energy,before-2);assert.equal(s.actors[0].remaining,1);assert.equal(s.humans[0].conditions.stimulated,undefined);
 });
+
+test('legacy poison receipts still prevent choosing a second target in the same combat',()=>{
+ const s=fixture(['venenoso']);s.actors[0].effectTargets=['venenoso:enemy'];
+ assert.deepEqual(optionalEffects(s.actors[0],e.currentForm(s.actors[0]).attacks[0],s.actors[2].id),[]);
+ assert.throws(()=>e.beginAttack(s,config({targetId:s.actors[2].id,chosenEffects:['venenoso']})),/indisponível/);
+});
