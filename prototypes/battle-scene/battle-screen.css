@@ -76,3 +76,23 @@ html:has(.game-screen),body.game-screen{width:100%;height:100dvh;min-height:0;ma
 .hud-chip.owner{color:#9affe7;border-color:#50cdb1;background:#103a35}
 .hud-chip.waiting{opacity:.65;font-size:8px}
 #forumIdentityStatus{color:#8bb3c1;font-size:10px;max-width:240px}
+
+/* Keep the partnership resources readable beside the selected combatant. */
+.game-screen .battle-dock{min-height:108px;max-height:none;padding:12px 16px;gap:14px}
+.game-screen .arena-frame{bottom:132px}
+.game-screen #pairHud.has-resource-meters{display:flex;width:min(62vw,660px);max-width:none;min-width:0}
+.game-screen #pairHud.has-resource-meters>span{display:none!important}
+.game-screen #pairHud.has-resource-meters #resourceMeters{display:grid;width:100%;grid-template-columns:1fr 1fr .8fr;gap:10px}
+.game-screen #pairHud.has-resource-meters #resourceMeters>div{--resource-color:#66e5ff;display:grid;width:auto;min-width:0;gap:5px;padding:9px 12px;border:1px solid #3c7c91;border-radius:8px;background:#082332;box-shadow:inset 0 0 18px #4bbddd12}
+.game-screen #pairHud.has-resource-meters #resourceMeters .resource-bond{--resource-color:#ffc86b;border-color:#896936;background:#2b2417}
+.game-screen #pairHud.has-resource-meters #resourceMeters .resource-uses{--resource-color:#c0b7e8;border-color:#635c7b;background:#201e2c}
+.game-screen #pairHud.has-resource-meters #resourceMeters small{color:#e9f6fc;font:700 10px/1.3 var(--mono);letter-spacing:.4px;white-space:nowrap}
+.game-screen #pairHud.has-resource-meters #resourceMeters b{font:700 22px/1.1 var(--mono);color:var(--resource-color)}
+.game-screen #pairHud.has-resource-meters #resourceMeters b span{font-size:13px;color:#c0d0d8}
+.game-screen #pairHud.has-resource-meters #resourceMeters meter{display:block;width:100%;height:14px;accent-color:var(--resource-color)}
+.game-screen #resourceMeters meter::-webkit-meter-bar{background:#030e16;border:1px solid #426071;border-radius:4px}
+.game-screen #resourceMeters meter::-webkit-meter-optimum-value,.game-screen #resourceMeters meter::-webkit-meter-suboptimum-value,.game-screen #resourceMeters meter::-webkit-meter-even-less-good-value{background:var(--resource-color);border-radius:3px}
+.game-screen #resourceMeters meter::-moz-meter-bar{background:var(--resource-color)}
+.game-screen #pairHud.has-resource-meters #resourceMeters .resource-negative{--resource-color:#ff9688;border-color:#bd655a}
+@media(max-width:1050px) and (min-width:701px){.game-screen #pairHud.has-resource-meters #resourceMeters small{font-size:8px}.game-screen #pairHud.has-resource-meters #resourceMeters>div{padding:8px}.game-screen #pairHud.has-resource-meters #resourceMeters b{font-size:20px}}
+@media(max-width:700px){.game-screen .battle-dock{min-height:124px;padding:8px 10px;gap:6px}.game-screen .arena-frame{bottom:150px}.game-screen #pairHud.has-resource-meters{width:100%}.game-screen #pairHud.has-resource-meters #resourceMeters{grid-template-columns:1fr 1fr;gap:10px}.game-screen #pairHud.has-resource-meters #resourceMeters .resource-uses{display:none}.game-screen #pairHud.has-resource-meters #resourceMeters>div{padding:8px 10px}.game-screen #pairHud.has-resource-meters #resourceMeters small{font-size:9px}.game-screen #pairHud.has-resource-meters #resourceMeters b{font-size:20px}}

@@ -22,7 +22,7 @@ export function renderInterface({state,mode,playerId,busy,choose,currentUser=nul
  $('#controlPicker').hidden=narrator||!!actor;
  const lock=actor&&controlLocked(state,actor.id);
  $('#controlledBanner').hidden=!narrator&&!actor;
- $('#controlledBanner').innerHTML=narrator?'NARRATOR // CONTROLE LOCAL DA CENA':actor?`<small>CONTROLANDO</small><b>${esc(currentForm(actor).name)} // ${esc(human?.name)}</b><button id="changeControlled" ${lock||busy?'disabled':''}>${lock?'🔒 CONTROLE BLOQUEADO NESTA RODADA':'TROCAR PARTICIPANTE'}</button>`:'';
+ $('#controlledBanner').innerHTML=narrator?'NARRATOR // CONTROLE LOCAL DA CENA':actor?`<small>CONTROLANDO</small><b>${esc(currentForm(actor).name)} // ${esc(human?.name)}</b><button id="changeControlled" ${lock||busy?'disabled':''}>${lock?'AGUARDANDO TURNO':'TROCAR PARTICIPANTE'}</button>`:'';
  $('#changeControlled')?.addEventListener('click',()=>choose(null));
  $('#playerChoices').innerHTML=state.actors.filter(a=>a.side==='ally'&&a.controller==='player'&&mayControl(a)).map(a=>{const h=state.humans.find(h=>h.pairId===a.pairId),f=currentForm(a);return `<button data-player-choice="${esc(a.id)}"><img src="${esc(f.image)}" alt=""><b>${esc(f.name)}</b><span>${esc(h?.name)}</span>${chip(STAGES[f.stage].label,'stage')}</button>`;}).join('');
  $('#playerChoices').querySelectorAll('button').forEach(b=>{b.disabled=!canChoose(state,mode,playerId,b.dataset.playerChoice,busy,mayControl);b.onclick=()=>choose(b.dataset.playerChoice);});
@@ -43,10 +43,12 @@ export function renderInterface({state,mode,playerId,busy,choose,currentUser=nul
  const resolution=$('#resolutionPanel');resolution.classList.toggle('standby',!busy&&!state.pending&&!state.result);
  $('#skipNpc').hidden=!narrator||$('#operator').value.startsWith('ally');
  $('#pairHud').classList.toggle('player-hud',!narrator);
- if(actor&&!narrator){
-  const uses=actor.uses[actor.formId]??currentForm(actor).attributes.intelligence,max=currentForm(actor).attributes.intelligence;
-  const blocks=[['ENERGIA',human.energy,9+pair.level],['LAÇO',pair.bond,pair.level+5],['SIGNATURE USES',uses,max]];
+ const resourceActor=narrator?operator:actor,resourceHuman=state.humans.find(h=>h.pairId===resourceActor?.pairId),resourcePair=state.pairs.find(p=>p.id===resourceActor?.pairId);
+ const showResources=!!(resourceActor&&resourceHuman&&resourcePair);$('#pairHud').classList.toggle('has-resource-meters',showResources);
+ if(showResources){
+  const form=currentForm(resourceActor),uses=resourceActor.uses[resourceActor.formId]??form.attributes.intelligence;
+  const blocks=[['energy','ENERGIA',resourceHuman.energy,9+resourcePair.level],['bond','PONTOS DE LAÇO · PL',resourcePair.bond,resourcePair.level+5],['uses','USOS DE ASSINATURA',uses,form.attributes.intelligence]];
   let resources=$('#resourceMeters');if(!resources){resources=document.createElement('div');resources.id='resourceMeters';$('#pairHud').append(resources);}
-  resources.innerHTML=blocks.map(([label,value,total])=>`<div><small>${label}</small><b>${value} / ${total}</b><meter min="0" max="${total}" value="${Math.max(0,value)}"></meter></div>`).join('');resources.hidden=false;
+  resources.innerHTML=blocks.map(([id,label,value,total])=>`<div class="resource-${id} ${value<0?'resource-negative':''}"><small>${label}</small><b>${value}<span> / ${total}</span></b><meter min="0" max="${total}" value="${Math.max(0,value)}" aria-label="${label}: ${value} de ${total}" aria-valuetext="${value} de ${total}"></meter></div>`).join('');resources.hidden=false;
  }else if($('#resourceMeters'))$('#resourceMeters').hidden=true;
 }

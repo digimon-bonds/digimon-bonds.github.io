@@ -50,7 +50,7 @@ export function createSceneRepository(initial,save){
    const next=structuredClone(data),client=next.clients[token]||={actorId:null};
    if(command==='claim'){
     const actor=e.actorById(next.state,args[0]);if(!actor||actor.side!=='ally'||actor.controller!=='player')throw Error('Participante inválido.');
-    if(client.actorId&&client.actorId!==actor.id&&controlLocked(next.state,client.actorId))throw Error('Controle bloqueado nesta rodada.');
+    if(client.actorId&&client.actorId!==actor.id&&controlLocked(next.state,client.actorId))throw Error('Aguardando turno. Você poderá trocar de participante na próxima rodada.');
     client.actorId=actor.id;
    }else if(command==='restart'){
     if(!narrator)throw Error('Somente o Narrador pode recomeçar a cena.');

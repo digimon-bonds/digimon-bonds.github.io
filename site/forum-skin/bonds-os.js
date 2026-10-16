@@ -82,6 +82,12 @@
     } catch (_) {}
     return null;
   }
+  function latestTransmissionURL(row) {
+    var title=row.querySelector('.last-info a[title]'),topic=title&&topicURL(title.getAttribute('href'));
+    if(!topic)return null;
+    return Array.from(row.querySelectorAll('.lastpost a[href]')).map(function(link){return topicURL(link.getAttribute('href'));})
+      .find(function(url){return url&&topicKey(url)===topicKey(topic)&&/^#\d+$/.test(url.hash);})||null;
+  }
   function rollActor(content) {
     if (!content || !content.textContent) return null;
     var match = content.textContent.trim().match(/^O membro\s+['“](.+?)['”]\s+realizou a seguinte ação:/);
@@ -715,7 +721,7 @@
           var description = make('p', 'bos-node-description', info[0]), title = dterm.querySelector('.hierarchy'); if (title) title.after(description);
         }
         dterm.querySelectorAll('a.gensmall').forEach(function (subforum) { var separator = subforum.nextSibling; if (separator && separator.nodeType === 3 && /^\s*,\s*$/.test(separator.textContent)) separator.remove(); });
-        var latest = row.querySelector('.last-info a[title]'); if (latest && latest.title) latest.textContent = latest.title;
+        var latest = row.querySelector('.last-info a[title]'); if (latest && latest.title) { latest.textContent = latest.title; var destination=latestTransmissionURL(row); if(destination)latest.setAttribute('href',destination.pathname+destination.search+destination.hash); }
       });
     });
     if (kind === 'home' && categories.length >= 4 && !document.querySelector('.bos-home-layout')) {
