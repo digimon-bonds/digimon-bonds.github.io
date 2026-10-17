@@ -54,10 +54,11 @@ const handler={async fetch(request){try{
   const object=await env.BUCKET.get(u.pathname.slice(7));if(!object)return new Response('Not found',{status:404});
   return new Response(request.method==='HEAD'?null:object.body,{headers:{'Content-Type':'image/png','Cache-Control':'public,max-age=31536000,immutable','ETag':object.httpEtag,'X-Content-Type-Options':'nosniff'}});
  }
- // Both galleries contain identical PNGs. Serve their shared copy without changing URLs.
- if(['GET','HEAD'].includes(request.method)&&/^\/battle\/assets\/partners\/[a-z0-9-]+\.png$/.test(u.pathname)){
-  u.pathname=u.pathname.replace('/battle/assets/partners/','/assets/partner-cutouts/');
-  return env.ASSETS.fetch(new Request(u,request));
+ // Transparent gallery PNGs already live on the public GitHub site.
+ // Keep old asset URLs working without duplicating the gallery in the API Worker.
+ if(['GET','HEAD'].includes(request.method)&&/^\/(?:battle\/assets\/partners|assets\/partner-cutouts)\/[a-z0-9-]+\.png$/.test(u.pathname)){
+  const image=new URL('/assets/partner-cutouts/'+u.pathname.split('/').pop(),'https://digimon-bonds.github.io');
+  image.search=u.search;return Response.redirect(image.href,302);
  }
  return env.ASSETS.fetch(request);
  }catch(error){console.error('Forum export',error.message);return json({error:'Serviço temporariamente indisponível'},503);}}};

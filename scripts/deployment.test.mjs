@@ -123,9 +123,9 @@ test('Worker gallery aliases preserve URLs, request methods and full-quality PNG
  let source=await readFile(path.join(root,'server/worker.js'),'utf8');
  source=source.replace("import {env} from 'cloudflare:workers';","const env={ASSETS:{fetch:async r=>Response.json({url:r.url,method:r.method})}};").replace("'./battle-api.mjs'",JSON.stringify(pathToFileURL(path.join(root,'server/battle-api.mjs')).href)).replace("'./sheet-document.js'",JSON.stringify(pathToFileURL(path.join(root,'server/sheet-document.js')).href));
  const {default:worker}=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
- for(const method of ['GET','HEAD']){
-  const res=await worker.fetch(new Request('https://app.test/battle/assets/partners/kudamon.png?v=1',{method}));
-  assert.equal(res.status,200);assert.deepEqual(await res.json(),{url:'https://app.test/assets/partner-cutouts/kudamon.png?v=1',method});
+ for(const method of ['GET','HEAD'])for(const route of ['/battle/assets/partners/','/assets/partner-cutouts/']){
+  const res=await worker.fetch(new Request('https://app.test'+route+'kudamon.png?v=1',{method}));
+  assert.equal(res.status,302);assert.equal(res.headers.get('location'),'https://digimon-bonds.github.io/assets/partner-cutouts/kudamon.png?v=1');
  }
  const untouched=await worker.fetch(new Request('https://app.test/assets/other.png'));
  assert.equal((await untouched.json()).url,'https://app.test/assets/other.png');
