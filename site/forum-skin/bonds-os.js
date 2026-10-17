@@ -677,6 +677,16 @@
   }
 
   function enhance() {
+    document.querySelectorAll('#page-header a[href], .topomenu a[href]').forEach(function(link){
+      var url;try{url=new URL(link.getAttribute('href'),location.href);}catch(_){return;}
+      if(url.origin!==location.origin||url.pathname!=='/register')return;
+      var walker=document.createTreeWalker(link,NodeFilter.SHOW_TEXT),node;
+      while((node=walker.nextNode()))node.textContent=node.textContent.replace(/\bregistar\b/gi,'Registrar');
+      [link].concat(Array.from(link.querySelectorAll('img'))).forEach(function(el){
+        ['title','aria-label','alt'].forEach(function(attr){var value=el.getAttribute(attr);if(value)el.setAttribute(attr,value.replace(/\bregistar\b/gi,'Registrar'));});
+      });
+    });
+
     document.querySelectorAll('#page-header a[href], .topomenu a[href]').forEach(function(link){if(/discord/i.test(link.textContent))link.href='https://discord.gg/U3dQqZJFw';});
     var count = document.querySelectorAll('#page-body .forabg ul.forums').length;
     var kind = pageKind(document.body.getAttribute('data-bos-source') || location.href, count >= 4 && !document.querySelector('.page-title'));
