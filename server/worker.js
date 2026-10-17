@@ -54,6 +54,11 @@ const handler={async fetch(request){try{
   const object=await env.BUCKET.get(u.pathname.slice(7));if(!object)return new Response('Not found',{status:404});
   return new Response(request.method==='HEAD'?null:object.body,{headers:{'Content-Type':'image/png','Cache-Control':'public,max-age=31536000,immutable','ETag':object.httpEtag,'X-Content-Type-Options':'nosniff'}});
  }
+ // Both galleries contain identical PNGs. Serve their shared copy without changing URLs.
+ if(['GET','HEAD'].includes(request.method)&&/^\/battle\/assets\/partners\/[a-z0-9-]+\.png$/.test(u.pathname)){
+  u.pathname=u.pathname.replace('/battle/assets/partners/','/assets/partner-cutouts/');
+  return env.ASSETS.fetch(new Request(u,request));
+ }
  return env.ASSETS.fetch(request);
  }catch(error){console.error('Forum export',error.message);return json({error:'Serviço temporariamente indisponível'},503);}}};
 async function limited(message){if(Number(message.headers.get('content-length'))>max)return null;const reader=message.body?.getReader();if(!reader)return null;const chunks=[];let total=0;while(true){const {value,done}=await reader.read();if(done)break;total+=value.length;if(total>max){await reader.cancel();return null;}chunks.push(value);}const result=new Uint8Array(total);let offset=0;for(const c of chunks){result.set(c,offset);offset+=c.length;}return result.buffer;}

@@ -111,3 +111,22 @@ test('updated export restores progress and locked evolution history cannot leak'
  const code='<iframe data-bonds-project="'+restorationCode(s)+'"></iframe>',restored=restoreEmbeddedCode(code);assert.deepEqual(progress(restored),progress(s));assert.equal(rookieForm(restored).qualities[0].rank,2);
  s.digimonForms.champion={...blankForm('champion'),unlocked:true,qualities:[{name:'Segredo',rank:1}]};s=progressionPlan(s,2,5).next;s=withUpdate(s,{type:'upgrade',choice:'talent',name:'Novo'});s=withUpdate(s,{type:'upgrade',choice:'Defesa'});s=withUpdate(s,{type:'upgrade',name:'Mapa'});s=withUpdate(s,{type:'form-upgrade',stage:'champion',target:'quality',index:0,base:{name:'Segredo',rank:1}});lockStage(s,'champion');assert.equal(restorationCode(s),'');assert.doesNotThrow(()=>parseProject(s));
 });
+
+test('Worker gallery aliases preserve URLs, request methods and full-quality PNG contents',async()=>{
+ const {sheetArt}=await import('../prototypes/battle-scene/sheet-art.mjs');
+ const {createHash}=await import('node:crypto');
+ for(const art of sheetArt){
+  const battle=await readFile(path.join(root,'prototypes/battle-scene',art.image));
+  const shared=await readFile(path.join(root,'site/assets/partner-cutouts',path.basename(art.image)));
+  assert.equal(createHash('sha256').update(battle).digest('hex'),createHash('sha256').update(shared).digest('hex'),art.id);
+ }
+ let source=await readFile(path.join(root,'server/worker.js'),'utf8');
+ source=source.replace("import {env} from 'cloudflare:workers';","const env={ASSETS:{fetch:async r=>Response.json({url:r.url,method:r.method})}};").replace("'./battle-api.mjs'",JSON.stringify(pathToFileURL(path.join(root,'server/battle-api.mjs')).href)).replace("'./sheet-document.js'",JSON.stringify(pathToFileURL(path.join(root,'server/sheet-document.js')).href));
+ const {default:worker}=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
+ for(const method of ['GET','HEAD']){
+  const res=await worker.fetch(new Request('https://app.test/battle/assets/partners/kudamon.png?v=1',{method}));
+  assert.equal(res.status,200);assert.deepEqual(await res.json(),{url:'https://app.test/assets/partner-cutouts/kudamon.png?v=1',method});
+ }
+ const untouched=await worker.fetch(new Request('https://app.test/assets/other.png'));
+ assert.equal((await untouched.json()).url,'https://app.test/assets/other.png');
+});
