@@ -2011,12 +2011,12 @@ const aliases={piyomon:'biyomon',plotmon:'salamon',vmon:'veemon',flamon:'flamemo
 export function findPartnerCutout(name,stage=''){const n=key(name);return partnerCutouts.find(art=>(!stage||art.stage===stage)&&(key(art.name)===(aliases[n]||n)||key(art.id)===(aliases[n]||n)));}
 export const validImageBackground=value=>/^#[0-9a-f]{6}$/i.test(String(value));
 export function partnerVisual(form){
- const art=form.imageMode==='cutout'&&findPartnerCutout(form.name,form.stage||'');
+ const art=form.imageMode==='cutout'&&findPartnerCutout(form.speciesName||form.name,form.stage||'');
  return {image:art?new URL('./assets/partner-cutouts/'+art.image,import.meta.url).href:form.image,
  background:art&&validImageBackground(form.imageBackground)?form.imageBackground:''};
 }
 export function imageAppearanceControls(form,esc){
- const art=findPartnerCutout(form.name,form.stage||'');if(!art)return '';
+ const art=findPartnerCutout(form.speciesName||form.name,form.stage||'');if(!art)return '';
  const selected=form.imageMode==='cutout';
  return `<fieldset class="partner-image-options"><legend>Imagem do parceiro</legend><label class="field">VERSÃO DA IMAGEM<select data-form-field="imageMode"><option value="original" ${selected?'':'selected'}>Imagem original / personalizada</option><option value="cutout" ${selected?'selected':''}>Recorte com fundo transparente</option></select></label>${selected?`<label class="field">COR DE FUNDO<input aria-label="Cor de fundo do Digimon" data-form-field="imageBackground" type="color" value="${validImageBackground(form.imageBackground)?form.imageBackground:'#17313b'}"></label>`:''}<p class="hint">O recorte usa a arte do Digibank. A imagem original continua guardada e pode ser restaurada a qualquer momento.</p></fieldset>`;
 }

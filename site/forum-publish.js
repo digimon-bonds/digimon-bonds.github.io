@@ -19,7 +19,7 @@ export async function prepareForumPost(input,status=()=>{},snapshots){
   status('Preparando Digivice // '+(f.unlocked?f.name:'ACCESS LOCKED'));
   const host=document.createElement('div');host.style.cssText='position:fixed;left:-10000px;top:0;width:640px;pointer-events:none;';document.body.append(host);
   try{
-   host.innerHTML=renderDigivice({...s,activeDigimonStage:stage,formLocked:!f.unlocked,digiName:f.unlocked?f.name:'',digiImage:f.unlocked?f.image:'',imageMode:f.imageMode,imageBackground:f.imageBackground,zoom:f.zoom,imagePosition:f.imagePosition},esc,valid);
+   host.innerHTML=renderDigivice({...s,activeDigimonStage:stage,formLocked:!f.unlocked,speciesName:f.speciesName,digiName:f.unlocked?f.name:'',digiImage:f.unlocked?f.image:'',imageMode:f.imageMode,imageBackground:f.imageBackground,zoom:f.zoom,imagePosition:f.imagePosition},esc,valid);
    const figure=host.querySelector('figure');figure.style.cssText='width:640px;max-width:none;margin:0;container-type:inline-size;';
    host.querySelectorAll('button,figcaption').forEach(el=>el.remove());
    const img=host.querySelector('.digivice-lcd img');
