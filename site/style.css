@@ -197,3 +197,4 @@ body:not(.launch-mode){background:radial-gradient(ellipse at 45% 0,#19343e80,tra
 @media(max-width:650px){#terminal-launcher [data-battle-entry]{width:100%}}
 /* Update shortcuts keep a return action at the end of the editor as well as in the toolbar. */
 body.update-mode .navigation:not([hidden]){display:flex}
+.terminal-modes #return-update:not([hidden]){background:linear-gradient(120deg,#ffc76a,#f6ad52);border-color:#f6ad52;color:#16232c}
