@@ -1,9 +1,10 @@
 import {FORUM_ORIGIN,normalizeForumUser,ownerFields,sheetURL} from './forum-owner.js';
-let currentUser=null,connection='pending';
+let currentUser=null,connection='pending',capabilities={};
 const listeners=new Set(),owners=new Map(),inflight=new Map();
 let host=null,identityRequest=null;
 export const getForumUser=()=>currentUser;
 export const getForumConnection=()=>connection;
+export const getForumCapabilities=()=>capabilities;
 export const getForumOwners=()=>owners;
 export function subscribeForumIdentity(listener){listeners.add(listener);return ()=>listeners.delete(listener);}
 const notify=()=>listeners.forEach(listener=>listener(currentUser));
@@ -15,7 +16,7 @@ export function initForumIdentity(target=window){
   if(event.origin!==FORUM_ORIGIN||event.source!==host.parent||!event.data||event.data.version!==1)return;
   const data=event.data;
   if(data.type==='bonds:identity:available'){requestIdentity();return;}
-  if(data.type==='bonds:identity'&&data.requestId===identityRequest){currentUser=normalizeForumUser(data.currentUser);connection=currentUser?'verified':'guest';notify();return;}
+  if(data.type==='bonds:identity'&&data.requestId===identityRequest){currentUser=normalizeForumUser(data.currentUser);capabilities={publishing:!!data.capabilities?.publishing};connection=currentUser?'verified':'guest';notify();return;}
   if(data.type==='bonds:sheet-owners'&&inflight.has(data.requestId)){
    const job=inflight.get(data.requestId);inflight.delete(data.requestId);host.clearTimeout(job.timer);
    for(const item of Array.isArray(data.owners)?data.owners:[]){const url=sheetURL(item.url),owner=ownerFields(item);if(job.urls.includes(url)&&owner.ownerForumUserId)owners.set(url,owner);}

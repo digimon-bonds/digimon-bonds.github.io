@@ -11,7 +11,7 @@
     4: ['Regras, mecânicas e informações para começar sua jornada.'],
     1: ['Histórias, registros e acontecimentos do universo Bonds.'],
     5: ['Fichas de personagens, parceiros e laços.'],
-    6: ['Evolução, conquistas e atualizações da sua ficha.'],
+    6: ['Atualizações de ficha e pedidos de novos episódios.'],
     2: ['Explore cidades, encontre outros escolhidos e escreva sua história.'],
     3: ['Novos territórios, mistérios e encontros no Mundo Digital.'],
     8: ['Um tópico livre para Testes de Templates, Rolls e outras ideias.']
