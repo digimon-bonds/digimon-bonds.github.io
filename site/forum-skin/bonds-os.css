@@ -428,6 +428,12 @@ html.bonds-os-preview [data-bos-post] .postbody>.content img {max-width:100%; he
 html.bonds-os-preview [data-bos-post] .postbody>.signature_div {max-width:100%; overflow-x:auto; margin-top:28px; padding-top:18px; border-top:1px solid var(--bos-line);}
 html.bonds-os-preview [data-bos-post] .edicao {margin-top:16px; color:#8eacba; font:10px/1.6 'Segoe UI',sans-serif; text-align:right;}
 html.bonds-os-preview [data-bos-post] .postbody>.content>blockquote,html.bonds-os-preview [data-bos-post] .postbody>.content>dl.codebox {box-sizing:border-box; width:100%; max-width:100%; height:auto; margin:20px 0; padding:18px 22px; border:1px solid #3d6576; border-left:3px solid #6cb2c5; border-radius:6px; background:#061722; color:#c4d9e3; box-shadow:none;}
+/* Native quotes can be nested inside BBCode wrappers and contain a legacy painted div. */
+html.bonds-os-preview .postbody .content blockquote {box-sizing:border-box;max-width:100%;margin:20px 0;padding:18px 22px;border:1px solid #3d6576!important;border-left:3px solid #d8b775!important;border-radius:6px!important;background:#071a25!important;color:#d2e2e9!important;-webkit-text-fill-color:currentColor;box-shadow:none!important;}
+html.bonds-os-preview .postbody .content blockquote>div {background:transparent!important;color:inherit!important;box-shadow:none!important;}
+html.bonds-os-preview .postbody .content blockquote cite {display:block;margin-bottom:12px;color:#a9c5d1!important;font-style:normal;font-weight:600;}
+html.bonds-os-preview .postbody .content blockquote a {color:#e3bf7c!important;text-decoration:underline;text-underline-offset:3px;}
+html.bonds-os-preview .postbody .content blockquote blockquote {background:#102b37!important;}
 html.bonds-os-preview [data-bos-post] .postbody>.content>dl.codebox dd {overflow:auto; max-height:440px;}
 
 /* 17 PANELS, PROFILES AND TABLES */
