@@ -521,6 +521,32 @@
     });
     if(wrappers.size)post.dataset.bosShellRepaired='';
   }
+  function organizeUpdateTopics(main) {
+    var source = new URL(document.body.getAttribute('data-bos-source') || location.href, location.href);
+    if (!/^\/f6(?:p\d+)?(?:-|$)/.test(source.pathname) || main.querySelector('[data-bos-update-section]')) return;
+    var boxes = Array.from(main.querySelectorAll('.forumbg[data-bos-topics]'));
+    var rows = boxes.flatMap(function(box){return Array.from(box.querySelectorAll('[data-bos-topic-row]'));});
+    if (!rows.length) return;
+    function id(row) {var url=topicURL(row.querySelector('a.topictitle').getAttribute('href'));return url ? topicKey(url) : '';}
+    var requests=rows.filter(function(row){return id(row)==='93';});
+    var updates=rows.filter(function(row){return id(row)!=='93';});
+    var tutorial=updates.find(function(row){return id(row)==='22';});
+    if(tutorial) updates=[tutorial].concat(updates.filter(function(row){return row!==tutorial;}));
+    function section(key,title,description,items) {
+      if(!items.length)return;
+      var box=make('section','forumbg bos-update-section');box.dataset.bosTopics='';box.dataset.bosUpdateSection=key;
+      box.setAttribute('aria-labelledby','bos-'+key+'-heading');
+      var heading=make('div','bos-update-section-heading'),label=make('h2','',title);label.id='bos-'+key+'-heading';
+      heading.append(label,make('p','',description));
+      var inner=make('div','inner'),list=make('ul','topiclist topics bg_none');
+      items.forEach(function(row){list.appendChild(row);});inner.append(heading,list);box.appendChild(inner);boxes[0].before(box);
+    }
+    requests.forEach(function(row){row.dataset.bosTopicKind='episode';var badge=row.querySelector('.bos-topic-state');if(badge)badge.textContent='PRÓXIMA AVENTURA';});
+    if(tutorial){tutorial.dataset.bosTopicKind='update-guide';var badge=tutorial.querySelector('.bos-topic-state');if(badge)badge.textContent='TUTORIAL / COMECE AQUI';}
+    section('episodes','Pedidos de Episódio','Escolha sua próxima aventura e deixe seu pedido.',requests);
+    section('updates','Atualizações de Ficha','Comece pelo tutorial e acompanhe as atualizações dos personagens.',updates);
+    boxes.forEach(function(box){if(!box.querySelector('li.row'))box.remove();});
+  }
   function enhanceInteriors(kind) {
     var main = document.querySelector('#main-content'); if (!main || kind === 'home') return;
     document.querySelectorAll('.post[id^="p"]').forEach(repairPostShell);
@@ -568,6 +594,7 @@
         if (term && (locked || important)) term.prepend(make('span','bos-topic-state',important ? 'Importante' : 'Bloqueado'));
       });
     });
+    organizeUpdateTopics(main);
     enhanceTopicArtwork(main);
     // Platform-generated blocks must never fall back to the legacy profile frame.
     main.querySelectorAll('.post').forEach(function(post){

@@ -688,6 +688,17 @@ html.bonds-os-preview #page-footer a:focus-visible {outline:2px solid #f2ce8c;ou
 
 /* Container forum empty-list placeholder, only when real subforums exist. */
 html.bonds-os-preview .forumbg[data-bos-container-empty] {display:none;}
+/* Updates and episode requests share forum f6, with distinct visual destinations. */
+html.bonds-os-preview #page-body .bos-update-section .bos-update-section-heading {margin:0 0 18px;padding:0;}
+html.bonds-os-preview #page-body .bos-update-section-heading h2 {margin:0 0 6px;border:0;padding:0;background:none;color:#d8eaf1;font:600 20px/1.4 'Exo 2','Segoe UI',sans-serif;text-transform:none;}
+html.bonds-os-preview .bos-update-section-heading p {margin:0;color:#9ab9c7;font:12px/1.7 'Segoe UI',sans-serif;}
+html.bonds-os-preview #page-body .bos-update-section[data-bos-update-section="episodes"] ul.topiclist.bg_none {grid-template-columns:minmax(0,1fr);}
+html.bonds-os-preview #page-body .bos-update-section[data-bos-update-section="updates"] {margin-top:38px;padding-top:30px;border-top:1px solid #49677788;}
+html.bonds-os-preview #page-body .forumbg.bos-update-section li.row[data-bos-topic-row][data-bos-topic-kind="episode"] {min-height:180px;border-color:#ab895e99;border-top-color:#e1b875;background:radial-gradient(ellipse at 95% 0,#97734533,transparent 65%),linear-gradient(130deg,#342d29,#172730)!important;}
+html.bonds-os-preview [data-bos-topic-kind="episode"] .bos-topic-state {color:#ffe1a0;border-color:#dab06b77;background:#9c75382b;}
+html.bonds-os-preview #page-body [data-bos-topic-kind="episode"] a.topictitle {color:#ffe2b2;}
+html.bonds-os-preview #page-body .forumbg.bos-update-section li.row[data-bos-topic-row][data-bos-topic-kind="update-guide"] {border-color:#78c7d3aa;border-left:3px solid #78c7d3;}
+html.bonds-os-preview [data-bos-topic-kind="update-guide"] .bos-topic-state {color:#a3e3ee;background:#397d8d33;border-color:#78c7d366;}
 
 /* v10 beta2: clear hierarchy, native actions and a composed community area. */
 html.bonds-os-preview .bos-home-intro {grid-template-columns:minmax(0,1fr);}
