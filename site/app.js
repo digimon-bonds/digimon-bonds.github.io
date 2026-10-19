@@ -113,15 +113,26 @@ document.addEventListener('click',async e=>{
    const next=withUpdate(s,readUpdate(document,s,action));pendingUpdate={base:JSON.stringify(s),next};$('#update-review').textContent=progress(next).history.at(-1);$('#update-confirm').hidden=false;$('#update-confirm').scrollIntoView({block:'nearest'});
   }
   if(action==='confirm'){
-   if(!pendingUpdate||pendingUpdate.base!==JSON.stringify(s))throw Error('A ficha mudou. Revise novamente.');s=pendingUpdate.next;pendingUpdate=null;persist();navigate(9);renderPreview();toast('UPDATE APLICADO E SALVO');
+   if(!pendingUpdate||pendingUpdate.base!==JSON.stringify(s))throw Error('A ficha mudou. Revise novamente.');s=pendingUpdate.next;pendingUpdate=null;persist();refreshUpdateChoices();toast('UPDATE APLICADO E SALVO');
   }
   if(action==='cancel'){pendingUpdate=null;$('#update-confirm').hidden=true;$('#progression-route').innerHTML='';}
   if(action==='checkpoint'){s.updateStart=s.updates.length;pendingUpdate=null;persist();navigate(9);toast('FICHA ATUAL DEFINIDA COMO BASE');}
-  if(action==='undo'&&s.updates.length>(s.updateStart||0)){s.updates.pop();pendingUpdate=null;persist();navigate(9);renderPreview();toast('ÚLTIMA ALTERAÇÃO DESFEITA');}
+  if(action==='undo'&&s.updates.length>(s.updateStart||0)){s.updates.pop();pendingUpdate=null;persist();refreshUpdateChoices();toast('ÚLTIMA ALTERAÇÃO DESFEITA');}
   if(action==='copy-sheet'){const result=await copyGeneratedText($('#sheet-only-code'));toast(result==='copied'?'CÓDIGO DA FICHA COPIADO':'Código selecionado. Use Ctrl+C ou Copiar.');}
   if(action==='copy'){const result=await copyGeneratedText($('#update-code'));toast(result==='copied'?'RESUMO DO UPDATE COPIADO':'Código selecionado. Use Ctrl+C ou a opção Copiar do navegador.');}
  }catch(err){toast(err.message);if($('#update-error'))$('#update-error').textContent=err.message;if(action==='read-code'&&$('#import-error'))$('#import-error').textContent=err.message;}
 });
+function refreshUpdateChoices(){
+ const root=$('#editor'),position={left:window.scrollX,top:window.scrollY},scrollers=[];
+ for(let node=root.parentElement;node;node=node.parentElement)if(node.scrollTop||node.scrollLeft)scrollers.push({node,top:node.scrollTop,left:node.scrollLeft});
+ const next=document.createElement('div');next.innerHTML=renderUpdate(s,esc);
+ const cards=[...root.querySelectorAll('.update-card')],replacement=[...next.querySelectorAll('.update-card')];
+ // Keep the surrounding page and the pasted source intact while advancing the reward queue.
+ cards.forEach((card,index)=>{if(index&&replacement[index])card.replaceChildren(...replacement[index].childNodes);});
+ updateFields();renderPreview();refreshPublicationControls();
+ const restore=()=>{if(step!==9||terminalMode!=='update')return;for(const view of scrollers){view.node.scrollLeft=view.left;view.node.scrollTop=view.top;}window.scrollTo({...position,behavior:'instant'});};
+ restore();requestAnimationFrame(()=>{restore();requestAnimationFrame(restore);});
+}
 let pendingUpdate=null,pendingImport=null;setInterval(()=>{if(step===5){enhanceDigimonUI();const e=document.querySelector('#editor');if(e&&!e.querySelector('[data-mobile-preview]')){const b=document.createElement('button');b.type='button';b.dataset.mobilePreview='';b.className='mobile-preview-button';b.textContent='VER PREVIEW';e.append(b)}}},250);
 const requestedMode=location.hash; navigate(requestedMode==='#update'?9:0);renderPreview();if(requestedMode==='#template')setTerminalMode('template');else if(requestedMode==='#digibank')setTerminalMode('digibank');else if(!['#update','#registration'].includes(requestedMode))setTerminalMode('launcher');
 if(document.modelContext?.registerTool){const controller=new AbortController();for(const tool of [{name:'inspect_character_validation',title:'Verificar ficha',description:'Lista pendências da ficha local atual sem alterá-la.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true},execute(input){if(!input||Object.keys(input).length)throw Error('Nenhum argumento esperado.');return {issues:validate(s),derived:derivedStats(s)}}},{name:'navigate_character_step',title:'Abrir etapa da ficha',description:'Abre uma etapa do editor sem alterar os dados.',inputSchema:{type:'object',properties:{step:{type:'integer',minimum:0,maximum:9}},required:['step'],additionalProperties:false},execute(input){if(!input||Object.keys(input).length!==1||!Number.isInteger(input.step)||input.step<0||input.step>9)throw Error('Etapa inválida.');navigate(input.step);return {step,title:steps[step]}}}]){try{Promise.resolve(document.modelContext.registerTool(tool,{signal:controller.signal})).catch(()=>{})}catch{}}addEventListener('pagehide',()=>controller.abort(),{once:true})}
