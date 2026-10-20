@@ -3,8 +3,8 @@
   'use strict';
   if(document.currentScript && document.currentScript.dataset.bondsCancelled==='1')return;
   var BASE_URL = 'https://digimon-bonds.github.io/forum-skin/';
-  var VERSION = '20261019-gold-update-guide';
-  if(!document.getElementById('bonds-forum-app-identity')){var identityBridge=document.createElement('script');identityBridge.id='bonds-forum-app-identity';identityBridge.type='module';identityBridge.src=BASE_URL+'forum-app-bridge.js?v=20261019-publishing1';document.head.appendChild(identityBridge);}
+  var VERSION = '20261020-profile-digivices';
+  if(!document.getElementById('bonds-forum-app-identity')){var identityBridge=document.createElement('script');identityBridge.id='bonds-forum-app-identity';identityBridge.type='module';identityBridge.src=BASE_URL+'forum-app-bridge.js?v=20261020-profile-digivices';document.head.appendChild(identityBridge);}
   var root=document.documentElement, storageKey='bondsSkinVersion', failKey='bondsSkinFailsafe';
   if (document.getElementById('bonds-skin-switcher-style')) return;
   var flag=new URLSearchParams(location.search).get('bondsos'), preference='2', failedSession='';
