@@ -729,7 +729,7 @@ html.bonds-os-preview[data-bos-page="editor"] #page-body .bos-page-heading .bos-
 html.bonds-os-preview [data-bos-post] .postprofile {--bos-id-accent:#8da8b6;isolation:isolate;overflow:hidden;background:radial-gradient(circle at 50% 80px,#33536388,transparent 170px),linear-gradient(160deg,#183744,#091d28 420px)!important;box-shadow:inset -1px 0 #77abb522;}
 html.bonds-os-preview [data-bos-post] .postprofile[data-bos-role="narrator"] {--bos-id-accent:#dfbb75;}
 html.bonds-os-preview [data-bos-post] .postprofile[data-bos-role="player"] {--bos-id-accent:#7ecbda;}
-html.bonds-os-preview [data-bos-post] .postprofile::before {content:'IDENTIDADE / AUTOR';display:block;margin:0 0 22px;padding:0 0 12px;border-bottom:1px solid #6c9caa4d;color:var(--bos-id-accent);font:9px/1.6 var(--bos-mono);letter-spacing:.1em;text-align:center;}
+html.bonds-os-preview [data-bos-post] .postprofile::before {content:none;display:none;}
 html.bonds-os-preview [data-bos-post] .postprofile::after {content:'';position:absolute;z-index:-1;inset:0;background:url('./assets/card-circuit.svg') center 80px/auto 280px no-repeat;opacity:.2;pointer-events:none;}
 html.bonds-os-preview [data-bos-post] .postprofile .bos-author-card {box-shadow:0 8px 18px #0003,inset 0 0 0 3px #071a2533;}
 html.bonds-os-preview #page-body [data-bos-post] .bos-post-tools {position:relative;isolation:isolate;display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:12px 18px;min-height:70px;margin:0 -30px 24px;padding:16px 24px;border:0;border-bottom:1px solid #527d8c;border-left:3px solid #7db9c6;background:linear-gradient(115deg,#203e4b,#102934 65%);box-shadow:0 4px 12px #0002;}
@@ -869,3 +869,19 @@ html.bonds-os-preview .bos-profile-device-caption {display:block;color:#d9c08e;f
 html.bonds-os-preview .bos-profile-device a:focus-visible {outline:2px solid #e9c17c;outline-offset:4px;border-radius:5px;}
 html.bonds-os-preview [data-bos-post] .postprofile[data-bos-device-owner] dd.digivice {display:none;}
 @media(max-width:640px){html.bonds-os-preview [data-bos-post] .postprofile .bos-profile-device{max-width:180px;margin-top:18px;}html.bonds-os-preview [data-bos-post] .postprofile .bos-profile-device img{max-width:140px;}}
+
+/* One continuous frame connects the account identity to its approved Digivice. */
+html.bonds-os-preview [data-bos-post] .postprofile .bos-player-link-card {box-sizing:border-box;position:relative;isolation:isolate;width:100%;max-width:220px;align-self:center;padding:24px 12px 14px;border:1px solid #d4ae63;border-top:3px solid #ebca85;border-radius:25px 7px 30px 7px;background:radial-gradient(ellipse at 50% 12%,#36606c88,transparent 55%),linear-gradient(165deg,#173640,#0a202b);box-shadow:inset 0 0 0 4px #102a34,0 0 0 1px #d4ae6322,0 12px 24px #0003;}
+html.bonds-os-preview [data-bos-post] .bos-player-link-card::before {content:'';position:absolute;inset:8px;z-index:-1;border:1px solid #bd98533b;border-radius:18px 3px 23px 3px;background:url('./assets/card-circuit.svg') center/100% 100% no-repeat;opacity:.7;pointer-events:none;}
+html.bonds-os-preview [data-bos-post] .bos-player-link-card::after {content:'';position:absolute;top:-3px;left:27px;width:35px;height:3px;background:#fff1bb;box-shadow:0 0 9px #e7bc7666;pointer-events:none;}
+html.bonds-os-preview [data-bos-post] .postprofile .bos-player-link-card dt {gap:16px;}
+html.bonds-os-preview [data-bos-post] .postprofile .bos-player-link-card dt img {border-color:#d5b675!important;box-shadow:0 0 0 5px #d5b67512,0 6px 18px #0005!important;}
+html.bonds-os-preview [data-bos-post] .postprofile .bos-player-link-card .bos-author-card {width:100%;margin:0;padding:14px 4px;border:0;border-top:1px solid #d5b67566;border-bottom:1px solid #d5b67566;border-radius:0;background:linear-gradient(90deg,transparent,#d5b6750c,transparent);box-shadow:none;}
+html.bonds-os-preview [data-bos-post] .postprofile .bos-player-link-card .bos-author-role {color:#ceb881;}
+html.bonds-os-preview [data-bos-post] .postprofile .bos-player-link-card .bos-profile-device {position:relative;margin:24px 0 0;padding:14px 0 0;border:0;border-radius:0;background:radial-gradient(ellipse at center,#42647455,transparent 70%);box-shadow:none;}
+html.bonds-os-preview [data-bos-post] .bos-player-link-card .bos-profile-device::before {content:'';position:absolute;top:-24px;left:50%;width:1px;height:28px;background:linear-gradient(#d5b67588,#d5b675);}
+html.bonds-os-preview [data-bos-post] .bos-player-link-card .bos-profile-device::after {content:'';position:absolute;top:1px;left:calc(50% - 3px);width:5px;height:5px;border:1px solid #e2bf77;background:#183640;transform:rotate(45deg);}
+html.bonds-os-preview [data-bos-post] .bos-player-link-card .bos-profile-device-label {color:#d8bd83;font-size:7px;letter-spacing:.07em;}
+html.bonds-os-preview [data-bos-post] .bos-player-link-card .bos-profile-device a {transition:filter .2s ease;}
+html.bonds-os-preview [data-bos-post] .bos-player-link-card .bos-profile-device a:hover {filter:brightness(1.12);}
+html.bonds-os-preview [data-bos-post] .postprofile[data-bos-device-owner]::after {display:none;}

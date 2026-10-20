@@ -103,14 +103,16 @@ export function installForumProfileDevices(host=window){
  }
  function mount(profile,record){
   if(!profile.isConnected)return;const previous=profile.querySelector('.bos-profile-device');
-  if(!record){previous?.remove();delete profile.dataset.bosDeviceOwner;return;}
+  if(!record){previous?.remove();const shell=profile.querySelector('.bos-player-link-card');if(shell){shell.replaceWith(...shell.childNodes);}delete profile.dataset.bosDeviceOwner;return;}
   if(previous?.dataset.sheet===record.sheetURL&&previous.querySelector('img')?.src===record.image)return;
   const card=doc.createElement('div');card.className='bos-profile-device';card.dataset.sheet=record.sheetURL;card.dataset.ownerForumUserId=record.ownerForumUserId;
   const label=doc.createElement('span');label.className='bos-profile-device-label';label.textContent='DIGIVICE // LINK ATIVO';
   const link=doc.createElement('a');link.href=record.sheetURL;link.title='Ver ficha aprovada de '+record.ownerForumUsername;
   const image=doc.createElement('img');image.src=record.image;image.alt='Digivice personalizado de '+record.ownerForumUsername;image.loading='lazy';image.decoding='async';image.width=180;image.height=180;
-  const caption=doc.createElement('span');caption.className='bos-profile-device-caption';caption.textContent='VER FICHA APROVADA ↗';link.append(image,caption);card.append(label,link);
-  profile.dataset.bosDeviceOwner=record.ownerForumUserId;if(previous)previous.replaceWith(card);else profile.querySelector(':scope > dl')?.after(card);
+  link.setAttribute('aria-label',link.title);link.append(image);card.append(label,link);
+  let shell=profile.querySelector('.bos-player-link-card');
+  if(!shell){const identity=profile.querySelector(':scope > dl');if(!identity)return;shell=doc.createElement('div');shell.className='bos-player-link-card';identity.before(shell);shell.append(identity);}
+  profile.dataset.bosDeviceOwner=record.ownerForumUserId;if(previous)previous.replaceWith(card);else shell.append(card);
  }
  function scan(){
   if(queued||!doc.documentElement.classList.contains('bonds-os-preview'))return;queued=true;
