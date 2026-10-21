@@ -1,3 +1,4 @@
+import {hideOmegamonEditNotices} from '../forum-edit-notices.js';
 import {installUpdateSheetTools} from '../forum-update-tools.js';
 import {installForumProfileDevices} from '../forum-profile-devices.js';
 import {publishNativeForum} from '../forum-native-post.js';
@@ -13,7 +14,7 @@ export function installForumAppBridge(host=window){
  async function publicDocument(url){const response=await host.fetch(url,{credentials:'same-origin',signal:AbortSignal.timeout(12000)});if(!response.ok||new URL(response.url).origin!==FORUM_ORIGIN)throw Error('Leitura pública indisponível');const html=await response.text();if(html.length>2000000)throw Error('Página muito grande');return new host.DOMParser().parseFromString(html,'text/html');}
  async function approvedURLs(){if(!approved)approved=publicDocument(FORUM_ORIGIN+'/f9-fichas-aprovadas').then(page=>new Set([...page.querySelectorAll('a.topictitle[href]')].map(link=>sheetURL(link.getAttribute('href'))).filter(Boolean))).catch(error=>{approved=null;throw error;});return approved;}
  async function readOwner(url){if(!cache.has(url))cache.set(url,(async()=>{if(!(await approvedURLs()).has(url))return null;const page=await publicDocument(url),owner=extractSheetOwner(page);return owner.ownerForumUserId?{url,...owner}:null;})().catch(()=>{cache.delete(url);return null;}));return cache.get(url);}
- function attach(){if(doc.querySelectorAll){installUpdateSheetTools(host,identity());installForumProfileDevices(host);}const target=frame();if(!target||known.has(target))return;known.add(target);target.addEventListener('load',()=>send(target,{type:'bonds:identity:available'}));send(target,{type:'bonds:identity:available'});}
+ function attach(){if(doc.querySelectorAll){hideOmegamonEditNotices(doc);installUpdateSheetTools(host,identity());installForumProfileDevices(host);}const target=frame();if(!target||known.has(target))return;known.add(target);target.addEventListener('load',()=>send(target,{type:'bonds:identity:available'}));send(target,{type:'bonds:identity:available'});}
  host.addEventListener('message',async event=>{
   const target=frame(),data=event.data;
   if(!target||event.source!==target.contentWindow||event.origin!==APP_ORIGIN||!data||data.version!==1||typeof data.requestId!=='string'||!/^[\w-]{20,80}$/.test(data.requestId))return;
