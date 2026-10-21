@@ -107,7 +107,7 @@ export function installForumProfileDevices(host=window){
   if(previous?.dataset.sheet===record.sheetURL&&previous.querySelector('img')?.src===record.image)return;
   const card=doc.createElement('div');card.className='bos-profile-device';card.dataset.sheet=record.sheetURL;card.dataset.ownerForumUserId=record.ownerForumUserId;
   const label=doc.createElement('span');label.className='bos-profile-device-label';label.textContent='DIGIVICE // LINK ATIVO';
-  const link=doc.createElement('a');link.href=record.sheetURL;link.title='Ver ficha aprovada de '+record.ownerForumUsername;
+  const link=doc.createElement('a');link.href=record.sheetURL;link.title='Ir para a ficha';
   const image=doc.createElement('img');image.src=record.image;image.alt='Digivice personalizado de '+record.ownerForumUsername;image.loading='lazy';image.decoding='async';image.width=180;image.height=180;
   link.setAttribute('aria-label',link.title);link.append(image);card.append(label,link);
   let shell=profile.querySelector('.bos-player-link-card');
