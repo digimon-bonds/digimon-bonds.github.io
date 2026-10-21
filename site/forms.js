@@ -47,3 +47,27 @@ function validImageURL(value){try{const u=new URL(value);return ['http:','https:
 
 export function addSignatureAttack(s){initializeForms(s);const k=s.activeDigimonStage,f=s.digimonForms[k];if(k==='baby'||!f.unlocked||f.signatureAttacks.length>=100)return false;f.signatureAttacks.push({name:'',rank:stageRules[k].rank,element:'',effects:[{name:'',element:''}]});return true;}
 export function removeSignatureAttack(s,index){const f=s.digimonForms[s.activeDigimonStage];if(!f?.unlocked||!Number.isInteger(index)||index<1||index>=f.signatureAttacks.length)return false;f.signatureAttacks.splice(index,1);return true;}
+
+// Keep removals in the same source used to rebuild the displayed form.
+function qualityRemoval(s,index){
+ const stage=s.activeDigimonStage,f=activeForm(s),raw=s.digimonForms?.[stage];
+ if(!raw?.unlocked||!Number.isInteger(index)||index<0||index>=f.qualities.length||stage!=='baby'&&f.qualities.length<=1)return null;
+ const q=f.qualities[index],label=stageNames[stage][0]+stageNames[stage].slice(1).toLowerCase(),p=progress(s);
+ const globalIndex=stage==='rookie'?p.qualities.map((q,i)=>({q,i})).filter(x=>x.q.stage==='Novato')[index]?.i:p.qualities.findIndex(x=>x.stage===label&&x.name===q.name);
+ const baseline=(s.updates||[]).find(e=>e.type==='baseline');
+ const baseIndex=stage==='rookie'?baseline?.qualities?.map((q,i)=>({q,i})).filter(x=>x.q.stage==='Novato')[index]?.i:baseline?.qualities?.findIndex(x=>x.stage===label&&x.name===q.name);
+ const rawIndex=stage==='rookie'?-1:index<raw.qualities.length?index:-1;
+ // Earned capacities and upgrades must retain their reward history.
+ if((s.updates||[]).some(e=>e.type==='upgrade'&&(e.target==='quality'&&e.index===globalIndex||e.choice==='quality'&&(e.stage||'Novato')===label&&e.name.trim()===q.name)||e.type==='form-upgrade'&&e.target==='quality'&&e.stage===stage&&e.index===index))return null;
+ if(!(baseIndex>=0)&&rawIndex<0)return null;
+ return {stage,raw,rawIndex,baseline,baseIndex,globalIndex};
+}
+export function canRemoveFormQuality(s,index){return !!qualityRemoval(s,index);}
+export function removeFormQuality(s,index){
+ const source=qualityRemoval(s,index);if(!source)return false;
+ const {stage,raw,rawIndex,baseline,baseIndex,globalIndex}=source;
+ if(baseIndex>=0){baseline.qualities.splice(baseIndex,1);for(const e of s.updates)if(e.type==='upgrade'&&e.target==='quality'&&e.index>globalIndex)e.index--;}
+ if(rawIndex>=0){raw.qualities.splice(rawIndex,1);for(const e of s.updates||[])if(e.type==='form-upgrade'&&e.target==='quality'&&e.stage===stage&&e.index>index)e.index--;}
+ if(stage==='rookie'){const remaining=baseline.qualities.filter(q=>q.stage==='Novato');s.quality=remaining[0]?.name||'';raw.qualities=rookieForm(s).qualities;}
+ initializeForms(s);return true;
+}

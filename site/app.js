@@ -10,7 +10,7 @@ let recoveredSheet=null;
 import {styleSheet} from './sheet-layout.js';
 import {prepareForumPost,readyPost} from './forum-publish.js';
 import {palettes,paletteFor,applyPalette,resetVisual,styleCards} from './visual-style.js';
-import {initializeForms,stageOrder,stageNames,stageRules,activeForm,formMetrics,formIssues,unlockStage,lockStage,addSignatureAttack,removeSignatureAttack,setSignatureElement} from './forms.js';
+import {initializeForms,stageOrder,stageNames,stageRules,activeForm,formMetrics,formIssues,unlockStage,lockStage,addSignatureAttack,removeSignatureAttack,setSignatureElement,removeFormQuality} from './forms.js';
 import {stageTabs,formEditor,formPreview,lockedPanel,devControls,isDev,metrics,evolutionUnlocks,additionalAttacks} from './forms-ui.js';
 import {digiviceModels,modelFor,renderDigivice,validHex,skins,trimPanels,borderPanels} from './digivices.js';
 import {qualities,effects,elements} from './catalog.js';
@@ -171,7 +171,7 @@ document.addEventListener('click',e=>{
  if(button.dataset.formNav){const i=stageOrder.indexOf(s.activeDigimonStage)+(button.dataset.formNav==='next'?1:-1);if(stageOrder[i])requestStage(stageOrder[i],context);return;}
  if(button.dataset.unlockStage){changeLock(button.dataset.unlockStage,true);return;}
  if(button.dataset.lockStage){changeLock(button.dataset.lockStage,false);return;}
- if(button.hasAttribute('data-remove-quality')&&activeForm(s).unlocked){const index=Number(button.dataset.removeQuality),f=s.digimonForms[s.activeDigimonStage];if(Number.isInteger(index)&&index>=0&&index<f.qualities.length&&(f.qualities.length>1||s.activeDigimonStage==='baby')){f.qualities.splice(index,1);persist();renderEditor();renderPreview();document.querySelector('[data-add-quality]')?.focus();}return;}
+ if(button.hasAttribute('data-remove-quality')){if(removeFormQuality(s,Number(button.dataset.removeQuality))){const position={left:window.scrollX,top:window.scrollY};persist();renderEditor();renderPreview();const next=document.querySelector('[data-remove-quality="'+button.dataset.removeQuality+'"], [data-add-quality], [data-form-quality]');next?.focus({preventScroll:true});const restore=()=>window.scrollTo({...position,behavior:'instant'});restore();requestAnimationFrame(()=>{restore();requestAnimationFrame(restore);});}return;}
  if(button.hasAttribute('data-add-quality')&&s.activeDigimonStage!=='rookie'&&activeForm(s).unlocked){s.digimonForms[s.activeDigimonStage].qualities.push({name:'',rank:1});persist();renderEditor();renderPreview();}
 });
 document.addEventListener('keydown',e=>{const tab=e.target.closest('[data-stage]');if(!tab||!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const i=stageOrder.indexOf(tab.dataset.stage),next=e.key==='Home'?0:e.key==='End'?4:Math.max(0,Math.min(4,i+(e.key==='ArrowRight'?1:-1)));requestStage(stageOrder[next],tab.dataset.context);});
