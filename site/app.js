@@ -10,7 +10,7 @@ let recoveredSheet=null;
 import {styleSheet} from './sheet-layout.js';
 import {prepareForumPost,readyPost} from './forum-publish.js';
 import {palettes,paletteFor,applyPalette,resetVisual,styleCards} from './visual-style.js';
-import {initializeForms,stageOrder,stageNames,stageRules,activeForm,formMetrics,formIssues,unlockStage,lockStage,addSignatureAttack,removeSignatureAttack,setSignatureElement,removeFormQuality} from './forms.js';
+import {initializeForms,stageOrder,stageNames,stageRules,activeForm,formMetrics,formIssues,unlockStage,lockStage,addSignatureAttack,removeSignatureAttack,setSignatureElement,setSignatureEffect,removeFormQuality} from './forms.js';
 import {stageTabs,formEditor,formPreview,lockedPanel,devControls,isDev,metrics,evolutionUnlocks,additionalAttacks} from './forms-ui.js';
 import {digiviceModels,modelFor,renderDigivice,validHex,skins,trimPanels,borderPanels} from './digivices.js';
 import {qualities,effects,elements} from './catalog.js';
@@ -179,6 +179,13 @@ function handleFormInput(e){
  const t=e.target;if(!t.matches('[data-form-field],[data-form-stat],[data-form-quality],[data-form-attack]'))return;
  const f=s.digimonForms[s.activeDigimonStage];if(!f.unlocked)return;
  const rookie=s.activeDigimonStage==='rookie';
+ if(t.dataset.formAttack!==undefined&&['effect','effectElement'].includes(t.dataset.attackKey)){
+  try{const index=Number(t.dataset.formAttack),effectIndex=Number(t.dataset.effectIndex),current=activeForm(s).signatureAttacks[index]?.effects[effectIndex];
+   const name=t.dataset.attackKey==='effect'?t.value:current?.name,element=t.dataset.attackKey==='effectElement'?t.value:undefined;
+   if(!setSignatureEffect(s,s.activeDigimonStage,index,effectIndex,name,element))throw Error('Selecione um Efeito oficial para este Ataque.');
+   persist();renderEditor();renderPreview();document.querySelector('[data-form-attack="'+index+'"][data-attack-key="'+t.dataset.attackKey+'"][data-effect-index="'+effectIndex+'"]')?.focus({preventScroll:true});
+  }catch(error){toast(error.message);renderEditor();}return;
+ }
  if(rookie&&s.updates.some(e=>e.type!=='baseline')&&(t.dataset.formQuality!==undefined||(Number(t.dataset.formAttack)===0&&t.dataset.attackKey!=='element')||['name','digital','classification'].includes(t.dataset.formField)))return;
  if(t.dataset.formField){const k=t.dataset.formField;f[k]=k==='zoom'?Number(t.value):t.value;}
  if(t.dataset.formStat){const value=Number(t.value),r=stageRules[s.activeDigimonStage];if(!Number.isInteger(value)||value<r.min||value>r.max){t.setAttribute('aria-invalid','true');return;}t.removeAttribute('aria-invalid');f.attributes[t.dataset.formStat]=value;}

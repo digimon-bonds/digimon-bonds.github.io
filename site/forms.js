@@ -20,6 +20,39 @@ export function setSignatureElement(s,stage,index,value){
  for(const event of s.updates||[])if(event.type==='form-upgrade'&&event.target==='attack'&&event.stage===stage&&event.index===index&&event.base)event.base.element=element;
  return true;
 }
+// Correct an existing effect in its original sources so history replay keeps it.
+export function setSignatureEffect(s,stage,index,effectIndex,value,extraElement){
+ const form=s.digimonForms?.[stage];if(!form?.unlocked||!Number.isInteger(index)||!Number.isInteger(effectIndex)||effectIndex<0)return false;
+ const attack=activeForm({...s,activeDigimonStage:stage}).signatureAttacks[index];
+ if(!attack?.effects[effectIndex]||!effects.some(e=>e.name===value))return false;
+ if(value!=='MULTI-ELEMENTO'&&attack.effects.some((e,i)=>i!==effectIndex&&e.name===value))throw Error('Esse Efeito já está neste Ataque.');
+ const occupied=attack.effects.filter((e,i)=>i!==effectIndex&&e.name==='MULTI-ELEMENTO').map(e=>e.element);
+ const element=value==='MULTI-ELEMENTO'?(extraElement??(attack.effects[effectIndex].name===value?attack.effects[effectIndex].element:elements.find(e=>e!==attack.element&&!occupied.includes(e)))):'';
+ if(value==='MULTI-ELEMENTO'&&(!elements.includes(element)||element===attack.element||occupied.includes(element)))throw Error('Escolha um Elemento adicional diferente dos já utilizados.');
+ const next=structuredClone(s),replacement={name:value,element},primary=stage==='rookie'&&index===0;
+ const replace=list=>{if(list?.[effectIndex])list[effectIndex]={...replacement};};
+ replace(next.digimonForms[stage].signatureAttacks[index]?.effects);
+ if(primary&&effectIndex===0){next.effect=value;next.effectElement=element;}
+ const label=({rookie:'Novato',champion:'Campeão',ultimate:'Perfeito',mega:'Mega'})[stage];
+ for(let n=0;n<(next.updates||[]).length;n++){
+  const event=next.updates[n],original=s.updates[n];
+  if(primary&&event.type==='baseline')replace(event.effects);
+  if(index===0&&event.type==='form'&&event.form?.stage===label)replace(event.form.attack?.effects);
+  const independent=event.type==='form-upgrade'&&event.target==='attack'&&event.stage===stage&&event.index===index;
+  if(independent)replace(event.base?.effects);
+  const legacy=event.type==='upgrade'&&index===0&&(event.attackStage||'Novato')===label;
+  if((independent||legacy)&&event.choice==='effect'){
+   const before=progress({...s,updates:s.updates.slice(0,n)});
+   const previous=independent?(before.formAttacks[stage+':'+index]||original.base):primary?{effects:before.effects}:before.forms.find(f=>f.stage===label)?.attack;
+   if(previous?.effects.length===effectIndex){event.name=value;event.element=element;}
+  }
+ }
+ // Validate the complete replay before committing; no rewards, ranks or XP change.
+ progress(next);initializeForms(next);
+ const updated=activeForm({...next,activeDigimonStage:stage}).signatureAttacks[index]?.effects[effectIndex];
+ if(updated?.name!==value||updated.element!==element)return false;
+ Object.assign(s,next);return true;
+}
 export function blankForm(stage){const r=stageRules[stage];return {unlocked:stage==='rookie',speciesId:'',name:'',image:'',personality:'',digital:'',element:'',classification:'',attributes:Object.fromEntries(keys.map(k=>[k,r.min])),qualities:stage==='baby'?[]:[{name:'',rank:1}],signatureAttacks:stage==='baby'?[]:[{name:'',rank:r.rank,element:'',effects:[{name:'',element:''}]}],imageMode:'cutout',imageBackground:'#17313b',imagePosition:'center',zoom:1};}
 export function rookieForm(s){const p=progress(s);return {...blankForm('rookie'),unlocked:s.digimonForms?.rookie?.unlocked??true,speciesId:s.digiSpeciesId||'',speciesName:selectedSpecies(s)?.name||'',name:s.digiName,image:s.digiImage,personality:s.digiPersonality,digital:s.digital,element:selectedSpecies(s)?.element||s.element,classification:s.classification,attributes:{...s.digi},qualities:p.qualities.filter(q=>q.stage==='Novato').map(q=>({name:q.name,rank:q.rank})),signatureAttacks:[{name:s.attack,rank:p.attackRank,element:s.attackElement||s.element,effects:structuredClone(p.effects)},...structuredClone(s.digimonForms?.rookie?.signatureAttacks?.slice(1)||[])].map((a,i)=>p.formAttacks['rookie:'+i]||a),imageMode:s.imageMode||'original',imageBackground:s.imageBackground||'#17313b',imagePosition:s.imagePosition,zoom:s.zoom};}
 export function initializeForms(s){
