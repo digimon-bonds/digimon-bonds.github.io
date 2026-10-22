@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#09151e">
+  <title>Digi-Pet · Digimon Bonds</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%230c202b'/%3E%3Cpath d='M10 12h14v5h5v11H10z' fill='none' stroke='%2379c7ce' stroke-width='3'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="digi-pet.css">
+  <script src="digi-pet.js" defer></script>
+</head>
+<body>
+  <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+    <symbol id="i-pet" viewBox="0 0 24 24"><path d="M5 5h11v4h4v10H5zM9 11v2m6-2v2M9 16h6"/></symbol>
+    <symbol id="i-food" viewBox="0 0 24 24"><path d="M3 11h18l-3 8H6zM7 5v2m5-3v3m5-2v2M5 21h14"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m7 5 3 5-4 5m4-5 6-1 4 5m-4-5-2 6-8 0m8 0 1 6"/></symbol>
+    <symbol id="i-train" viewBox="0 0 24 24"><path d="M3 8v8m4-11v14M7 12h10m0-7v14m4-11v8"/></symbol>
+    <symbol id="i-talk" viewBox="0 0 24 24"><path d="M4 4h16v12H9l-5 4zM8 9h8m-8 3h5"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></symbol>
+    <symbol id="i-sound" viewBox="0 0 24 24"><path d="m11 5-6 5H2v4h3l6 5zM16 9l5 6m0-6-5 6"/></symbol>
+  </defs></svg>
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="brand"><span class="brand-mark">B<span>›</span></span><div>DIGIMON <b>BONDS</b><small>SEU VÍNCULO. SEU MUNDO.</small></div></div>
+      <div class="prototype-label"><span></span> PROTÓTIPO VISUAL <b>01</b></div>
+    </header>
+    <main class="pet-experience">
+      <div class="page-heading"><div class="page-title"><svg><use href="#i-pet"/></svg><h1>DIGI-PET</h1><span class="separator"></span><span>Um pequeno mundo. Um grande vínculo.</span></div><span class="session">SESSÃO LOCAL</span></div>
+      <section class="room-shell" aria-label="Sala digital do parceiro">
+        <div class="room-top"><span><i></i> DIGIMON ROOM <span class="room-number">/ 01</span></span><span class="link-status"><i></i> LINK ESTÁVEL</span></div>
+        <div class="room" id="room">
+          <img class="room-scenery" src="assets/room.svg" alt="Sala digital navy com janela luminosa, terminal à esquerda e almofada de descanso à direita" draggable="false">
+          <div class="room-vignette" aria-hidden="true"></div>
+          <div class="partner-info"><span class="eyebrow">SEU PARCEIRO</span><h2 id="partner-name">Agumon</h2><div><span id="partner-species">Agumon</span><span class="info-dot">·</span><span class="stage" id="partner-stage">Rookie</span></div></div>
+          <div class="room-note" aria-hidden="true"><span class="pixel-flower">✳</span><span>Um lugar para<br>estar junto.</span></div>
+          <div class="particles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="partner-anchor"><div class="partner-shadow" aria-hidden="true"></div><img id="partner-image" class="partner-image" src="assets/agumon.png" alt="Agumon, parceiro de exemplo" draggable="false"><span class="partner-presence" aria-hidden="true">◆</span></div>
+          <div class="message" id="pet-message" role="status" aria-live="polite" aria-atomic="true"></div>
+          <div class="room-bottom"><span><i></i> AMBIENTE TRANQUILO</span><div><span class="sound-label" title="Este protótipo não possui áudio"><svg><use href="#i-sound"/></svg> SEM ÁUDIO</span><button id="fullscreen" class="fullscreen" type="button" aria-label="Entrar em tela cheia" title="Tela cheia"><svg><use href="#i-expand"/></svg></button></div></div>
+        </div>
+        <div class="interaction-deck"><div class="deck-caption"><span id="welcome">Um tempo com Agumon.</span><span>ESCOLHA UMA INTERAÇÃO</span></div>
+          <div class="actions" role="group" aria-label="Interações visuais com o parceiro">
+            <button type="button" data-action="food"><svg><use href="#i-food"/></svg><span>COMIDA</span><span class="action-number" aria-hidden="true">01</span></button>
+            <button type="button" data-action="play"><svg><use href="#i-play"/></svg><span>BRINCAR</span><span class="action-number" aria-hidden="true">02</span></button>
+            <button type="button" data-action="train"><svg><use href="#i-train"/></svg><span>TREINAR</span><span class="action-number" aria-hidden="true">03</span></button>
+            <button type="button" data-action="talk"><svg><use href="#i-talk"/></svg><span>CONVERSAR</span><span class="action-number" aria-hidden="true">04</span></button>
+          </div>
+        </div>
+      </section>
+      <footer class="experience-footer"><span><i></i> Pequenos momentos, novos laços.</span><span>DADOS DE EXEMPLO <b>·</b> ETAPA 01</span></footer>
+    </main>
+  </div>
+</body>
+</html>

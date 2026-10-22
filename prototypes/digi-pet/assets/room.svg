@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="650" viewBox="0 0 1400 650" fill="none">
+<defs>
+  <linearGradient id="wall" x2="0" y2="1"><stop stop-color="#132e3c"/><stop offset="1" stop-color="#1c3a47"/></linearGradient>
+  <linearGradient id="floor" x2="0" y2="1"><stop stop-color="#1e414c"/><stop offset="1" stop-color="#0e2533"/></linearGradient>
+  <linearGradient id="glass" x2="0" y2="1"><stop stop-color="#102735"/><stop offset="1" stop-color="#2a5860"/></linearGradient>
+  <linearGradient id="cushion" x2="0" y2="1"><stop stop-color="#867052"/><stop offset="1" stop-color="#4d4c43"/></linearGradient>
+  <radialGradient id="light"><stop stop-color="#7ef0d9" stop-opacity=".18"/><stop offset="1" stop-color="#7ef0d9" stop-opacity="0"/></radialGradient>
+  <radialGradient id="pool"><stop stop-color="#74cfc1" stop-opacity=".12"/><stop offset="1" stop-color="#74cfc1" stop-opacity="0"/></radialGradient>
+  <filter id="glow"><feGaussianBlur stdDeviation="5"/></filter>
+  <pattern id="tiles" width="110" height="80" patternUnits="userSpaceOnUse" patternTransform="matrix(1 0 -.6 .55 350 350)"><path d="M110 0H0V80" stroke="#6e9da9" stroke-opacity=".12" stroke-width="1.4"/></pattern>
+</defs>
+<!-- Architectural planes: wide enough to crop gracefully at smaller sizes. -->
+<path d="M0 0H1400V650H0Z" fill="#102733"/>
+<path d="M215 0H1185V367H215Z" fill="url(#wall)"/>
+<path d="m0 0 215 0v367L0 518Z" fill="#132c39"/>
+<path d="M1185 0h215v518l-215-151Z" fill="#102936"/>
+<path d="M215 367h970l215 151v132H0V518Z" fill="url(#floor)"/>
+<path d="M215 367h970l215 151v132H0V518Z" fill="url(#tiles)"/>
+<path d="M215 0v367L0 518m1185-518v367l215 151" stroke="#3d626f" stroke-opacity=".5"/>
+<path d="M0 526 215 376h970l215 150" stroke="#050f1b" stroke-width="12"/>
+<path d="M0 519 215 369h970l215 150" stroke="#7ec7c2" stroke-opacity=".45" stroke-width="2"/>
+<path d="M0 520 215 370h970l215 150" stroke="#7ef0df" stroke-opacity=".4" stroke-width="5" filter="url(#glow)"/>
+<!-- Quiet recessed wall panels. -->
+<path d="M253 41h176v271H253zM972 41h176v271H972z" stroke="#36515e" stroke-opacity=".5"/>
+<path d="M265 54h152m567 0h152" stroke="#6a8a97" stroke-opacity=".25"/>
+<path d="M270 282h38m-38 7h28m725-7h89m-89 7h89" stroke="#0d2633" stroke-width="3"/>
+<rect x="531" y="29" width="338" height="15" rx="7" fill="#091e2a" stroke="#37525b"/>
+<path d="M566 36h268" stroke="#a6e1d7" stroke-width="3"/>
+<path d="M560 38h280" stroke="#8cffee" stroke-width="9" opacity=".4" filter="url(#glow)"/>
+<ellipse cx="700" cy="243" rx="340" ry="290" fill="url(#light)"/>
+<!-- A luminous window, with a small pixel moon and distant digital islands. -->
+<rect x="478" y="89" width="444" height="240" rx="34" fill="#0b1e2b" stroke="#46626b" stroke-width="2"/>
+<rect x="491" y="102" width="418" height="214" rx="24" fill="url(#glass)" stroke="#5d9297" stroke-opacity=".5"/>
+<path d="M494 281h55v-20h31v-25h33v48h40v-12h51v25h49v-35h38v-35h24v50h49v-25h42" stroke="#7abbb4" stroke-opacity=".13" stroke-width="2"/>
+<path d="M700 104v210" stroke="#112d39" stroke-width="7"/>
+<path d="M494 249h412" stroke="#112d39" stroke-width="6"/>
+<path d="M789 143h28v9h10v28h-9v10h-29v-9h-9v-28h9Z" fill="#c9e9cf" opacity=".75"/>
+<path d="M805 142h12v10h10v28h-9v10h-13v-10h10v-28h-10z" fill="#234b55"/>
+<g fill="#b1ded2" opacity=".5"><path d="M559 143h3v3h-3zM632 174h3v3h-3zM755 217h3v3h-3zM857 215h3v3h-3zM853 135h2v2h-2zM530 208h2v2h-2z"/></g>
+<path d="M517 118h26m-26 0v26M883 301h-26m26 0v-26" stroke="#84cac4" stroke-opacity=".5"/>
+<!-- Work terminal: small friendly CRT, physical keys, no gameplay HUD. -->
+<ellipse cx="322" cy="459" rx="130" ry="26" fill="#05131c" opacity=".35"/>
+<path d="m244 385 145 0 34 25-146 6Z" fill="#3a535c" stroke="#546a6f"/>
+<path d="m244 385 33 31v55l-33-22z" fill="#142e3b"/>
+<path d="m277 416 146-6v52l-146 9Z" fill="#203c49"/>
+<path d="M288 426h122m-122 9h122" stroke="#132d3a" stroke-width="3"/>
+<path d="m264 310 97-1 12 72-105 5z" fill="#3b555e" stroke="#5e7b80" stroke-width="2"/>
+<path d="m275 322 75-1 9 48-80 5z" fill="#0e242d" stroke="#18333c" stroke-width="5"/>
+<path d="m283 332 60-1 4 30-61 4z" fill="#49847e" opacity=".3"/>
+<g stroke="#a2d5b7" stroke-width="2" opacity=".8"><path d="m293 343 6 4-5 5m13-1 17-1"/></g>
+<path d="m280 389 74-2 12 9-74 3z" fill="#74847c" opacity=".4"/>
+<path d="m292 390 2 7m10-8 3 7m9-7 3 7m10-8 3 7m9-7 3 7" stroke="#142e3b" stroke-width="2"/>
+<circle cx="365" cy="375" r="2" fill="#f6ad52"/>
+<!-- Rest nook: warm fabric softens the digital room. -->
+<ellipse cx="1055" cy="470" rx="129" ry="31" fill="#061923" opacity=".45"/>
+<path d="M944 413q109-44 220-2v46q-110 47-220 0z" fill="#1b333e" stroke="#40505a"/>
+<ellipse cx="1054" cy="418" rx="110" ry="34" fill="url(#cushion)" stroke="#9b8662" stroke-opacity=".65" stroke-width="2"/>
+<ellipse cx="1054" cy="416" rx="87" ry="22" fill="#3d4844" stroke="#9b8662" stroke-opacity=".4"/>
+<path d="M1002 394q22-28 55-7l-5 21q-26-7-50-3z" fill="#6b7970" stroke="#8d9c8e" stroke-opacity=".5"/>
+<path d="M962 453q92 30 186 0" stroke="#ad915e" stroke-opacity=".4"/>
+<!-- A little potted digital plant and a toy on the floor. -->
+<path d="M1100 319h42l-6 35h-29z" fill="#465855" stroke="#718478"/><path d="M1121 321v-43m0 22-13-9m13-1 14-13" stroke="#81b5a0" stroke-width="3"/>
+<path d="M1098 277h13v13h-13zm30-14h13v13h-13zm-13-16h13v15h-13z" fill="#82b59a" opacity=".8"/>
+<path d="M1087 356h67v8h-67z" fill="#3e535a"/><path d="M1093 364v20m55-20v23" stroke="#253e48" stroke-width="5"/>
+<ellipse cx="899" cy="505" rx="25" ry="7" fill="#071b26" opacity=".4"/>
+<circle cx="897" cy="489" r="18" fill="#a18860" stroke="#c3a56c"/><path d="m885 477 10 11 18-1m-18 1-4 18" stroke="#3d5960" stroke-width="3"/>
+<!-- Grounded light pool and a restrained floor inset. -->
+<ellipse cx="700" cy="505" rx="330" ry="120" fill="url(#pool)"/>
+<ellipse cx="700" cy="506" rx="209" ry="59" fill="#183b46" fill-opacity=".4" stroke="#75bdb5" stroke-opacity=".24"/>
+<path d="M528 537q170 75 345-1" stroke="#79c7ce" stroke-opacity=".3" stroke-width="2"/>
+<path d="m497 509 6 10m389-10-5 10" stroke="#f6ad52" stroke-width="3" opacity=".55"/>
+</svg>
