@@ -885,3 +885,39 @@ html.bonds-os-preview [data-bos-post] .bos-player-link-card .bos-profile-device-
 html.bonds-os-preview [data-bos-post] .bos-player-link-card .bos-profile-device a {transition:filter .2s ease;}
 html.bonds-os-preview [data-bos-post] .bos-player-link-card .bos-profile-device a:hover {filter:brightness(1.12);}
 html.bonds-os-preview [data-bos-post] .postprofile[data-bos-device-owner]::after {display:none;}
+
+/* Native Forumeiros rolls: a visual mirror, with the official post kept intact. */
+html.bonds-os-preview {--bos-native-roll-view:1;}
+html.bonds-os-preview[data-bos-initialized="ready"][data-bos-roll-attachments="ready"] .post[data-bos-roll-attached] {display:none!important;}
+html.bonds-os-preview [data-bos-post] .bos-native-rolls {box-sizing:border-box;position:relative;isolation:isolate;display:block;width:100%;max-width:680px;min-width:0;margin:26px auto 4px;padding:0;border:1px solid #537e8e;border-top:2px solid #d1ad69;border-radius:6px 20px 6px 6px;background:radial-gradient(ellipse at 50% 0,#23475466,transparent 70%),#0a202b;box-shadow:0 8px 20px #0002;color:#d9eaf1;overflow:hidden;}
+html.bonds-os-preview [data-bos-post] .bos-native-rolls > summary {display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative;padding:16px 20px 16px 36px;border:0;border-bottom:1px solid #49718166;background:#1c3a4655;list-style:none;color:#e0bf80;font:600 11px/1.5 var(--bos-mono);letter-spacing:.09em;cursor:pointer;}
+html.bonds-os-preview .bos-native-rolls > summary::-webkit-details-marker {display:none;}
+html.bonds-os-preview .bos-native-rolls > summary::before {content:'▸';position:absolute;left:17px;color:#86cbd8;}
+html.bonds-os-preview .bos-native-rolls[open] > summary::before {content:'▾';}
+html.bonds-os-preview .bos-native-rolls > summary:focus-visible {outline:2px solid #e0bf80;outline-offset:-4px;}
+html.bonds-os-preview .bos-native-rolls-kind {color:#81adbd;font-size:8px;letter-spacing:.08em;}
+html.bonds-os-preview .bos-native-rolls-list {padding:0 20px;}
+html.bonds-os-preview .bos-native-roll-entry {margin:0;padding:18px 0 20px;border:0;background:none;}
+html.bonds-os-preview .bos-native-roll-entry + .bos-native-roll-entry {border-top:1px solid #537e8e66;}
+html.bonds-os-preview .bos-native-roll-entry-head {display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin:0 0 10px;color:#729bad;font:8px/1.6 var(--bos-mono);letter-spacing:.06em;}
+html.bonds-os-preview .bos-native-roll-entry-head a {color:#9dc7d2;font:9px/1.6 var(--bos-mono);text-decoration:none;}
+html.bonds-os-preview .bos-native-roll-entry-head a:hover {color:#edcc8e;text-decoration:underline;}
+html.bonds-os-preview .bos-native-roll-entry-head a:focus-visible {outline:2px solid #e0bf80;outline-offset:3px;}
+html.bonds-os-preview .bos-native-roll-payload {display:block;width:100%;max-width:100%;margin:0;padding:0;overflow-wrap:anywhere;}
+html.bonds-os-preview .bos-native-roll-payload .bos-native-roll-dice {box-sizing:border-box;position:relative;display:flex!important;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px;width:100%!important;max-width:100%!important;height:auto!important;min-height:0!important;margin:0!important;padding:4px 8px 8px!important;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;float:none!important;}
+html.bonds-os-preview .bos-native-roll-payload .bos-native-roll-dice + .bos-native-roll-dice {margin-top:18px!important;padding-top:18px!important;border-top:1px solid #537e8e44!important;}
+html.bonds-os-preview .bos-native-roll-payload .bos-native-roll-dice::before,html.bonds-os-preview .bos-native-roll-payload .bos-native-roll-dice::after {content:none!important;display:none!important;}
+html.bonds-os-preview .bos-native-roll-dice-heading {flex-basis:100%;display:flex;flex-direction:column;align-items:center;gap:6px;margin:0 0 10px;padding:0;color:#89b0bd;font:8px/1.6 var(--bos-mono);letter-spacing:.12em;}
+html.bonds-os-preview .bos-native-roll-dice-heading strong {color:#a4dfc9;font:700 17px/1.4 'Exo 2','Segoe UI',sans-serif;letter-spacing:.04em;}
+html.bonds-os-preview [data-bos-post] .bos-native-roll-payload .bos-native-roll-dice > img {display:block;position:static;inset:auto;float:none;width:auto!important;height:auto!important;max-width:52px!important;max-height:60px!important;margin:0!important;padding:0;border:0!important;border-radius:0!important;background:none!important;object-fit:contain;box-shadow:none;}
+@media(max-width:640px){
+ html.bonds-os-preview [data-bos-post] .bos-native-rolls {margin-top:20px;border-radius:5px 14px 5px 5px;}
+ html.bonds-os-preview [data-bos-post] .bos-native-rolls > summary {padding:14px 12px 14px 30px;font-size:10px;gap:6px;}
+ html.bonds-os-preview .bos-native-rolls > summary::before {left:12px;}
+ html.bonds-os-preview .bos-native-rolls-kind {font-size:7px;}
+ html.bonds-os-preview .bos-native-rolls-list {padding:0 12px;}
+ html.bonds-os-preview .bos-native-roll-entry-head {font-size:7px;}
+ html.bonds-os-preview .bos-native-roll-payload .bos-native-roll-dice {gap:8px;padding-left:0!important;padding-right:0!important;}
+ html.bonds-os-preview .bos-native-roll-dice-heading strong {font-size:15px;}
+ html.bonds-os-preview [data-bos-post] .bos-native-roll-payload .bos-native-roll-dice > img {max-width:42px!important;max-height:48px!important;}
+}
