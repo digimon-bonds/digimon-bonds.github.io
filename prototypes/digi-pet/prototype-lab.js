@@ -51,6 +51,6 @@
   const status=e('p',note,'lab-status');status.setAttribute('role','status');sandbox.append(status,btn('Reiniciar bancada',()=>{scene=R.createScene();note=scene.lastAction;show();}));dialog.append(sandbox);
   if(!dialog.open)dialog.showModal();
  }
- const launch=btn('Catálogo TESTE',()=>show());launch.id='open-prototype-lab';document.querySelector('.experience-footer').append(launch);
+ const launch=btn('Catálogo de itens · TESTE',()=>show());launch.id='open-prototype-lab';launch.setAttribute('aria-haspopup','dialog');launch.setAttribute('aria-controls','prototype-lab');document.querySelector('.experience-footer').append(launch);
  if(!document.querySelector('dialog[open]'))show();
 })();

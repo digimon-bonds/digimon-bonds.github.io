@@ -28,7 +28,16 @@ function showSystemFeedback(text){
 const petSpeech=PetSpeech.create({element:document.querySelector('.pet-thought'),textElement:byId('pet-thought-text'),library:PET_SPEECH,settings:P.speech,canSpeak:()=>!document.hidden});
 function showPetSpeech(context,explicit=false){return petSpeech.speak(context,explicit,context==='dirty');}
 let wasteWasVisible=state.waste;
-function renderPetSpeech(){if(state.waste&&!wasteWasVisible)showPetSpeech('dirty',true);if(!state.waste&&petSpeech.current?.context==='dirty')petSpeech.hide();wasteWasVisible=state.waste;petSpeech.observe('casual');}
+function renderPetSpeech(){
+ if(state.waste&&!wasteWasVisible)showPetSpeech('dirty',true);
+ if(!state.waste&&petSpeech.current?.context==='dirty')petSpeech.hide();
+ wasteWasVisible=state.waste;
+ // Ambient speech has no queue: one line after two quiet minutes, only at rest.
+ // The dirt announcement remains a one-shot event, rather than an idle reminder.
+ const context=engine.speechContext(state),ambientContext=context==='dirty'?'casual':context;
+ petSpeech.observe(ambientContext,false);
+ if(!state.activity&&byId('food-dialog').hidden&&!document.querySelector('dialog[open]'))petSpeech.speak(ambientContext);
+}
 function consumeEvent(){if(state.lastEvent&&state.lastEvent.id>seenEvent){seenEvent=state.lastEvent.id;showSystemFeedback(state.lastEvent.system);showPetSpeech(state.lastEvent.context,true);if(state.lastEvent.context==='dirty')wasteWasVisible=state.waste;}}
 const formatTime=ms=>{const seconds=Math.max(0,Math.ceil(ms/1000));return `${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`;};
 const activityNames={play:'Brincando',train:'Treinando',sleep:'Descansando',explore:'Explorando'};

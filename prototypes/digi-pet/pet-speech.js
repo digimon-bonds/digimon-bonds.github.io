@@ -2,7 +2,7 @@
 (() => {
   class SpeechController {
     constructor({ element, textElement, library, canSpeak = () => true, now = Date.now,
-      settings = { visibleMs: 4500, quietMs: 60000, contextCooldownMs: 180000, actionGapMs: 2000 } }) {
+      settings = { visibleMs: 10000, quietMs: 120000, contextCooldownMs: 120000, actionGapMs: 2000 } }) {
       Object.assign(this, { element, textElement, library, canSpeak, now, settings });
       this.timer = null;
       this.current = null;
@@ -36,12 +36,12 @@
       this.timer = setTimeout(() => this.hide(), this.settings.visibleMs);
       return true;
     }
-    observe(context) {
+    observe(context, remind = true) {
       if (!this.canSpeak()) { this.hide(); return; }
       if (this.current && this.now() >= this.current.until) this.hide();
       // A resolved complaint must disappear even if its display period is unfinished.
       if (this.current && !this.current.explicit && ['dirty', 'hungry', 'tired', 'sad', 'lonely'].includes(this.current.context) && this.current.context !== context) this.hide();
-      if (!['dirty', 'hungry', 'tired', 'sad', 'lonely'].includes(context)) return;
+      if (!remind || !['dirty', 'hungry', 'tired', 'sad', 'lonely'].includes(context)) return;
       this.speak(context);
     }
     reset() {

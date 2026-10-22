@@ -218,3 +218,12 @@ A tabela e o RNG permanecem internos, sem novos sorteios ao recarregar. Resultad
 
 
 Migração da etapa 16: o XP que já estava pendente é preservado; os próximos ganhos seguem os múltiplos de 15 ciclos totais. Um progresso antigo de treino 2/3 agora libera um PREPARADO, uma única vez, se não havia outro ativo. A chave v6 protege esses dados das abas antigas. As probabilidades, os consumíveis de RPG e os cards têm testes próprios em rpg-reward-rules.test.cjs. Validação adicional no Edge: catálogo ausente na URL normal; seis alimentos, três itens, nove cards, especiais e chances liberados; cura fictícia, Asas Brancas +2d6/expiração, comum de um uso, raro preservado, estoque real intacto, restauração com duas metades e versão mobile. Nenhuma publicação.
+
+
+## Presença e acesso ao catálogo — etapa 17
+
+Prévia de teste: http://127.0.0.1:4231/?lab=16&life=17. O botão Catálogo de itens · TESTE fica à direita do aparelho no desktop e no rodapé em telas pequenas; pode reabrir a bancada quantas vezes precisar. Continua restrito ao modo de teste em localhost com ?lab=16 e não altera o inventário real do protótipo.
+
+Exterior diurno, com as mesmas formas do jardim e vidro do visor. A sombra foi aproximada dos pés sem mudar pet-motion.js, respiração, tamanho ou reação ao toque. Piscadas automáticas a cada 3 segundos, duração de 120–180ms, mantendo fallback sem sprite e pausas em atividades/abas ocultas. Falas ambientais após 2 minutos desde a última fala, durando 10 segundos; respeitam atividades, painéis e visibilidade, sem fila de mensagens atrasadas. O aviso de sujeira continua único por ocorrência. Valores centralizados em pet-config.js e pet-sprites.js.
+
+Validação: 85 testes passaram e verificação no Edge cobriu reabrir o catálogo, cadência real das piscadas, falas/expiração/pausa em modal e encaixe sem rolagem em 1280×900, 1366×768, 1280×720, 390×660 e 360×800. Capturas: outputs/digi-pet-life17-desktop.png e outputs/digi-pet-life17-mobile.png. Nenhuma publicação, deploy ou integração.

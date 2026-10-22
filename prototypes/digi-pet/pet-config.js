@@ -1,6 +1,6 @@
 /* All balance values and temporary personality data live here, not in the view. */
 (() => {
- const PET_CONFIG={mode:'test',storageKey:'digimon-bonds:digi-pet:prototype:v3',legacyKeys:['digimon-bonds:digi-pet:prototype:v2','digimon-bonds:digi-pet:prototype:v1'],skins:['street'],historyLimit:18,initial:{satiety:65,energy:70,companionship:65,baseMood:70},thresholds:{hungry:25,tired:25,lonely:30,sad:35,happy:75,animated:85},speech:{visibleMs:4500,quietMs:60000,contextCooldownMs:180000,actionGapMs:2000},foodRefusalAt:95,talkCooldownMs:60000,touch:{cooldownMs:800,speechCooldownMs:30000,speechChance:.2},talkEffects:{companionship:10,mood:4}};
+ const PET_CONFIG={mode:'test',storageKey:'digimon-bonds:digi-pet:prototype:v3',legacyKeys:['digimon-bonds:digi-pet:prototype:v2','digimon-bonds:digi-pet:prototype:v1'],skins:['street'],historyLimit:18,initial:{satiety:65,energy:70,companionship:65,baseMood:70},thresholds:{hungry:25,tired:25,lonely:30,sad:35,happy:75,animated:85},speech:{visibleMs:10000,quietMs:120000,contextCooldownMs:120000,actionGapMs:2000},foodRefusalAt:95,talkCooldownMs:60000,touch:{cooldownMs:800,speechCooldownMs:30000,speechChance:.2},talkEffects:{companionship:10,mood:4}};
  const FOOD_CONFIG=[
   {id:'digimeat',name:'DIGIMEAT',satiety:25,energy:0,mood:0,company:0,category:'Proteína',icon:'meat'},
   {id:'digifish',name:'DIGIFISH',satiety:25,energy:0,mood:0,company:0,category:'Proteína',icon:'fish'},

@@ -1,23 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1120" height="560" viewBox="0 0 1120 560" fill="none">
 <defs>
- <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#152e43"/><stop offset="1" stop-color="#618980"/></linearGradient>
- <linearGradient id="grass" x2="0" y2="1"><stop stop-color="#436e60"/><stop offset="1" stop-color="#1a3a39"/></linearGradient>
- <linearGradient id="tree" x2="1" y2="1"><stop stop-color="#4a8170"/><stop offset="1" stop-color="#254b45"/></linearGradient>
- <radialGradient id="sun"><stop stop-color="#efcb8e" stop-opacity=".17"/><stop offset="1" stop-color="#efcb8e" stop-opacity="0"/></radialGradient>
+ <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#73bccc"/><stop offset="1" stop-color="#d3e8c0"/></linearGradient>
+ <linearGradient id="grass" x2="0" y2="1"><stop stop-color="#80ae6c"/><stop offset="1" stop-color="#416f52"/></linearGradient>
+ <linearGradient id="tree" x2="1" y2="1"><stop stop-color="#6da668"/><stop offset="1" stop-color="#396d4b"/></linearGradient>
+ <radialGradient id="sun"><stop stop-color="#fff0b0" stop-opacity=".30"/><stop offset="1" stop-color="#fff0b0" stop-opacity="0"/></radialGradient>
  <pattern id="lawn" width="83" height="60" patternUnits="userSpaceOnUse"><path d="m12 34 2-5 3 4m47 15 3-6 3 5" stroke="#a6c9a0" stroke-opacity=".17"/></pattern>
 </defs>
 <path d="M0 0h1120v560H0z" fill="url(#sky)"/>
 <ellipse cx="773" cy="142" rx="230" ry="190" fill="url(#sun)"/>
-<circle cx="773" cy="139" r="36" fill="#e2c58e" opacity=".8"/>
-<g stroke="#bdd7cb" stroke-opacity=".25" stroke-linecap="round" stroke-width="7"><path d="M148 104h83m-64-12h36M868 76h98m-71-12h43M469 158h66m-48-10h25"/></g>
-<path d="M0 291q99-69 228-29t226 5q110-69 252-20t240-7q100-25 174 16v147H0Z" fill="#355e59"/>
+<circle cx="773" cy="139" r="36" fill="#ffe59a" opacity=".95"/>
+<g stroke="#f0faf1" stroke-opacity=".55" stroke-linecap="round" stroke-width="7"><path d="M148 104h83m-64-12h36M868 76h98m-71-12h43M469 158h66m-48-10h25"/></g>
+<path d="M0 291q99-69 228-29t226 5q110-69 252-20t240-7q100-25 174 16v147H0Z" fill="#6d9b73"/>
 <path d="M0 321q117-51 265-10t290-1q165-41 307-3t258-5v258H0Z" fill="url(#grass)"/>
 <path d="M0 321q117-51 265-10t290-1q165-41 307-3t258-5" stroke="#91baa0" stroke-opacity=".25" stroke-width="2"/>
 <path d="M0 325h1120v235H0z" fill="url(#lawn)"/>
 <!-- A little garden path and a quiet stone platform. -->
 <path d="M450 560q-86-72-42-100t52-42q4-14-29-25" stroke="#a8a17d" stroke-width="28" opacity=".16"/>
 <ellipse cx="560" cy="439" rx="177" ry="44" fill="#162f30" opacity=".3"/>
-<ellipse cx="560" cy="431" rx="171" ry="40" fill="#52766a" stroke="#9bb79a" stroke-opacity=".25"/>
+<ellipse cx="560" cy="431" rx="171" ry="40" fill="#7fa883" stroke="#9bb79a" stroke-opacity=".25"/>
 <path d="M408 451q148 49 302-1" stroke="#9ac2ac" stroke-opacity=".3"/>
 <!-- Rounded canopy echoes the interior's soft monitor corners. -->
 <ellipse cx="250" cy="398" rx="151" ry="28" fill="#142f30" opacity=".3"/>

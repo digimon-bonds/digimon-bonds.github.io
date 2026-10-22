@@ -1,6 +1,6 @@
 /* Presentation only: no changes to pet needs, activities, saves or habitat. */
 (() => {
-  const DEFAULT_TIMING = Object.freeze({ interval: [3000, 8000], duration: [120, 180] });
+  const DEFAULT_TIMING = Object.freeze({ interval: [3000, 3000], duration: [120, 180] });
 
   class PetSpriteController {
     constructor({ element, variants, canBlink = () => true, timing = DEFAULT_TIMING, random = Math.random }) {
