@@ -61,15 +61,15 @@ function render(){
   if(key==='mood')card.title=`Humor-base ${Math.round(mood.baseMood)} · penalidades temporárias ${Math.round(mood.baseMood-mood.visibleMood)}${state.waste?' · sujeira −20':''}`;
  }
  const condition=engine.condition(state).toUpperCase();if(byId('condition').textContent!==condition)byId('condition').textContent=condition;
- byId('waste').hidden=!state.waste;byId('sleep-note').hidden=state.activity?.kind!=='sleep';room.dataset.sleeping=String(state.activity?.kind==='sleep');room.dataset.habitat=state.habitat;
- document.querySelector('.room-shell').dataset.skin=state.skin;byId('device-skin').value=state.skin;
+ byId('waste').hidden=!state.waste;room.dataset.sleeping=String(state.activity?.kind==='sleep');room.dataset.habitat=state.habitat;
+ document.querySelector('.room-shell').dataset.skin='street';
  document.querySelector('.scenery-interior').hidden=state.habitat!=='interior';document.querySelector('.scenery-exterior').hidden=state.habitat!=='exterior';
  byId('habitat-name').textContent=state.habitat==='interior'?'01 / QUARTO DIGITAL':'02 / JARDIM DIGITAL';
- document.querySelectorAll('.habitat-switch button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.habitat===state.habitat)));
- document.querySelectorAll('[data-action]').forEach(button=>{const action=button.dataset.action,reason=engine.availability(state,action);button.setAttribute('aria-disabled',String(Boolean(reason)&&!(action==='food'&&!state.activity)));button.title=reason||'Cuidar de Agumon';});
+ document.querySelectorAll('.habitat-switch button').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.habitat===state.habitat));b.disabled=Boolean(state.activity);});
+ document.querySelectorAll('[data-action]').forEach(button=>{const action=button.dataset.action,reason=engine.availability(state,action);button.disabled=Boolean(reason)&&!(action==='food'&&!state.activity);button.setAttribute('aria-disabled',String(button.disabled));button.title=reason||'Cuidar de Agumon';});
  byId('sleep-button').textContent=state.activity?.kind==='sleep'?'☾ Acordar':'☾ Descansar';byId('sleep-button').setAttribute('aria-pressed',String(state.activity?.kind==='sleep'));
- byId('sleep-button').setAttribute('aria-disabled',String(Boolean(state.activity&&state.activity.kind!=='sleep')));
- byId('clean-button').textContent=state.waste?'Limpar · 1':'Limpar';byId('clean-button').setAttribute('aria-disabled',String(!state.waste));
+ byId('sleep-button').disabled=Boolean(state.activity&&state.activity.kind!=='sleep')||(!state.activity&&Boolean(engine.availability(state,'sleep')));
+ byId('sleep-button').setAttribute('aria-disabled',String(byId('sleep-button').disabled));
  byId('activity-status').hidden=!state.activity;
  if(state.activity){byId('activity-label').textContent=activityNames[state.activity.kind];byId('activity-timer').textContent=formatTime(state.activity.endsAt-Date.now());byId('activity-timer').dateTime=new Date(state.activity.endsAt).toISOString();}
  if(Date.now()>=feedbackUntil){const text=state.activity?`A atividade termina em ${formatTime(state.activity.endsAt-Date.now())}.`:state.waste?'Há uma limpeza pendente. Clique na sujeira para limpar.':'Escolha um cuidado para Agumon.';if(byId('system-feedback').textContent!==text)byId('system-feedback').textContent=text;}
@@ -84,10 +84,9 @@ function interact(action,options={}){const result=engine.act(state,action,Date.n
 byId('partner-name').textContent=mockPartner.digimonName;byId('partner-species').textContent=mockPartner.species;byId('partner-stage').textContent=mockPartner.stage;byId('partner-image').src=mockPartner.image;
 document.querySelectorAll('[data-action]').forEach(button=>button.addEventListener('click',()=>{if(button.dataset.action==='food'&&!state.activity){update();renderFoods();byId('food-dialog').showModal();}else interact(button.dataset.action);}));
 byId('close-food').addEventListener('click',()=>byId('food-dialog').close());
-document.querySelectorAll('.habitat-switch button').forEach(button=>button.addEventListener('click',()=>{state.habitat=button.dataset.habitat;update();}));
-byId('device-skin').addEventListener('change',event=>{if(P.skins.includes(event.target.value)){state.skin=event.target.value;update();}});
+document.querySelectorAll('.habitat-switch button').forEach(button=>button.addEventListener('click',()=>{if(state.activity)return;state.habitat=button.dataset.habitat;update();}));
 byId('sleep-button').addEventListener('click',()=>interact(state.activity?.kind==='sleep'?'wake':'sleep'));
-byId('clean-button').addEventListener('click',()=>interact('clean'));byId('waste').addEventListener('click',()=>interact('clean'));
+byId('waste').addEventListener('click',()=>interact('clean'));
 byId('open-history').addEventListener('click',()=>{update();byId('history-dialog').showModal();});byId('close-history').addEventListener('click',()=>byId('history-dialog').close());
 document.querySelectorAll('[data-simulate]').forEach(button=>button.addEventListener('click',()=>{state=engine.simulate(state,Number(button.dataset.simulate));consumeEvent();save();render();byId('test-feedback').textContent=`+${button.dataset.simulate} minutos simulados.`;}));
 document.querySelectorAll('[data-debug]').forEach(button=>button.addEventListener('click',()=>{state=engine.debug(state,button.dataset.debug);consumeEvent();save();render();byId('test-feedback').textContent='Ajuste aplicado apenas neste protótipo.';}));

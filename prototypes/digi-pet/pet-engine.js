@@ -4,7 +4,7 @@
  const {PET_CONFIG:P,FOOD_CONFIG:F,ACTIVITY_CONFIG:A,NEED_DECAY_CONFIG:N,MOOD_CONFIG:M,PARTNER_PROFILE:PROFILE,PREFERENCE_CONFIG:PR}=globalThis.DigiPetConfig;
  const hour=3600000,finite=x=>typeof x==='number'&&Number.isFinite(x),clamp=x=>Math.max(0,Math.min(100,x)),copy=x=>structuredClone(x);
  const labels={food:'Comida',play:'Brincar',train:'Treinar',talk:'Conversar',sleep:'Descansar',wake:'Acordar',clean:'Limpar',simulation:'Teste de tempo',debug:'Ajuste de teste'};
- function create(now=Date.now()){return {version:3,stats:{satiety:P.initial.satiety,energy:P.initial.energy,companionship:P.initial.companionship},baseMood:P.initial.baseMood,skin:'bonds',habitat:'interior',waste:false,digestionDue:null,lastUpdatedAt:now,lastInteractionAt:now,lastTalkAt:null,activity:null,activityStats:{trainingSessions:0},discoveredFoods:{},history:[],counts:{},eventSequence:0,lastEvent:null};}
+ function create(now=Date.now()){return {version:3,stats:{satiety:P.initial.satiety,energy:P.initial.energy,companionship:P.initial.companionship},baseMood:P.initial.baseMood,skin:'street',habitat:'interior',waste:false,digestionDue:null,lastUpdatedAt:now,lastInteractionAt:now,lastTalkAt:null,activity:null,activityStats:{trainingSessions:0},discoveredFoods:{},history:[],counts:{},eventSequence:0,lastEvent:null};}
  function mood(state){
   const low={hunger:state.stats.satiety<=P.thresholds.hungry,exhaustion:state.stats.energy<=P.thresholds.tired,loneliness:state.stats.companionship<=P.thresholds.lonely};
   const needs=Object.values(low).filter(Boolean).length;
@@ -19,7 +19,7 @@
    if(!finite(value))return create(now);s.stats[key]=clamp(value);
   }
   const base=legacy?raw.stats.mood:raw.baseMood;if(!finite(base))return create(now);s.baseMood=clamp(base);
-  s.waste=raw.waste===true;s.habitat=raw.habitat==='exterior'?'exterior':'interior';s.skin=P.skins.includes(raw.skin)?raw.skin:'bonds';
+  s.waste=raw.waste===true;s.habitat=raw.habitat==='exterior'?'exterior':'interior';s.skin=P.skins.includes(raw.skin)?raw.skin:'street';
   // Legacy saves only stored displayed mood. Reconstruct the temporary causes once.
   if(legacy)s.baseMood=clamp(base+Object.values(mood(s).modifiers).reduce((a,b)=>a+b,0));
   const timestamp=(v,fallback=now)=>finite(v)&&v>=0?Math.min(v,now):fallback;

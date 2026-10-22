@@ -6,11 +6,11 @@ Execute `node serve.mjs` nesta pasta (Node.js 22+) e abra http://127.0.0.1:4231.
 
 ## Visor e cards
 
-As skins Bonds e Street Link foram preservadas, sem criar novas skins. Textura é apenas da carcaça. Visor, controles, cards e menus têm fundo próprio opaco, sem herdar filtro/opacidade da skin. Descansar não escurece a tela inteira. Ações indisponíveis usam contraste/borda próprios, sem transparência.
+A carcaça agora usa somente Street Link. A faixa superior com textos e seletor de skin foi removida, deixando a estampa exposta. Saves com outra skin são normalizados para Street Link sem perder o progresso. Textura é apenas da carcaça; visor, controles, cards e menus têm fundo próprio opaco. Descansar não escurece a tela inteira. Ações indisponíveis ficam escurecidas e realmente desabilitadas.
 
 Quatro cards separados, com ícones vetoriais originais: carne (Saciedade), rosto (Humor), raio (Energia) e coração (Companhia). Barras mantêm escala 0–100, valores e semântica de medidor acessível. O card de Humor fica vermelho enquanto houver sujeira.
 
-Interior, Exterior e Agumon estático permanecem. Sem expressões ou animações novas do personagem. As moscas simples já existentes continuam e respeitam movimento reduzido.
+Interior, Exterior e Agumon estático permanecem. Os dois ambientes compartilham exatamente as dimensões do parceiro usadas no Interior, inclusive nos breakpoints menores. O módulo Seu Parceiro e o módulo de botões receberam bordas físicas em camadas, trilhos e profundidade semelhantes ao visor. Descansar/Acordar é maior e dourado. Não há botão separado de limpeza: o cocô é o próprio controle de limpar, acessível também por teclado. Sem novas animações do personagem; as moscas existentes respeitam movimento reduzido.
 
 ## Dois canais de texto
 
@@ -95,7 +95,7 @@ O modo atual é **test**. Durações futuras são apenas configuração, sem pub
 - **Descansar**: recupera até +60 Energia proporcionalmente ao tempo previsto, limitado a 100. Pode acordar antes, mantendo apenas a fração já recuperada. Sem punição por acordar.
 - **Conversar**: imediato, +10 Companhia e +4 Humor-base. Novos ganhos apenas após 60 segundos da última conversa recompensada. Repetições ainda registram a conversa e podem receber fala, sem ganho mecânico.
 
-Enquanto há uma atividade, outras ações principais ficam incompatíveis; limpeza e troca de ambiente continuam disponíveis. O botão Acordar fica disponível durante descanso. A faixa de atividade mostra estado e tempo restante. Inícios/conclusões são distintos no histórico.
+Enquanto há uma atividade, ações principais incompatíveis e troca de ambiente ficam desabilitadas e escurecidas. A limpeza pelo cocô continua disponível; Acordar fica disponível durante descanso. O relógio maior aparece dentro do visor, como sobreposição, sem ocupar espaço no layout ou alterar o tamanho da cena. O mesmo relógio atende brincar, treinar e descansar. Inícios/conclusões são distintos no histórico. Histórico/Teste continua acessível para desenvolvimento.
 
 ## Tempo e ausência leve
 
@@ -112,7 +112,7 @@ Estado interno usa valores fracionários para não depender da frequência de at
 
 Refeição aceita agenda digestão para 2 minutos depois, se não houver sujeira/digestão pendente. No máximo uma necessidade de limpeza. Novas refeições não adiam a digestão nem empilham cocôs.
 
-Sujeira aplica apenas `dirtyMoodPenalty=20`; não causa perda contínua de Humor-base. Clique no cocô ou use Limpar. A ação remove a sujeira e exatamente sua penalidade; não concede +X de Humor ou Companhia. Cliques repetidos sem sujeira não geram benefícios. Barra de Humor deixa de ficar vermelha imediatamente.
+Sujeira aplica apenas `dirtyMoodPenalty=20`; não causa perda contínua de Humor-base. Clique no cocô para limpar (ou foque nele e use Enter). A ação remove a sujeira e exatamente sua penalidade; não concede +X de Humor ou Companhia. Cliques repetidos sem sujeira não geram benefícios. Barra de Humor deixa de ficar vermelha imediatamente.
 
 ## Persistência, migração e reset
 
@@ -130,17 +130,15 @@ Todas as ferramentas de teste ficam no diálogo: +5 minutos, +1 hora, +12 horas,
 
 ## Arquivos desta etapa
 
-Alterados: `index.html`, `digi-pet.js`, `pet-engine.js`, `pet-engine.test.cjs`, `README.md`.
+Alterados nesta iteração: `index.html`, `digi-pet.js`, `pet-engine.js`, `pet-config.js`, `care-interface.css` e `README.md`. Nenhum arquivo novo.
 
-Criados: `pet-config.js` e `care-interface.css`.
-
-Preservados: skins e `device-skins.css`, CSS base, arte urbana, sala, jardim, PNG de Agumon e servidor local. O projeto continua isolado em `prototypes/digi-pet`.
+Preservados: lógica de cuidados e testes, arte urbana, sala, jardim, PNG de Agumon e servidor local. O projeto continua isolado em `prototypes/digi-pet`.
 
 ## Verificação
 
 `node pet-engine.test.cjs`: 24 testes de tempo offline, conclusão única, descanso parcial, comidas/recusa/preferência, Companhia após graça, Humor composto, limpeza exata, migração/persistência, conversa, debug e canais de fala.
 
-No Edge: ambas as skins em 1440×900, 1366×768, 1024×650, 390×844 e 360×740, sem scroll e com controles visíveis; também conferido com atividade em andamento. Opacidade dos controles/visor =1, filtro do visor=none, personagem sem animação. Menu com seis comidas, descoberta/recusa, conclusão offline, descanso parcial, vermelho por sujeira, limpeza, cooldown, save legado e backup inválido conferidos. Sem erros JavaScript ou requisições externas. Telas menores podem rolar para preservar usabilidade.
+No Edge nesta iteração: 1440×900, 1366×768, 1024×650, 390×844 e 360×740, sem scroll e com controles visíveis. Conferidos por medidas os mesmos tamanhos de Agumon nos dois ambientes e as mesmas dimensões/posição do visor antes e durante descanso. Relógio dentro dos limites da tela, bloqueio nativo dos botões (incluindo cliques programáticos), desbloqueio ao acordar/concluir, limpeza pelo cocô e Street Link fixa após recarga. Sem erros JavaScript. Os fluxos mecânicos de comida, save e migração já foram verificados na etapa anterior; os 24 testes de lógica continuam passando. Telas menores podem rolar para preservar usabilidade.
 
 ## Limites
 
