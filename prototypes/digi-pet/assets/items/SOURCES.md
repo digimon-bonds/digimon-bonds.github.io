@@ -8,4 +8,4 @@
 | energy-patch.webp | SP Capsule I | https://digimon-story.mtwildwood.net/img/ui/ui_icon_item_042.webp |
 | care-pack.webp | Friendship | https://digimon-story.mtwildwood.net/img/ui/ui_icon_item_060.webp |
 
-Cards mantêm a carta azul enviada pelo usuário em assets/card-placeholder.png. Nenhuma nova arte de card foi criada. Todas as imagens são servidas localmente, sem depender de requests externos durante o jogo.
+Cards usam a carta azul vetorial do protótipo em assets/card-blue.svg, sem fotografia ou print. Todas as imagens são servidas localmente, sem depender de requests externos durante o jogo.

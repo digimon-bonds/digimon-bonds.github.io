@@ -94,10 +94,10 @@ Esses itens não são mais usados nas necessidades do pet. Podem ser encontrados
 | Consumível | Preço | Efeito em um Tópico/Luta |
 | --- | --- | --- |
 | RECOVERY DISK | 10 CR | Recupera 10 PV do Digimon |
-| ENERGY PATCH | 12 CR | Recupera 10 de Energia do Digimon |
+| ENERGY PATCH | 12 CR | Recupera 10 de Energia do humano |
 | CARE PACK | 8 CR | Recupera 3 Pontos de Laço |
 
-PV e Energia de combate do Digimon são separados das necessidades do Digi-Pet. Pontos de Laço não são Companhia. As definições usam `rpgEffect`, sem efeitos nos atributos do pet. O catálogo exclusivo de teste permite simular o consumo em uma ficha fictícia, respeitando máximos e gastando só a unidade fictícia.
+PV e Energia do humano são separados das necessidades do Digi-Pet. Pontos de Laço não são Companhia. As definições usam `rpgEffect`, sem efeitos nos atributos do pet. O catálogo exclusivo de teste permite simular o consumo em uma ficha fictícia, respeitando máximos e gastando só a unidade fictícia.
 
 ## Cards: regras iniciais v1
 
@@ -119,17 +119,17 @@ PV e Energia de combate do Digimon são separados das necessidades do Digi-Pet. 
 | Amplificador de Poder | Raro | +2 Poder por 1 turno |
 | Asas Brancas | Raro | +2d6 em Esquiva por 1 turno |
 
-Os aumentos de +2 são valores iniciais configuráveis desta bancada. Cards continuam com a imagem enviada em `assets/card-placeholder.png`; não foram criadas artes novas. A coleção mostra claramente uso único ou permanente/Scanner.
+Os aumentos de +2 são valores iniciais configuráveis desta bancada. Cards usam a carta azul vetorial limpa em `assets/card-blue.svg`. A coleção mostra claramente uso único ou permanente/Scanner.
 
 **Fragmentos: 0/2.** Reunir **2 fragmentos** habilita RESTAURAR CARD. Consome 2 e sorteia um Card Comum inteiro, com 20% para cada um dos cinco comuns. Fragmentos extras são preservados. Recurso de Dados removido do inventário e dos sorteios. PREPARADO vem de **2 ciclos de treino no mesmo atributo** e registra +1d6 para somar em uma rolagem apropriada; só um PREPARADO ativo, sem acumulação. O XP usa **15 ciclos**, independentemente de treino e fragmentos.
 
 ## Catálogo exclusivo de teste — tudo visível
 
-Abra **http://127.0.0.1:4231/?lab=16**. O botão **Catálogo TESTE** aparece no rodapé somente com essa opção. O catálogo abre automaticamente se nenhum prêmio pendente estiver ocupando um diálogo.
+Abra **http://127.0.0.1:4231/?lab=16**. O botão **Catálogo de itens · TESTE** aparece à direita no desktop e no rodapé no mobile somente com essa opção. O catálogo abre automaticamente se nenhum prêmio pendente estiver ocupando um diálogo.
 
 Há cinco abas: **Comida, Itens, Cards, Especiais e Chances**. Todas as opções aparecem independentemente do estoque do pet. É possível simular alimentos, itens do RPG, ativação de cards, testes com bônus, Scanner ligado/desligado, próximo turno e reiniciar a bancada.
 
-A ficha fictícia começa com PV do Digimon 5/20, Energia do Digimon 5/20 e Laço 1/10; cada consumível e cada card tem uma cópia de exemplo. Raros são preservados, comuns são gastos e os efeitos expiram ao mudar de turno. Reiniciar a bancada ou recarregar restaura os exemplos. Nada dessa cena usa localStorage ou altera estoque, crédito, progresso, necessidades ou ficha real.
+A ficha fictícia começa com PV do Digimon 5/20, Energia do humano 5/20 e Laço 1/10; cada consumível e cada card tem uma cópia de exemplo. Raros são preservados, comuns são gastos e os efeitos expiram ao mudar de turno. Reiniciar a bancada ou recarregar restaura os exemplos. Nada dessa cena usa localStorage ou altera estoque, crédito, progresso, necessidades ou ficha real.
 
 O catálogo só executa em localhost com `PET_CONFIG.mode === 'test'` e a opção `lab=16`. Não aparece na URL normal nem no modo de produção. É uma ferramenta local de protótipo, não um controle de autenticação/identidade; não foi criado backend ou acesso de jogadores.
 
@@ -211,7 +211,7 @@ Validado sem rolagem da página em 1440×900, 1366×768, 1280×720, 360×800 e 3
 
 ## Prêmios visuais — etapa 15
 
-Prévia: http://127.0.0.1:4231/?rewards=15. A exploração pode terminar com a aba aberta, oculta ou fechada; ao voltar, o prêmio pendente aparece diretamente. Comidas exibem o próprio ícone, quantidade e efeito por porção; créditos, cuidados e recursos têm emblemas próprios. Cards mostram a nova imagem enviada, preservada sem edição no arquivo card-placeholder.png. Fragmentos usam a mesma arte com recorte CSS de metade da carta e borda serrilhada, também na categoria Especiais do inventário. Nenhuma recompensa é concedida pela tela: ela já está salva antes de aparecer. Os botões permitem voltar ao parceiro ou abrir a categoria correspondente no inventário.
+Prévia: http://127.0.0.1:4231/?rewards=15. A exploração pode terminar com a aba aberta, oculta ou fechada; ao voltar, o prêmio pendente aparece diretamente. Comidas exibem o próprio ícone, quantidade e efeito por porção; créditos, cuidados e recursos têm emblemas próprios. Cards agora mostram a carta azul vetorial limpa em card-blue.svg. Fragmentos usam a mesma arte com recorte CSS de metade da carta e borda serrilhada, também na categoria Especiais do inventário. Nenhuma recompensa é concedida pela tela: ela já está salva antes de aparecer. Os botões permitem voltar ao parceiro ou abrir a categoria correspondente no inventário.
 
 A tabela e o RNG permanecem internos, sem novos sorteios ao recarregar. Resultados antigos mantêm seu prêmio registrado, mesmo que o número original pertença hoje a outra faixa da tabela. Validado no Edge: exemplo legado +1 DIGICARROT com imagem correta, card/fragmento, fechamento da aba antes da conclusão, retorno, recarga sem duplicação, conclusão com aba aberta, inventário e mobile. Testes de apresentação atualizados; nada publicado.
 
@@ -230,8 +230,13 @@ Validação: 85 testes passaram e verificação no Edge cobriu reabrir o catálo
 
 ## Itens visuais — etapa 18
 
-Prévia: http://127.0.0.1:4231/?lab=16&items=18. Recovery Disk: +10 PV do Digimon; Energy Patch: +10 Energia de combate do Digimon; Care Pack: +3 Pontos de Laço. Textos de uso em um Tópico/Luta. Os dois primeiros atuam no parceiro simulado e não nas barras de cuidado. Integração real continua desligada.
+Prévia: http://127.0.0.1:4231/?lab=16&items=18. Recovery Disk: +10 PV do Digimon; Energy Patch: +10 Energia do humano; Care Pack: +3 Pontos de Laço. Textos de uso em um Tópico/Luta. Os dois primeiros atuam no parceiro simulado e não nas barras de cuidado. Integração real continua desligada.
 
-Os três ícones de Time Stranger aparecem no inventário, na revelação e no catálogo. Cards do catálogo mostram a carta azul enviada, sem novas artes. Fontes em assets/items/SOURCES.md. Recurso de Dados removido dos sorteios, inventário, catálogo e resultados antigos; demais itens e progresso preservados. A faixa 81–90 sempre dá um fragmento; o evento Sinal Antigo dá 2 Energy Patch. Caches legados que sorteavam recurso agora dão Recovery Disk.
+Os três ícones de Time Stranger aparecem no inventário, na revelação e no catálogo. Cards do catálogo mostram a carta azul vetorial limpa. Fontes em assets/items/SOURCES.md. Recurso de Dados removido dos sorteios, inventário, catálogo e resultados antigos; demais itens e progresso preservados. A faixa 81–90 sempre dá um fragmento; o evento Sinal Antigo dá 2 Energy Patch. Caches legados que sorteavam recurso agora dão Recovery Disk.
 
 Validação: testes de domínio, alvo de recuperação, probabilidades e migração; Edge com imagens carregadas, inventário, catálogo, prêmio e mobile sem overflow. Nenhuma publicação, deploy ou integração.
+
+
+## Correção de energia e carta azul — etapa 19
+
+Recovery Disk mantém +10 PV do Digimon; Energy Patch recupera +10 Energia do humano; Care Pack mantém +3 Laço. A bancada separa os alvos e não altera necessidades do pet. O print de carta foi removido dos assets ativos e substituído por card-blue.svg: carta azul vetorial limpa, circuitos e símbolo digital. Cards, coleção, catálogo, revelação e metades rasgadas usam a mesma arte. Saves antigos atualizam as referências de imagem no carregamento. Nenhuma integração ou publicação.

@@ -11,14 +11,14 @@
   const common=C.cards.filter(c=>c.rarity==='COMMON').length,rare=C.cards.filter(c=>c.rarity==='RARE').length;
   return {categories,foodEach:categories.food/F.filter(f=>f.price>0).length,careEach:categories.care/C.careItems.length,commonEach:categories.common/common,rareEach:categories.rare/rare,restorationEach:100/common,fragment:categories.fragment+categories.rareFind*.25,eventEach:categories.rareFind/4};
  }
- function createScene(){return {turn:1,scanner:true,cardUsedThisTurn:false,activeCard:null,human:{bond:1,maxBond:10},digimon:{hp:5,maxHp:20,energy:5,maxEnergy:20},attributes:{power:2,intelligence:2,heart:2,agility:2},pet:{satiety:30,energy:30,mood:30,companionship:30},inventory:{care:Object.fromEntries(C.careItems.map(i=>[i.id,1])),cards:Object.fromEntries(C.cards.map(c=>[c.id,1]))},lastAction:'Bancada nova: todos os exemplos disponíveis.'};}
+ function createScene(){return {turn:1,scanner:true,cardUsedThisTurn:false,activeCard:null,human:{energy:5,maxEnergy:20,bond:1,maxBond:10},digimon:{hp:5,maxHp:20},attributes:{power:2,intelligence:2,heart:2,agility:2},pet:{satiety:30,energy:30,mood:30,companionship:30},inventory:{care:Object.fromEntries(C.careItems.map(i=>[i.id,1])),cards:Object.fromEntries(C.cards.map(c=>[c.id,1]))},lastAction:'Bancada nova: todos os exemplos disponíveis.'};}
  function fail(scene,feedback){return {scene:copy(scene),ok:false,feedback};}
  function useItem(input,id){
   const s=copy(input),item=C.careItems.find(i=>i.id===id);if(!item||!(s.inventory.care[id]>0))return fail(s,'Sem unidade de teste. Reinicie a bancada.');
   const e=item.rpgEffect,recipient=s[e.target],maxKey={hp:'maxHp',energy:'maxEnergy',bond:'maxBond'}[e.resource];
   if(recipient[e.resource]>=recipient[maxKey])return fail(s,'Esse recurso simulado já está cheio.');
   const old=recipient[e.resource];recipient[e.resource]=Math.min(recipient[maxKey],old+e.amount);s.inventory.care[id]--;
-  s.lastAction=`${item.name}: +${recipient[e.resource]-old} ${e.resource==='hp'?'PV do Digimon':e.resource==='energy'?'Energia do Digimon':'Pontos de Laço'} em um Tópico/Luta (simulação).`;return {scene:s,ok:true,feedback:s.lastAction};
+  s.lastAction=`${item.name}: +${recipient[e.resource]-old} ${e.resource==='hp'?'PV do Digimon':e.resource==='energy'?'Energia do humano':'Pontos de Laço'} em um Tópico/Luta (simulação).`;return {scene:s,ok:true,feedback:s.lastAction};
  }
  function activateCard(input,id){
   const s=copy(input),c=C.cards.find(c=>c.id===id);if(!c||!(s.inventory.cards[id]>0))return fail(s,'Card indisponível na bancada.');

@@ -85,13 +85,13 @@
     if(f.price)row.append(button('Comprar',()=>{const r=commit(D.buy(state,f.id));inventory('food');byId('downtime-title').focus?.();if(!r.ok)line(r.feedback);},d.credits<f.price));panel.append(row);
    }
   }else if(tab==='items'){
-   line('Consumíveis para usar em um Tópico/Luta: PV e Energia do Digimon ou Pontos de Laço.');
+   line('Consumíveis para usar em um Tópico/Luta: PV do Digimon, Energia do humano ou Pontos de Laço.');
    for(const item of C.careItems){const row=el('section',undefined,'inventory-row care-item-row'),txt=el('div'),tools=el('div',undefined,'item-tools');
     const image=el('img');image.src=item.image;image.alt=item.name;image.className='care-item-art';row.append(image);
     txt.append(el('strong',item.name),el('small',`Quantidade: ${i.care[item.id]||0} · ${item.price} CR`,'item-quantity'),el('small',item.description),el('small','Consumível do RPG · 1 unidade por uso futuro','item-kind'));
     tools.append(button('Comprar',()=>{commit(D.buyCare(state,item.id));inventory('items');},d.credits<item.price));row.append(txt,tools);panel.append(row);
    }
-   line('PV e Energia de combate são separados das necessidades do Digi-Pet. Experimente os efeitos na simulação do catálogo.');
+   line('PV do Digimon e Energia do humano são separados das necessidades do Digi-Pet. Experimente os efeitos na simulação do catálogo.');
   }else if(tab==='cards'){
    line(`CARDS · ${i.cards.length} encontrados. Comuns: uso único. Raros: permanentes, ativados pelo Scanner. Todo efeito dura somente o turno de ativação.`);
    if(!i.cards.length)line('Sua primeira descoberta está no próximo sinal.');
@@ -110,7 +110,7 @@
  }
  function revealCard(card){heading('DADOS RESTAURADOS','Card encontrado');cardContent(card);panel.append(button('Ver coleção',()=>inventory('cards')));open('card');}
  function fragmentArtwork(){
-  const art=el('div',undefined,'fragment-artwork'),image=el('img');image.src='assets/card-placeholder.png';image.alt='Fragmento de card rasgado pela metade';art.append(image);return art;
+  const art=el('div',undefined,'fragment-artwork'),image=el('img');image.src='assets/card-blue.svg';image.alt='Fragmento de card rasgado pela metade';art.append(image);return art;
  }
  function rewardContent(result){
   const r=result.reward,food=FOOD_CONFIG.find(f=>f.id===r.food),item=C.careItems.find(i=>i.id===r.item);

@@ -23,7 +23,7 @@
    p('Chances abaixo são por exploração. A preferência alimentar continua valendo no Digi-Pet; esta simulação só demonstra o efeito básico.');
    for(const food of F){const n=row(food.name,`+${food.satiety} Saciedade${food.energy?` · +${food.energy} Energia`:''}${food.mood?` · +${food.mood} Humor`:''} · ${food.price?food.price+' CR':'grátis, infinito'}`,food.price?`Exploração direta: ${pct(chances.foodEach)}`:'Não ocupa a tabela de prêmios; sempre disponível.',btn('Simular alimento',()=>act(R.feed(scene,food.id))));const img=e('img');img.src=food.image;img.alt='';n.prepend(img);}
   }else if(tab==='items'){
-   p('Consumíveis para usar em um Tópico/Luta. PV e Energia de combate do Digimon são separados das necessidades do pet; Laço é diferente de Companhia.');
+   p('Consumíveis para usar em um Tópico/Luta. PV do Digimon e Energia do humano são separados das necessidades do pet; Laço é diferente de Companhia.');
    for(const item of C.careItems){const n=row(item.name,`${item.description} Consumível: 1 unidade por uso. ${item.price} CR. Quantidade de teste: ${scene.inventory.care[item.id]}`,`Direto: ${pct(chances.careEach)}${['care-pack','energy-patch'].includes(item.id)?` · Evento: ${pct(chances.eventEach)} para +2 unidades`:''}`,btn('Simular uso',()=>act(R.useItem(scene,item.id)),scene.inventory.care[item.id]===0));art(n,item.image,item.name);}
   }else if(tab==='cards'){
    p('Regras v1: ative no turno do humano; 1 card por turno, sem acumular cards. Todos expiram ao fim do turno de ativação. Comuns são consumidos; raros ficam na ficha e podem ser reutilizados pelo Scanner em outro turno.');
@@ -40,7 +40,7 @@
    row('EVENTOS RAROS','Reserva Digital (+40 CR), Dados Preservados (+2 fragmentos), Caravana (+2 Care Pack), Sinal Antigo (+2 Energy Patch).',`${pct(chances.categories.rareFind)} no total; ${pct(chances.eventEach)} por evento. Não concedem card automaticamente.`);
   }
   const sandbox=e('section',undefined,'lab-scene');sandbox.append(e('small',`FICHA FICTÍCIA · TURNO ${scene.turn}`));
-  const stats=e('div',undefined,'lab-human-stats');for(const text of [`PV Digimon ${scene.digimon.hp}/${scene.digimon.maxHp}`,`Energia Digimon ${scene.digimon.energy}/${scene.digimon.maxEnergy}`,`Laço ${scene.human.bond}/${scene.human.maxBond}`])stats.append(e('strong',text));sandbox.append(stats);
+  const stats=e('div',undefined,'lab-human-stats');for(const text of [`PV Digimon ${scene.digimon.hp}/${scene.digimon.maxHp}`,`Energia Humano ${scene.human.energy}/${scene.human.maxEnergy}`,`Laço ${scene.human.bond}/${scene.human.maxBond}`])stats.append(e('strong',text));sandbox.append(stats);
   const active=scene.activeCard?C.cards.find(c=>c.id===scene.activeCard.id):null,attribute=active?.effect.kind==='attribute'?active.effect:null;
   sandbox.append(e('p',`Poder ${scene.attributes.power+(attribute?.attribute==='power'?attribute.amount:0)} · Inteligência ${scene.attributes.intelligence+(attribute?.attribute==='intelligence'?attribute.amount:0)}${active?' · Card ativo: '+active.name:''}`));
   if(tab==='food')sandbox.append(e('p',`Pet fictício: Saciedade ${scene.pet.satiety} · Humor ${scene.pet.mood} · Energia ${scene.pet.energy} · Companhia ${scene.pet.companionship}`));

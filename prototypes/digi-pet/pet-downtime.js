@@ -90,7 +90,7 @@
   for(const [group,allowed]of [['food',P.FOOD_CONFIG.map(f=>f.id)],['care',C.careItems.map(i=>i.id)]])for(const id of allowed)if(count(inv[group]?.[id]))d.inventory[group][id]=count(inv[group][id]);
   d.inventory.fragments=count(inv.fragments);
   d.inventory.cards=Array.isArray(inv.cards)?inv.cards.filter(c=>C.cards.some(t=>t.id===c.id)&&typeof c.instanceId==='string').map(c=>({...clone(C.cards.find(t=>t.id===c.id)),instanceId:c.instanceId,source:c.source==='restoration'?'restoration':'exploration'})):[];
-  d.results=Array.isArray(raw.results)?raw.results.filter(r=>r&&typeof r.id==='string'&&Number.isInteger(r.natural)&&r.natural>=1&&r.natural<=100&&(C.loot.some(e=>e.id===r.kind)||r.kind==='cache')&&r.reward&&typeof r.reward.text==='string').filter(r=>r.reward.item!=='data-resource').slice(0,30).map(clone):[];
+  d.results=Array.isArray(raw.results)?raw.results.filter(r=>r&&typeof r.id==='string'&&Number.isInteger(r.natural)&&r.natural>=1&&r.natural<=100&&(C.loot.some(e=>e.id===r.kind)||r.kind==='cache')&&r.reward&&typeof r.reward.text==='string').filter(r=>r.reward.item!=='data-resource').slice(0,30).map(r=>{const result=clone(r),template=C.cards.find(c=>c.id===result.reward.card?.id);if(template)result.reward.card.image=template.image;return result;}):[];
   d.forcedRoll=Number.isInteger(raw.forcedRoll)&&raw.forcedRoll>=1&&raw.forcedRoll<=100?raw.forcedRoll:null;
   return d;
  }

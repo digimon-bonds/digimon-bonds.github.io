@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="336" viewBox="0 0 240 336" fill="none">
+<defs>
+ <linearGradient id="base" x2="240" y2="336" gradientUnits="userSpaceOnUse"><stop stop-color="#073c90"/><stop offset=".5" stop-color="#0876ac"/><stop offset="1" stop-color="#061e68"/></linearGradient>
+ <radialGradient id="light"><stop stop-color="#47eaff" stop-opacity=".65"/><stop offset="1" stop-color="#0064a6" stop-opacity="0"/></radialGradient>
+ <pattern id="grid" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M12 0H0v12" stroke="#64d8f4" stroke-opacity=".09"/></pattern>
+</defs>
+<rect x="2" y="2" width="236" height="332" rx="15" fill="url(#base)" stroke="#6db5d4" stroke-width="3"/>
+<rect x="10" y="10" width="220" height="316" rx="10" stroke="#50aee2" stroke-opacity=".65"/>
+<rect x="11" y="11" width="218" height="314" rx="10" fill="url(#grid)"/>
+<ellipse cx="120" cy="167" rx="114" ry="145" fill="url(#light)"/>
+<g stroke="#59ceec" stroke-opacity=".55" stroke-width="1.5">
+ <path d="M28 12v46l35 35v41l23 23M49 12v35l35 35v34m-72-9h25l27 27v43l24 24M12 199h26l32 32v57l-25 25v13M12 246h22l19 19v25l-23 23v13M81 12v31l29 29v35M115 12v29l25 25v35M151 12v35l-25 25v26M193 12v55l-28 28v33M228 48h-17v32l-29 29v46l-26 26M228 143h-22l-20 20v41l-38 38v42l-21 21v21M228 196h-21l-37 37v58l-26 26v9M228 261h-27l-12 12v39l-14 14M93 326v-43l23-23v-43M67 326v-19l25-25v-33"/>
+ <g fill="#0b467e"><circle cx="84" cy="116" r="3"/><circle cx="110" cy="107" r="3"/><circle cx="140" cy="101" r="3"/><circle cx="126" cy="98" r="3"/><circle cx="165" cy="128" r="3"/><circle cx="88" cy="201" r="3"/><circle cx="156" cy="181" r="3"/><circle cx="116" cy="217" r="3"/></g>
+</g>
+<path d="m120 103 53 31v65l-53 31-53-31v-65z" fill="#063674" fill-opacity=".75" stroke="#64d8ef"/>
+<g fill="#efd359" shape-rendering="crispEdges">
+ <path d="M118 126h28v7h14v14h-7v7h-21v7h21v7h-28v14h14v7h14v14h-14v-7h-14v14h-14v-21H97v14H83v-14h7v-14h14v-14h7v-21h7z"/>
+ <path d="M83 154h7v7h-7zM76 168h7v7h-7zM83 175h7v7h-7zM90 161h7v7h-7zM97 147h7v7h-7z"/>
+</g>
+<path d="M139 133h7v7h-7z" fill="#082d69"/>
+<path d="M33 37h25M182 299h25" stroke="#c0e8f3" stroke-width="2"/>
+<text x="120" y="44" fill="#c1eaff" text-anchor="middle" font-family="monospace" font-size="10" letter-spacing="4">BONDS</text>
+<text x="120" y="292" fill="#b3dced" text-anchor="middle" font-family="monospace" font-size="8" letter-spacing="2">DIGITAL CARD</text>
+</svg>

@@ -32,7 +32,7 @@
   ],
   careItems:[
    {id:'recovery-disk',name:'RECOVERY DISK',image:'assets/items/recovery-disk.webp',price:10,consumable:true,target:'RPG',description:'Recupera 10 PV do Digimon em um Tópico/Luta.',rpgEffect:{kind:'recover',target:'digimon',resource:'hp',amount:10}},
-   {id:'energy-patch',name:'ENERGY PATCH',image:'assets/items/energy-patch.webp',price:12,consumable:true,target:'RPG',description:'Recupera 10 de Energia do Digimon em um Tópico/Luta.',rpgEffect:{kind:'recover',target:'digimon',resource:'energy',amount:10}},
+   {id:'energy-patch',name:'ENERGY PATCH',image:'assets/items/energy-patch.webp',price:12,consumable:true,target:'RPG',description:'Recupera 10 de Energia do humano em um Tópico/Luta.',rpgEffect:{kind:'recover',target:'human',resource:'energy',amount:10}},
    {id:'care-pack',name:'CARE PACK',image:'assets/items/care-pack.webp',price:8,consumable:true,target:'RPG',description:'Recupera 3 Pontos de Laço em um Tópico/Luta. Não altera Companhia.',rpgEffect:{kind:'recover',target:'human',resource:'bond',amount:3}}
   ],
   cards:[
@@ -45,6 +45,6 @@
    {id:'quantum-mind',name:'Quantum Mind',rarity:'RARE',test:'Inteligência',description:'Amplia temporariamente a capacidade de análise.',effect:{kind:'attribute',attribute:'intelligence',amount:2,test:'Inteligência'}},
    {id:'power-amplifier',name:'Amplificador de Poder',rarity:'RARE',test:'Poder',description:'Amplifica o Poder do parceiro durante o turno.',effect:{kind:'attribute',attribute:'power',amount:2,test:'Poder'}},
    {id:'white-wings',name:'Asas Brancas',rarity:'RARE',test:'Esquiva',description:'Asas de luz protegem o parceiro: +2d6 em Esquiva por 1 turno.',effect:{kind:'dice',diceCount:2,test:'Esquiva'}}
-  ].map(c=>({...c,image:'assets/card-placeholder.png',consumable:c.rarity==='COMMON',requiresScanner:c.rarity==='RARE',effect:{kind:'dice',diceCount:1,test:c.test,...c.effect,turns:1,uses:c.rarity==='COMMON'?1:null,applied:false},source:'sector01'})).map(c=>({...c,effect:{...c.effect,...(c.effect.kind==='dice'?{dice:`+${c.effect.diceCount}d6`}:{})}}))
+  ].map(c=>({...c,image:'assets/card-blue.svg',consumable:c.rarity==='COMMON',requiresScanner:c.rarity==='RARE',effect:{kind:'dice',diceCount:1,test:c.test,...c.effect,turns:1,uses:c.rarity==='COMMON'?1:null,applied:false},source:'sector01'})).map(c=>({...c,effect:{...c.effect,...(c.effect.kind==='dice'?{dice:`+${c.effect.diceCount}d6`}:{})}}))
  };
 })();

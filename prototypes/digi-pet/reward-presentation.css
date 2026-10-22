@@ -10,15 +10,15 @@
 .reward-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:21px}
 .reward-actions>button:last-child:not(:first-child){border-color:#a89c71!important;color:#e7d3a0!important;background:linear-gradient(#3c4943,#23373b)!important}
 .reward-actions>button:only-child{grid-column:1/-1}
-.fragment-artwork{position:relative;width:188px;height:150px;margin:5px auto 12px;filter:drop-shadow(0 9px 5px #0008);transform:rotate(-7deg)}
-.fragment-artwork img{display:block;width:188px;height:232px;object-fit:fill;clip-path:polygon(9% 12%,79% 0,88% 47%,82% 52%,77% 48%,72% 55%,66% 51%,61% 58%,55% 53%,50% 60%,44% 55%,39% 62%,33% 57%,28% 64%,22% 59%,16% 63%)}
+.fragment-artwork{position:relative;width:156px;height:126px;margin:5px auto 12px;filter:drop-shadow(0 9px 5px #0008);transform:rotate(-7deg)}
+.fragment-artwork img{display:block;width:156px;height:218px;object-fit:contain;clip-path:polygon(0 0,100% 0,100% 53%,93% 49%,86% 55%,79% 50%,72% 56%,65% 51%,58% 55%,51% 50%,44% 56%,37% 51%,30% 55%,23% 50%,16% 56%,9% 51%,0 55%)}
 .loot-fragment{background:radial-gradient(ellipse at 50% 20%,#3f70b452,transparent 68%),#102733}
 .loot-rareFind{border-color:#9b8555;background:radial-gradient(ellipse at 50% 25%,#9c7b3c40,transparent 68%),#172c32}
 .loot-emblem{display:grid;place-items:center;width:94px;height:94px;margin:9px auto 24px;border:2px solid #a5c5bf;border-radius:22px;font:500 47px var(--mono);color:#cde7df;background:linear-gradient(140deg,#45656a,#142e3b);box-shadow:inset 0 2px #f4fff755,0 9px 16px #0005}
 .loot-credits-art{border-radius:50%;border:5px double #e8c778;color:#efd390;background:linear-gradient(140deg,#665c3c,#253d3e);font-size:29px;letter-spacing:-2px}
 .loot-care-art{border-color:#93c7b4;color:#aee0c5;font-size:61px}.loot-data-art{border-color:#95bfe1;color:#b0d9f7}.loot-empty-art{border:0;background:transparent;box-shadow:none;font-size:52px;color:#86a9b8}
-.card-reveal img{width:190px;height:212px;object-fit:fill;border:0;border-radius:0;background:transparent;box-shadow:none;clip-path:polygon(9% 12%,79% 0,98% 88%,24% 100%);filter:drop-shadow(0 9px 12px #0008)}
+.card-reveal img{width:190px;height:266px;object-fit:contain;border:0;border-radius:12px;background:transparent;box-shadow:none;filter:drop-shadow(0 9px 12px #0008)}
 .card-reveal.is-rare img{border:0;box-shadow:none;filter:drop-shadow(0 0 13px #e2bd6777)}
-.collection-item img{object-fit:contain;background:#edf0ee}
-.reward-tile>.fragment-artwork{width:132px;height:107px;margin:10px auto 18px}.reward-tile>.fragment-artwork img{width:132px;height:163px}
-@media(max-width:380px){.loot-reveal{padding:21px 12px 16px}.loot-reveal h3{font-size:21px}.loot-food-art{width:104px;height:104px}.reward-actions{grid-template-columns:1fr}.card-reveal img{width:170px;height:198px}}
+.collection-item img{object-fit:contain;background:transparent}
+.reward-tile>.fragment-artwork{width:132px;height:107px;margin:10px auto 18px}.reward-tile>.fragment-artwork img{width:132px;height:185px}
+@media(max-width:380px){.loot-reveal{padding:21px 12px 16px}.loot-reveal h3{font-size:21px}.loot-food-art{width:104px;height:104px}.reward-actions{grid-template-columns:1fr}.card-reveal img{width:170px;height:238px}}
