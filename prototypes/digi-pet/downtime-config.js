@@ -3,8 +3,8 @@
 (() => {
  const C=globalThis.DigiPetConfig;
  // Older open tabs still write v3 care saves. Isolate progression from them.
- C.PET_CONFIG.legacyKeys.unshift('digimon-bonds:digi-pet:prototype:v4',C.PET_CONFIG.storageKey);
- C.PET_CONFIG.storageKey='digimon-bonds:digi-pet:prototype:v5';
+ C.PET_CONFIG.legacyKeys.unshift('digimon-bonds:digi-pet:prototype:v5','digimon-bonds:digi-pet:prototype:v4',C.PET_CONFIG.storageKey);
+ C.PET_CONFIG.storageKey='digimon-bonds:digi-pet:prototype:v6';
  C.FOOD_CONFIG.forEach(f=>{f.price={digimeat:0,digifish:8,digiapple:6,digicarrot:6,digibanana:7,digiprotein:12}[f.id];});
  C.FOOD_CONFIG.find(f=>f.id==='digimeat').satiety=20;
  C.ACTIVITY_CONFIG.durations.test.explore=90000;
@@ -14,7 +14,8 @@
  C.PET_SPEECH.exploreTired=['Podemos ir depois que eu descansar um pouco?'];
  C.PET_SPEECH.exploreHungry=['Explorar de barriga vazia?'];
  globalThis.DigiDowntimeConfig={
-  timeZone:'America/Sao_Paulo',cyclesPerXP:10,trainingGoal:3,
+  timeZone:'America/Sao_Paulo',cyclesPerXP:15,trainingGoal:2,fragmentGoal:2,
+  cardRules:{cardsPerHumanTurn:1,durationTurns:1,commonConsumed:true,rareRequiresScanner:true,rareConsumed:false,stacking:false},
   attributes:{power:'Poder',heart:'Coração',intelligence:'Inteligência',agility:'Agilidade'},
   zones:[{id:'sector01',name:'ÁREA DE DADOS // SETOR 01'}],
   disposition:{good:{satiety:70,mood:70,energy:70,companionship:60},excellent:90,low:35,bonus:5},
@@ -30,9 +31,9 @@
    {min:100,max:100,id:'rare',name:'CARD RARO'}
   ],
   careItems:[
-   {id:'recovery-disk',name:'RECOVERY DISK',price:10,consumable:true,description:'Uma pausa reconfortante para melhorar o Humor e a Companhia.',effects:{mood:12,companionship:5}},
-   {id:'energy-patch',name:'ENERGY PATCH',price:12,consumable:true,description:'Recupera 20 de Energia do pet, sem alterar a ficha.',effects:{energy:20}},
-   {id:'care-pack',name:'CARE PACK',price:8,consumable:true,description:'Suprimentos para recuperar 10 de Saciedade e 8 de Humor.',effects:{satiety:10,mood:8}}
+   {id:'recovery-disk',name:'RECOVERY DISK',price:10,consumable:true,target:'RPG',description:'Recupera 10 PV do humano na ficha do RPG.',rpgEffect:{kind:'recover',resource:'hp',amount:10}},
+   {id:'energy-patch',name:'ENERGY PATCH',price:12,consumable:true,target:'RPG',description:'Recupera 10 de Energia do humano. Não é a Energia do Digi-Pet.',rpgEffect:{kind:'recover',resource:'humanEnergy',amount:10}},
+   {id:'care-pack',name:'CARE PACK',price:8,consumable:true,target:'RPG',description:'Recupera 3 Pontos de Laço na ficha do RPG. Não altera Companhia.',rpgEffect:{kind:'recover',resource:'bond',amount:3}}
   ],
   cards:[
    {id:'power-drive',name:'Power Drive',rarity:'COMMON',test:'Poder',description:'Força extra para superar um obstáculo.'},
@@ -41,7 +42,9 @@
    {id:'heart-signal',name:'Heart Signal',rarity:'COMMON',test:'Coração',description:'Coragem para seguir em frente.'},
    {id:'quick-step',name:'Quick Step',rarity:'COMMON',test:'Agilidade',description:'Uma abertura para agir com rapidez.'},
    {id:'nova-strike',name:'Nova Strike',rarity:'RARE',test:'Ataque',description:'Um sinal excepcional atravessou o setor.'},
-   {id:'quantum-mind',name:'Quantum Mind',rarity:'RARE',test:'Inteligência',description:'Dados raros, possibilidades extraordinárias.'}
-  ].map(c=>({...c,image:'assets/card-placeholder.png',effect:{dice:'+1d6',test:c.test,uses:1,applied:false},source:'sector01'}))
+   {id:'quantum-mind',name:'Quantum Mind',rarity:'RARE',test:'Inteligência',description:'Amplia temporariamente a capacidade de análise.',effect:{kind:'attribute',attribute:'intelligence',amount:2,test:'Inteligência'}},
+   {id:'power-amplifier',name:'Amplificador de Poder',rarity:'RARE',test:'Poder',description:'Amplifica o Poder do parceiro durante o turno.',effect:{kind:'attribute',attribute:'power',amount:2,test:'Poder'}},
+   {id:'white-wings',name:'Asas Brancas',rarity:'RARE',test:'Esquiva',description:'Asas de luz protegem o parceiro: +2d6 em Esquiva por 1 turno.',effect:{kind:'dice',diceCount:2,test:'Esquiva'}}
+  ].map(c=>({...c,image:'assets/card-placeholder.png',consumable:c.rarity==='COMMON',requiresScanner:c.rarity==='RARE',effect:{kind:'dice',diceCount:1,test:c.test,...c.effect,turns:1,uses:c.rarity==='COMMON'?1:null,applied:false},source:'sector01'})).map(c=>({...c,effect:{...c.effect,...(c.effect.kind==='dice'?{dice:`+${c.effect.diceCount}d6`}:{})}}))
  };
 })();

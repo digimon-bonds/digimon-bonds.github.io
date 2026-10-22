@@ -83,6 +83,9 @@
   for(const [key,row]of Object.entries(raw.ledger||{}))if(/^\d{4}-\d{2}-\d{2}$/.test(key)&&row){d.ledger[key]={care:row.care===true,major:['train','explore'].includes(row.major)?row.major:null,attribute:Object.hasOwn(C.attributes,row.attribute)?row.attribute:null,finished:row.finished===true,completed:row.completed===true};}
   for(const key of Object.keys(d.training))d.training[key]=Math.min(C.trainingGoal-1,count(raw.training?.[key]));
   if(Object.hasOwn(C.attributes,raw.prepared?.attribute))d.prepared={attribute:raw.prepared.attribute,label:C.attributes[raw.prepared.attribute],effect:'+1d6',uses:1,sourceDate:raw.prepared.sourceDate};
+  // An existing 2/3 training progress now satisfies the new 2-cycle goal.
+  // Preserve existing Prepared and pending XP; never revoke previous awards.
+  if(!d.prepared){const earned=Object.keys(d.training).find(key=>count(raw.training?.[key])>=C.trainingGoal);if(earned){d.prepared={attribute:earned,label:C.attributes[earned],effect:'+1d6',uses:1,sourceDate:'migration-2-cycles'};d.training[earned]=0;}}
   const inv=raw.inventory||{};
   for(const [group,allowed]of [['food',P.FOOD_CONFIG.map(f=>f.id)],['care',C.careItems.map(i=>i.id)],['data',['data-resource']]])for(const id of allowed)if(count(inv[group]?.[id]))d.inventory[group][id]=count(inv[group][id]);
   d.inventory.fragments=count(inv.fragments);
@@ -156,16 +159,11 @@
   },
   useCare(input,id,at=Date.now()){
    const s=E.advance(input,at),item=C.careItems.find(x=>x.id===id);
-   if(s.activity)return {state:s,ok:false,feedback:'Aguarde a atividade terminar para usar um consumível.'};
-   if(!item||!(s.downtime.inventory.care[id]>0))return {state:s,ok:false,feedback:'Este item não está no estoque.'};
-   s.downtime.inventory.care[id]--;
-   for(const [key,value]of Object.entries(item.effects)){if(key==='mood')s.baseMood=Math.min(100,s.baseMood+value);else s.stats[key]=Math.min(100,s.stats[key]+value);}
-   s.lastInteractionAt=at;care(s,at);log(s,'careItem',at,item.name);
-   return {state:s,ok:true,feedback:`${item.name} utilizado no pet. Nenhum efeito na ficha.`};
+   return {state:s,ok:false,feedback:item?'Consumível destinado à ficha do RPG. Integração ainda desligada; simule na bancada de teste.':'Item indisponível.'};
   },
   restoreCard(input,at=Date.now()){
-   const s=E.advance(input,at);if(s.downtime.inventory.fragments<3)return {state:s,ok:false,feedback:'São necessários 3 fragmentos.'};
-   s.downtime.inventory.fragments-=3;const item=card(s,'COMMON','restoration');log(s,'restoreCard',at,item.name);return {state:s,ok:true,card:item,feedback:'Card restaurado.'};
+   const s=E.advance(input,at);if(s.downtime.inventory.fragments<C.fragmentGoal)return {state:s,ok:false,feedback:`São necessários ${C.fragmentGoal} fragmentos.`};
+   s.downtime.inventory.fragments-=C.fragmentGoal;const item=card(s,'COMMON','restoration');log(s,'restoreCard',at,item.name);return {state:s,ok:true,card:item,feedback:'Card restaurado.'};
   },
   debug(input,command,at=Date.now(),value){
    let s=E.advance(input,at),d=s.downtime;

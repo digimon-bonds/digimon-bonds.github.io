@@ -15,9 +15,10 @@
   <script src="pet-sprites.js" defer></script>
   <script src="pet-speech.js" defer></script>
   <script src="pet-motion.js" defer></script>
-  <script src="digi-pet.js" defer></script><script src="downtime-ui.js" defer></script><link rel="stylesheet" href="downtime.css"><link rel="stylesheet" href="care-polish.css"><link rel="stylesheet" href="gameplay-clarity.css">
+  <script src="rpg-reward-rules.js" defer></script><script src="digi-pet.js" defer></script><script src="downtime-ui.js" defer></script><link rel="stylesheet" href="downtime.css"><link rel="stylesheet" href="care-polish.css"><link rel="stylesheet" href="gameplay-clarity.css">
   <link rel="stylesheet" href="reward-presentation.css">
   <script src="device-fit.js" defer></script>
+  <link rel="stylesheet" href="prototype-lab.css"><script src="prototype-lab.js" defer></script>
 </head>
 <body>
   <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
@@ -79,7 +80,7 @@
           </div>
           <div class="major-actions-heading"><span>ATIVIDADE PRINCIPAL</span><small>ESCOLHA UMA POR DIA</small></div>
           <div class="major-actions" role="group" aria-label="Atividades principais, uma por Digi-Cycle">
-            <button data-action="train" type="button"><svg><use href="#i-train"/></svg><span>TREINAR<small>3 ciclos → +1d6</small></span></button>
+            <button data-action="train" type="button"><svg><use href="#i-train"/></svg><span>TREINAR<small>2 ciclos → +1d6</small></span></button>
             <button data-action="explore" type="button"><svg><use href="#i-expand"/></svg><span>EXPLORAR<small>Partir e descobrir</small></span></button>
           </div>
           <div class="downtime-strip"><button id="open-cycle" type="button"><span id="cycle-summary">DIGI-CYCLE</span><small id="cycle-detail"></small></button><button id="open-inventory" type="button">◈ Inventário <small id="credits-summary">0 CR</small></button></div>
