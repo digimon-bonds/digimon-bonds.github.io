@@ -1,4 +1,9 @@
 /* Readable care cards and a food bubble, inside the existing handheld shell. */
+.page-heading .session{display:inline-flex;align-items:center;gap:6px}
+.page-heading .device-led{display:inline-block;flex:none;width:5px;height:5px;background:#9ae6ce;box-shadow:0 0 5px #9ae6ce,0 0 10px #74dbbd88}
+.speaker-vents{display:flex;justify-content:flex-end;align-items:center;height:17px;margin:7px 0;padding-right:6px}
+.speaker-vents .speaker{position:static;gap:3px}
+.speaker-vents .speaker i{width:7px}
 .partner-info .partner-name-line{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
 .partner-info #partner-name{font-size:32px;line-height:1.1;margin:0;font-weight:600;letter-spacing:-1.2px}
 .partner-info .stage{font-size:9px;padding:4px 7px;letter-spacing:.03em}
@@ -12,7 +17,12 @@
 .room-shell .pet-stat .need-icon{width:18px;height:18px;color:var(--need-color);grid-column:1;grid-row:1}
 .room-shell .pet-stat strong{font:600 14px var(--mono);color:var(--need-color);grid-column:3;grid-row:1}
 .room-shell .pet-stat .need-track{height:5px;grid-column:1/-1;grid-row:2;background:#07131d;box-shadow:inset 0 1px 2px #0009}
-.room-shell .pet-stat:not(.is-dirty):not(.needs-care) .need-track i{background:linear-gradient(90deg,color-mix(in srgb,var(--need-color) 60%,#375669),var(--need-color))}
+.room-shell .pet-stat[data-health=good]{--need-color:#a8d6a2;--need-dark:#233c32}
+.room-shell .pet-stat[data-health=medium]{--need-color:#edd07c;--need-dark:#393627}
+.room-shell .pet-stat[data-health=low]{--need-color:#ec8e85;--need-dark:#3c282e}
+.room-shell .pet-stat[data-health] .need-track i{background:linear-gradient(90deg,color-mix(in srgb,var(--need-color) 60%,#375669),var(--need-color))}
+.room-shell .pet-stat[data-health].is-dirty{border-color:color-mix(in srgb,var(--need-color) 40%,#233844)!important}
+.room-shell .pet-stat[data-health].is-dirty .need-icon,.room-shell .pet-stat[data-health].is-dirty strong{color:var(--need-color)}
 .room .waste{left:calc(var(--pet-left) + var(--pet-width) * .65);bottom:calc(var(--pet-bottom) - 3%);width:40px;height:40px;padding:8px}
 .room-shell .interaction-deck{position:relative;overflow:visible}
 #food-dialog{position:absolute;z-index:20;left:0;bottom:calc(100% + 10px);width:100%;max-width:none;margin:0;padding:14px;border:1px solid #8ba9a1;border-radius:17px;background:linear-gradient(145deg,#203740,#102530);color:#deebe6;box-shadow:inset 0 1px #ebffed33,0 10px 28px #0009;isolation:isolate}

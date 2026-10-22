@@ -50,7 +50,7 @@ function render(){
  const mood=engine.mood(state),values={satiety:state.stats.satiety,mood:mood.visibleMood,energy:state.stats.energy,companionship:state.stats.companionship};
  for(const [key,value]of Object.entries(values)){
   const rounded=Math.round(value),element=byId(`stat-${key}`),track=byId(`meter-${key}`),card=element.closest('.pet-stat');
-  element.textContent=rounded;track.style.setProperty('--level',`${value}%`);track.setAttribute('aria-valuenow',String(rounded));card.dataset.need=key;
+  element.textContent=rounded;track.style.setProperty('--level',`${value}%`);track.setAttribute('aria-valuenow',String(rounded));card.dataset.need=key;card.dataset.health=rounded<=20?'low':rounded<=60?'medium':'good';
   card.classList.toggle('needs-care',value<=(key==='mood'?P.thresholds.sad:key==='energy'?P.thresholds.tired:30));
   card.classList.toggle('is-dirty',key==='mood'&&state.waste);
   if(key==='mood')card.title=`Humor-base ${Math.round(mood.baseMood)} · penalidades temporárias ${Math.round(mood.baseMood-mood.visibleMood)}${state.waste?' · sujeira −20':''}`;

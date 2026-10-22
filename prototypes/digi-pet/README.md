@@ -140,3 +140,11 @@ Nesta iteração a verificação automatizada no Edge foi concluída em desktop 
 - Cards de comida têm tons diferentes por alimento e mostram efeitos/estoque; preferências só aparecem depois de descobertas, sem repetir texto desconhecido em todos os cards.
 - Cocô posicionado junto aos pés do parceiro nos dois ambientes. A fala da sujeira ocorre uma vez no evento de digestão, pode interromper uma fala de ação recente e não fica repetindo enquanto estiver sujo. Outras reações continuam breves; a UI não faz monólogos automáticos de necessidade.
 - `care-polish.css` concentra o acabamento desta etapa; a lógica de digestão emite o evento em `pet-engine.js`, e `pet-speech.js` aceita prioridade para esse evento. Regras e recompensas do downtime permanecem locais.
+
+## Acabamento — etapa 12
+
+A faixa PARTNER LINK foi removida. As cinco pequenas saídas de som continuam diretamente sobre a carcaça, entre visor e controles. O LED cyan de ligado foi movido para o selo LOCAL no cabeçalho, com rótulo acessível “Aparelho ligado”.
+
+Todas as necessidades agora compartilham a mesma escala de cor, segundo o valor mostrado: 0–20 vermelho; 21–60 amarelo; 61–100 verde. A cor não identifica o tipo de necessidade. A penalidade da sujeira continua reduzindo o valor de Humor; não força vermelho se o valor resultante ainda estiver mediano ou bom. Barras, números e detalhes dos cards acompanham a mesma escala.
+
+Verificação local no Edge: faixa ausente, cinco saídas preservadas, LED visível; limites 20/60/61 e Humor com sujeira verificados. Sem mudança das regras de cuidado ou downtime, sem publicação.
