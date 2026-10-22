@@ -1,0 +1,28 @@
+/* Local downtime fits inside the existing Street Link handheld. */
+.downtime-strip{display:grid;grid-template-columns:1.7fr 1fr;gap:7px;margin:10px 0 4px}
+.downtime-strip button{background:#0c2029;border:1px solid #48616a;border-radius:8px;padding:9px 8px;color:#b9d9da;text-align:left;box-shadow:inset 0 1px #6c858755,0 2px 3px #0008;font-size:9px;letter-spacing:.06em}
+.downtime-strip small{display:block;margin-top:5px;color:#91afa9;font-size:9px;letter-spacing:0}
+.interaction-deck .care-tools{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:9px}
+.care-tools>[data-action=explore]{border:1px solid #76aab0;background:linear-gradient(#285362,#163440);color:#ccebed;box-shadow:inset 0 1px #b3e4e555,0 3px 2px #0008;border-radius:9px;min-height:42px;padding:0 16px;font:10px var(--font-mono,monospace);letter-spacing:.1em}
+button:disabled{cursor:not-allowed}
+#room[data-exploring=true] .partner-anchor{visibility:hidden}
+#downtime-dialog{width:min(420px,calc(100vw - 28px));max-height:min(760px,88dvh);padding:22px;background:linear-gradient(145deg,#16313d,#091c27);color:#c4dde1;border:1px solid #60858c;border-radius:19px;box-shadow:inset 0 1px #c9e8e344,0 25px 100px #000c;overflow:auto}
+#downtime-dialog::backdrop{background:#020a10c9;backdrop-filter:blur(5px)}
+.downtime-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:18px}
+.downtime-heading h2{font-size:20px;line-height:1.3;margin:7px 0 0;letter-spacing:-.03em}
+#downtime-dialog button,.debug-grid button{background:linear-gradient(#294751,#16313c);border:1px solid #577781;border-radius:8px;color:#d3e7e7;padding:11px 12px;font-size:11px;box-shadow:inset 0 1px #cce5e322,0 2px #020c12;cursor:pointer}
+#downtime-dialog button:disabled{opacity:.35;cursor:not-allowed}
+#downtime-dialog button:hover:not(:disabled){border-color:#adcaba;color:#fff}
+.downtime-heading>button{font-size:20px!important;padding:3px 10px!important}
+.downtime-copy{font-size:12px;line-height:1.7;color:#a2bec7;margin:12px 0}
+.cycle-steps,.reward-tile{padding:15px;background:#07192399;border:1px solid #3e6269;border-radius:12px;margin:16px 0}
+.cycle-steps p{font-size:13px;margin:6px 0}
+.reward-tile h3{color:#e1c887;font-size:20px;margin:10px 0}.reward-tile p{font-size:12px;line-height:1.6}
+.downtime-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}
+.inventory-tabs{display:flex;gap:5px;margin-bottom:18px}.inventory-tabs button{flex:1;padding:9px 5px!important}.inventory-tabs [aria-pressed=true]{border-color:#d9bc78!important;color:#e8d3a4!important}
+.inventory-row{display:flex;align-items:center;justify-content:space-between;gap:9px;padding:13px 0;border-bottom:1px solid #52757b44}.inventory-row strong{font-size:12px}.inventory-row small{display:block;font-size:10px;color:#94b4bf;line-height:1.7;margin-top:5px}
+#downtime-dialog details{font-size:11px;color:#a8c7cc;margin:18px 0}#downtime-dialog details p{line-height:1.6}
+.card-reveal{text-align:center;padding:14px 0}.card-reveal>small{display:block;font-size:10px;letter-spacing:.08em}.card-reveal img{display:block;width:150px;height:190px;object-fit:cover;margin:20px auto;border-radius:12px;box-shadow:0 8px 32px #50bbd542;border:1px solid #8ac9d2}.card-reveal h3{color:#c9e8ee;margin:12px 0}.card-reveal p{font-size:12px;line-height:1.6;color:#a8c3cc}.card-reveal.is-rare img{box-shadow:0 0 32px #e2bd6755;border:2px solid #e2bd67}.card-reveal.is-rare>small:first-child{color:#e2c37e}
+.roll-stage{padding:24px 10px;text-align:center}.roll-stage strong{display:block;font:48px monospace;color:#c0e7e4}.roll-stage p{font-size:11px;color:#9fbfc4;line-height:1.7}.roll-stage.roll-resolved{padding:7px 0}.roll-resolved strong{font-size:26px}
+.debug-grid input{min-width:0;border:1px solid #587681;background:#09202b;color:#d4ebeb;padding:8px;border-radius:6px}
+@media(max-width:360px){.downtime-strip{grid-template-columns:1.5fr 1fr}.downtime-strip button{font-size:8px;padding:7px}.downtime-strip small{font-size:8px}#downtime-dialog{padding:17px}.interaction-deck .care-tools>div{flex:1;min-width:0}.care-tools>[data-action=explore]{flex:1;min-width:0;padding:0 8px;font-size:9px}#sleep-button{width:100%;min-width:0;padding:8px;font-size:9px}}

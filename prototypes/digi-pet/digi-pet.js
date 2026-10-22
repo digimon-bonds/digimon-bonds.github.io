@@ -6,17 +6,17 @@ const byId=id=>document.getElementById(id),room=byId('room');
 let state,storageAvailable=true,loadNotice='',seenEvent=0,historySignature='';
 function validSave(raw){const c=raw?.version===1?raw.stats?.bond:raw?.stats?.companionship;return [1,2,3].includes(raw?.version)&&[raw.stats?.satiety,raw.stats?.energy,c,raw.version===3?raw.baseMood:raw.stats?.mood].every(x=>typeof x==='number'&&Number.isFinite(x));}
 try{
- let rawText=localStorage.getItem(P.storageKey),source=P.storageKey;
- if(rawText===null)for(const key of P.legacyKeys){const value=localStorage.getItem(key);if(value!==null){rawText=value;source=key;break;}}
+ let rawText=DigiPetPersistence.read(P.storageKey),source=P.storageKey;
+ if(rawText===null)for(const key of P.legacyKeys){const value=DigiPetPersistence.read(key);if(value!==null){rawText=value;source=key;break;}}
  if(rawText!==null){
   let raw;try{raw=JSON.parse(rawText);}catch{}
-  if(!validSave(raw)){localStorage.setItem(`${P.storageKey}:backup:${Date.now()}`,rawText);loadNotice='Save anterior preservado em backup local. Novo protótipo iniciado.';state=engine.create();}
+  if(!validSave(raw)){DigiPetPersistence.backup(P.storageKey,rawText);loadNotice='Save anterior preservado em backup local. Novo protótipo iniciado.';state=engine.create();}
   else {state=engine.restore(raw);if(source!==P.storageKey||raw.version<3)loadNotice='Dados anteriores migrados. O save original foi preservado.';}
  }else state=engine.create();
 }catch{state=engine.create();storageAvailable=false;}
 seenEvent=state.eventSequence;
 state=engine.advance(state);
-function save(){try{localStorage.setItem(P.storageKey,JSON.stringify(state));storageAvailable=true;}catch{storageAvailable=false;}byId('save-status').textContent=storageAvailable?'SALVO NESTE NAVEGADOR':'SEM SALVAMENTO · SESSÃO TEMPORÁRIA';}
+function save(){try{DigiPetPersistence.write(P.storageKey,JSON.stringify(state));storageAvailable=true;}catch{storageAvailable=false;}byId('save-status').textContent=storageAvailable?'SALVO NESTE NAVEGADOR':'SEM SALVAMENTO · SESSÃO TEMPORÁRIA';}
 
 // Two independent channels. System text never enters the pet speech component.
 let systemFeedbackTimer;
@@ -30,7 +30,7 @@ function showPetSpeech(context,explicit=false){return petSpeech.speak(context,ex
 function renderPetSpeech(){petSpeech.observe(engine.speechContext(state));}
 function consumeEvent(){if(state.lastEvent&&state.lastEvent.id>seenEvent){seenEvent=state.lastEvent.id;showSystemFeedback(state.lastEvent.system);showPetSpeech(state.lastEvent.context,true);}}
 const formatTime=ms=>{const seconds=Math.max(0,Math.ceil(ms/1000));return `${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`;};
-const activityNames={play:'Brincando',train:'Treinando',sleep:'Descansando'};
+const activityNames={play:'Brincando',train:'Treinando',sleep:'Descansando',explore:'Explorando'};
 function renderFoods(){
  const list=byId('food-list');list.replaceChildren();
  const names={favorite:'♥ Favorito',liked:'Gostou',neutral:'Neutro',disliked:'Não gosta'};
@@ -39,6 +39,7 @@ function renderFoods(){
   const svg=document.createElementNS('http://www.w3.org/2000/svg','svg'),use=document.createElementNS('http://www.w3.org/2000/svg','use');use.setAttribute('href',`#i-${food.icon}`);svg.append(use);svg.setAttribute('aria-hidden','true');button.append(svg);
   const text=document.createElement('span'),name=document.createElement('strong'),effects=document.createElement('small'),badge=document.createElement('em');name.textContent=food.name;
   effects.textContent=`+${food.satiety} Saciedade${food.energy?` · +${food.energy} Energia`:''}${food.mood?` · +${food.mood} Humor`:''}`;
+  effects.textContent+=food.price===0?' · ∞ gratuito':(' · estoque: '+(state.downtime.inventory.food[food.id]||0));button.disabled=food.price>0&&!(state.downtime.inventory.food[food.id]>0);
   badge.textContent=state.discoveredFoods[food.id]?names[state.discoveredFoods[food.id].preference]:'? Preferência a descobrir';badge.dataset.preference=state.discoveredFoods[food.id]?.preference||'unknown';
   text.append(name,effects,badge);button.append(text);button.addEventListener('click',()=>{interact('food',{foodId:food.id});byId('food-dialog').close();});list.append(button);
  }
@@ -58,7 +59,7 @@ function render(){
  document.querySelector('.scenery-interior').hidden=state.habitat!=='interior';document.querySelector('.scenery-exterior').hidden=state.habitat!=='exterior';
  byId('habitat-name').textContent=state.habitat==='interior'?'01 / QUARTO DIGITAL':'02 / JARDIM DIGITAL';
  document.querySelectorAll('.habitat-switch button').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.habitat===state.habitat));b.disabled=Boolean(state.activity);});
- document.querySelectorAll('[data-action]').forEach(button=>{const action=button.dataset.action,reason=engine.availability(state,action);button.disabled=Boolean(reason)&&!(action==='food'&&!state.activity);button.setAttribute('aria-disabled',String(button.disabled));button.title=reason||'Cuidar de Agumon';});
+ document.querySelectorAll('[data-action]').forEach(button=>{const action=button.dataset.action,reason=engine.availability(state,action);button.disabled=Boolean(reason)&&!(['food','explore'].includes(action)&&!state.activity&&(action==='food'||!state.downtime.majorActivityUsed));button.setAttribute('aria-disabled',String(button.disabled));button.title=reason||'Cuidar de Agumon';});
  byId('sleep-button').textContent=state.activity?.kind==='sleep'?'☾ Acordar':'☾ Descansar';byId('sleep-button').setAttribute('aria-pressed',String(state.activity?.kind==='sleep'));
  byId('sleep-button').disabled=Boolean(state.activity&&state.activity.kind!=='sleep')||(!state.activity&&Boolean(engine.availability(state,'sleep')));
  byId('sleep-button').setAttribute('aria-disabled',String(byId('sleep-button').disabled));
@@ -73,7 +74,7 @@ function render(){
  byId('pet-touch').disabled=Boolean(state.activity);
 }
 function update(){state=engine.advance(state);consumeEvent();save();render();}
-function interact(action,options={}){const result=engine.act(state,action,Date.now(),options);state=result.state;consumeEvent();showSystemFeedback(result.feedback);if(!result.ok&&result.speechContext)showPetSpeech(result.speechContext,true);save();render();}
+function interact(action,options={}){const result=engine.act(state,action,Date.now(),options);state=result.state;consumeEvent();showSystemFeedback(result.feedback);if(!result.ok&&result.speechContext)showPetSpeech(result.speechContext,true);save();render();return result;}
 byId('partner-name').textContent=mockPartner.digimonName;byId('partner-species').textContent=mockPartner.species;byId('partner-stage').textContent=mockPartner.stage;
 const petSprites=PetSprites.create({
  element:byId('partner-image'),
@@ -87,7 +88,7 @@ byId('pet-touch').addEventListener('click',()=>{
  lastTouchAt=now;petSprites.blinkOnce();petMotion.react();
  if(now-lastTickleSpeechAt>=P.touch.speechCooldownMs&&Math.random()<P.touch.speechChance&&showPetSpeech('tickled',true))lastTickleSpeechAt=now;
 });
-document.querySelectorAll('[data-action]').forEach(button=>button.addEventListener('click',()=>{if(button.dataset.action==='food'&&!state.activity){update();renderFoods();byId('food-dialog').showModal();}else interact(button.dataset.action);}));
+document.querySelectorAll('[data-action]').forEach(button=>button.addEventListener('click',()=>{if(button.dataset.action==='food'&&!state.activity){update();renderFoods();byId('food-dialog').showModal();}else if(button.dataset.action==='train'){globalThis.DowntimeUI.openTraining();}else if(button.dataset.action==='explore'){globalThis.DowntimeUI.openExploration();}else interact(button.dataset.action);}));
 byId('close-food').addEventListener('click',()=>byId('food-dialog').close());
 document.querySelectorAll('.habitat-switch button').forEach(button=>button.addEventListener('click',()=>{if(state.activity)return;state.habitat=button.dataset.habitat;update();}));
 byId('sleep-button').addEventListener('click',()=>interact(state.activity?.kind==='sleep'?'wake':'sleep'));
@@ -104,3 +105,5 @@ document.addEventListener('fullscreenchange',()=>fullscreen.setAttribute('aria-l
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)update();else petSpeech.hide();});window.addEventListener('pagehide',update);
 window.addEventListener('storage',event=>{if(event.key!==P.storageKey)return;try{const raw=JSON.parse(event.newValue);if(validSave(raw)){state=engine.advance(engine.restore(raw));consumeEvent();render();}}catch{}});
 setInterval(update,1000);consumeEvent();if(loadNotice)showSystemFeedback(loadNotice);if(!petSpeech.current){const context=engine.speechContext(state);showPetSpeech(['dirty','hungry','tired','sad','lonely'].includes(context)?context:'greeting');}save();render();
+
+

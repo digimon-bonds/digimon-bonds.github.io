@@ -3,13 +3,13 @@ function environment(){
  let time=0,sequence=0;const timers=new Map();
  const clock={get now(){return time},set(fn,delay){const id=++sequence;timers.set(id,{at:time+delay,fn});return id},clear(id){timers.delete(id)},tick(ms){const end=time+ms;let guard=0;while(true){const next=[...timers].sort((a,b)=>a[1].at-b[1].at)[0];if(!next||next[1].at>end)break;if(++guard>10000)throw Error('Timer loop');time=next[1].at;timers.delete(next[0]);next[1].fn();}time=end},get pending(){return timers.size}};
  function target(){return {listeners:{},addEventListener(type,fn){(this.listeners[type]??=[]).push(fn)},removeEventListener(type,fn){this.listeners[type]=(this.listeners[type]||[]).filter(x=>x!==fn)},emit(type,event={}){for(const fn of this.listeners[type]||[])fn(event)}}}
- function element(){return Object.assign(target(),{dataset:{},attributes:{},hidden:false,textContent:'',children:[],style:{setProperty(){}},classList:{toggle(){}},setAttribute(k,v){this.attributes[k]=v},getAttribute(k){return this.attributes[k]??null},set src(v){this.attributes.src=v},get src(){return this.attributes.src},append(...children){this.children.push(...children)},replaceChildren(...children){this.children=children},closest(){return this.card||(this.card=element())},showModal(){this.open=true},close(){this.open=false}})}
+ function element(){return Object.assign(target(),{dataset:{},attributes:{},hidden:false,textContent:'',children:[],style:{setProperty(){}},classList:{toggle(){},add(){}},insertBefore(child){this.children.push(child)},get lastChild(){return this.children.at(-1)},setAttribute(k,v){this.attributes[k]=v},getAttribute(k){return this.attributes[k]??null},set src(v){this.attributes.src=v},get src(){return this.attributes.src},append(...children){this.children.push(...children)},replaceChildren(...children){this.children=children},closest(){return this.card||(this.card=element())},showModal(){this.open=true},close(){this.open=false;this.emit('close')}})}
  const nodes=new Map(),get=id=>{if(!nodes.has(id))throw Error('Missing DOM id: '+id);return nodes.get(id)};
- const doc=Object.assign(target(),{hidden:false,getElementById:get,createElement:element,createElementNS:element});
+ const doc=Object.assign(target(),{hidden:false,getElementById:get,createElement:()=>{const node=element();Object.defineProperty(node,'id',{get(){return this._id},set(value){this._id=value;nodes.set(value,this)}});return node},createElementNS:element});
  const media=Object.assign(target(),{matches:false});const win=Object.assign(target(),{matchMedia:()=>media});
  const imageLoads=[];class Image{set src(value){imageLoads.push(value);queueMicrotask(()=>{if(value.includes('missing'))this.onerror?.();else{this.naturalWidth=1280;this.onload?.()}})}decode(){return Promise.resolve()}}
  const storage=new Map();
- const context=vm.createContext({window:win,document:doc,Image,queueMicrotask,structuredClone,console,Date,Math,setTimeout:(fn,ms)=>clock.set(fn,ms),clearTimeout:id=>clock.clear(id),setInterval:(fn,ms)=>{const repeat=()=>{fn();clock.set(repeat,ms)};return clock.set(repeat,ms)},localStorage:{getItem:k=>storage.get(k)??null,setItem:(k,v)=>storage.set(k,v)}});
+ const context=vm.createContext({window:win,document:doc,Image,crypto:require('node:crypto').webcrypto,queueMicrotask,structuredClone,console,Date,Math,setTimeout:(fn,ms)=>clock.set(fn,ms),clearTimeout:id=>clock.clear(id),setInterval:(fn,ms)=>{const repeat=()=>{fn();clock.set(repeat,ms)};return clock.set(repeat,ms)},localStorage:{getItem:k=>storage.get(k)??null,setItem:(k,v)=>storage.set(k,v)}});
  const load=file=>vm.runInContext(fs.readFileSync(path.join(__dirname,file),'utf8'),context,{filename:file});
  return {clock,element,context,load,doc,win,media,imageLoads,nodes,storage};
 }
@@ -30,19 +30,36 @@ test('complete application initializes against current HTML without removed-cont
  const e=environment(),html=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
  for(const match of html.matchAll(/\bid="([^"]+)"/g)){const node=e.element();const tag=html.match(new RegExp('<[^>]*id="'+match[1]+'"[^>]*>'))?.[0]||'';node.hidden=/\bhidden\b/.test(tag);e.nodes.set(match[1],node)}
  const thought=e.element();thought.hidden=true;const shell=e.element(),inside=e.element(),outside=e.element();
- const actions=['food','play','train','talk'].map(action=>{const n=e.element();n.dataset.action=action;return n});const habitats=['interior','exterior'].map(habitat=>{const n=e.element();n.dataset.habitat=habitat;return n});
+ const actions=['food','play','train','talk','explore'].map(action=>{const n=e.element();n.dataset.action=action;return n});const habitats=['interior','exterior'].map(habitat=>{const n=e.element();n.dataset.habitat=habitat;return n});
  e.doc.querySelector=selector=>({'.pet-thought':thought,'.room-shell':shell,'.scenery-interior':inside,'.scenery-exterior':outside,'dialog[open]':[...e.nodes.values()].find(n=>n.open),'.pet-experience':e.element()}[selector]??null);
  e.doc.querySelectorAll=selector=>({'[data-action]':actions,'.habitat-switch button':habitats,'[data-simulate]':[],'[data-debug]':[]}[selector]||[]);
- for(const file of ['pet-config.js','pet-engine.js','pet-sprites.js','pet-speech.js','pet-motion.js','digi-pet.js'])e.load(file);
+ for(const file of ['pet-config.js','downtime-config.js','exploration-rng.js','pet-storage.js','pet-engine.js','pet-downtime.js','pet-sprites.js','pet-speech.js','pet-motion.js','digi-pet.js','downtime-ui.js'])e.load(file);
  await vm.runInContext('petSprites.ready',e.context);assert.equal(shell.dataset.skin,'street');assert.equal(thought.hidden,false);e.clock.tick(4500);assert.equal(thought.hidden,true);assert.equal(e.nodes.get('pet-thought-text').textContent,'');
  assert.ok(!html.includes('id="open-history"'));assert.ok(!html.includes('id="last-action"'));assert.ok(!html.includes('deck-caption'));assert.ok(!fs.readFileSync(path.join(__dirname,'digi-pet.js'),'utf8').includes('A atividade termina em'));
- assert.equal(e.nodes.get('system-feedback').hidden,true);assert.ok(e.storage.has('digimon-bonds:digi-pet:prototype:v3'));
- const beforeTouch=e.storage.get('digimon-bonds:digi-pet:prototype:v3');
- e.nodes.get('pet-touch').emit('click');assert.equal(e.nodes.get('partner-image').dataset.spriteVariant,'blink');assert.equal(e.storage.get('digimon-bonds:digi-pet:prototype:v3'),beforeTouch);
+ assert.equal(e.nodes.get('system-feedback').hidden,true);assert.ok(e.storage.has('digimon-bonds:digi-pet:prototype:v4'));
+ const beforeTouch=e.storage.get('digimon-bonds:digi-pet:prototype:v4');
+ e.nodes.get('pet-touch').emit('click');assert.equal(e.nodes.get('partner-image').dataset.spriteVariant,'blink');assert.equal(e.storage.get('digimon-bonds:digi-pet:prototype:v4'),beforeTouch);
  e.clock.tick(180);assert.equal(e.nodes.get('partner-image').dataset.spriteVariant,'normal');
  actions.find(x=>x.dataset.action==='play').emit('click');assert.equal(e.nodes.get('pet-touch').disabled,true);
- const whileBusy=e.storage.get('digimon-bonds:digi-pet:prototype:v3');e.nodes.get('pet-touch').emit('click');assert.equal(e.storage.get('digimon-bonds:digi-pet:prototype:v3'),whileBusy);
+ const whileBusy=e.storage.get('digimon-bonds:digi-pet:prototype:v4');e.nodes.get('pet-touch').emit('click');assert.equal(e.storage.get('digimon-bonds:digi-pet:prototype:v4'),whileBusy);
  e.doc.emit('keydown',{ctrlKey:true,shiftKey:true,code:'KeyD',preventDefault(){}});assert.equal(e.nodes.get('history-dialog').open,true);
+ e.nodes.get('history-dialog').close();
+ vm.runInContext("state=DigiDowntime.debug(state,'finish');state=DigiDowntime.debug(state,'ready');save();render();",e.context);
+ actions.find(x=>x.dataset.action==='train').emit('click');assert.equal(e.nodes.get('downtime-dialog').open,true);assert.equal(e.nodes.get('downtime-title').textContent,'O que vamos treinar?');
+ const descendants=node=>[node,...node.children.flatMap(descendants)];
+ descendants(e.nodes.get('downtime-dialog')).find(x=>x.textContent==='Poder · 0/3').emit('click');
+ assert.equal(vm.runInContext('state.activity.attribute',e.context),'power');
+ vm.runInContext("state=DigiDowntime.debug(state,'finishTrain');state=DigiDowntime.debug(state,'nextDay');state=DigiDowntime.debug(state,'ready');save();render();",e.context);
+ actions.find(x=>x.dataset.action==='explore').emit('click');assert.equal(e.nodes.get('downtime-title').textContent,'ÁREA DE DADOS // SETOR 01');
+ descendants(e.nodes.get('downtime-dialog')).find(x=>x.textContent==='INICIAR EXPLORAÇÃO').emit('click');assert.equal(vm.runInContext('state.activity.kind',e.context),'explore');
+ vm.runInContext("state=DigiDowntime.debug(state,'roll',Date.now(),95);state=DigiDowntime.debug(state,'finishExplore');save();render();",e.context);
+ assert.equal(e.nodes.get('downtime-title').textContent,'ROLANDO… D100');e.clock.tick(1550);assert.equal(e.nodes.get('downtime-title').textContent,'CARD RARO');
+ assert.equal(vm.runInContext('state.downtime.inventory.cards.length',e.context),1);e.nodes.get('downtime-dialog').close();
+ assert.equal(vm.runInContext('state.downtime.results[0].seen',e.context),true);
+ e.nodes.get('open-inventory').emit('click');assert.ok(e.nodes.get('downtime-title').textContent.startsWith('Inventário'));
+ descendants(e.nodes.get('downtime-dialog')).find(x=>x.textContent==='Cards').emit('click');assert.ok(descendants(e.nodes.get('downtime-dialog')).some(x=>x.textContent.includes('+1d6 em um teste de')));
+ e.nodes.get('downtime-dialog').close();e.nodes.get('open-cycle').emit('click');assert.equal(e.nodes.get('downtime-title').textContent,'Digi-Cycle');e.nodes.get('downtime-dialog').close();
+ e.nodes.get('open-reset').emit('click');e.nodes.get('confirm-reset').emit('click');assert.equal(vm.runInContext('state.downtime.inventory.cards.length',e.context),0);
 });
 
 function motion(){
@@ -74,3 +91,5 @@ test('touch reaction is a small 320ms tilt on a separate wrapper',async()=>{
 test('manual happy blink reuses the normal/blink lifecycle without overlapping timers',async()=>{
  const e=sprites();await e.controller.ready;assert.equal(e.controller.blinkOnce(),true);assert.equal(e.image.dataset.spriteVariant,'blink');assert.equal(e.controller.blinkOnce(),false);e.clock.tick(120);assert.equal(e.image.dataset.spriteVariant,'normal');e.controller.destroy();assert.equal(e.clock.pending,0);
 });
+
+

@@ -1,178 +1,132 @@
-# Digi-Pet — loop de cuidado local
+# Digi-Pet — downtime local, iteração 10
 
-## Acesso
+Protótipo independente do Digimon Bonds. **Não publicado. Sem backend, autenticação, ficha, Battle Link ou recompensas oficiais.**
 
-Execute `node serve.mjs` nesta pasta (Node.js 22+) e abra http://127.0.0.1:4231. Na raiz da branch: `node prototypes/digi-pet/serve.mjs`. Ctrl+C encerra o servidor. O HTML também abre diretamente, mas o endereço HTTP é recomendado para persistência consistente.
+## Abrir e jogar
 
-## Visor e cards
+Prévia atual: http://127.0.0.1:4231/?downtime=10. Recarregue a página para carregar os arquivos desta etapa. Se precisar iniciar o servidor, execute `node serve.mjs` nesta pasta (Node 22+); encerre com Ctrl+C. Na branch local: `node prototypes/digi-pet/serve.mjs`.
 
-O aparelho tem largura máxima de **480px** no desktop e se adapta ao mobile. Fica centralizado horizontal e verticalmente sobre o fundo escuro. Cabeçalho, necessidades, visor, controles, salvamento e reset fazem parte da mesma carcaça. O visor usa altura própria, sem crescer para ocupar a janela. Diálogos continuam sobrepostos; telas muito baixas podem rolar para preservar a usabilidade.
+1. Cuide do Agumon com Comida, Conversar, Brincar ou clicando no cocô para limpar.
+2. Escolha **Treinar** ou **Explorar**, uma atividade principal por dia.
+3. Espere o relógio do visor. Atividades continuam por timestamps mesmo com a aba fechada.
+4. Explore para obter créditos, alimentos, itens, fragmentos e cards. Abra **Inventário** para comprar comidas, consultar itens e ver a coleção.
+5. O botão **Digi-Cycle** mostra os requisitos do dia, progresso dos treinos, PREPARADO e memória de convivência.
 
-A carcaça agora usa somente Street Link. A faixa superior com textos e seletor de skin foi removida, deixando a estampa exposta. Saves com outra skin são normalizados para Street Link sem perder o progresso. Textura é apenas da carcaça; visor, controles, cards e menus têm fundo próprio opaco. Descansar não escurece a tela inteira. Ações indisponíveis ficam escurecidas e realmente desabilitadas.
+A carcaça Street Link de 480px, ambientes Interior/Exterior, Agumon, sprites NORMAL/BLINK, respiração, toque, halo do visor e controles de borracha foram preservados. Durante exploração Agumon fica ausente do habitat; o relógio permanece no visor. Painéis são diálogos sobrepostos, sem aumentar o aparelho.
 
-Quatro cards separados, com ícones vetoriais originais: carne (Saciedade), rosto (Humor), raio (Energia) e coração (Companhia). Barras mantêm escala 0–100, valores e semântica de medidor acessível. O card de Humor fica vermelho enquanto houver sujeira.
+## Digi-Cycle e memória
 
-Interior e Exterior compartilham as mesmas dimensões do parceiro. Seu Parceiro e controles mantêm bordas físicas semelhantes ao visor; Descansar/Acordar é maior e dourado. A limpeza ocorre pelo próprio cocô. Agumon alterna NORMAL/BLINK e respira de forma sutil durante idle. O visor emite um halo cyan discreto. A base dos controles usa uma textura CSS de borracha com círculos em relevo, inspirada em tapete arcade. Não há frases fixas, legenda promocional, histórico ou indicação da última ação nessa área: somente botões.
+Um ciclo exige **um cuidado + uma atividade principal concluída**, no máximo uma conclusão por dia, no fuso **America/Sao_Paulo**. A escolha é registrada na partida e não pode ser trocada após começar. Cuidados seguem disponíveis após a conclusão; atividades com relógio bloqueiam outras atividades.
 
-## Respiração e toque
+O registro por data impede repetir o ciclo ao recarregar ou voltar para um dia já concluído. Uma atividade que atravessa a meia-noite pertence ao dia de partida; o dia seguinte fica disponível após seu retorno. Se não houve cuidado no dia de origem, uma atividade concluída no dia seguinte não completa retroativamente o ciclo anterior. Brincar conta como cuidado ao concluir; Comida, Conversar e Limpar contam ao serem aceitos.
 
-`pet-motion.js` aplica respiração em um wrapper, sem interferir na troca de sprites: deslocamento máximo de 1px e escala de 1,006/1,012. Cada ciclo concluído sorteia nova duração entre **2,4 e 3,4 segundos**; não muda a duração no meio do movimento. Pausa durante atividades, diálogos, aba oculta e preferência de movimento reduzido. Navegadores sem Web Animations mantêm a imagem estática, sem erro.
+Cada 10 ciclos completos registra **+1 XP de convivência pendente** e o indicador volta a 0/10. Não há envio à ficha nem uso desse XP. O progresso de treino também depende do ciclo completo: terminar um treino sem cuidar não concede progresso até cumprir o cuidado no mesmo dia.
 
-Clicar/tocar no parceiro ou focá-lo e usar Enter/Espaço aciona `blinkOnce()` da camada já existente de sprites. Uma inclinação de até 1 grau, por 320ms, acompanha a reação. Cliques repetidos têm intervalo mínimo de 800ms, sem sobrepor animações. O toque não concede atributos nem muda necessidades, histórico ou save.
+## Treinar
 
-A fala de cócegas é opcional: chance de 20% por toque aceito, no máximo uma tentativa de fala aceita a cada 30 segundos, ainda respeitando o fluxo de falas curtas. Exemplos mock: “Isso faz cócegas!” e “Hehe!”. Reações e respiração não executam durante atividades críticas/descanso. A preferência de movimento reduzido também impede a reação visual.
+Escolha Poder, Coração, Inteligência ou Agilidade. Cada atributo tem progresso independente. Após **3 ciclos completos de treino no mesmo atributo**, registra **PREPARADO // atributo — +1d6 em UM teste apropriado**, um uso futuro. Só existe um PREPARADO; enquanto ativo, novo treino é bloqueado para impedir acumulação. A exploração continua disponível nos dias seguintes. Não há botão de consumo oficial nesta etapa.
 
-## Sprites NORMAL e BLINK
+Requisitos: Energia ≥20, Saciedade ≥15. Custo ao concluir: **−15 Energia e −8 Saciedade**; +3 Humor-base se Humor visível ≥50 no fim. Duração de teste: **2 min**; configuração futura: 15 min.
 
-`pet-sprites.js` é uma camada de apresentação independente do jogo. O perfil visual atual usa:
+## Explorar e rolagem
 
-```js
-sprites: {
-  normal: 'assets/agumon-normal.png',
-  blink: 'assets/agumon-blink.png'
-}
-```
+Zona inicial configurável: **ÁREA DE DADOS // SETOR 01**. Requisitos: **Energia ≥25, Saciedade ≥20**. As recusas são falas do parceiro, sem notificação do sistema. Custo na partida: **−20 Energia, −10 Saciedade**.
 
-NORMAL é uma cópia intacta do PNG atual; BLINK é a imagem enviada pelo usuário, sem edição. Ambas possuem o mesmo tamanho de canvas. Os dois arquivos são pré-carregados/decodificados antes de iniciar as trocas, e a dimensão do elemento de imagem não muda.
+Duração local: **90 segundos**. Preset de produção: **30 minutos**, sem ativar publicação. Tempos centralizados em `ACTIVITY_CONFIG.durations`.
 
-Intervalos aleatórios entre inícios de piscada: 3–8 segundos. Duração aleatória da piscada: 120–180 ms. Retorna automaticamente a NORMAL. Se BLINK estiver ausente ou falhar, permanece NORMAL sem tentativas contínuas nem imagem quebrada na tela. O estado do jogo e o localStorage não armazenam a piscada.
+A Disposição é calculada **antes dos custos** e guardada na atividade:
 
-Durante atividades (inclusive descanso), diálogos, aba oculta ou preferência de movimento reduzido, as piscadas são suspensas e a imagem volta para NORMAL. Ao retomar, começa um novo intervalo completo, sem acumular piscadas. `destroy()` cancela timers e listeners. O mapa de variantes permite acrescentar nomes no futuro, mas não foram implementados happy, sad, tired ou sleeping.
-
-## Dois canais de texto
-
-- **PET SPEECH**: exclusivamente o balão de Agumon. Biblioteca temporária em `PET_SPEECH`, por contexto, independente da espécie. Frases curtas de fome, sono, solidão, tristeza, sujeira, comida e atividades.
-- **SYSTEM FEEDBACK**: notificações discretas e temporárias, fora da área dos botões. Conclusões, recusas e avisos de migração desaparecem após 3,2 segundos. O início da atividade e sua contagem não são repetidos em frases; o relógio do visor basta.
-
-A UI implementa `showPetSpeech` e `showSystemFeedback` separadamente. `pet-speech.js` controla o ciclo do balão: aparece por 4,5 segundos e é escondido de verdade, com o texto limpo. Não há fila de falas antigas, repetição automática de frases casuais/felizes ou balão permanente durante atividades. Reações a ações são breves, com intervalo mínimo de 2 segundos entre elas.
-
-Lembretes de necessidade mantêm a prioridade do estado (sujeira, fome, cansaço, tristeza, solidão), mas há pelo menos 60 segundos de silêncio desde a última fala e 3 minutos antes de repetir o mesmo contexto. Resolver a causa remove uma reclamação automática ainda visível. A saudação aparece uma vez por abertura e desaparece. Os tempos ficam em `PET_CONFIG.speech`; aba oculta limpa o balão.
-
-## Configuração central
-
-`pet-config.js` concentra:
-
-- `PET_CONFIG`: estado inicial, thresholds, recusa de comida, modo de teste, conversa e persistência.
-- `FOOD_CONFIG`: seis comidas, efeitos e categorias.
-- `ACTIVITY_CONFIG`: durações de teste/futuras, requisitos e efeitos de conclusão.
-- `NEED_DECAY_CONFIG`: desgaste, graça de ausência, pisos e digestão.
-- `MOOD_CONFIG`: causas temporárias de desconforto.
-- `PARTNER_PROFILE`, `PREFERENCE_CONFIG`, `PET_SPEECH`: perfil e personalidade mock, separados do rótulo de espécie.
-
-## Quatro necessidades e Humor composto
-
-Iniciais: Saciedade 65, Energia 70, Companhia 65 e Humor-base 70.
-
-O save guarda três necessidades em `stats` e `baseMood` separado. `engine.mood(state)` deriva a quarta necessidade visível:
-
-```text
-visibleMood = clamp(baseMood − soma dos modificadores, 0, 100)
-```
-
-| Modificador temporário | Condição | Penalidade |
-| --- | --- | ---: |
-| Sujeira | Existe um cocô | 20 |
-| Fome | Saciedade ≤25 | 12 |
-| Exaustão | Energia ≤25 | 12 |
-| Solidão | Companhia ≤30 | 12 |
-| Acúmulo | Duas ou três necessidades ruins entre fome/exaustão/solidão | +5 por necessidade além da primeira |
-
-Corrigir a necessidade remove sua penalidade naturalmente. O tempo e a sujeira não destroem `baseMood`. Brincar, alimentos e conversa podem melhorar esse valor-base.
-
-Exemplo obrigatório: baseMood 85, necessidades boas, sujeira → Humor visível 65; limpar → Humor 85, sem bônus adicional.
-
-Estados gerais: Brincando/Treinando/Dormindo enquanto ocupado; Triste (Humor ≤35 ou três necessidades ruins); Com fome; Cansado; Solitário; Incomodado; Animado (Humor ≥85 e Energia ≥75); Feliz (Humor ≥75); Tranquilo. Todos os thresholds estão centralizados.
-
-## Comida e descoberta
-
-COMIDA abre um seletor; clicar no botão principal não alimenta automaticamente. Ícones são vetores originais locais, sem assets dos jogos.
-
-| Alimento | Efeito básico |
+| Estado de saída | Modificador |
 | --- | --- |
-| DIGIMEAT | +25 Saciedade |
-| DIGIFISH | +25 Saciedade |
-| DIGIAPPLE | +15 Saciedade, +3 Humor-base |
-| DIGICARROT | +15 Saciedade |
-| DIGIBANANA | +20 Saciedade, +5 Energia |
-| DIGIPROTEIN | +10 Saciedade, +15 Energia |
+| Saciedade, Humor visível e Energia ≥70, Companhia ≥60, sem sujeira | +5 |
+| Todos os quatro acima de 90, sem sujeira | +5, identificado como Excelente Disposição |
+| Qualquer um dos quatro abaixo de 35, ou sujeira | −5 |
+| Demais condições | 0 |
 
-Perfil mock individual: Fogo / Vacina, independente do nome Agumon. Apenas esse perfil foi definido nesta etapa:
+Bônus não se acumulam. D100 natural + modificador, limitado a 1–100. Exemplo: 92 +5 =97 → Card Comum. **Resultado final 100 → exatamente um Card Raro**. Com baixa disposição, um 100 natural pode terminar em 95; a UI mostra separadamente natural, modificador e final.
 
-- Favorito: DIGIMEAT. Bônus +5 Humor-base e +3 Companhia.
-- Gostou: DIGIPROTEIN e DIGICARROT. Bônus +2 Humor-base e +1 Companhia.
-- Neutro: DIGIAPPLE e DIGIBANANA. Apenas efeitos básicos.
-- Não gosta: DIGIFISH. Alimenta, sem bônus emocional.
+`exploration-rng.js` usa `crypto.getRandomValues` com rejection sampling (sem viés de módulo). O domínio recebe esse adaptador; não há Math.random para loot. O resultado e a recompensa são resolvidos e salvos uma vez ao concluir. A apresentação de 750ms/1550ms revela primeiro o número e depois o achado; ela nunca sorteia ou concede itens. Fechar/reabrir ou recarregar não duplica o prêmio. Achados ainda não vistos reaparecem ao abrir o pet.
 
-A primeira oferta aceita descobre a preferência pela fala e grava `discoveredFoods`; ofertas seguintes mostram o resultado discretamente no menu. Não há IA ou regra universal de espécie. Preferências são dados de teste para o perfil Elemento/Atributo, não regras oficiais de Digimon.
-
-Em Saciedade ≥95, recusa com fala “Não cabe mais nada.” e feedback mecânico separado. Não aplica benefícios, descoberta ou consumo. Sem peso, obesidade ou doença. Efeitos são limitados a 0–100.
-
-## Atividades com tempo real
-
-O modo atual é **test**. Durações futuras são apenas configuração, sem publicação.
-
-| Atividade | Teste | Preset futuro |
+| D100 final | Chance base | Categoria |
 | --- | --- | --- |
-| Brincar | 1 minuto | 10 minutos |
-| Treinar | 2 minutos | 15 minutos |
-| Descansar | 3 minutos | 30 minutos |
+| 01–40 | 40% | 8–20 Créditos |
+| 41–62 | 22% | 1 comida especial |
+| 63–76 | 14% | 1 Recovery Disk, Energy Patch ou Care Pack |
+| 77–87 | 11% | Cache de Dados |
+| 88–94 | 7% | 1 Fragmento de Card |
+| 95–97 | 3% | 1 Card Comum |
+| 98–99 | 2% | Achado Raro |
+| 100 | 1% | 1 Card Raro |
 
-`activity = {kind, startedAt, endsAt}` é persistido. Timestamps são a fonte da verdade; o intervalo de 1 segundo só atualiza a tela. Ao reabrir, `advance` resolve o tempo transcorrido e a conclusão uma única vez.
+Percentuais acima são da tabela sem modificador. O modificador desloca os resultados, alterando as chances efetivas. Com +5, a faixa de raro inclui 95–100 naturais; com −5 nenhum resultado final chega a 100.
 
-- **Brincar**: ao concluir, +15 Humor-base, +8 Companhia, −10 Energia, −5 Saciedade. Exige inicialmente Energia ≥12 e Saciedade ≥10.
-- **Treinar**: ao concluir, −15 Energia, −8 Saciedade; +3 Humor-base se o Humor visível na conclusão era ≥50. Incrementa `activityStats.trainingSessions`, sem XP, PL ou bônus do RPG. Exige inicialmente Energia ≥20 e Saciedade ≥15.
-- **Descansar**: recupera até +60 Energia proporcionalmente ao tempo previsto, limitado a 100. Pode acordar antes, mantendo apenas a fração já recuperada. Sem punição por acordar.
-- **Conversar**: imediato, +10 Companhia e +4 Humor-base. Novos ganhos apenas após 60 segundos da última conversa recompensada. Repetições ainda registram a conversa e podem receber fala, sem ganho mecânico.
+Cache sorteia créditos extras (+25), 1–2 alimentos, 1 fragmento ou Recurso de Dados. Achado Raro sorteia +40 créditos, +2 fragmentos ou +2 Care Pack: **não é um card automático**. Configuração extensível em `downtime-config.js`.
 
-Enquanto há uma atividade, ações principais incompatíveis e troca de ambiente ficam desabilitadas e escurecidas. A limpeza pelo cocô continua disponível; Acordar fica disponível durante descanso. O relógio maior aparece dentro do visor, como sobreposição, sem ocupar espaço no layout ou alterar o tamanho da cena. O mesmo relógio atende brincar, treinar e descansar. Inícios/conclusões são distintos no histórico. Histórico/Teste continua acessível para desenvolvimento.
+## Comidas, preferências e loja
 
-## Tempo e ausência leve
+DIGIMEAT é **gratuito, infinito, +20 Saciedade**, sem bônus de Humor ou Companhia, mesmo sendo favorito no perfil atual. A preferência continua descoberta/registrada; os bônus emocionais ficam para as comidas especiais. Saciedade ≥95 recusa alimento sem gastar estoque.
 
-- Saciedade: −2 por hora.
-- Energia: −1,5 por hora acordado; durante descanso, aplica a recuperação proporcional.
-- Companhia: sem perda nas primeiras 12 horas após interação válida. Depois, −2 por hora elegível. Descanso pausa a perda enquanto está ocorrendo.
-- Um retorno muito longo processa no máximo 24 horas de desgaste de Saciedade/Energia e no máximo 35 pontos de perda de Companhia. O restante é descartado, sem dívida futura.
-- Pisos de desgaste: Saciedade 15, Energia 15, Companhia 20. Valores que uma ação já levou abaixo do piso não são reduzidos novamente pelo relógio nem recebem aumento artificial.
-- Ausência pode causar solidão e tristeza temporárias, sem perda oficial de atributos, evolução, XP ou Laço. Sem doença ou morte.
+| Comida | Preço | Efeitos básicos |
+| --- | --- | --- |
+| DIGIMEAT | grátis / infinito | +20 Saciedade |
+| DIGIFISH | 8 CR | +25 Saciedade |
+| DIGIAPPLE | 6 CR | +15 Saciedade, +3 Humor |
+| DIGICARROT | 6 CR | +15 Saciedade |
+| DIGIBANANA | 7 CR | +20 Saciedade, +5 Energia |
+| DIGIPROTEIN | 12 CR | +10 Saciedade, +15 Energia |
 
-Estado interno usa valores fracionários para não depender da frequência de atualização; cards exibem valores arredondados. Conclusões de atividades usam seus próprios timestamps mesmo ao processar uma ausência longa.
+Comidas pagas precisam ser compradas antes de oferecer. Preferências preservadas do perfil mock Fogo/Vacina: favorito DIGIMEAT; gosta de DIGIPROTEIN/DIGICARROT; neutro DIGIAPPLE/DIGIBANANA; não gosta de DIGIFISH. Em comidas especiais, favorito +5 Humor/+3 Companhia, gosta +2/+1; neutro sem bônus; não gosta alimenta sem ganhos emocionais. O estoque é descontado só quando a comida é aceita.
 
-## Sujeira
+## Inventário e cards
 
-Refeição aceita agenda digestão para 2 minutos depois, se não houver sujeira/digestão pendente. No máximo uma necessidade de limpeza. Novas refeições não adiam a digestão nem empilham cocôs.
+Categorias locais: FOOD, CARE ITEMS, CARDS, CARD FRAGMENTS, DATA ITEMS; sem limite, equipamentos, crafting ou uso oficial de itens. Itens de recuperação são apenas achados guardados, sem recuperar PV/Energia da ficha.
 
-Sujeira aplica apenas `dirtyMoodPenalty=20`; não causa perda contínua de Humor-base. Clique no cocô para limpar (ou foque nele e use Enter). A ação remove a sujeira e exatamente sua penalidade; não concede +X de Humor ou Companhia. Cliques repetidos sem sujeira não geram benefícios. Barra de Humor deixa de ficar vermelha imediatamente.
+Com **3 fragmentos**, RESTAURAR CARD fica disponível. Consome 3 e sorteia um Card Comum. Não restaura automaticamente sem clicar. A coleção aceita cópias independentes com instanceId; cada card possui id, nome, raridade, imagem, descrição, efeito e origem.
 
-## Persistência, migração e reset
+Pool comum: Power Drive (Poder), Logic Boost (Inteligência), Attack Chip (Ataque), Heart Signal (Coração), Quick Step (Agilidade). Raros: Nova Strike (Ataque), Quantum Mind (Inteligência). Todos registram **+1d6 em UM teste indicado, um uso futuro**. Os efeitos não são executados, acumulados em atributos ou consumidos no RPG. A imagem enviada foi copiada intacta para `assets/card-placeholder.png` e usada em todas as revelações; a arte pode ser substituída por card depois.
 
-Chave atual: `digimon-bonds:digi-pet:prototype:v3` em `localStorage`.
+## Necessidades e cuidado preservados
 
-Guarda necessidades, baseMood, atividade, relógios, preferência descoberta, contador de treinos, histórico, ambiente e skin. Lê saves v2/v1 se ainda não houver v3 e mantém as chaves antigas intactas. Vínculo antigo vira Companhia. Como saves antigos só tinham Humor exibido, a migração reconstrói baseMood pelas causas temporárias presentes, até o limite de 100, preservando a leitura anterior quando possível. Descanso antigo sem timestamps inicia uma nova sessão cronometrada, sem energia retroativa instantânea.
+Saciedade, Humor visível, Energia e Companhia: 0–100. Estado inicial 65/70/70/65. Humor deriva de Humor-base e penalidades temporárias: sujeira −20; fome, exaustão e solidão −12 cada; necessidades negativas acumuladas adicionam −5 após a primeira. Limpar o cocô clicando nele remove a penalidade; moscas decorativas permanecem.
 
-JSON inválido ou formato incompatível é preservado numa chave `...:v3:backup:<timestamp>` antes de iniciar um novo pet; a interface avisa. Se o navegador bloquear armazenamento, funciona em memória com aviso no rodapé. Abas desta versão acompanham o save mais recente.
+Passagem de tempo: Saciedade −2/h; Energia acordado −1,5/h; Companhia −2/h após 12h sem cuidado, perda máxima 35 por recuperação offline. Desgaste limitado a 24h por catch-up; pisos 15 Saciedade/Energia e 20 Companhia, sem forçar subida se já estiver abaixo. Digestão pode gerar uma sujeira depois de 2 min. Não existe doença, morte, perda de XP ou dívida de ausência.
 
-**Resetar protótipo → Resetar dados** restaura apenas o save v3 (incluindo descobertas, atividade e histórico); não remove saves anteriores ou outros dados do Bonds. Cancelar não altera dados.
+Brincar: 1 min teste /10 min futuro; ao concluir +15 Humor-base, +8 Companhia, −10 Energia, −5 Saciedade. Conversar: +10 Companhia, +4 Humor-base, ganhos limitados a uma vez por minuto. Dormir: 3 min teste/30 min futuro; recupera até +60 Energia proporcionalmente, com queda natural de Saciedade. Acordar cedo mantém apenas o recuperado. Relógio no visor, botões críticos bloqueados durante a contagem.
 
-## Histórico / teste
+Falas somem após 4,5s. Necessidades persistentes têm silêncio mínimo de 60s e repetição por contexto só após 3min. Sem monólogo casual constante. Piscada e respiração pausam em atividades, diálogos, aba oculta e movimento reduzido; toque continua sem recompensa mecânica.
 
-O botão Histórico/Teste foi removido. Para desenvolvimento local, o diálogo ainda pode ser aberto pelo atalho **Ctrl+Shift+D**: +5 minutos, +1 hora, +12 horas, +24 horas, forçar sujeira, reduzir necessidades e concluir atividade. Nada disso aparece na área principal de controles. A simulação afeta somente o relógio do pet. O histórico continua salvo internamente.
+## Dados locais e arquitetura
 
-## Arquivos desta etapa
+Save: **localStorage**, chave `digimon-bonds:digi-pet:prototype:v4`. Migra necessidades dos saves v3/v2/v1; não inventa recompensas retroativas. A chave nova impede abas antigas (v3) de sobrescrever o downtime. O objeto de cuidados permanece schema v3 e contém `downtime.version:1`; versões do armazenamento e do domínio são independentes. Saves antigos não são apagados; dados inválidos são copiados para `:backup:<timestamp>`.
 
-Alterados nesta iteração: `index.html`, `digi-pet.js`, `pet-config.js`, `pet-sprites.js`, `pet-presentation.test.cjs` e `README.md`.
+- `pet-config.js`: necessidades, comidas, preferências, atividades e falas.
+- `downtime-config.js`: presets desta etapa, preços, regiões, tabela, cards, treino/ciclos e chave nova.
+- `pet-engine.js`: cuidado e avanço analítico por timestamps; hook de conclusão desacoplado.
+- `pet-downtime.js`: regras de ciclos, treino, exploração, recompensas e inventário; sem DOM.
+- `exploration-rng.js`: porta de RNG substituível.
+- `pet-storage.js`: porta de leitura/escrita local substituível.
+- `digi-pet.js`: UI principal e cuidado.
+- `downtime-ui.js`, `downtime.css`: painéis compactos, revelação e controles.
+- `pet-sprites.js`, `pet-motion.js`, `pet-speech.js`: apresentação independente.
 
-Criados: `compact-device.css` e `pet-motion.js`. A limpeza visual anterior, as duas sprites e os módulos de fala continuam preservados.
+**NÃO CONFIAR EM LOCALSTORAGE para XP, Créditos, Cards, itens, Digi-Cycles, PREPARADO ou resultados de exploração.** Relógio e dados locais são editáveis. O ledger evita repetição acidental, não é proteção contra fraude. Integração futura precisa mover validação, relógio, RNG, concessão e consumo para transações de um backend seguro; substituir apenas o salvamento não basta. Nenhuma chamada de backend foi adicionada.
 
-Preservados: lógica de cuidados, schema do save v3, arte urbana, sala, jardim e servidor local. O projeto continua isolado em `prototypes/digi-pet`.
+Reset: **Resetar protótipo** no rodapé → confirmar. Limpa estados e todo o progresso do save atual, sem tocar em dados de outros módulos. A chave v4 reiniciada prevalece sobre saves antigos.
 
-## Verificação
+## Debug e validação
 
-`node pet-engine.test.cjs`: 24 testes de tempo offline, conclusão única, descanso parcial, comidas/recusa/preferência, Companhia após graça, Humor composto, limpeza exata, migração/persistência, conversa, debug e canais de fala.
+**Ctrl+Shift+D** abre ferramentas escondidas da experiência normal. Permite: completar ciclo, simular próximo dia, completar treino/exploração, forçar próximo D100 (1–100), forçar Card Comum/Raro, adicionar 50 Créditos, fragmentos e preparar todos os estados em 100. Ferramentas anteriores de necessidades, sujeira e tempo foram mantidas.
 
-`node pet-presentation.test.cjs`: 16 testes com relógio, DOM e animações simulados. Cobrem piscadas/fallback, pausa/retomada, descarte, dimensões dos PNGs, expiração das falas, silêncio, inicialização contra o HTML atual, durações variáveis de respiração, reação de toque de 320ms e blink manual sem sobreposição. A integração simulada também confere que tocar não grava alterações no save e é bloqueado durante atividade.
+O próximo dia de teste usa um deslocamento de datas persistido, explicitamente marcado como TESTE no aparelho e DIA SIMULADO no ciclo. Não altera o relógio do computador. Use Resetar ao voltar a testar dias reais. Completar ciclo é um atalho de debug e não gera progresso de atributo sem treino válido. Forçar card adiciona um exemplar de teste e abre a mesma revelação ao fechar o painel. Forçar D100 ainda aplica a Disposição.
 
-Total desta iteração: 40 testes passando e sintaxe JavaScript conferida. A validação visual real no navegador desta iteração está pendente pelo bloqueio anterior da execução do Edge pelo revisor automático de aprovação por limite de uso. Isso não foi uma avaliação de risco. Nenhuma captura da etapa anterior deve ser tratada como prévia atualizada desta iteração.
+Testes (executar separadamente; isolation=none dispensa processos filhos no sandbox):
 
-## Limites
+```powershell
+node --test --test-isolation=none pet-engine.test.cjs
+node --test --test-isolation=none pet-downtime.test.cjs
+node --test --test-isolation=none pet-presentation.test.cjs
+```
 
-Somente protótipo local. Nada publicado, enviado ao GitHub ou mesclado. Sem deploy, backend, IA, ficha real, XP, Laço oficial, Battle Link, Forumeiros ou alterações em módulos/workflows de publicação. Nenhuma skin nova nesta etapa.
+24 testes do cuidado anterior, 23 testes de downtime e 16 testes de apresentação/integração DOM. Cobrem dias/catch-up, treinamento, loot, restauração, compras/estoque, reset, fallback de sprites, falas e o fluxo UI treino → explorar → D100 → card → coleção. Testes do cuidado isolado verificam a base anterior; os de downtime verificam overrides desta etapa (inclusive DIGIMEAT).
+
+A checagem automatizada de navegador com Edge foi bloqueada anteriormente pelo revisor automático por limite de uso da conta. Nesta etapa a validação de UI foi feita com DOM/relógio simulados; não há nova captura visual validada em navegador. Não foram executados build de publicação, deploy ou alterações nos módulos atuais do Bonds.

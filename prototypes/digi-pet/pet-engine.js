@@ -3,7 +3,7 @@
  'use strict';
  const {PET_CONFIG:P,FOOD_CONFIG:F,ACTIVITY_CONFIG:A,NEED_DECAY_CONFIG:N,MOOD_CONFIG:M,PARTNER_PROFILE:PROFILE,PREFERENCE_CONFIG:PR}=globalThis.DigiPetConfig;
  const hour=3600000,finite=x=>typeof x==='number'&&Number.isFinite(x),clamp=x=>Math.max(0,Math.min(100,x)),copy=x=>structuredClone(x);
- const labels={food:'Comida',play:'Brincar',train:'Treinar',talk:'Conversar',sleep:'Descansar',wake:'Acordar',clean:'Limpar',simulation:'Teste de tempo',debug:'Ajuste de teste'};
+ const labels={food:'Comida',play:'Brincar',train:'Treinar',explore:'Explorar',talk:'Conversar',sleep:'Descansar',wake:'Acordar',clean:'Limpar',simulation:'Teste de tempo',debug:'Ajuste de teste'};
  function create(now=Date.now()){return {version:3,stats:{satiety:P.initial.satiety,energy:P.initial.energy,companionship:P.initial.companionship},baseMood:P.initial.baseMood,skin:'street',habitat:'interior',waste:false,digestionDue:null,lastUpdatedAt:now,lastInteractionAt:now,lastTalkAt:null,activity:null,activityStats:{trainingSessions:0},discoveredFoods:{},history:[],counts:{},eventSequence:0,lastEvent:null};}
  function mood(state){
   const low={hunger:state.stats.satiety<=P.thresholds.hungry,exhaustion:state.stats.energy<=P.thresholds.tired,loneliness:state.stats.companionship<=P.thresholds.lonely};
@@ -26,9 +26,9 @@
   s.lastUpdatedAt=timestamp(legacy?raw.lastTick:raw.lastUpdatedAt);s.lastInteractionAt=timestamp(raw.lastInteractionAt,s.lastUpdatedAt);
   s.lastTalkAt=raw.lastTalkAt===null?null:finite(raw.lastTalkAt)?timestamp(raw.lastTalkAt):finite(raw.lastActions?.talk)?timestamp(raw.lastActions.talk):null;
   s.digestionDue=finite(raw.digestionDue)&&raw.digestionDue>=0?Math.min(raw.digestionDue,now+N.digestionMs):null;
-  if(raw.version===3&&raw.activity&&['play','train','sleep'].includes(raw.activity.kind)&&finite(raw.activity.startedAt)&&finite(raw.activity.endsAt)&&raw.activity.endsAt>raw.activity.startedAt){
+  if(raw.version===3&&raw.activity&&['play','train','sleep','explore'].includes(raw.activity.kind)&&finite(raw.activity.startedAt)&&finite(raw.activity.endsAt)&&raw.activity.endsAt>raw.activity.startedAt){
    const maxDuration=A.durations.production[raw.activity.kind];
-   if(raw.activity.endsAt-raw.activity.startedAt<=maxDuration&&raw.activity.startedAt<=now)s.activity={kind:raw.activity.kind,startedAt:raw.activity.startedAt,endsAt:raw.activity.endsAt};
+   if(raw.activity.endsAt-raw.activity.startedAt<=maxDuration&&raw.activity.startedAt<=now)s.activity={kind:raw.activity.kind,startedAt:raw.activity.startedAt,endsAt:raw.activity.endsAt,...(raw.activity.cycleDate?{cycleDate:raw.activity.cycleDate,attribute:raw.activity.attribute,zone:raw.activity.zone,disposition:raw.activity.disposition}: {})};
   } else if(legacy&&raw.sleeping){s.activity={kind:'sleep',startedAt:now,endsAt:now+A.durations[P.mode].sleep};s.lastUpdatedAt=now;}
   s.activityStats.trainingSessions=finite(raw.activityStats?.trainingSessions)?Math.max(0,Math.floor(raw.activityStats.trainingSessions)):Math.max(0,Math.floor(raw.counts?.train||0));
   for(const food of F){const discovered=raw.discoveredFoods?.[food.id];if(discovered&&['favorite','liked','neutral','disliked'].includes(discovered.preference))s.discoveredFoods[food.id]={preference:discovered.preference,at:timestamp(discovered.at)};}
@@ -49,10 +49,11 @@
   return ['favorite','liked','neutral','disliked'].find(key=>profileRules[key].includes(foodId))||'neutral';
  }
  function finish(s,at){
-  const kind=s.activity.kind;s.activity=null;
+  const completed=s.activity,kind=completed.kind;s.activity=null;
   if(kind==='play'){apply(s,A.play.effects);notify(s,'Agumon terminou de brincar.','finishedPlaying',at);}
   if(kind==='train'){const comfortable=mood(s).visibleMood>=M.trainingComfortMinimum;apply(s,A.train.effects);if(comfortable)apply(s,{mood:A.train.happyMoodGain});s.activityStats.trainingSessions++;notify(s,'Agumon terminou o treino.','finishedTraining',at);}
   if(kind==='sleep')notify(s,'Agumon terminou o descanso.','finishedResting',at);
+  globalThis.DigiDowntime?.complete(s,completed,at);
   record(s,kind,at);
  }
  function advance(input,now=Date.now()){
@@ -114,7 +115,7 @@
   return {state:s,ok:true,feedback:s.lastEvent.system,speechContext:s.lastEvent.context};
  }
  function condition(s){
-  if(s.activity)return {play:'Brincando',train:'Treinando',sleep:'Dormindo'}[s.activity.kind];
+  if(s.activity)return {play:'Brincando',train:'Treinando',sleep:'Dormindo',explore:'Explorando'}[s.activity.kind];
   const m=mood(s);if(m.visibleMood<=P.thresholds.sad||m.badNeeds>=3)return 'Triste';
   if(s.stats.satiety<=P.thresholds.hungry)return 'Com fome';if(s.stats.energy<=P.thresholds.tired)return 'Cansado';if(s.stats.companionship<=P.thresholds.lonely)return 'Solitário';if(s.waste)return 'Incomodado';
   if(m.visibleMood>=P.thresholds.animated&&s.stats.energy>=P.thresholds.happy)return 'Animado';if(m.visibleMood>=P.thresholds.happy)return 'Feliz';return 'Tranquilo';
@@ -136,3 +137,4 @@
  }
  globalThis.DigiPetEngine={CONFIG:P,labels,create,restore,advance,act,availability,mood,condition,speechContext,preferenceFor,simulate,debug};
 })();
+
