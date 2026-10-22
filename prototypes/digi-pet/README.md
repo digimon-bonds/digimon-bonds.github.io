@@ -1,103 +1,147 @@
-# Digi-Pet — aparelho e cuidados, iteração 03
+# Digi-Pet — loop de cuidado local
 
-## Abrir localmente
+## Acesso
 
-Com Node.js 22 ou superior, execute nesta pasta `node serve.mjs` e abra http://127.0.0.1:4231. Ctrl+C encerra o servidor. Na raiz da branch: `node prototypes/digi-pet/serve.mjs`.
+Execute `node serve.mjs` nesta pasta (Node.js 22+) e abra http://127.0.0.1:4231. Na raiz da branch: `node prototypes/digi-pet/serve.mjs`. Ctrl+C encerra o servidor. O HTML também abre diretamente, mas o endereço HTTP é recomendado para persistência consistente.
 
-Para persistência previsível, use o mesmo endereço e navegador. A prévia também abre diretamente pelo HTML; o armazenamento de `file://` depende do navegador e é separado do HTTP.
+## Visor e cards
 
-## Aparelho e skins
+As skins Bonds e Street Link foram preservadas, sem criar novas skins. Textura é apenas da carcaça. Visor, controles, cards e menus têm fundo próprio opaco, sem herdar filtro/opacidade da skin. Descansar não escurece a tela inteira. Ações indisponíveis usam contraste/borda próprios, sem transparência.
 
-Carcaça com microtextura, parafusos, trilhos superior/inferior, trava lateral, rebaixo e vidro. Interior, Exterior e o PNG estático de Agumon foram preservados.
+Quatro cards separados, com ícones vetoriais originais: carne (Saciedade), rosto (Humor), raio (Energia) e coração (Companhia). Barras mantêm escala 0–100, valores e semântica de medidor acessível. O card de Humor fica vermelho enquanto houver sujeira.
 
-O seletor **CARCAÇA** alterna entre:
+Interior, Exterior e Agumon estático permanecem. Sem expressões ou animações novas do personagem. As moscas simples já existentes continuam e respeitam movimento reduzido.
 
-- **Bonds**: acabamento navy limpo, metal acetinado, luzes suaves e teclas azul-petróleo.
-- **Street Link**: adesivos/grafismos vetoriais originais, carcaça customizada e teclas douradas. Inspirada nas referências fornecidas, sem reproduzi-las.
+## Dois canais de texto
 
-`device-skins.css` concentra tokens de carcaça, trilhos, teclas e indicadores. A skin urbana usa `assets/urban-wrap.svg`, arte vetorial local editável. Cada skin sobrescreve os tokens em `.room-shell[data-skin=...]`; a lista permitida fica em `CONFIG.skins` e as opções no HTML. A skin é cosmética, sem modificar estados.
+- **PET SPEECH**: exclusivamente o balão de Agumon. Biblioteca temporária em `PET_SPEECH`, por contexto, independente da espécie. Frases curtas de fome, sono, solidão, tristeza, sujeira, comida e atividades.
+- **SYSTEM FEEDBACK**: exclusivamente a área inferior. Início/fim de ações, recusa mecânica, intervalo de conversa, migração e instruções de cuidado.
 
-Sem animações do Digimon. As únicas animações novas são três pequenas moscas sobre a sujeira; respeitam `prefers-reduced-motion`.
+A UI implementa `showPetSpeech` e `showSystemFeedback` separadamente. Nunca coloca avisos de sistema no balão. Uma fala fica normalmente pelo menos 8 segundos, com fila curta para reações. Necessidades urgentes podem interromper mensagens menos importantes. Prioridade contextual: sujeira, fome, cansaço, tristeza, solidão, atividade, casual. Reações diretas ao cuidado têm prioridade sobre fala casual; não há várias falas simultâneas.
 
-## Estados, 0–100
+## Configuração central
 
-| Estado | Inicial | Leitura |
-| --- | ---: | --- |
-| Saciedade | 65 | Quanto está alimentado; quanto maior, melhor. |
-| Humor | 60 | Cai com sujeira e necessidades ruins acumuladas; melhora com cuidados. |
-| Energia | 70 | Diminui acordado, recupera durante o sono. |
-| Companhia | 65 | Atenção e presença cotidiana; cai lentamente sem cuidados. |
+`pet-config.js` concentra:
 
-Quatro barrinhas discretas, com valores numéricos e semântica acessível de medidor. Necessidades baixas ficam em âmbar. Companhia substitui o antigo nome Vínculo e não representa o Laço oficial do RPG.
+- `PET_CONFIG`: estado inicial, thresholds, recusa de comida, modo de teste, conversa e persistência.
+- `FOOD_CONFIG`: seis comidas, efeitos e categorias.
+- `ACTIVITY_CONFIG`: durações de teste/futuras, requisitos e efeitos de conclusão.
+- `NEED_DECAY_CONFIG`: desgaste, graça de ausência, pisos e digestão.
+- `MOOD_CONFIG`: causas temporárias de desconforto.
+- `PARTNER_PROFILE`, `PREFERENCE_CONFIG`, `PET_SPEECH`: perfil e personalidade mock, separados do rótulo de espécie.
 
-Condições derivadas, por prioridade: Dormindo; Tristinho (Humor ≤35); Com fome (Saciedade ≤30); Cansado (Energia ≤25); Solitário (Companhia ≤30); Incomodado (sujeira); Feliz (Humor ≥75); Tranquilo. O espaço de fala/status acompanha o estado com textos fixos acolhedores, sem IA. A sujeira tem prioridade na mensagem de necessidade, mesmo que haja outras condições.
+## Quatro necessidades e Humor composto
 
-## Ações configuradas
+Iniciais: Saciedade 65, Energia 70, Companhia 65 e Humor-base 70.
 
-| Ação | Efeitos |
+O save guarda três necessidades em `stats` e `baseMood` separado. `engine.mood(state)` deriva a quarta necessidade visível:
+
+```text
+visibleMood = clamp(baseMood − soma dos modificadores, 0, 100)
+```
+
+| Modificador temporário | Condição | Penalidade |
+| --- | --- | ---: |
+| Sujeira | Existe um cocô | 20 |
+| Fome | Saciedade ≤25 | 12 |
+| Exaustão | Energia ≤25 | 12 |
+| Solidão | Companhia ≤30 | 12 |
+| Acúmulo | Duas ou três necessidades ruins entre fome/exaustão/solidão | +5 por necessidade além da primeira |
+
+Corrigir a necessidade remove sua penalidade naturalmente. O tempo e a sujeira não destroem `baseMood`. Brincar, alimentos e conversa podem melhorar esse valor-base.
+
+Exemplo obrigatório: baseMood 85, necessidades boas, sujeira → Humor visível 65; limpar → Humor 85, sem bônus adicional.
+
+Estados gerais: Brincando/Treinando/Dormindo enquanto ocupado; Triste (Humor ≤35 ou três necessidades ruins); Com fome; Cansado; Solitário; Incomodado; Animado (Humor ≥85 e Energia ≥75); Feliz (Humor ≥75); Tranquilo. Todos os thresholds estão centralizados.
+
+## Comida e descoberta
+
+COMIDA abre um seletor; clicar no botão principal não alimenta automaticamente. Ícones são vetores originais locais, sem assets dos jogos.
+
+| Alimento | Efeito básico |
 | --- | --- |
-| Comida | +20 Saciedade, +2 Companhia; agenda digestão. |
-| Brincar | +15 Humor, −12 Energia, +4 Companhia. |
-| Treinar | −20 Energia, −8 Saciedade; apenas histórico/contador, sem XP. |
-| Conversar | +12 Companhia, +8 Humor. |
-| Dormir | +8 Energia e −1 Saciedade por minuto; pausa a queda de Companhia enquanto dorme. |
-| Acordar | Encerra o sono, sem ganho instantâneo. |
-| Limpar | Remove a sujeira, +22 Humor e +3 Companhia. |
+| DIGIMEAT | +25 Saciedade |
+| DIGIFISH | +25 Saciedade |
+| DIGIAPPLE | +15 Saciedade, +3 Humor-base |
+| DIGICARROT | +15 Saciedade |
+| DIGIBANANA | +20 Saciedade, +5 Energia |
+| DIGIPROTEIN | +10 Saciedade, +15 Energia |
 
-As quatro ações principais têm intervalo de 5 segundos por ação. Brincar exige Energia ≥12; Treinar exige Energia ≥20 e Saciedade ≥10. Comida é recusada em Saciedade 100. O sono impede as quatro ações principais, mas não limpeza ou troca de ambiente. Ao completar 100 Energia, acorda automaticamente.
+Perfil mock individual: Fogo / Vacina, independente do nome Agumon. Apenas esse perfil foi definido nesta etapa:
 
-Cada cuidado válido reinicia a contagem de tempo sem atenção. Ação recusada apenas explica o motivo: não concede benefício nem registra sucesso. Limpar um ambiente já limpo também não concede ganho.
+- Favorito: DIGIMEAT. Bônus +5 Humor-base e +3 Companhia.
+- Gostou: DIGIPROTEIN e DIGICARROT. Bônus +2 Humor-base e +1 Companhia.
+- Neutro: DIGIAPPLE e DIGIBANANA. Apenas efeitos básicos.
+- Não gosta: DIGIFISH. Alimenta, sem bônus emocional.
 
-## Tempo, necessidades e ausência
+A primeira oferta aceita descobre a preferência pela fala e grava `discoveredFoods`; ofertas seguintes mostram o resultado discretamente no menu. Não há IA ou regra universal de espécie. Preferências são dados de teste para o perfil Elemento/Atributo, não regras oficiais de Digimon.
 
-Toda a lógica ajustável fica em `CONFIG` de `pet-engine.js`.
+Em Saciedade ≥95, recusa com fala “Não cabe mais nada.” e feedback mecânico separado. Não aplica benefícios, descoberta ou consumo. Sem peso, obesidade ou doença. Efeitos são limitados a 0–100.
 
-- Um passo de 60 segundos; interface verifica o relógio a cada segundo e ao voltar à aba.
-- Acordado: −1 Saciedade e −1 Energia por minuto.
-- Dormindo: −1 Saciedade e +8 Energia por minuto.
-- Após 10 minutos acordado sem cuidado válido, Companhia cai 1 a cada 5 minutos adicionais (primeira queda no minuto 15). Sono pausa essa contagem.
-- Se pelo menos duas necessidades estiverem ruins (Saciedade ≤30, Energia ≤25, Companhia ≤30 ou sujeira), Humor cai 1 por minuto.
-- Sujeira causa ainda −1 Humor por minuto, além da perda inicial abaixo. Pode somar com a perda por necessidades acumuladas.
-- Após ausência, calcula no máximo 60 minutos. Descarta o excesso sem dívida futura.
-- Pisos de desgaste passivo: Saciedade 20, Humor 20, Energia 15 e Companhia 20. Se uma ação já levou um valor abaixo disso, o relógio não o reduz mais nem oferece aumento artificial. Ações sempre respeitam 0–100.
-- Sem doença, morte, evolução, XP, PL ou penalidades oficiais. Conversa, brincadeira, alimentação e limpeza permitem recuperar os estados.
+## Atividades com tempo real
 
-Minutos incompletos são preservados. Iniciar ou encerrar sono começa um novo minuto para evitar ganho de descanso por frações de tempo anteriores.
+O modo atual é **test**. Durações futuras são apenas configuração, sem publicação.
 
-## Sujeira e limpeza direta
+| Atividade | Teste | Preset futuro |
+| --- | --- | --- |
+| Brincar | 1 minuto | 10 minutos |
+| Treinar | 2 minutos | 15 minutos |
+| Descansar | 3 minutos | 30 minutos |
 
-Uma refeição agenda digestão para 2 minutos depois, se não houver sujeira nem digestão pendente. Outras refeições não empilham cocôs nem adiam a digestão. No máximo um cocô aparece, compartilhado entre Interior e Exterior.
+`activity = {kind, startedAt, endsAt}` é persistido. Timestamps são a fonte da verdade; o intervalo de 1 segundo só atualiza a tela. Ao reabrir, `advance` resolve o tempo transcorrido e a conclusão uma única vez.
 
-Ao surgir, a sujeira reduz Humor em **18**, uma única vez, respeitando o piso de desgaste. As moscas e a mensagem “Ops, acho que fiz sujeira. Uma limpeza cairia bem.” indicam a necessidade. Limpe **clicando diretamente no cocô** (também acessível por teclado) ou pelo botão Limpar. Os dois caminhos executam a mesma regra e concedem o mesmo ganho; cliques repetidos não duplicam o benefício.
+- **Brincar**: ao concluir, +15 Humor-base, +8 Companhia, −10 Energia, −5 Saciedade. Exige inicialmente Energia ≥12 e Saciedade ≥10.
+- **Treinar**: ao concluir, −15 Energia, −8 Saciedade; +3 Humor-base se o Humor visível na conclusão era ≥50. Incrementa `activityStats.trainingSessions`, sem XP, PL ou bônus do RPG. Exige inicialmente Energia ≥20 e Saciedade ≥15.
+- **Descansar**: recupera até +60 Energia proporcionalmente ao tempo previsto, limitado a 100. Pode acordar antes, mantendo apenas a fração já recuperada. Sem punição por acordar.
+- **Conversar**: imediato, +10 Companhia e +4 Humor-base. Novos ganhos apenas após 60 segundos da última conversa recompensada. Repetições ainda registram a conversa e podem receber fala, sem ganho mecânico.
 
-## Persistência e migração
+Enquanto há uma atividade, outras ações principais ficam incompatíveis; limpeza e troca de ambiente continuam disponíveis. O botão Acordar fica disponível durante descanso. A faixa de atividade mostra estado e tempo restante. Inícios/conclusões são distintos no histórico.
 
-`localStorage`, chave atual: `digimon-bonds:digi-pet:prototype:v2`.
+## Tempo e ausência leve
 
-Salva estados, ambiente, skin, sono, digestão, sujeira, tempo sem atenção, relógio, contadores e últimas 12 ações. Se não houver um save v2, lê o protótipo v1 e migra o valor antigo de `bond` para `companionship`, preservando os demais dados válidos. A chave anterior fica intacta; abas antigas não sobrescrevem o save novo.
+- Saciedade: −2 por hora.
+- Energia: −1,5 por hora acordado; durante descanso, aplica a recuperação proporcional.
+- Companhia: sem perda nas primeiras 12 horas após interação válida. Depois, −2 por hora elegível. Descanso pausa a perda enquanto está ocorrendo.
+- Um retorno muito longo processa no máximo 24 horas de desgaste de Saciedade/Energia e no máximo 35 pontos de perda de Companhia. O restante é descartado, sem dívida futura.
+- Pisos de desgaste: Saciedade 15, Energia 15, Companhia 20. Valores que uma ação já levou abaixo do piso não são reduzidos novamente pelo relógio nem recebem aumento artificial.
+- Ausência pode causar solidão e tristeza temporárias, sem perda oficial de atributos, evolução, XP ou Laço. Sem doença ou morte.
 
-Dados inválidos são normalizados e JSON inválido inicia um pet novo. Sem acesso ao armazenamento, funciona temporariamente em memória e avisa no rodapé. Abas desta versão acompanham o save local mais recente.
+Estado interno usa valores fracionários para não depender da frequência de atualização; cards exibem valores arredondados. Conclusões de atividades usam seus próprios timestamps mesmo ao processar uma ausência longa.
 
-**Resetar protótipo → Resetar dados** restaura somente o save v2, incluindo skin Bonds, Interior, estados e histórico. Cancelar não altera dados. Nenhuma outra chave do app é removida.
+## Sujeira
 
-**Histórico / teste → Simular +5 minutos** permite conferir desgaste, sono, digestão e recuperação sem esperar; avança apenas o relógio do pet, sem alterar o computador.
+Refeição aceita agenda digestão para 2 minutos depois, se não houver sujeira/digestão pendente. No máximo uma necessidade de limpeza. Novas refeições não adiam a digestão nem empilham cocôs.
 
-## Arquivos desta iteração
+Sujeira aplica apenas `dirtyMoodPenalty=20`; não causa perda contínua de Humor-base. Clique no cocô ou use Limpar. A ação remove a sujeira e exatamente sua penalidade; não concede +X de Humor ou Companhia. Cliques repetidos sem sujeira não geram benefícios. Barra de Humor deixa de ficar vermelha imediatamente.
+
+## Persistência, migração e reset
+
+Chave atual: `digimon-bonds:digi-pet:prototype:v3` em `localStorage`.
+
+Guarda necessidades, baseMood, atividade, relógios, preferência descoberta, contador de treinos, histórico, ambiente e skin. Lê saves v2/v1 se ainda não houver v3 e mantém as chaves antigas intactas. Vínculo antigo vira Companhia. Como saves antigos só tinham Humor exibido, a migração reconstrói baseMood pelas causas temporárias presentes, até o limite de 100, preservando a leitura anterior quando possível. Descanso antigo sem timestamps inicia uma nova sessão cronometrada, sem energia retroativa instantânea.
+
+JSON inválido ou formato incompatível é preservado numa chave `...:v3:backup:<timestamp>` antes de iniciar um novo pet; a interface avisa. Se o navegador bloquear armazenamento, funciona em memória com aviso no rodapé. Abas desta versão acompanham o save mais recente.
+
+**Resetar protótipo → Resetar dados** restaura apenas o save v3 (incluindo descobertas, atividade e histórico); não remove saves anteriores ou outros dados do Bonds. Cancelar não altera dados.
+
+## Histórico / teste
+
+Todas as ferramentas de teste ficam no diálogo: +5 minutos, +1 hora, +12 horas, +24 horas, forçar sujeira, reduzir cada necessidade e concluir atividade. A simulação avança só o relógio deste pet e depois ajusta os timestamps, sem mudar o relógio do computador. São ferramentas explícitas de desenvolvimento, não recompensas do jogo.
+
+## Arquivos desta etapa
 
 Alterados: `index.html`, `digi-pet.js`, `pet-engine.js`, `pet-engine.test.cjs`, `README.md`.
 
-Criados: `device-skins.css`, `assets/urban-wrap.svg`.
+Criados: `pet-config.js` e `care-interface.css`.
 
-Preservados: CSS base `digi-pet.css`, `assets/room.svg`, `assets/garden.svg`, `assets/agumon.png` e `serve.mjs`.
-
-O estado é exclusivo do experimento; `mockPartner` continua apenas como apresentação temporária. Não há modelo definitivo de personagem nem contrato de ficha real.
+Preservados: skins e `device-skins.css`, CSS base, arte urbana, sala, jardim, PNG de Agumon e servidor local. O projeto continua isolado em `prototypes/digi-pet`.
 
 ## Verificação
 
-`node pet-engine.test.cjs`: 13 testes determinísticos, incluindo efeitos, limites, cooldown, tempo fracionado, desgaste e pisos, sujeira/limpeza, sono, migração de saves e validação de skins.
+`node pet-engine.test.cjs`: 24 testes de tempo offline, conclusão única, descanso parcial, comidas/recusa/preferência, Companhia após graça, Humor composto, limpeza exata, migração/persistência, conversa, debug e canais de fala.
 
-No Edge: ambas as skins em 1440×900, 1366×768, 1024×650, 390×844 e 360×740, sem scroll e com controles visíveis. Verificados medidores acessíveis, skin persistida, alternância de ambientes, ações, limpeza pelo cocô, sono, simulação, histórico, reset, ausência longa, sincronização entre abas e armazenamento inválido/bloqueado. Sem erros JavaScript ou requisições externas. Telas menores podem rolar para preservar os controles.
+No Edge: ambas as skins em 1440×900, 1366×768, 1024×650, 390×844 e 360×740, sem scroll e com controles visíveis; também conferido com atividade em andamento. Opacidade dos controles/visor =1, filtro do visor=none, personagem sem animação. Menu com seis comidas, descoberta/recusa, conclusão offline, descanso parcial, vermelho por sujeira, limpeza, cooldown, save legado e backup inválido conferidos. Sem erros JavaScript ou requisições externas. Telas menores podem rolar para preservar usabilidade.
 
-## Escopo local
+## Limites
 
-Nada publicado, enviado ao GitHub ou mesclado. Sem deploy, backend, ficha real, IA, autenticação, Forumeiros ou regras do RPG. Somente `prototypes/digi-pet`, fora do build atual. Nenhuma alteração em GitHub Pages, workflows ou módulos existentes.
+Somente protótipo local. Nada publicado, enviado ao GitHub ou mesclado. Sem deploy, backend, IA, ficha real, XP, Laço oficial, Battle Link, Forumeiros ou alterações em módulos/workflows de publicação. Nenhuma skin nova nesta etapa.

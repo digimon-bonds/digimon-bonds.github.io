@@ -1,95 +1,29 @@
-const {test} = require('node:test');
-const assert = require('node:assert/strict');
-require('./pet-engine.js');
-const e = globalThis.DigiPetEngine;
-const now = 1_800_000_000_000;
-const minute = e.CONFIG.tickMs;
-test('all four care actions apply and record the configured effects without mutating input', () => {
- for(const action of ['food','play','train','talk']) {
-  const initial=e.create(now), result=e.act(initial,action,now);
-  assert.equal(result.ok,true); assert.equal(result.state.counts[action],1);
-  assert.equal(result.state.history[0].action,action);
-  for(const [key,value] of Object.entries(e.CONFIG.initial)) assert.equal(result.state.stats[key], value+(e.CONFIG.actions[action].effects[key]||0));
-  assert.deepEqual(initial,e.create(now));
- }
-});
-test('cooldown rejects repeats without effects or extra history; other actions remain available',()=>{
- const first=e.act(e.create(now),'talk',now).state;
- const repeated=e.act(first,'talk',now+1000);
- assert.equal(repeated.ok,false);assert.deepEqual(repeated.state.stats,first.stats);assert.equal(repeated.state.history.length,1);
- assert.equal(e.act(first,'play',now+1000).ok,true);
- assert.equal(e.act(first,'talk',now+5000).ok,true);
-});
-test('resource boundaries, full meals and insufficient energy are enforced',()=>{
- let s=e.create(now);s.stats={satiety:100,mood:99,energy:0,companionship:99};
- assert.equal(e.act(s,'food',now).ok,false);assert.equal(e.act(s,'play',now).ok,false);assert.equal(e.act(s,'train',now).ok,false);
- s=e.act(s,'talk',now).state;assert.equal(s.stats.companionship,100);assert.equal(s.stats.mood,100);
- s.stats.energy=100;s.stats.satiety=9;assert.equal(e.act(s,'train',now).ok,false);
-});
-test('one-minute ticks preserve partial time and do not apply twice',()=>{
- let s=e.advance(e.create(now),now+59000);assert.equal(s.stats.satiety,65);
- s=e.advance(s,now+60000);assert.equal(s.stats.satiety,64);assert.equal(s.stats.energy,69);
- s=e.advance(s,now+61000);assert.equal(s.stats.satiety,64);
-});
-test('long absences are capped, discarded and reduce company and mood with safe floors',()=>{
- let s=e.create(now);s.stats.energy=0;
- s=e.advance(s,now+10*24*60*minute);
- assert.equal(s.stats.satiety,20);assert.equal(s.stats.energy,0);assert.equal(s.stats.mood,34);assert.equal(s.stats.companionship,55);
- assert.deepEqual(e.advance(s,now+10*24*60*minute).stats,s.stats);
- s.stats.satiety=5;assert.equal(e.advance(s,s.lastTick+minute).stats.satiety,5);
-});
-test('sleep regenerates gradually, blocks interactions, wakes at full energy and cannot grant instant energy',()=>{
- let s=e.act(e.create(now),'sleep',now+59000).state;
- assert.equal(e.act(s,'play',now+59001).ok,false);
- assert.equal(e.advance(s,now+60000).stats.energy,70);
- s=e.advance(s,now+119000);assert.equal(s.stats.energy,78);assert.equal(s.stats.satiety,64);
- const awake=e.act(s,'wake',now+119000).state;assert.equal(awake.stats.energy,78);
- s=e.advance(s,now+5*minute+59000);assert.equal(s.sleeping,false);assert.equal(s.stats.energy,99);assert.equal(s.history[0].action,'wake');
-});
-test('dirt lowers mood once on arrival, remains unpleasant and cleaning improves mood only once',()=>{
- let s=e.act(e.create(now),'food',now).state;
- assert.equal(e.advance(s,now+119999).waste,false);
- s=e.advance(s,now+120000);assert.equal(s.waste,true);assert.equal(s.digestionDue,null);assert.equal(s.stats.mood,41);
- assert.deepEqual(e.advance(s,now+120000).stats,s.stats);
- const clean=e.act(s,'clean',now+120000);assert.equal(clean.ok,true);assert.equal(clean.state.waste,false);assert.equal(clean.state.stats.mood,63);assert.equal(clean.state.stats.companionship,70);
- assert.equal(e.act(clean.state,'clean',now+120001).ok,false);
- s=e.act(s,'food',now+125000).state;assert.equal(s.digestionDue,null);
-});
-test('restore validates version, numeric states, unknown fields and clock changes',()=>{
- assert.deepEqual(e.restore({version:9},now),e.create(now));
- assert.deepEqual(e.restore({version:1,stats:{satiety:'x'}},now),e.create(now));
- let s=e.create(now);s.stats.companionship=999;s.lastTick=now+minute;s.history=[{action:'unknown',at:now}];
- s=e.restore(s,now);assert.equal(s.stats.companionship,100);assert.equal(s.lastTick,now);assert.equal(s.history.length,0);
- assert.equal(e.advance(s,now-minute).lastTick,now-minute);
-});
-test('simulation advances digestion and sleep, rebases timestamps and history stays bounded',()=>{
- let s=e.act(e.create(now),'food',now).state;
- s=e.act(s,'sleep',now).state;s=e.simulate(s,5,now);
- assert.equal(s.waste,true);assert.equal(s.sleeping,false);assert.equal(s.lastTick,now);
- assert.ok(s.history.every(item=>item.at<=now));
- for(let i=0;i<25;i++)s=e.act(s,'talk',now+i*5000).state;
- assert.equal(s.history.length,e.CONFIG.historyLimit);
- assert.equal(s.counts.talk,25);
-});
-test('conditions prioritize sleep, hunger and tiredness before happiness',()=>{
- let s=e.create(now);assert.equal(e.condition(s),'Tranquilo');s.stats.mood=80;assert.equal(e.condition(s),'Feliz');
- s.stats.energy=20;assert.equal(e.condition(s),'Cansado');s.stats.satiety=20;assert.equal(e.condition(s),'Com fome');
- s.sleeping=true;assert.equal(e.condition(s),'Dormindo');
-});
-test('old saves migrate bond to companionship and skins validate without losing care data',()=>{
- const raw={...e.create(now),version:1,stats:{satiety:55,mood:40,energy:30,bond:42},skin:'unknown'};
- const s=e.restore(raw,now);assert.equal(s.version,2);assert.equal(s.stats.companionship,42);assert.equal(s.stats.bond,undefined);assert.equal(s.skin,'bonds');
- s.skin='street';s.habitat='exterior';assert.deepEqual(e.restore(s,now),s);
-});
-test('attention resets solitude clock, sleep pauses companionship decay, company can be restored',()=>{
- let s=e.advance(e.create(now),now+15*minute);assert.equal(s.stats.companionship,64);
- s=e.act(s,'talk',now+15*minute).state;assert.equal(s.stats.companionship,76);assert.equal(s.attentionTicks,0);
- s=e.advance(s,now+25*minute);assert.equal(s.stats.companionship,76);
- s.stats.energy=0;s=e.act(s,'sleep',now+25*minute).state;
- assert.equal(e.advance(s,now+35*minute).stats.companionship,76);
-});
-test('passive needs never cross safety floors and sadness/solitude have helpful status text',()=>{
- let s=e.create(now);s.stats={satiety:21,energy:16,mood:21,companionship:21};s.waste=true;
- s=e.advance(s,now+60*minute);assert.deepEqual(s.stats,{satiety:20,energy:15,mood:20,companionship:20});assert.equal(e.condition(s),'Tristinho');assert.match(e.status(s),/sujeira/);
- s.waste=false;s.stats.satiety=80;s.stats.energy=80;s.stats.mood=60;assert.equal(e.condition(s),'Solitário');assert.match(e.status(s),/falta/);
-});
+const {test}=require('node:test'),assert=require('node:assert/strict');
+require('./pet-config.js');require('./pet-engine.js');
+const e=globalThis.DigiPetEngine,c=globalThis.DigiPetConfig,T=1800000000000,MIN=60000,H=3600000;
+const close=(a,b)=>assert.ok(Math.abs(a-b)<1e-7,`${a} != ${b}`);
+const offer=(s,id,at=T)=>e.act(s,'food',at,{foodId:id});
+test('initial state exposes four needs with independent base mood',()=>{const s=e.create(T);assert.deepEqual(Object.keys(s.stats),['satiety','energy','companionship']);assert.equal(e.mood(s).visibleMood,70);assert.equal(s.version,3);});
+test('six food definitions remain configurable with named categories',()=>{assert.equal(c.FOOD_CONFIG.length,6);assert.equal(new Set(c.FOOD_CONFIG.map(x=>x.id)).size,6);assert.equal(c.FOOD_CONFIG.find(x=>x.id==='digiprotein').energy,15);});
+test('favorite is discovered, saved and grants only its configured bonuses',()=>{const s=e.create(T),r=offer(s,'digimeat');assert.equal(r.ok,true);assert.equal(r.state.stats.satiety,90);assert.equal(r.state.baseMood,75);assert.equal(r.state.stats.companionship,68);assert.equal(r.state.discoveredFoods.digimeat.preference,'favorite');assert.equal(r.speechContext,'eatingFavorite');assert.equal(s.stats.satiety,65);});
+test('preference is based on the mock Fire/Vaccine profile, not species',()=>{assert.equal(e.preferenceFor('digimeat'), 'favorite');assert.equal(e.preferenceFor('digicarrot'),'liked');assert.equal(e.preferenceFor('digiapple'),'neutral');assert.equal(e.preferenceFor('digifish'),'disliked');assert.equal(e.preferenceFor('digimeat',{element:'water',digitalAttribute:'vaccine',preferenceProfile:'fire-vaccine'}),'neutral');});
+test('disliked food still feeds without emotional bonuses',()=>{const s=offer(e.create(T),'digifish').state;assert.equal(s.stats.satiety,90);assert.equal(s.baseMood,70);assert.equal(s.stats.companionship,65);assert.equal(s.discoveredFoods.digifish.preference,'disliked');});
+test('fullness refusal applies no effect, discovery or history',()=>{const s=e.create(T);s.stats.satiety=95;const r=offer(s,'digimeat');assert.equal(r.ok,false);assert.equal(r.speechContext,'foodRefused');assert.deepEqual(r.state.stats,s.stats);assert.equal(r.state.history.length,0);assert.deepEqual(r.state.discoveredFoods,{});});
+test('food action requires choosing an item, rather than feeding automatically',()=>{assert.equal(e.act(e.create(T),'food',T).ok,false);});
+test('play starts without immediate reward, blocks incompatible actions and finishes from timestamps',()=>{let s=e.act(e.create(T),'play',T).state;assert.equal(s.activity.endsAt,T+MIN);assert.equal(s.baseMood,70);assert.equal(e.act(s,'train',T).ok,false);s=e.advance(s,T+MIN-1);assert.equal(s.activity.kind,'play');s=e.advance(s,T+MIN);assert.equal(s.activity,null);assert.equal(s.baseMood,85);close(s.stats.energy,70-1.5/60-10);close(s.stats.satiety,65-2/60-5);assert.equal(s.counts.play,1);assert.equal(s.lastEvent.system,'Agumon terminou de brincar.');});
+test('offline completion awards a training session exactly once',()=>{let s=e.act(e.create(T),'train',T).state;s=e.advance(s,T+3*MIN);assert.equal(s.activity,null);assert.equal(s.activityStats.trainingSessions,1);assert.equal(s.counts.train,1);assert.equal(s.baseMood,73);const again=e.advance(s,T+3*MIN);assert.deepEqual(again,s);});
+test('test and future production presets are separate',()=>{assert.equal(c.ACTIVITY_CONFIG.durations.test.play,MIN);assert.equal(c.ACTIVITY_CONFIG.durations.production.play,10*MIN);assert.equal(c.ACTIVITY_CONFIG.durations.production.train,15*MIN);assert.equal(c.ACTIVITY_CONFIG.durations.production.sleep,30*MIN);});
+test('waking early keeps only proportional rest recovery',()=>{let s=e.create(T);s.stats.energy=0;s=e.act(s,'sleep',T).state;s=e.act(s,'wake',T+MIN).state;close(s.stats.energy,20);assert.equal(s.activity,null);assert.equal(s.counts.wake,1);});
+test('full rest recovers configured energy without requiring an interval callback',()=>{let s=e.create(T);s.stats.energy=10;s=e.act(s,'sleep',T).state;s=e.advance(s,T+3*MIN);close(s.stats.energy,70);assert.equal(s.activity,null);assert.equal(s.lastEvent.system,'Agumon terminou o descanso.');});
+test('dirty penalty is temporary: base 85 -> visible 65 -> clean 85',()=>{let s=e.create(T);s.baseMood=85;s.waste=true;assert.equal(e.mood(s).dirtyMoodPenalty,20);assert.equal(e.mood(s).visibleMood,65);const clean=e.act(s,'clean',T);assert.equal(clean.state.baseMood,85);assert.equal(e.mood(clean.state).visibleMood,85);assert.equal(e.act(clean.state,'clean',T).ok,false);});
+test('dirt never erodes base mood over time and digestion creates at most one mess',()=>{let s=offer(e.create(T),'digimeat').state;s=e.advance(s,T+2*MIN);assert.equal(s.waste,true);assert.equal(s.baseMood,75);assert.equal(s.digestionDue,null);s=e.advance(s,T+24*H);assert.equal(s.baseMood,75);s.stats.satiety=40;s=offer(s,'digimeat',T+24*H).state;assert.equal(s.digestionDue,null);});
+test('combined bad needs affect displayed mood and fixing causes restores it',()=>{const s=e.create(T);s.baseMood=85;s.stats={satiety:20,energy:20,companionship:20};assert.ok(e.mood(s).visibleMood<60);assert.equal(e.condition(s),'Triste');s.stats={satiety:100,energy:100,companionship:100};assert.equal(e.mood(s).visibleMood,85);assert.equal(s.baseMood,85);});
+test('companionship has a 12-hour grace period then declines slowly',()=>{let s=e.advance(e.create(T),T+12*H);close(s.stats.companionship,65);s=e.advance(s,T+13*H);close(s.stats.companionship,63);});
+test('long absence is capped, floors are safe and excess is not a future debt',()=>{let s=e.advance(e.create(T),T+10*24*H);close(s.stats.companionship,30);close(s.stats.satiety,17);close(s.stats.energy,34);assert.deepEqual(e.advance(s,T+10*24*H),s);s.stats.satiety=2;assert.equal(e.advance(s,T+10*24*H+H).stats.satiety,2);});
+test('talk cooldown permits speech without granting repeated rewards',()=>{let r=e.act(e.create(T),'talk',T),s=r.state;assert.equal(s.stats.companionship,75);assert.equal(s.baseMood,74);r=e.act(s,'talk',T+1000);assert.equal(r.ok,true);assert.equal(r.speechContext,'talk');assert.equal(r.state.stats.companionship,75);assert.equal(r.state.baseMood,74);r=e.act(r.state,'talk',T+MIN);assert.equal(r.state.stats.companionship,85);assert.equal(r.state.baseMood,78);});
+test('v1/v2 saves migrate without losing visible mood, skin or original care counters',()=>{for(const version of [1,2]){const raw={version,stats:{satiety:70,energy:50,mood:60,...(version===1?{bond:42}:{companionship:42})},skin:'street',habitat:'exterior',waste:true,lastTick:T,counts:{train:3}};const s=e.restore(raw,T);assert.equal(s.version,3);assert.equal(s.baseMood,80);assert.equal(e.mood(s).visibleMood,60);assert.equal(s.skin,'street');assert.equal(s.stats.companionship,42);assert.equal(s.activityStats.trainingSessions,3);}});
+test('JSON persistence restores running activity, discoveries and last conversation timestamp',()=>{let s=offer(e.create(T),'digicarrot').state;s=e.act(s,'talk',T).state;s=e.act(s,'play',T).state;const loaded=e.restore(JSON.parse(JSON.stringify(s)),T+30000);assert.deepEqual(loaded.activity,s.activity);assert.deepEqual(loaded.discoveredFoods,s.discoveredFoods);assert.equal(loaded.lastTalkAt,T);assert.equal(e.advance(loaded,T+MIN).counts.play,1);});
+test('debug simulation advances real time, activities and grace-period absence without future timestamps',()=>{let s=e.act(e.create(T),'train',T).state;s=e.simulate(s,5,T);assert.equal(s.activity,null);assert.equal(s.activityStats.trainingSessions,1);assert.equal(s.lastUpdatedAt,T);assert.ok(s.history.every(x=>x.at<=T));s=e.simulate(s,24*60,T);assert.ok(s.stats.companionship<65);});
+test('speech priorities select one pet context, never a system completion sentence',()=>{const s=e.create(T);s.waste=true;s.stats.satiety=0;assert.equal(e.speechContext(s),'dirty');s.waste=false;assert.equal(e.speechContext(s),'hungry');s.stats.satiety=90;s.stats.energy=0;assert.equal(e.speechContext(s),'tired');for(const lines of Object.values(c.PET_SPEECH))assert.ok(lines.every(x=>!x.startsWith('Agumon terminou')));});
+test('debug forcing or clearing dirt changes visible mood, never adds arbitrary mood gains',()=>{let s=e.debug(e.create(T),'waste',T);assert.equal(s.baseMood,70);assert.equal(e.mood(s).visibleMood,50);s=e.act(s,'clean',T).state;assert.equal(e.mood(s).visibleMood,70);});
+test('legacy sleeping save resumes a fresh timed rest without retroactive instant recovery',()=>{const raw={version:2,stats:{satiety:70,mood:60,energy:10,companionship:42},sleeping:true,lastTick:T-24*H};const s=e.advance(e.restore(raw,T),T);assert.equal(s.stats.energy,10);assert.equal(s.activity.kind,'sleep');assert.equal(s.activity.endsAt,T+3*MIN);});
