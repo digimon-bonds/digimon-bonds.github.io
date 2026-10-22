@@ -3,12 +3,14 @@
  'use strict';
  const {PET_CONFIG:P,FOOD_CONFIG:F,ACTIVITY_CONFIG:A,NEED_DECAY_CONFIG:N,MOOD_CONFIG:M,PARTNER_PROFILE:PROFILE,PREFERENCE_CONFIG:PR}=globalThis.DigiPetConfig;
  const hour=3600000,finite=x=>typeof x==='number'&&Number.isFinite(x),clamp=x=>Math.max(0,Math.min(100,x)),copy=x=>structuredClone(x);
- const labels={food:'Comida',play:'Brincar',train:'Treinar',explore:'Explorar',talk:'Conversar',sleep:'Descansar',wake:'Acordar',clean:'Limpar',simulation:'Teste de tempo',debug:'Ajuste de teste'};
+ const labels={food:'Alimentar',play:'Brincar',train:'Treinar',explore:'Explorar',talk:'Conversar',sleep:'Descansar',wake:'Acordar',clean:'Limpar',careItem:'Consumível',purchase:'Compra',restoreCard:'Restaurar Card',simulation:'Teste de tempo',debug:'Ajuste de teste'};
  function create(now=Date.now()){return {version:3,stats:{satiety:P.initial.satiety,energy:P.initial.energy,companionship:P.initial.companionship},baseMood:P.initial.baseMood,skin:'street',habitat:'interior',waste:false,digestionDue:null,lastUpdatedAt:now,lastInteractionAt:now,lastTalkAt:null,activity:null,activityStats:{trainingSessions:0},discoveredFoods:{},history:[],counts:{},eventSequence:0,lastEvent:null};}
  function mood(state){
   const low={hunger:state.stats.satiety<=P.thresholds.hungry,exhaustion:state.stats.energy<=P.thresholds.tired,loneliness:state.stats.companionship<=P.thresholds.lonely};
   const needs=Object.values(low).filter(Boolean).length;
-  const modifiers={dirty:state.waste?M.dirtyPenalty:0,hunger:low.hunger?M.hungerPenalty:0,exhaustion:low.exhaustion?M.exhaustionPenalty:0,loneliness:low.loneliness?M.lonelinessPenalty:0,stacked:needs>=2?(needs-1)*M.stackedNeedPenalty:0};
+  const modifiers={dirty:0,hunger:low.hunger?M.hungerPenalty:0,exhaustion:low.exhaustion?M.exhaustionPenalty:0,loneliness:low.loneliness?M.lonelinessPenalty:0,stacked:needs>=2?(needs-1)*M.stackedNeedPenalty:0};
+  const cleanMood=clamp(state.baseMood-Object.values(modifiers).reduce((a,b)=>a+b,0));
+  modifiers.dirty=state.waste?Math.max(0,cleanMood-M.dirtyMoodCap):0;
   return {baseMood:state.baseMood,dirtyMoodPenalty:modifiers.dirty,modifiers,visibleMood:clamp(state.baseMood-Object.values(modifiers).reduce((a,b)=>a+b,0)),badNeeds:needs};
  }
  function restore(raw,now=Date.now()){
@@ -54,7 +56,7 @@
   if(kind==='train'){const comfortable=mood(s).visibleMood>=M.trainingComfortMinimum;apply(s,A.train.effects);if(comfortable)apply(s,{mood:A.train.happyMoodGain});s.activityStats.trainingSessions++;notify(s,'Agumon terminou o treino.','finishedTraining',at);}
   if(kind==='sleep')notify(s,'Agumon terminou o descanso.','finishedResting',at);
   globalThis.DigiDowntime?.complete(s,completed,at);
-  record(s,kind,at);
+  record(s,kind,at,'completed',completed.attribute||'');
  }
  function advance(input,now=Date.now()){
   const s=copy(input);if(now<s.lastUpdatedAt){s.lastUpdatedAt=now;return s;}
@@ -77,7 +79,7 @@
   s.lastUpdatedAt=now;return s;
  }
  function availability(s,action,now=Date.now()){
-  if(!Object.hasOwn(labels,action)||['simulation','debug'].includes(action))return 'Ação indisponível.';
+  if(!Object.hasOwn(labels,action)||['simulation','debug','purchase','restoreCard','careItem'].includes(action))return 'Ação indisponível.';
   if(action==='clean')return s.waste?'':'O ambiente já está limpo.';
   if(action==='wake')return s.activity?.kind==='sleep'?'':'Agumon não está descansando.';
   if(s.activity)return 'Há uma atividade em andamento. Aguarde a conclusão'+(s.activity.kind==='sleep'?' ou acorde Agumon.':'.');

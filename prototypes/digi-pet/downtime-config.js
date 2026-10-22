@@ -3,8 +3,8 @@
 (() => {
  const C=globalThis.DigiPetConfig;
  // Older open tabs still write v3 care saves. Isolate progression from them.
- C.PET_CONFIG.legacyKeys.unshift(C.PET_CONFIG.storageKey);
- C.PET_CONFIG.storageKey='digimon-bonds:digi-pet:prototype:v4';
+ C.PET_CONFIG.legacyKeys.unshift('digimon-bonds:digi-pet:prototype:v4',C.PET_CONFIG.storageKey);
+ C.PET_CONFIG.storageKey='digimon-bonds:digi-pet:prototype:v5';
  C.FOOD_CONFIG.forEach(f=>{f.price={digimeat:0,digifish:8,digiapple:6,digicarrot:6,digibanana:7,digiprotein:12}[f.id];});
  C.FOOD_CONFIG.find(f=>f.id==='digimeat').satiety=20;
  C.ACTIVITY_CONFIG.durations.test.explore=90000;
@@ -20,16 +20,20 @@
   disposition:{good:{satiety:70,mood:70,energy:70,companionship:60},excellent:90,low:35,bonus:5},
   credits:{min:8,max:20},
   loot:[
-   {min:1,max:40,id:'credits',name:'CRÉDITOS DIGITAIS'},
-   {min:41,max:62,id:'food',name:'COMIDA ESPECIAL'},
-   {min:63,max:76,id:'care',name:'ITEM DE CUIDADO'},
-   {min:77,max:87,id:'cache',name:'CACHE DE DADOS'},
-   {min:88,max:94,id:'fragment',name:'FRAGMENTO DE CARD'},
-   {min:95,max:97,id:'common',name:'CARD COMUM'},
-   {min:98,max:99,id:'rareFind',name:'ACHADO RARO'},
+   {min:1,max:10,id:'nothing',name:'NADA ENCONTRADO'},
+   {min:11,max:45,id:'credits',name:'CRÉDITOS DIGITAIS'},
+   {min:46,max:65,id:'food',name:'COMIDA ESPECIAL'},
+   {min:66,max:80,id:'care',name:'ITEM DE CUIDADO'},
+   {min:81,max:90,id:'fragment',name:'FRAGMENTO / MATERIAL'},
+   {min:91,max:97,id:'common',name:'CARD COMUM'},
+   {min:98,max:99,id:'rareFind',name:'EVENTO RARO'},
    {min:100,max:100,id:'rare',name:'CARD RARO'}
   ],
-  careItems:[{id:'recovery-disk',name:'RECOVERY DISK'},{id:'energy-patch',name:'ENERGY PATCH'},{id:'care-pack',name:'CARE PACK'}],
+  careItems:[
+   {id:'recovery-disk',name:'RECOVERY DISK',price:10,consumable:true,description:'Uma pausa reconfortante para melhorar o Humor e a Companhia.',effects:{mood:12,companionship:5}},
+   {id:'energy-patch',name:'ENERGY PATCH',price:12,consumable:true,description:'Recupera 20 de Energia do pet, sem alterar a ficha.',effects:{energy:20}},
+   {id:'care-pack',name:'CARE PACK',price:8,consumable:true,description:'Suprimentos para recuperar 10 de Saciedade e 8 de Humor.',effects:{satiety:10,mood:8}}
+  ],
   cards:[
    {id:'power-drive',name:'Power Drive',rarity:'COMMON',test:'Poder',description:'Força extra para superar um obstáculo.'},
    {id:'logic-boost',name:'Logic Boost',rarity:'COMMON',test:'Inteligência',description:'Uma nova perspectiva diante de um desafio.'},

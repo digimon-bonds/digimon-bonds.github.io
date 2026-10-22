@@ -15,7 +15,7 @@
   <script src="pet-sprites.js" defer></script>
   <script src="pet-speech.js" defer></script>
   <script src="pet-motion.js" defer></script>
-  <script src="digi-pet.js" defer></script><script src="downtime-ui.js" defer></script><link rel="stylesheet" href="downtime.css"><link rel="stylesheet" href="care-polish.css">
+  <script src="digi-pet.js" defer></script><script src="downtime-ui.js" defer></script><link rel="stylesheet" href="downtime.css"><link rel="stylesheet" href="care-polish.css"><link rel="stylesheet" href="gameplay-clarity.css">
 </head>
 <body>
   <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
@@ -69,13 +69,18 @@
         </div>
         <div class="speaker-vents" aria-hidden="true"><span class="speaker"><i></i><i></i><i></i><i></i><i></i></span></div>
         <div class="interaction-deck">
-          <div class="actions" role="group" aria-label="Interações com o parceiro">
-            <button type="button" data-action="food"><svg><use href="#i-food"/></svg><span>COMIDA</span><span class="action-number" aria-hidden="true">01</span></button>
-            <button type="button" data-action="play"><svg><use href="#i-play"/></svg><span>BRINCAR</span><span class="action-number" aria-hidden="true">02</span></button>
-            <button type="button" data-action="train"><svg><use href="#i-train"/></svg><span>TREINAR</span><span class="action-number" aria-hidden="true">03</span></button>
-            <button type="button" data-action="talk"><svg><use href="#i-talk"/></svg><span>CONVERSAR</span><span class="action-number" aria-hidden="true">04</span></button>
+          <div class="actions" role="group" aria-label="Cuidados básicos">
+            <button type="button" data-action="food"><svg><use href="#i-food"/></svg><span>ALIMENTAR</span></button>
+            <button type="button" data-action="play"><svg><use href="#i-play"/></svg><span>BRINCAR</span></button>
+            <button type="button" data-action="talk"><svg><use href="#i-talk"/></svg><span>CONVERSAR</span></button>
+            <button id="sleep-button" type="button" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15A9 9 0 0 1 9 4a9 9 0 1 0 11 11Z"/></svg><span id="sleep-label">DESCANSAR</span></button>
           </div>
-          <div class="downtime-strip"><button id="open-cycle" type="button"><span id="cycle-summary">DIGI-CYCLE</span><small id="cycle-detail"></small></button><button id="open-inventory" type="button">◈ Inventário <small id="credits-summary">0 CR</small></button></div><div class="care-tools"><button data-action="explore" type="button">◇ EXPLORAR</button><div><button id="sleep-button" type="button" aria-pressed="false">☾ Descansar</button></div></div>
+          <div class="major-actions-heading"><span>ATIVIDADE PRINCIPAL</span><small>ESCOLHA UMA POR DIA</small></div>
+          <div class="major-actions" role="group" aria-label="Atividades principais, uma por Digi-Cycle">
+            <button data-action="train" type="button"><svg><use href="#i-train"/></svg><span>TREINAR<small>3 ciclos → +1d6</small></span></button>
+            <button data-action="explore" type="button"><svg><use href="#i-expand"/></svg><span>EXPLORAR<small>Partir e descobrir</small></span></button>
+          </div>
+          <div class="downtime-strip"><button id="open-cycle" type="button"><span id="cycle-summary">DIGI-CYCLE</span><small id="cycle-detail"></small></button><button id="open-inventory" type="button">◈ Inventário <small id="credits-summary">0 CR</small></button></div>
         </div>
       <footer class="experience-footer"><span id="save-status">SALVO NESTE NAVEGADOR</span><button id="open-reset" type="button">Resetar protótipo</button></footer>
       <div id="system-feedback" class="system-toast" role="status" aria-live="polite" hidden></div>

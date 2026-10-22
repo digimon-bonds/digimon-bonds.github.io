@@ -34,6 +34,7 @@
   return {label:excellent?'EXCELENTE DISPOSIÇÃO':good?'BOA DISPOSIÇÃO':low?'BAIXA DISPOSIÇÃO':'DISPOSIÇÃO ESTÁVEL',modifier:good?cfg.bonus:low?-cfg.bonus:0,values,waste:s.waste};
  }
  function add(map,id,n=1){map[id]=(map[id]||0)+n;}
+ function log(s,action,at,detail){s.history.unshift({action,at,phase:'completed',detail});s.history=s.history.slice(0,P.PET_CONFIG.historyLimit);s.counts[action]=(s.counts[action]||0)+1;}
  function pick(items){return items[rng.integer(0,items.length-1)];}
  function card(s,rarity,source){
   const template=pick(C.cards.filter(c=>c.rarity===rarity)),d=s.downtime;
@@ -41,17 +42,19 @@
  }
  function reward(s,kind){
   const d=s.downtime,i=d.inventory;
+  if(kind==='nothing')return {text:'O setor estava tranquilo. Nenhum item encontrado desta vez.'};
   if(kind==='credits'){const n=rng.integer(C.credits.min,C.credits.max);d.credits+=n;return {text:`+${n} Créditos`,credits:n};}
   if(kind==='food'){const f=pick(P.FOOD_CONFIG.filter(f=>f.price>0));add(i.food,f.id);return {text:`+1 ${f.name}`,food:f.id};}
   if(kind==='care'){const item=pick(C.careItems);add(i.care,item.id);return {text:`+1 ${item.name}`,item:item.id};}
-  if(kind==='fragment'){i.fragments++;return {text:'+1 Fragmento de Card',fragments:1};}
+  if(kind==='fragment'){if(rng.integer(1,4)===4){add(i.data,'data-resource');return {text:'+1 Recurso de Dados',item:'data-resource'};}i.fragments++;return {text:'+1 Fragmento de Card',fragments:1};}
   if(kind==='common'||kind==='rare'){const item=card(s,kind==='rare'?'RARE':'COMMON','exploration');return {text:item.name,card:clone(item)};}
   if(kind==='rareFind'){
    // A rare find is deliberately not a card: varied valuable supplies.
-   const roll=rng.integer(1,3);
+   const roll=rng.integer(1,4);
    if(roll===1){d.credits+=40;return {text:'Reserva digital · +40 Créditos',credits:40};}
    if(roll===2){i.fragments+=2;return {text:'Dados preservados · +2 Fragmentos',fragments:2};}
-   add(i.care,'care-pack',2);return {text:'Suprimentos raros · +2 CARE PACK',item:'care-pack'};
+   if(roll===3){add(i.care,'care-pack',2);return {text:'Caravana de dados · +2 CARE PACK',item:'care-pack'};}
+   add(i.data,'data-resource',3);return {text:'Sinal antigo · +3 Recursos de Dados',item:'data-resource'};
   }
   const roll=rng.integer(1,4);
   if(roll===1){d.credits+=25;return {text:'Cache monetário · +25 Créditos',credits:25};}
@@ -69,7 +72,7 @@
    const entry=C.loot.find(x=>final>=x.min&&final<=x.max);
    const result={id:`expedition-${++d.sequence}`,at,cycleDate:activity.cycleDate,zone:activity.zone,natural,modifier,final,kind:entry.id,title:entry.name,reward:reward(s,entry.id),seen:false};
    d.results.unshift(result);d.results=d.results.slice(0,30);
-   s.eventSequence++;s.lastEvent={id:s.eventSequence,system:'Agumon voltou da exploração. Um achado está esperando.',context:'happy',at};
+   s.eventSequence++;s.lastEvent={id:s.eventSequence,system:entry.id==='nothing'?'Agumon voltou. Não encontrou itens desta vez.':`Exploração concluída: ${result.reward.text}.`,context:entry.id==='nothing'?'finishedPlaying':'happy',at};
   }
   creditCycle(s,activity.cycleDate);sync(s,at);
  }
@@ -84,7 +87,7 @@
   for(const [group,allowed]of [['food',P.FOOD_CONFIG.map(f=>f.id)],['care',C.careItems.map(i=>i.id)],['data',['data-resource']]])for(const id of allowed)if(count(inv[group]?.[id]))d.inventory[group][id]=count(inv[group][id]);
   d.inventory.fragments=count(inv.fragments);
   d.inventory.cards=Array.isArray(inv.cards)?inv.cards.filter(c=>C.cards.some(t=>t.id===c.id)&&typeof c.instanceId==='string').map(c=>({...clone(C.cards.find(t=>t.id===c.id)),instanceId:c.instanceId,source:c.source==='restoration'?'restoration':'exploration'})):[];
-  d.results=Array.isArray(raw.results)?raw.results.filter(r=>r&&typeof r.id==='string'&&Number.isInteger(r.natural)&&r.natural>=1&&r.natural<=100&&C.loot.some(e=>e.id===r.kind)&&r.reward&&typeof r.reward.text==='string').slice(0,30).map(clone):[];
+  d.results=Array.isArray(raw.results)?raw.results.filter(r=>r&&typeof r.id==='string'&&Number.isInteger(r.natural)&&r.natural>=1&&r.natural<=100&&(C.loot.some(e=>e.id===r.kind)||r.kind==='cache')&&r.reward&&typeof r.reward.text==='string').slice(0,30).map(clone):[];
   d.forcedRoll=Number.isInteger(raw.forcedRoll)&&raw.forcedRoll>=1&&raw.forcedRoll<=100?raw.forcedRoll:null;
   return d;
  }
@@ -138,16 +141,31 @@
  // A completed play session counts as care; starting it alone does not.
  const onComplete=complete;
  globalThis.DigiDowntime={config:C,dateKey,sync,disposition,
-  complete(s,a,at){onComplete(s,a,at);if(a.kind==='play')care(s,at);},
+  complete(s,a,at){onComplete(s,a,at);if(['play','sleep'].includes(a.kind))care(s,at);},
   buy(input,id,at=Date.now()){
    const s=E.advance(input,at),f=P.FOOD_CONFIG.find(f=>f.id===id);
    if(!f||f.price<=0)return {state:s,ok:false,feedback:'DIGIMEAT já está sempre disponível.'};
    if(s.downtime.credits<f.price)return {state:s,ok:false,feedback:'Créditos insuficientes.'};
-   s.downtime.credits-=f.price;add(s.downtime.inventory.food,id);return {state:s,ok:true,feedback:`${f.name} comprado.`};
+   s.downtime.credits-=f.price;add(s.downtime.inventory.food,id);log(s,'purchase',at,f.name);return {state:s,ok:true,feedback:`${f.name} comprado.`};
+  },
+  buyCare(input,id,at=Date.now()){
+   const s=E.advance(input,at),item=C.careItems.find(x=>x.id===id);
+   if(!item)return {state:s,ok:false,feedback:'Item indisponível.'};
+   if(s.downtime.credits<item.price)return {state:s,ok:false,feedback:'Créditos insuficientes.'};
+   s.downtime.credits-=item.price;add(s.downtime.inventory.care,id);log(s,'purchase',at,item.name);return {state:s,ok:true,feedback:`${item.name} comprado.`};
+  },
+  useCare(input,id,at=Date.now()){
+   const s=E.advance(input,at),item=C.careItems.find(x=>x.id===id);
+   if(s.activity)return {state:s,ok:false,feedback:'Aguarde a atividade terminar para usar um consumível.'};
+   if(!item||!(s.downtime.inventory.care[id]>0))return {state:s,ok:false,feedback:'Este item não está no estoque.'};
+   s.downtime.inventory.care[id]--;
+   for(const [key,value]of Object.entries(item.effects)){if(key==='mood')s.baseMood=Math.min(100,s.baseMood+value);else s.stats[key]=Math.min(100,s.stats[key]+value);}
+   s.lastInteractionAt=at;care(s,at);log(s,'careItem',at,item.name);
+   return {state:s,ok:true,feedback:`${item.name} utilizado no pet. Nenhum efeito na ficha.`};
   },
   restoreCard(input,at=Date.now()){
    const s=E.advance(input,at);if(s.downtime.inventory.fragments<3)return {state:s,ok:false,feedback:'São necessários 3 fragmentos.'};
-   s.downtime.inventory.fragments-=3;const item=card(s,'COMMON','restoration');return {state:s,ok:true,card:item,feedback:'Card restaurado.'};
+   s.downtime.inventory.fragments-=3;const item=card(s,'COMMON','restoration');log(s,'restoreCard',at,item.name);return {state:s,ok:true,card:item,feedback:'Card restaurado.'};
   },
   debug(input,command,at=Date.now(),value){
    let s=E.advance(input,at),d=s.downtime;

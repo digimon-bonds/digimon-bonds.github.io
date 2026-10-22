@@ -36,12 +36,12 @@ test('complete application initializes against current HTML without removed-cont
  for(const file of ['pet-config.js','downtime-config.js','exploration-rng.js','pet-storage.js','pet-engine.js','pet-downtime.js','pet-sprites.js','pet-speech.js','pet-motion.js','digi-pet.js','downtime-ui.js'])e.load(file);
  await vm.runInContext('petSprites.ready',e.context);assert.equal(shell.dataset.skin,'street');assert.equal(thought.hidden,false);e.clock.tick(4500);assert.equal(thought.hidden,true);assert.equal(e.nodes.get('pet-thought-text').textContent,'');
  assert.ok(!html.includes('id="open-history"'));assert.ok(!html.includes('id="last-action"'));assert.ok(!html.includes('deck-caption'));assert.ok(!fs.readFileSync(path.join(__dirname,'digi-pet.js'),'utf8').includes('A atividade termina em'));
- assert.equal(e.nodes.get('system-feedback').hidden,true);assert.ok(e.storage.has('digimon-bonds:digi-pet:prototype:v4'));
- const beforeTouch=e.storage.get('digimon-bonds:digi-pet:prototype:v4');
- e.nodes.get('pet-touch').emit('click');assert.equal(e.nodes.get('partner-image').dataset.spriteVariant,'blink');assert.equal(e.storage.get('digimon-bonds:digi-pet:prototype:v4'),beforeTouch);
+ assert.equal(e.nodes.get('system-feedback').hidden,true);assert.ok(e.storage.has('digimon-bonds:digi-pet:prototype:v5'));
+ const beforeTouch=e.storage.get('digimon-bonds:digi-pet:prototype:v5');
+ e.nodes.get('pet-touch').emit('click');assert.equal(e.nodes.get('partner-image').dataset.spriteVariant,'blink');assert.equal(e.storage.get('digimon-bonds:digi-pet:prototype:v5'),beforeTouch);
  e.clock.tick(180);assert.equal(e.nodes.get('partner-image').dataset.spriteVariant,'normal');
  actions.find(x=>x.dataset.action==='play').emit('click');assert.equal(e.nodes.get('pet-touch').disabled,true);
- const whileBusy=e.storage.get('digimon-bonds:digi-pet:prototype:v4');e.nodes.get('pet-touch').emit('click');assert.equal(e.storage.get('digimon-bonds:digi-pet:prototype:v4'),whileBusy);
+ const whileBusy=e.storage.get('digimon-bonds:digi-pet:prototype:v5');e.nodes.get('pet-touch').emit('click');assert.equal(e.storage.get('digimon-bonds:digi-pet:prototype:v5'),whileBusy);
  e.doc.emit('keydown',{ctrlKey:true,shiftKey:true,code:'KeyD',preventDefault(){}});assert.equal(e.nodes.get('history-dialog').open,true);
  e.nodes.get('history-dialog').close();
  vm.runInContext("state=DigiDowntime.debug(state,'finish');state=DigiDowntime.debug(state,'ready');save();render();",e.context);
@@ -53,7 +53,11 @@ test('complete application initializes against current HTML without removed-cont
  actions.find(x=>x.dataset.action==='explore').emit('click');assert.equal(e.nodes.get('downtime-title').textContent,'ÁREA DE DADOS // SETOR 01');
  descendants(e.nodes.get('downtime-dialog')).find(x=>x.textContent==='INICIAR EXPLORAÇÃO').emit('click');assert.equal(vm.runInContext('state.activity.kind',e.context),'explore');
  vm.runInContext("state=DigiDowntime.debug(state,'roll',Date.now(),95);state=DigiDowntime.debug(state,'finishExplore');save();render();",e.context);
- assert.equal(e.nodes.get('downtime-title').textContent,'ROLANDO… D100');e.clock.tick(1550);assert.equal(e.nodes.get('downtime-title').textContent,'CARD RARO');
+ assert.equal(e.nodes.get('downtime-title').textContent,'ROLANDO… D100');
+ // A delayed native close event from the previous chooser must not cancel the
+ // newly opened reveal or acknowledge its pending reward before dismissal.
+ e.nodes.get('downtime-dialog').emit('close');assert.equal(vm.runInContext('state.downtime.results[0].seen',e.context),false);
+ e.clock.tick(1550);assert.equal(e.nodes.get('downtime-title').textContent,'CARD RARO');
  assert.equal(vm.runInContext('state.downtime.inventory.cards.length',e.context),1);e.nodes.get('downtime-dialog').close();
  assert.equal(vm.runInContext('state.downtime.results[0].seen',e.context),true);
  e.nodes.get('open-inventory').emit('click');assert.ok(e.nodes.get('downtime-title').textContent.startsWith('Inventário'));

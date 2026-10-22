@@ -17,7 +17,7 @@
   sleep:{energyRecovery:60},
  };
  const NEED_DECAY_CONFIG={satietyPerHour:2,energyPerHour:1.5,companyPerHour:2,companyGraceMs:12*3600000,maxCompanyLoss:35,maxDecayMs:24*3600000,floors:{satiety:15,energy:15,companionship:20},digestionMs:120000};
- const MOOD_CONFIG={dirtyPenalty:20,hungerPenalty:12,exhaustionPenalty:12,lonelinessPenalty:12,stackedNeedPenalty:5,trainingComfortMinimum:50};
+ const MOOD_CONFIG={dirtyMoodCap:20,hungerPenalty:12,exhaustionPenalty:12,lonelinessPenalty:12,stackedNeedPenalty:5,trainingComfortMinimum:50};
  // This mock profile is independent of the species label. Only Fire/Vaccine is defined.
  const PARTNER_PROFILE={id:'mock-partner-01',element:'fire',digitalAttribute:'vaccine',preferenceProfile:'fire-vaccine'};
  const PREFERENCE_CONFIG={profiles:{'fire-vaccine':{element:'fire',digitalAttribute:'vaccine',favorite:['digimeat'],liked:['digiprotein','digicarrot'],neutral:['digiapple','digibanana'],disliked:['digifish']}},bonuses:{favorite:{mood:5,companionship:3},liked:{mood:2,companionship:1},neutral:{mood:0,companionship:0},disliked:{mood:0,companionship:0}}};
