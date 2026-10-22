@@ -31,6 +31,20 @@ let messageTimer;
 let reactionTimer;
 const message = document.getElementById('pet-message');
 const room = document.getElementById('room');
+// Local presentation state only. Switching habitats has no gameplay effect.
+document.querySelectorAll('[data-habitat][type="button"]').forEach(button => {
+  button.addEventListener('click', () => {
+    const habitat = button.dataset.habitat;
+    room.dataset.habitat = habitat;
+    document.querySelector('.scenery-interior').hidden = habitat !== 'interior';
+    document.querySelector('.scenery-exterior').hidden = habitat !== 'exterior';
+    document.getElementById('habitat-name').textContent = habitat === 'interior'
+      ? '01 / QUARTO DIGITAL' : '02 / JARDIM DIGITAL';
+    document.querySelectorAll('.habitat-switch button').forEach(item => {
+      item.setAttribute('aria-pressed', String(item === button));
+    });
+  });
+});
 document.querySelectorAll('[data-action]').forEach(button => {
   button.addEventListener('click', () => {
     clearTimeout(messageTimer);

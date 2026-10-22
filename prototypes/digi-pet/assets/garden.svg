@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="560" viewBox="0 0 1120 560" fill="none">
+<defs>
+ <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#152e43"/><stop offset="1" stop-color="#618980"/></linearGradient>
+ <linearGradient id="grass" x2="0" y2="1"><stop stop-color="#436e60"/><stop offset="1" stop-color="#1a3a39"/></linearGradient>
+ <linearGradient id="tree" x2="1" y2="1"><stop stop-color="#4a8170"/><stop offset="1" stop-color="#254b45"/></linearGradient>
+ <radialGradient id="sun"><stop stop-color="#efcb8e" stop-opacity=".17"/><stop offset="1" stop-color="#efcb8e" stop-opacity="0"/></radialGradient>
+ <pattern id="lawn" width="83" height="60" patternUnits="userSpaceOnUse"><path d="m12 34 2-5 3 4m47 15 3-6 3 5" stroke="#a6c9a0" stroke-opacity=".17"/></pattern>
+</defs>
+<path d="M0 0h1120v560H0z" fill="url(#sky)"/>
+<ellipse cx="773" cy="142" rx="230" ry="190" fill="url(#sun)"/>
+<circle cx="773" cy="139" r="36" fill="#e2c58e" opacity=".8"/>
+<g stroke="#bdd7cb" stroke-opacity=".25" stroke-linecap="round" stroke-width="7"><path d="M148 104h83m-64-12h36M868 76h98m-71-12h43M469 158h66m-48-10h25"/></g>
+<path d="M0 291q99-69 228-29t226 5q110-69 252-20t240-7q100-25 174 16v147H0Z" fill="#355e59"/>
+<path d="M0 321q117-51 265-10t290-1q165-41 307-3t258-5v258H0Z" fill="url(#grass)"/>
+<path d="M0 321q117-51 265-10t290-1q165-41 307-3t258-5" stroke="#91baa0" stroke-opacity=".25" stroke-width="2"/>
+<path d="M0 325h1120v235H0z" fill="url(#lawn)"/>
+<!-- A little garden path and a quiet stone platform. -->
+<path d="M450 560q-86-72-42-100t52-42q4-14-29-25" stroke="#a8a17d" stroke-width="28" opacity=".16"/>
+<ellipse cx="560" cy="439" rx="177" ry="44" fill="#162f30" opacity=".3"/>
+<ellipse cx="560" cy="431" rx="171" ry="40" fill="#52766a" stroke="#9bb79a" stroke-opacity=".25"/>
+<path d="M408 451q148 49 302-1" stroke="#9ac2ac" stroke-opacity=".3"/>
+<!-- Rounded canopy echoes the interior's soft monitor corners. -->
+<ellipse cx="250" cy="398" rx="151" ry="28" fill="#142f30" opacity=".3"/>
+<path d="m239 383 10-171h29l15 171z" fill="#685f4e" stroke="#8e8165" stroke-opacity=".4"/>
+<path d="m262 292-39-43m44 13 35-35" stroke="#685f4e" stroke-width="13"/>
+<path d="M133 234q-49-44-15-91 7-50 68-54 40-53 93-21 67-15 91 44 57 30 31 86 8 53-54 69-30 33-81 9-45 29-81-3-47 2-52-39Z" fill="url(#tree)" stroke="#719a7b" stroke-opacity=".3" stroke-width="2"/>
+<path d="M158 145q14-35 59-33m65-11q37 0 46 27" stroke="#9abd8c" stroke-opacity=".2" stroke-width="5" stroke-linecap="round"/>
+<g fill="#d1b36e" opacity=".75"><circle cx="198" cy="197" r="7"/><circle cx="320" cy="167" r="6"/><circle cx="270" cy="234" r="5"/></g>
+<!-- Low bench, stones and a restrained digital lantern. -->
+<ellipse cx="866" cy="410" rx="99" ry="17" fill="#183a35" opacity=".5"/>
+<path d="M798 353h140v18H798z" fill="#8b876b" stroke="#b1aa83" stroke-opacity=".5"/>
+<path d="M812 370v33m110-33v33" stroke="#4e6157" stroke-width="10"/>
+<path d="M804 323h128v22H804z" fill="#718574"/><path d="M815 343v13m104-13v13" stroke="#506c5b" stroke-width="5"/>
+<path d="m950 432 8-14h27l11 15-8 6h-33Z" fill="#718b7c"/><path d="m160 442 9-10h18l8 11Z" fill="#5f7f70"/>
+<path d="M958 300v-55m-15 1h30l-4 23h-22z" stroke="#799f92" stroke-width="3"/><path d="M950 249h16v15h-16z" fill="#e2c78e" opacity=".8"/>
+<g stroke="#8ec3a2" stroke-width="2" opacity=".55"><path d="m733 450 4-11 4 8m-2 2 7-7M349 367l4-10 4 9M1012 374l4-11 4 8"/></g>
+<g fill="#e0bf7f"><path d="M733 433h4v4h-4zM1012 357h4v4h-4zM347 350h4v4h-4z"/></g>
+<!-- Occasional square glints keep this connected to the digital habitat. -->
+<g stroke="#a7e2ca" stroke-opacity=".4"><path d="M644 239h5v5h-5zM897 190h4v4h-4zM445 285h4v4h-4z"/></g>
+</svg>
