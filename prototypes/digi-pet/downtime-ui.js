@@ -51,7 +51,7 @@
   if(tab==='food'){
    line('Compre primeiro, depois ofereça em COMIDA. DIGIMEAT é gratuito e infinito.');
    for(const f of FOOD_CONFIG){
-    const row=el('section',undefined,'inventory-row'),txt=el('div');txt.append(el('strong',f.name),el('small',`${f.price?`${i.food[f.id]||0} no estoque · ${f.price} CR`:'∞ disponível · grátis'} · +${f.satiety} Saciedade${f.energy?` · +${f.energy} Energia`:''}${f.mood?` · +${f.mood} Humor`:''}`));row.append(txt);
+    const row=el('section',undefined,'inventory-row'),txt=el('div'),image=el('img');image.src=f.image;image.alt='';image.className='food-asset';row.append(image);txt.append(el('strong',f.name),el('small',`${f.price?`${i.food[f.id]||0} no estoque · ${f.price} CR`:'∞ disponível · grátis'} · +${f.satiety} Saciedade${f.energy?` · +${f.energy} Energia`:''}${f.mood?` · +${f.mood} Humor`:''}`));row.append(txt);
     if(f.price)row.append(button('Comprar',()=>{const r=commit(D.buy(state,f.id));inventory('food');byId('downtime-title').focus?.();if(!r.ok)line(r.feedback);},d.credits<f.price));panel.append(row);
    }
   }else if(tab==='items'){

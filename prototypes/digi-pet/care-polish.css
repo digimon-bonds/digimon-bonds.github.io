@@ -1,0 +1,30 @@
+/* Readable care cards and a food bubble, inside the existing handheld shell. */
+.partner-info .partner-name-line{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.partner-info #partner-name{font-size:32px;line-height:1.1;margin:0;font-weight:600;letter-spacing:-1.2px}
+.partner-info .stage{font-size:9px;padding:4px 7px;letter-spacing:.03em}
+.partner-info>.eyebrow{font-size:7px;margin-bottom:8px}
+.room-shell .partner-console .pet-states{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding-top:5px}
+.room-shell .pet-stat,.room-shell .pet-stat:first-child{--need-color:#dfb07c;--need-dark:#342d29;background:linear-gradient(135deg,var(--need-dark),#10232e);border-color:color-mix(in srgb,var(--need-color) 40%,#233844);border-radius:9px;padding:10px 8px;grid-template-columns:19px minmax(0,1fr) auto;gap:8px 6px;box-shadow:inset 0 1px #ffffff12,0 2px 3px #0003}
+.room-shell .pet-stat[data-need=mood]{--need-color:#a8d6a2;--need-dark:#233c32}
+.room-shell .pet-stat[data-need=energy]{--need-color:#edd07c;--need-dark:#393627}
+.room-shell .pet-stat[data-need=companionship]{--need-color:#dda3bf;--need-dark:#392c3e}
+.room-shell .pet-stat>span:first-of-type{font-size:12px;line-height:1.3;font-weight:500;color:#e3e9e6;grid-column:2;grid-row:1}
+.room-shell .pet-stat .need-icon{width:18px;height:18px;color:var(--need-color);grid-column:1;grid-row:1}
+.room-shell .pet-stat strong{font:600 14px var(--mono);color:var(--need-color);grid-column:3;grid-row:1}
+.room-shell .pet-stat .need-track{height:5px;grid-column:1/-1;grid-row:2;background:#07131d;box-shadow:inset 0 1px 2px #0009}
+.room-shell .pet-stat:not(.is-dirty):not(.needs-care) .need-track i{background:linear-gradient(90deg,color-mix(in srgb,var(--need-color) 60%,#375669),var(--need-color))}
+.room .waste{left:calc(var(--pet-left) + var(--pet-width) * .65);bottom:calc(var(--pet-bottom) - 3%);width:40px;height:40px;padding:8px}
+.room-shell .interaction-deck{position:relative;overflow:visible}
+#food-dialog{position:absolute;z-index:20;left:0;bottom:calc(100% + 10px);width:100%;max-width:none;margin:0;padding:14px;border:1px solid #8ba9a1;border-radius:17px;background:linear-gradient(145deg,#203740,#102530);color:#deebe6;box-shadow:inset 0 1px #ebffed33,0 10px 28px #0009;isolation:isolate}
+#food-dialog::after{content:'';position:absolute;left:27px;bottom:-8px;width:14px;height:14px;background:#152a34;border:solid #8ba9a1;border-width:0 1px 1px 0;transform:rotate(45deg)}
+#food-dialog .food-heading{margin-bottom:11px;gap:8px}#food-dialog .food-heading h2{font-size:19px;letter-spacing:-.5px;margin:4px 0 0}#food-dialog .eyebrow{font-size:7px;color:#c8b987;letter-spacing:1.5px}
+#food-dialog .food-heading>button{border:1px solid #64818a;background:#122630;border-radius:50%;color:#bad2d3;width:29px;height:29px;line-height:1;font-size:21px}
+#food-dialog .food-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;max-height:min(340px,52svh);overflow:auto;padding:1px 2px 4px}
+#food-dialog .food-choice{--food-tint:#66503c;display:flex;align-items:center;gap:7px;padding:10px 7px;background:linear-gradient(135deg,color-mix(in srgb,var(--food-tint) 55%,#1d303a),#142b34);border:1px solid color-mix(in srgb,var(--food-tint) 65%,#738b89);border-radius:10px;box-shadow:inset 0 1px #ffffff12;text-align:left;min-width:0}
+#food-dialog .food-choice[data-kind=digifish]{--food-tint:#3f6f93}#food-dialog .food-choice[data-kind=digiapple]{--food-tint:#985052}#food-dialog .food-choice[data-kind=digicarrot]{--food-tint:#a2713d}#food-dialog .food-choice[data-kind=digibanana]{--food-tint:#9b8b41}#food-dialog .food-choice[data-kind=digiprotein]{--food-tint:#786894}
+#food-dialog .food-choice:hover:not(:disabled){border-color:#e1d3a6;filter:brightness(1.15)}#food-dialog .food-choice:disabled{opacity:.78;cursor:not-allowed}
+.food-asset{width:40px;height:40px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 3px 2px #0006)}
+#food-dialog .food-choice>span{min-width:0;gap:4px}#food-dialog .food-choice strong{font:600 10px var(--mono);letter-spacing:0;color:#f1eee1}#food-dialog .food-choice small{font:10px/1.45 'Segoe UI',sans-serif;color:#c1d4d5}#food-dialog .food-choice em{font:9px/1.3 'Segoe UI',sans-serif}
+#food-dialog .food-hint{margin:10px 0 0;color:#9fbac2;font-size:10px;line-height:1.5}
+.inventory-row>div{flex:1;min-width:0}
+@media(max-width:360px){.partner-info #partner-name{font-size:29px}.partner-info .partner-name-line{gap:6px}.room-shell .pet-stat,.room-shell .pet-stat:first-child{padding:9px 6px;grid-template-columns:16px minmax(0,1fr) auto;gap:7px 4px}.room-shell .pet-stat>span:first-of-type{font-size:11px}.room-shell .pet-stat strong{font-size:13px}.room-shell .pet-stat .need-icon{width:16px;height:16px}#food-dialog{padding:11px}.food-asset{width:29px;height:32px}#food-dialog .food-choice{gap:5px;padding:9px 5px}#food-dialog .food-choice strong{font-size:9px}#food-dialog .food-choice small{font-size:9px}}

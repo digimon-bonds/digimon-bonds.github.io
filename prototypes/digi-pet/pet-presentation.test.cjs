@@ -31,7 +31,7 @@ test('complete application initializes against current HTML without removed-cont
  for(const match of html.matchAll(/\bid="([^"]+)"/g)){const node=e.element();const tag=html.match(new RegExp('<[^>]*id="'+match[1]+'"[^>]*>'))?.[0]||'';node.hidden=/\bhidden\b/.test(tag);e.nodes.set(match[1],node)}
  const thought=e.element();thought.hidden=true;const shell=e.element(),inside=e.element(),outside=e.element();
  const actions=['food','play','train','talk','explore'].map(action=>{const n=e.element();n.dataset.action=action;return n});const habitats=['interior','exterior'].map(habitat=>{const n=e.element();n.dataset.habitat=habitat;return n});
- e.doc.querySelector=selector=>({'.pet-thought':thought,'.room-shell':shell,'.scenery-interior':inside,'.scenery-exterior':outside,'dialog[open]':[...e.nodes.values()].find(n=>n.open),'.pet-experience':e.element()}[selector]??null);
+ e.doc.querySelector=selector=>({'.pet-thought':thought,'.room-shell':shell,'.interaction-deck':shell,'[data-action="food"]':actions[0],'.scenery-interior':inside,'.scenery-exterior':outside,'dialog[open]':[...e.nodes.values()].find(n=>n.open),'.pet-experience':e.element()}[selector]??null);
  e.doc.querySelectorAll=selector=>({'[data-action]':actions,'.habitat-switch button':habitats,'[data-simulate]':[],'[data-debug]':[]}[selector]||[]);
  for(const file of ['pet-config.js','downtime-config.js','exploration-rng.js','pet-storage.js','pet-engine.js','pet-downtime.js','pet-sprites.js','pet-speech.js','pet-motion.js','digi-pet.js','downtime-ui.js'])e.load(file);
  await vm.runInContext('petSprites.ready',e.context);assert.equal(shell.dataset.skin,'street');assert.equal(thought.hidden,false);e.clock.tick(4500);assert.equal(thought.hidden,true);assert.equal(e.nodes.get('pet-thought-text').textContent,'');
@@ -91,3 +91,4 @@ test('touch reaction is a small 320ms tilt on a separate wrapper',async()=>{
 test('manual happy blink reuses the normal/blink lifecycle without overlapping timers',async()=>{
  const e=sprites();await e.controller.ready;assert.equal(e.controller.blinkOnce(),true);assert.equal(e.image.dataset.spriteVariant,'blink');assert.equal(e.controller.blinkOnce(),false);e.clock.tick(120);assert.equal(e.image.dataset.spriteVariant,'normal');e.controller.destroy();assert.equal(e.clock.pending,0);
 });
+test('dirty event speech can interrupt a recent action but still expires without a queue',()=>{const e=speech();e.controller.speak('talk',true);assert.equal(e.controller.speak('dirty',true,true),true);assert.equal(e.text.textContent,'Uma limpeza cairia bem.');e.clock.tick(4500);assert.equal(e.bubble.hidden,true);e.clock.tick(60000);e.controller.observe('casual');assert.equal(e.bubble.hidden,true);});

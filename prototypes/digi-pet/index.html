@@ -15,7 +15,7 @@
   <script src="pet-sprites.js" defer></script>
   <script src="pet-speech.js" defer></script>
   <script src="pet-motion.js" defer></script>
-  <script src="digi-pet.js" defer></script><script src="downtime-ui.js" defer></script><link rel="stylesheet" href="downtime.css">
+  <script src="digi-pet.js" defer></script><script src="downtime-ui.js" defer></script><link rel="stylesheet" href="downtime.css"><link rel="stylesheet" href="care-polish.css">
 </head>
 <body>
   <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
@@ -43,7 +43,7 @@
         <div class="page-heading"><div class="page-title"><svg><use href="#i-pet"/></svg><h1>DIGI-PET</h1><span class="device-bonds">BONDS</span></div><span class="session">LOCAL</span></div>
         <div class="partner-console">
         <div class="device-toolbar">
-          <div class="partner-info"><span class="eyebrow">SEU PARCEIRO</span><h2 id="partner-name">Agumon</h2><div><span id="partner-species">Agumon</span><span class="info-dot">·</span><span class="stage" id="partner-stage">Rookie</span></div></div>
+          <div class="partner-info"><span class="eyebrow">SEU PARCEIRO</span><div class="partner-name-line"><h2 id="partner-name">Agumon</h2><span class="stage" id="partner-stage">Rookie</span></div></div>
           <div class="habitat-control"><span class="eyebrow">HABITAT</span><div class="habitat-switch" role="group" aria-label="Escolher ambiente"><button type="button" data-habitat="interior" aria-pressed="true">Interior</button><button type="button" data-habitat="exterior" aria-pressed="false">Exterior</button></div></div>
         </div>
         <div class="pet-states" aria-label="Estados do parceiro, de zero a cem">
@@ -80,7 +80,7 @@
       <footer class="experience-footer"><span id="save-status">SALVO NESTE NAVEGADOR</span><button id="open-reset" type="button">Resetar protótipo</button></footer>
       <div id="system-feedback" class="system-toast" role="status" aria-live="polite" hidden></div>
       </section>
-      <dialog id="food-dialog" aria-labelledby="food-title"><div class="food-heading"><div><span class="eyebrow">HORA DO LANCHE</span><h2 id="food-title">O que vamos oferecer?</h2></div><button id="close-food" type="button" aria-label="Fechar menu de comidas">×</button></div><p class="food-intro">Perfil de teste: Fogo / Vacina. Ofereça alimentos para descobrir as preferências deste parceiro.</p><div id="food-list" class="food-list"></div><p class="food-hint">Os efeitos e preferências são exclusivos deste protótipo.</p></dialog>
+      <div id="food-dialog" role="dialog" aria-modal="false" aria-labelledby="food-title" hidden><div class="food-heading"><div><span class="eyebrow">HORA DO LANCHE</span><h2 id="food-title">Um lanchinho?</h2></div><button id="close-food" type="button" aria-label="Fechar menu de comidas">×</button></div><div id="food-list" class="food-list"></div><p class="food-hint">DIGIMEAT é grátis. Outras comidas: compre no Inventário.</p></div>
       <dialog id="history-dialog" aria-labelledby="history-title"><h2 id="history-title">Pequenos cuidados</h2><p id="care-count"></p><p id="history-empty">O primeiro cuidado ainda está por vir.</p><ol id="history-list"></ol><div class="test-time"><p>Ferramentas locais · apenas o relógio e os dados deste pet.</p><div class="debug-grid"><button id="simulate-time" type="button" data-simulate="5">+5 minutos</button><button type="button" data-simulate="60">+1 hora</button><button type="button" data-simulate="720">+12 horas</button><button type="button" data-simulate="1440">+24 horas</button><button type="button" data-debug="waste">Forçar sujeira</button><button type="button" data-debug="complete">Concluir atividade</button><button type="button" data-debug="reduce:satiety">−20 Saciedade</button><button type="button" data-debug="reduce:mood">−20 Humor-base</button><button type="button" data-debug="reduce:energy">−20 Energia</button><button type="button" data-debug="reduce:companionship">−20 Companhia</button></div><p id="test-feedback" role="status"></p></div><button id="close-history" type="button">Voltar ao pet</button></dialog>
       <dialog id="reset-dialog" aria-labelledby="reset-title"><h2 id="reset-title">Começar de novo?</h2><p>Restaura necessidades, créditos, coleção, ciclos, recompensas e todo o progresso deste protótipo local. Nenhum outro dado do Bonds será alterado.</p><div class="dialog-actions"><button id="cancel-reset" type="button" autofocus>Cancelar</button><button id="confirm-reset" type="button">Resetar dados</button></div></dialog>
     </main>

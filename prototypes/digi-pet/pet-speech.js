@@ -19,10 +19,10 @@
       this.element.hidden = true;
       this.textElement.textContent = '';
     }
-    speak(context, explicit = false) {
+    speak(context, explicit = false, priority = false) {
       const time = this.now(), lines = this.library[context];
       if (!lines?.length || !this.canSpeak()) return false;
-      if (explicit && time - this.lastExplicit < this.settings.actionGapMs) return false;
+      if (explicit && !priority && time - this.lastExplicit < this.settings.actionGapMs) return false;
       if (!explicit && (this.current || time - this.lastShown < this.settings.quietMs ||
         time - (this.contextTimes[context] ?? -Infinity) < this.settings.contextCooldownMs)) return false;
       this.hide();

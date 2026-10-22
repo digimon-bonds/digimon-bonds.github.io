@@ -59,7 +59,7 @@
  function advance(input,now=Date.now()){
   const s=copy(input);if(now<s.lastUpdatedAt){s.lastUpdatedAt=now;return s;}
   let cursor=s.lastUpdatedAt,decayBudget=N.maxDecayMs,companyBudget=N.maxCompanyLoss;
-  function digest(){if(s.digestionDue!==null&&s.digestionDue<=cursor){s.waste=true;s.digestionDue=null;}}
+  function digest(){if(s.digestionDue!==null&&s.digestionDue<=cursor){const appeared=!s.waste;s.waste=true;s.digestionDue=null;if(appeared)notify(s,'','dirty',cursor);}}
   digest();
   if(s.activity&&s.activity.endsAt<=cursor)finish(s,cursor);
   while(cursor<now){

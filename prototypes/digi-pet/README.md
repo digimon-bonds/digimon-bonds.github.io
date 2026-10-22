@@ -1,10 +1,10 @@
-# Digi-Pet — downtime local, iteração 10
+# Digi-Pet — downtime local, iteração 11
 
 Protótipo independente do Digimon Bonds. **Não publicado. Sem backend, autenticação, ficha, Battle Link ou recompensas oficiais.**
 
 ## Abrir e jogar
 
-Prévia atual: http://127.0.0.1:4231/?downtime=10. Recarregue a página para carregar os arquivos desta etapa. Se precisar iniciar o servidor, execute `node serve.mjs` nesta pasta (Node 22+); encerre com Ctrl+C. Na branch local: `node prototypes/digi-pet/serve.mjs`.
+Prévia atual: http://127.0.0.1:4231/?care=11. Recarregue a página para carregar os arquivos desta etapa. Se precisar iniciar o servidor, execute `node serve.mjs` nesta pasta (Node 22+); encerre com Ctrl+C. Na branch local: `node prototypes/digi-pet/serve.mjs`.
 
 1. Cuide do Agumon com Comida, Conversar, Brincar ou clicando no cocô para limpar.
 2. Escolha **Treinar** ou **Explorar**, uma atividade principal por dia.
@@ -93,7 +93,7 @@ Passagem de tempo: Saciedade −2/h; Energia acordado −1,5/h; Companhia −2/h
 
 Brincar: 1 min teste /10 min futuro; ao concluir +15 Humor-base, +8 Companhia, −10 Energia, −5 Saciedade. Conversar: +10 Companhia, +4 Humor-base, ganhos limitados a uma vez por minuto. Dormir: 3 min teste/30 min futuro; recupera até +60 Energia proporcionalmente, com queda natural de Saciedade. Acordar cedo mantém apenas o recuperado. Relógio no visor, botões críticos bloqueados durante a contagem.
 
-Falas somem após 4,5s. Necessidades persistentes têm silêncio mínimo de 60s e repetição por contexto só após 3min. Sem monólogo casual constante. Piscada e respiração pausam em atividades, diálogos, aba oculta e movimento reduzido; toque continua sem recompensa mecânica.
+Falas de ações somem após 4,5s. A interface não inicia lembretes automáticos repetidos de necessidades. Quando a digestão gera sujeira, emite uma única fala prioritária: “Ops, acho que fiz sujeira.”; ela expira após 4,5s e não reaparece só porque o cocô continua presente. Limpar remove imediatamente uma reclamação de sujeira que ainda estiver visível. Piscada e respiração pausam em atividades, diálogos, aba oculta e movimento reduzido; toque continua sem recompensa mecânica.
 
 ## Dados locais e arquitetura
 
@@ -127,6 +127,16 @@ node --test --test-isolation=none pet-downtime.test.cjs
 node --test --test-isolation=none pet-presentation.test.cjs
 ```
 
-24 testes do cuidado anterior, 23 testes de downtime e 16 testes de apresentação/integração DOM. Cobrem dias/catch-up, treinamento, loot, restauração, compras/estoque, reset, fallback de sprites, falas e o fluxo UI treino → explorar → D100 → card → coleção. Testes do cuidado isolado verificam a base anterior; os de downtime verificam overrides desta etapa (inclusive DIGIMEAT).
+25 testes do cuidado, 23 testes de downtime e 17 testes de apresentação/integração DOM. Cobrem dias/catch-up, treinamento, loot, restauração, compras/estoque, reset, fallback de sprites, falas e o fluxo UI treino → explorar → D100 → card → coleção. Testes do cuidado isolado verificam a base anterior; os de downtime verificam overrides desta etapa (inclusive DIGIMEAT).
 
-A checagem automatizada de navegador com Edge foi bloqueada anteriormente pelo revisor automático por limite de uso da conta. Nesta etapa a validação de UI foi feita com DOM/relógio simulados; não há nova captura visual validada em navegador. Não foram executados build de publicação, deploy ou alterações nos módulos atuais do Bonds.
+Nesta iteração a verificação automatizada no Edge foi concluída em desktop e mobile: layout de 480px, fontes das necessidades, os seis ícones decodificados, balão não modal, fechar por Escape/×/clique fora, oferecer comida, evento de sujeira e expiração da fala, sem overflow horizontal ou erros JavaScript. Capturas em outputs/digi-pet-care11-*.png. Não foram executados build de publicação, deploy ou alterações nos módulos atuais do Bonds.
+
+## Refinamento visual — etapa 11
+
+- Cabeçalho: apenas Agumon em 32px e Rookie ao lado; removido o segundo nome da espécie.
+- Necessidades em grade 2×2: rótulos de 12px (11px em telas estreitas), números 14px, ícones 18px. Saciedade usa cobre, Humor verde, Energia dourado e Companhia rosa. Estados negativos mantêm as indicações de alerta.
+- Comida abre um balão ancorado aos controles, com ponta voltada ao botão, sem backdrop ou redimensionamento. Fecha por ×, Escape, clique fora, clique novamente no botão ou escolha do alimento. Controles e foco mantêm semântica acessível. Estoque e regras de compra foram preservados.
+- Alimentos usam os ícones de Digimon Story: Time Stranger tanto no balão quanto na loja. Fontes e URLs originais em `assets/food/SOURCES.md`. Os seis arquivos foram baixados sem edição e agora carregam localmente, sem depender da rede.
+- Cards de comida têm tons diferentes por alimento e mostram efeitos/estoque; preferências só aparecem depois de descobertas, sem repetir texto desconhecido em todos os cards.
+- Cocô posicionado junto aos pés do parceiro nos dois ambientes. A fala da sujeira ocorre uma vez no evento de digestão, pode interromper uma fala de ação recente e não fica repetindo enquanto estiver sujo. Outras reações continuam breves; a UI não faz monólogos automáticos de necessidade.
+- `care-polish.css` concentra o acabamento desta etapa; a lógica de digestão emite o evento em `pet-engine.js`, e `pet-speech.js` aceita prioridade para esse evento. Regras e recompensas do downtime permanecem locais.
