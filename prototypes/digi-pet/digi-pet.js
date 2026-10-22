@@ -9,7 +9,7 @@ let messageTimer;
 let storageAvailable = true;
 let state;
 let renderedHistory;
-try { state = engine.restore(JSON.parse(localStorage.getItem(CONFIG.storageKey))); }
+try { state = engine.restore(JSON.parse(localStorage.getItem(CONFIG.storageKey) ?? localStorage.getItem(CONFIG.legacyStorageKey))); }
 catch { state = engine.create(); storageAvailable = false; }
 state = engine.advance(state);
 
@@ -22,19 +22,27 @@ function feedback(text) {
   clearTimeout(messageTimer);
   message.textContent = text;
   message.classList.add('is-visible');
-  messageTimer = setTimeout(() => { message.classList.remove('is-visible'); message.textContent = ''; }, 4200);
+  room.classList.add('has-feedback');
+  messageTimer = setTimeout(() => { message.classList.remove('is-visible'); message.textContent = ''; room.classList.remove('has-feedback'); }, 4200);
 }
 function render() {
   for (const [key, value] of Object.entries(state.stats)) {
     const element = byId(`stat-${key}`);
     element.textContent = value;
-    element.closest('.pet-stat').classList.toggle('needs-care', (key === 'satiety' && value <= CONFIG.conditions.hungry) || (key === 'energy' && value <= CONFIG.conditions.tired));
+    const track = byId(`meter-${key}`);
+    track.setAttribute('aria-valuenow', String(value));
+    track.style.setProperty('--level', `${value}%`);
+    element.closest('.pet-stat').classList.toggle('needs-care', value <= (key === 'mood' ? CONFIG.conditions.sad : key === 'energy' ? CONFIG.conditions.tired : 30));
   }
   const condition = engine.condition(state).toUpperCase();
   if (byId('condition').textContent !== condition) byId('condition').textContent = condition;
   byId('waste').hidden = !state.waste;
   byId('sleep-note').hidden = !state.sleeping;
-  byId('care-note').textContent = state.waste ? 'Uma limpeza cairia bem.' : state.sleeping ? 'Descansando, um minuto de cada vez.' : 'Um tempo com Agumon.';
+  byId('care-note').textContent = state.waste ? 'Clique na sujeira para limpar.' : state.sleeping ? 'Descansando, um minuto de cada vez.' : 'Um tempo com Agumon.';
+  const thought = engine.status(state);
+  if (byId('pet-thought-text').textContent !== thought) byId('pet-thought-text').textContent = thought;
+  document.querySelector('.room-shell').dataset.skin = state.skin;
+  byId('device-skin').value = state.skin;
   room.dataset.sleeping = String(state.sleeping);
   room.dataset.habitat = state.habitat;
   document.querySelector('.scenery-interior').hidden = state.habitat !== 'interior';
@@ -81,6 +89,10 @@ document.querySelectorAll('[data-action]').forEach(button => button.addEventList
 document.querySelectorAll('.habitat-switch button').forEach(button => button.addEventListener('click', () => { state.habitat = button.dataset.habitat; update(); }));
 byId('sleep-button').addEventListener('click', () => interact(state.sleeping ? 'wake' : 'sleep'));
 byId('clean-button').addEventListener('click', () => interact('clean'));
+byId('waste').addEventListener('click', () => interact('clean'));
+byId('device-skin').addEventListener('change', event => {
+  if (CONFIG.skins.includes(event.target.value)) { state.skin = event.target.value; update(); }
+});
 byId('open-history').addEventListener('click', () => { update(); byId('history-dialog').showModal(); });
 byId('close-history').addEventListener('click', () => byId('history-dialog').close());
 byId('simulate-time').addEventListener('click', () => {

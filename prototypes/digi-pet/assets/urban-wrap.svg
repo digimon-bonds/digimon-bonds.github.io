@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="660" height="460" viewBox="0 0 660 460">
+<!-- Original vector wrap: layered labels, marker loops, stencil-like marks. -->
+<defs><pattern id="wrap" width="330" height="230" patternUnits="userSpaceOnUse">
+<path fill="#173e49" d="M0 0h330v230H0z"/>
+<path d="m-20 34 143-51 21 67-143 49z" fill="#d9c983"/>
+<path d="m-9 42 102-33m-98 47 96-32m-83 43 81-27" stroke="#263e46" stroke-width="5"/>
+<path d="m182-23 123 35-22 81-124-35z" fill="#e57b66" stroke="#112a35" stroke-width="5"/>
+<path d="m191 0 72 51m-56-54-10 65m53-50-38 36" stroke="#233e49" stroke-width="7"/>
+<path d="m113 62 96-19 16 56-99 21z" fill="#87c6ba" stroke="#102937" stroke-width="5"/>
+<g transform="rotate(-12 160 90)"><text x="129" y="89" font-family="Arial,sans-serif" font-size="24" font-weight="900" fill="#163b46">LINK</text><path d="M130 97h66" stroke="#163b46" stroke-width="3"/></g>
+<path d="m248 88 91-33 25 80-97 34z" fill="#b1a1bb" stroke="#122e38" stroke-width="4"/>
+<circle cx="296" cy="104" r="21" fill="none" stroke="#243e4a" stroke-width="7"/><path d="m277 119 37-35" stroke="#243e4a" stroke-width="6"/>
+<path d="M-19 159 53 94l63 70-73 63z" fill="#537e8b" stroke="#102937" stroke-width="5"/>
+<g transform="rotate(-40 45 158)"><text x="1" y="164" font-family="monospace" font-size="23" font-weight="bold" fill="#dfe4cb">BONDS</text></g>
+<path d="m120 151 129-33 19 76-134 33z" fill="#ddd9bb" stroke="#142c35" stroke-width="5"/>
+<g transform="rotate(-14 188 172)"><text x="139" y="166" font-family="Arial,sans-serif" font-size="13" font-weight="900" fill="#234754">STAY CURIOUS</text><text x="138" y="191" font-family="Arial,sans-serif" font-size="25" font-weight="900" fill="#234754">D / PET</text></g>
+<path d="M278 188h27v25h-27zm-7 8h42m-20-18v43" stroke="#e2b158" stroke-width="6"/>
+<path d="M69 18q59 29 32 87T53 73q7-39 35-19" fill="none" stroke="#58a6a5" stroke-width="6"/>
+<path d="m226 209 31 23m-18-24 31 23M6 211l29 14m79-96 18 7" stroke="#dc8a75" stroke-width="4"/>
+<g stroke="#a4ccc1" stroke-width="2" opacity=".55"><path d="m240 62 7-10 9 7m-18 5 12 8M76 205l13-9 5 13"/></g>
+</pattern></defs><path d="M0 0h660v460H0z" fill="url(#wrap)"/>
+</svg>
