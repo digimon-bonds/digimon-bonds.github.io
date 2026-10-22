@@ -104,4 +104,3 @@
  };
  globalThis.DowntimeUI={openTraining,openExploration,inventory,summary};render();
 })();
-

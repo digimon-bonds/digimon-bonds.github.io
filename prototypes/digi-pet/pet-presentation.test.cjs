@@ -91,5 +91,3 @@ test('touch reaction is a small 320ms tilt on a separate wrapper',async()=>{
 test('manual happy blink reuses the normal/blink lifecycle without overlapping timers',async()=>{
  const e=sprites();await e.controller.ready;assert.equal(e.controller.blinkOnce(),true);assert.equal(e.image.dataset.spriteVariant,'blink');assert.equal(e.controller.blinkOnce(),false);e.clock.tick(120);assert.equal(e.image.dataset.spriteVariant,'normal');e.controller.destroy();assert.equal(e.clock.pending,0);
 });
-
-

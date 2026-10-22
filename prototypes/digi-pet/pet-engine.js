@@ -137,4 +137,3 @@
  }
  globalThis.DigiPetEngine={CONFIG:P,labels,create,restore,advance,act,availability,mood,condition,speechContext,preferenceFor,simulate,debug};
 })();
-

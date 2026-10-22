@@ -105,5 +105,3 @@ document.addEventListener('fullscreenchange',()=>fullscreen.setAttribute('aria-l
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)update();else petSpeech.hide();});window.addEventListener('pagehide',update);
 window.addEventListener('storage',event=>{if(event.key!==P.storageKey)return;try{const raw=JSON.parse(event.newValue);if(validSave(raw)){state=engine.advance(engine.restore(raw));consumeEvent();render();}}catch{}});
 setInterval(update,1000);consumeEvent();if(loadNotice)showSystemFeedback(loadNotice);if(!petSpeech.current){const context=engine.speechContext(state);showPetSpeech(['dirty','hungry','tired','sad','lonely'].includes(context)?context:'greeting');}save();render();
-
-
