@@ -9,7 +9,7 @@
  let rng=globalThis.ExplorationRNG;
  const dateFormatter=new Intl.DateTimeFormat('en-CA',{timeZone:C.timeZone,year:'numeric',month:'2-digit',day:'2-digit'});
  function dateKey(at,offset=0){const p=Object.fromEntries(dateFormatter.formatToParts(new Date(at+offset*86400000)).map(x=>[x.type,x.value]));return `${p.year}-${p.month}-${p.day}`;}
- function fresh(){return {version:1,totalDigiCycles:0,currentCycleDate:'',cycleCompleted:false,majorActivityUsed:null,pendingBondXP:0,ledger:{},training:{power:0,heart:0,intelligence:0,agility:0},prepared:null,credits:0,inventory:{food:{},care:{},cards:[],fragments:0,data:{}},results:[],sequence:0,debugDayOffset:0,forcedRoll:null};}
+ function fresh(){return {version:1,totalDigiCycles:0,currentCycleDate:'',cycleCompleted:false,majorActivityUsed:null,pendingBondXP:0,ledger:{},training:{power:0,heart:0,intelligence:0,agility:0},prepared:null,credits:0,inventory:{food:{},care:{},cards:[],fragments:0},results:[],sequence:0,debugDayOffset:0,forcedRoll:null};}
  function sync(s,at){
   s.downtime??=fresh();const d=s.downtime,key=dateKey(at,d.debugDayOffset);
   d.ledger[key]??={care:false,major:null,attribute:null,finished:false,completed:false};
@@ -46,7 +46,7 @@
   if(kind==='credits'){const n=rng.integer(C.credits.min,C.credits.max);d.credits+=n;return {text:`+${n} Créditos`,credits:n};}
   if(kind==='food'){const f=pick(P.FOOD_CONFIG.filter(f=>f.price>0));add(i.food,f.id);return {text:`+1 ${f.name}`,food:f.id};}
   if(kind==='care'){const item=pick(C.careItems);add(i.care,item.id);return {text:`+1 ${item.name}`,item:item.id};}
-  if(kind==='fragment'){if(rng.integer(1,4)===4){add(i.data,'data-resource');return {text:'+1 Recurso de Dados',item:'data-resource'};}i.fragments++;return {text:'+1 Fragmento de Card',fragments:1};}
+  if(kind==='fragment'){i.fragments++;return {text:'+1 Fragmento de Card',fragments:1};}
   if(kind==='common'||kind==='rare'){const item=card(s,kind==='rare'?'RARE':'COMMON','exploration');return {text:item.name,card:clone(item)};}
   if(kind==='rareFind'){
    // A rare find is deliberately not a card: varied valuable supplies.
@@ -54,13 +54,13 @@
    if(roll===1){d.credits+=40;return {text:'Reserva digital · +40 Créditos',credits:40};}
    if(roll===2){i.fragments+=2;return {text:'Dados preservados · +2 Fragmentos',fragments:2};}
    if(roll===3){add(i.care,'care-pack',2);return {text:'Caravana de dados · +2 CARE PACK',item:'care-pack'};}
-   add(i.data,'data-resource',3);return {text:'Sinal antigo · +3 Recursos de Dados',item:'data-resource'};
+   add(i.care,'energy-patch',2);return {text:'Sinal antigo · +2 ENERGY PATCH',item:'energy-patch'};
   }
   const roll=rng.integer(1,4);
   if(roll===1){d.credits+=25;return {text:'Cache monetário · +25 Créditos',credits:25};}
   if(roll===2){const f=pick(P.FOOD_CONFIG.filter(f=>f.price>0)),n=rng.integer(1,2);add(i.food,f.id,n);return {text:`Cache de alimentos · +${n} ${f.name}`,food:f.id};}
   if(roll===3){i.fragments++;return {text:'Cache fragmentado · +1 Fragmento',fragments:1};}
-  add(i.data,'data-resource');return {text:'+1 Recurso de Dados',item:'data-resource'};
+  add(i.care,'recovery-disk');return {text:'+1 RECOVERY DISK',item:'recovery-disk'};
  }
  function complete(s,activity,at){
   if(!['train','explore'].includes(activity.kind)||!activity.cycleDate)return;
@@ -87,10 +87,10 @@
   // Preserve existing Prepared and pending XP; never revoke previous awards.
   if(!d.prepared){const earned=Object.keys(d.training).find(key=>count(raw.training?.[key])>=C.trainingGoal);if(earned){d.prepared={attribute:earned,label:C.attributes[earned],effect:'+1d6',uses:1,sourceDate:'migration-2-cycles'};d.training[earned]=0;}}
   const inv=raw.inventory||{};
-  for(const [group,allowed]of [['food',P.FOOD_CONFIG.map(f=>f.id)],['care',C.careItems.map(i=>i.id)],['data',['data-resource']]])for(const id of allowed)if(count(inv[group]?.[id]))d.inventory[group][id]=count(inv[group][id]);
+  for(const [group,allowed]of [['food',P.FOOD_CONFIG.map(f=>f.id)],['care',C.careItems.map(i=>i.id)]])for(const id of allowed)if(count(inv[group]?.[id]))d.inventory[group][id]=count(inv[group][id]);
   d.inventory.fragments=count(inv.fragments);
   d.inventory.cards=Array.isArray(inv.cards)?inv.cards.filter(c=>C.cards.some(t=>t.id===c.id)&&typeof c.instanceId==='string').map(c=>({...clone(C.cards.find(t=>t.id===c.id)),instanceId:c.instanceId,source:c.source==='restoration'?'restoration':'exploration'})):[];
-  d.results=Array.isArray(raw.results)?raw.results.filter(r=>r&&typeof r.id==='string'&&Number.isInteger(r.natural)&&r.natural>=1&&r.natural<=100&&(C.loot.some(e=>e.id===r.kind)||r.kind==='cache')&&r.reward&&typeof r.reward.text==='string').slice(0,30).map(clone):[];
+  d.results=Array.isArray(raw.results)?raw.results.filter(r=>r&&typeof r.id==='string'&&Number.isInteger(r.natural)&&r.natural>=1&&r.natural<=100&&(C.loot.some(e=>e.id===r.kind)||r.kind==='cache')&&r.reward&&typeof r.reward.text==='string').filter(r=>r.reward.item!=='data-resource').slice(0,30).map(clone):[];
   d.forcedRoll=Number.isInteger(raw.forcedRoll)&&raw.forcedRoll>=1&&raw.forcedRoll<=100?raw.forcedRoll:null;
   return d;
  }

@@ -85,12 +85,13 @@
     if(f.price)row.append(button('Comprar',()=>{const r=commit(D.buy(state,f.id));inventory('food');byId('downtime-title').focus?.();if(!r.ok)line(r.feedback);},d.credits<f.price));panel.append(row);
    }
   }else if(tab==='items'){
-   line('Consumíveis destinados à ficha do RPG: PV, Energia do humano e Pontos de Laço. A aplicação na ficha real ainda está desligada.');
+   line('Consumíveis para usar em um Tópico/Luta: PV e Energia do Digimon ou Pontos de Laço.');
    for(const item of C.careItems){const row=el('section',undefined,'inventory-row care-item-row'),txt=el('div'),tools=el('div',undefined,'item-tools');
+    const image=el('img');image.src=item.image;image.alt=item.name;image.className='care-item-art';row.append(image);
     txt.append(el('strong',item.name),el('small',`Quantidade: ${i.care[item.id]||0} · ${item.price} CR`,'item-quantity'),el('small',item.description),el('small','Consumível do RPG · 1 unidade por uso futuro','item-kind'));
     tools.append(button('Comprar',()=>{commit(D.buyCare(state,item.id));inventory('items');},d.credits<item.price));row.append(txt,tools);panel.append(row);
    }
-   line('Estes itens não alteram Saciedade, Humor, Energia ou Companhia do pet. O catálogo de teste permite simular seus efeitos em uma ficha fictícia.');
+   line('PV e Energia de combate são separados das necessidades do Digi-Pet. Experimente os efeitos na simulação do catálogo.');
   }else if(tab==='cards'){
    line(`CARDS · ${i.cards.length} encontrados. Comuns: uso único. Raros: permanentes, ativados pelo Scanner. Todo efeito dura somente o turno de ativação.`);
    if(!i.cards.length)line('Sua primeira descoberta está no próximo sinal.');
@@ -98,7 +99,6 @@
    for(const {card,quantity}of groups.values()){const c=R.definition(card),tile=el('section',undefined,'collection-item'),image=el('img');image.src=c.image;image.alt='';tile.append(image,el('small',`${c.rarity} · Quantidade: ${quantity}`),el('strong',c.name),el('p',R.cardText(c)),el('small',c.consumable?'Uso único · exemplar consumido':'Permanente na ficha · Scanner'),button('Ver Card',()=>revealCard(c)));collection.append(tile);}panel.append(collection);
   }else{
    const fragments=el('section',undefined,'reward-tile');fragments.append(fragmentArtwork(),el('small','FRAGMENTOS DE CARD','eyebrow'),el('h3',`${i.fragments} / ${C.fragmentGoal}`),el('p',`Reúna ${C.fragmentGoal} metades para restaurar um Card Comum inteiro.`),button('RESTAURAR CARD',()=>{const r=commit(D.restoreCard(state));if(r.ok)revealCard(r.card);},i.fragments<C.fragmentGoal));panel.append(fragments);
-   const data=el('section',undefined,'reward-tile');data.append(el('small','RECURSO DE DADOS','eyebrow'),el('h3',`Quantidade: ${i.data['data-resource']||0}`),el('p','Material especial guardado. Não consumível nesta etapa; uso futuro a definir.'));panel.append(data);
    if(d.prepared){const tile=el('section',undefined,'reward-tile');tile.append(el('small','BENEFÍCIO PRONTO','eyebrow'),el('h3',`PREPARADO // ${d.prepared.label}`),el('p','Quantidade: 1 · +1d6 em um teste apropriado. Consumível futuro; não acumula.'));panel.append(tile);}
    line(`${d.pendingBondXP} XP de convivência pendente · recompensa não consumível, aguardando integração futura.`);
   }
@@ -106,7 +106,7 @@
  }
  function cardContent(card){
   const c=R.definition(card),wrap=el('div',undefined,`card-reveal ${c.rarity==='RARE'?'is-rare':''}`),image=el('img');image.src=c.image;image.alt=`Arte provisória de ${c.name}`;
-  wrap.append(el('small',c.rarity==='RARE'?'SINAL EXCEPCIONAL // CARD RARO':'SIGNAL DETECTED // CARD DATA FOUND','eyebrow'),image,el('small',`CARD // ${c.rarity}`),el('h3',c.name),el('p',R.cardText(c)),el('p',c.description),el('p',c.consumable?'Uso único: o exemplar é consumido na ativação.':'Permanente na ficha: exige Scanner e não é consumido.'));panel.append(wrap);line('Regra inicial: 1 card por turno do humano, sem acumular cards. Expira ao fim desse turno. Aplicação real na ficha continua desligada.');
+  wrap.append(el('small',c.rarity==='RARE'?'SINAL EXCEPCIONAL // CARD RARO':'SIGNAL DETECTED // CARD DATA FOUND','eyebrow'),image,el('small',`CARD // ${c.rarity}`),el('h3',c.name),el('p',R.cardText(c)),el('p',c.description),el('p',c.consumable?'Uso único: o exemplar é consumido na ativação.':'Permanente na ficha: exige Scanner e não é consumido.'));panel.append(wrap);line('Regra inicial: 1 card por turno do humano, sem acumular cards. Expira ao fim desse turno. Uso em um Tópico/Luta; integração automática ainda desligada.');
  }
  function revealCard(card){heading('DADOS RESTAURADOS','Card encontrado');cardContent(card);panel.append(button('Ver coleção',()=>inventory('cards')));open('card');}
  function fragmentArtwork(){
@@ -120,9 +120,9 @@
   if(food){const image=el('img');image.src=food.image;image.alt=food.name;image.className='loot-food-art';tile.append(image);label=`+${quantity} ${food.name}`;detail=`+${food.satiety} Saciedade${food.energy?` · +${food.energy} Energia`:''}${food.mood?` · +${food.mood} Humor`:''} por porção`;tab='food';}
   else if(r.fragments){tile.append(fragmentArtwork());label=`+${r.fragments} ${r.fragments===1?'Fragmento de Card':'Fragmentos de Card'}`;detail=`${state.downtime.inventory.fragments} / ${C.fragmentGoal} fragmentos no inventário. Reúna ${C.fragmentGoal} para restaurar um card.`;tab='special';}
   else if(r.credits){tile.append(el('div','CR','loot-emblem loot-credits-art'));detail='Créditos para alimentos e cuidados na loja do inventário.';tab='food';}
-  else if(item){tile.append(el('div',item.id==='energy-patch'?'ϟ':'+','loot-emblem loot-care-art'));detail=item.description;}
+  else if(item){const image=el('img');image.src=item.image;image.alt=item.name;image.className='loot-food-art';tile.append(image);detail=item.description;}
   else if(result.kind==='nothing'){tile.append(el('div','…','loot-emblem loot-empty-art'));detail='Agumon voltou bem. A atividade conta para o Digi-Cycle de hoje.';}
-  else{tile.append(el('div','◇','loot-emblem loot-data-art'));detail='Recurso especial guardado para uso futuro.';tab='special';}
+  else{tile.append(el('div','◇','loot-emblem loot-data-art'));detail='Registro anterior do protótipo.';tab='special';}
   tile.append(el('small',result.kind==='rareFind'?'UM ENCONTRO INESPERADO':'RESULTADO DA EXPLORAÇÃO','eyebrow'),el('h3',label),el('p',detail));panel.append(tile);
   if(result.kind!=='nothing')panel.append(el('p','Já adicionado ao seu inventário.','reward-saved'));
   return tab;

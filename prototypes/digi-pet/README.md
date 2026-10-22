@@ -1,4 +1,4 @@
-# Digi-Pet — recompensas de RPG e catálogo de teste, etapa 16
+# Digi-Pet — itens visuais e recompensas, etapa 18
 
 Protótipo **local**, sem publicação, deploy, backend, autenticação, ficha ou Battle Link. Créditos, XP, cards e PREPARADO são dados de teste, sem validade oficial no RPG.
 
@@ -6,7 +6,7 @@ Protótipo **local**, sem publicação, deploy, backend, autenticação, ficha o
 
 Abra http://127.0.0.1:4231/?rules=16 e recarregue a página. Para iniciar a prévia: `node serve.mjs` nesta pasta, usando Node 22+; Ctrl+C encerra. Na branch local: `node prototypes/digi-pet/serve.mjs`.
 
-O aparelho Street Link continua com largura máxima de 480px, visor próprio, Interior/Exterior, Agumon NORMAL/BLINK, respiração sutil e reação ao toque. A faixa PARTNER LINK permanece removida; cinco saídas de som ficam sobre a carcaça e o LED de ligado aparece ao lado de LOCAL. Sem novos assets ou animações nesta etapa.
+O aparelho Street Link continua com largura máxima de 480px, visor próprio, Interior/Exterior, Agumon NORMAL/BLINK, respiração sutil e reação ao toque. A faixa PARTNER LINK permanece removida; cinco saídas de som ficam sobre a carcaça e o LED de ligado aparece ao lado de LOCAL. Ícones locais de alimentos e itens; sem novas animações.
 
 ## Como jogar
 
@@ -18,7 +18,7 @@ O aparelho Street Link continua com largura máxima de 480px, visor próprio, In
 
 **Digi-Cycle** abre um painel com progresso de 0–15, ciclos restantes para o próximo XP, total concluído, XP pendente, checklist do dia, última ação, resultado recente e treino/PREPARADO. A contagem e o resultado em andamento atualizam com o painel aberto. Logs do sistema ficam nesse painel e em notificações temporárias; não são inseridos no balão do personagem.
 
-**Inventário** abre um painel com saldo e quatro categorias: **Comida, Itens, Cards e Especiais**. As entradas mostram nome, quantidade, uso/descrição e se são consumíveis. Cards iguais são agrupados visualmente, mantendo cada exemplar no save. Especiais reúne fragmentos, recursos e PREPARADO.
+**Inventário** abre um painel com saldo e quatro categorias: **Comida, Itens, Cards e Especiais**. As entradas mostram nome, quantidade, uso/descrição e se são consumíveis. Cards iguais são agrupados visualmente, mantendo cada exemplar no save. Especiais reúne fragmentos e PREPARADO.
 
 ## Digi-Cycle e XP
 
@@ -61,12 +61,12 @@ Não acumula bônus. Resultado final = D100 + modificador, limitado a 1–100. A
 | 11–45 | 35% | 8–20 Créditos |
 | 46–65 | 20% | 1 comida especial |
 | 66–80 | 15% | 1 item de cuidado |
-| 81–90 | 10% | Fragmento / material |
+| 81–90 | 10% | Fragmento de Card |
 | 91–97 | 7% | 1 Card Comum |
 | 98–99 | 2% | Evento raro |
 | 100 | 1% | 1 Card Raro |
 
-Cards somam **8%** na tabela base. Na categoria fragmento/material, 75% concedem um fragmento e 25% um Recurso de Dados. Eventos raros sorteiam: reserva digital (+40 CR), dados preservados (+2 fragmentos), caravana de dados (+2 Care Pack) ou sinal antigo (+3 Recursos de Dados). Um evento raro não é automaticamente um card.
+Cards somam **8%** na tabela base. A faixa de fragmentos sempre concede um fragmento. Eventos raros sorteiam: reserva digital (+40 CR), dados preservados (+2 fragmentos), caravana de dados (+2 Care Pack) ou sinal antigo (+2 Energy Patch). Um evento raro não é automaticamente um card.
 
 **Nada encontrado** não concede itens nem créditos e não penaliza o pet; a atividade continua válida para completar o ciclo. A estrutura de caches antigos foi preservada para carregar resultados dos saves anteriores, mas não ocupa faixa na nova tabela.
 
@@ -91,13 +91,13 @@ Alimentos pagos precisam ser comprados primeiro. Estoque é gasto só quando a o
 
 Esses itens não são mais usados nas necessidades do pet. Podem ser encontrados e comprados, ficando guardados como recompensas locais destinadas à ficha. A integração com a ficha real permanece desligada; o botão antigo de uso no pet foi removido e a API recusa esse uso sem gastar estoque.
 
-| Consumível | Preço | Efeito na ficha do RPG |
+| Consumível | Preço | Efeito em um Tópico/Luta |
 | --- | --- | --- |
-| RECOVERY DISK | 10 CR | Recupera 10 PV |
-| ENERGY PATCH | 12 CR | Recupera 10 de Energia do humano |
+| RECOVERY DISK | 10 CR | Recupera 10 PV do Digimon |
+| ENERGY PATCH | 12 CR | Recupera 10 de Energia do Digimon |
 | CARE PACK | 8 CR | Recupera 3 Pontos de Laço |
 
-Energia do humano não é Energia do pet. Pontos de Laço não são Companhia. As definições usam `rpgEffect`, sem efeitos nos atributos do pet. O catálogo exclusivo de teste permite simular o consumo em uma ficha fictícia, respeitando máximos e gastando só a unidade fictícia.
+PV e Energia de combate do Digimon são separados das necessidades do Digi-Pet. Pontos de Laço não são Companhia. As definições usam `rpgEffect`, sem efeitos nos atributos do pet. O catálogo exclusivo de teste permite simular o consumo em uma ficha fictícia, respeitando máximos e gastando só a unidade fictícia.
 
 ## Cards: regras iniciais v1
 
@@ -121,7 +121,7 @@ Energia do humano não é Energia do pet. Pontos de Laço não são Companhia. A
 
 Os aumentos de +2 são valores iniciais configuráveis desta bancada. Cards continuam com a imagem enviada em `assets/card-placeholder.png`; não foram criadas artes novas. A coleção mostra claramente uso único ou permanente/Scanner.
 
-**Fragmentos: 0/2.** Reunir **2 fragmentos** habilita RESTAURAR CARD. Consome 2 e sorteia um Card Comum inteiro, com 20% para cada um dos cinco comuns. Fragmentos extras são preservados. Recursos de Dados continuam sem crafting ou uso. PREPARADO vem de **2 ciclos de treino no mesmo atributo** e registra +1d6 para somar em uma rolagem apropriada; só um PREPARADO ativo, sem acumulação. O XP usa **15 ciclos**, independentemente de treino e fragmentos.
+**Fragmentos: 0/2.** Reunir **2 fragmentos** habilita RESTAURAR CARD. Consome 2 e sorteia um Card Comum inteiro, com 20% para cada um dos cinco comuns. Fragmentos extras são preservados. Recurso de Dados removido do inventário e dos sorteios. PREPARADO vem de **2 ciclos de treino no mesmo atributo** e registra +1d6 para somar em uma rolagem apropriada; só um PREPARADO ativo, sem acumulação. O XP usa **15 ciclos**, independentemente de treino e fragmentos.
 
 ## Catálogo exclusivo de teste — tudo visível
 
@@ -129,7 +129,7 @@ Abra **http://127.0.0.1:4231/?lab=16**. O botão **Catálogo TESTE** aparece no 
 
 Há cinco abas: **Comida, Itens, Cards, Especiais e Chances**. Todas as opções aparecem independentemente do estoque do pet. É possível simular alimentos, itens do RPG, ativação de cards, testes com bônus, Scanner ligado/desligado, próximo turno e reiniciar a bancada.
 
-A ficha fictícia começa com PV 5/20, Energia do humano 5/20 e Laço 1/10; cada consumível e cada card tem uma cópia de exemplo. Raros são preservados, comuns são gastos e os efeitos expiram ao mudar de turno. Reiniciar a bancada ou recarregar restaura os exemplos. Nada dessa cena usa localStorage ou altera estoque, crédito, progresso, necessidades ou ficha real.
+A ficha fictícia começa com PV do Digimon 5/20, Energia do Digimon 5/20 e Laço 1/10; cada consumível e cada card tem uma cópia de exemplo. Raros são preservados, comuns são gastos e os efeitos expiram ao mudar de turno. Reiniciar a bancada ou recarregar restaura os exemplos. Nada dessa cena usa localStorage ou altera estoque, crédito, progresso, necessidades ou ficha real.
 
 O catálogo só executa em localhost com `PET_CONFIG.mode === 'test'` e a opção `lab=16`. Não aparece na URL normal nem no modo de produção. É uma ferramenta local de protótipo, não um controle de autenticação/identidade; não foi criado backend ou acesso de jogadores.
 
@@ -142,10 +142,9 @@ As chances são calculadas enumerando as 100 faces com modificadores 0, +5 ou �
 | Care Pack adicional por evento (+2 unidades) | 0,5% |
 | Cada Card Comum | 1,4% direto |
 | Cada Card Raro | 0,25% direto |
-| +1 fragmento | 7,5% |
+| +1 fragmento | 10% |
 | +2 fragmentos por evento | 0,5% |
-| +1 Recurso de Dados | 2,5% |
-| +3 Recursos de Dados por evento | 0,5% |
+| Energy Patch adicional por evento (+2 unidades) | 0,5% |
 | Cada evento raro específico | 0,5% |
 
 DIGIMEAT é grátis/infinito, não um drop. O pool tem cinco comuns e quatro raros; restauração sorteia somente comuns. Com Boa Disposição +5, raros somam 6% (1,5% por raro); com Baixa −5, raros e eventos raros ficam em 0%. O seletor do catálogo mostra as chances efetivas, sem mudar a Disposição real do parceiro.
@@ -197,7 +196,7 @@ node --test --test-isolation=none pet-presentation.test.cjs
 node --test --test-isolation=none rpg-reward-rules.test.cjs
 ```
 
-26 testes de cuidado, 30 de downtime, 17 de apresentação/DOM e 12 de regras RPG: **85 testes**. Cobrem intervalos/ausência, dia e meia-noite, uso único de recompensas, necessidade de cuidado para treino, compras/estoque/uso de consumíveis, nada encontrado, materiais/eventos raros, migração, limite de Humor e restauração, sprites, falas e fechamento atrasado de painéis.
+26 testes de cuidado, 31 de downtime, 17 de apresentação/DOM e 12 de regras RPG: **86 testes**. Cobrem intervalos/ausência, dia e meia-noite, uso único de recompensas, necessidade de cuidado para treino, compras/estoque/uso de consumíveis, nada encontrado, materiais/eventos raros, migração, limite de Humor e restauração, sprites, falas e fechamento atrasado de painéis.
 
 Validação adicional no Edge desktop e mobile: quatro cuidados básicos, duas atividades especiais, painel de ciclo, dois treinos em dias distintos → PREPARADO, exploração → card e nada encontrado, quinze ciclos → XP pendente, quatro categorias de inventário, compra de consumível e uso na ficha fictícia, reload, limpeza e ausência de overflow horizontal/erros JavaScript. Capturas atuais: `outputs/digi-pet-gameplay13-*.png`.
 
@@ -227,3 +226,12 @@ Prévia de teste: http://127.0.0.1:4231/?lab=16&life=17. O botão Catálogo de i
 Exterior diurno, com as mesmas formas do jardim e vidro do visor. A sombra foi aproximada dos pés sem mudar pet-motion.js, respiração, tamanho ou reação ao toque. Piscadas automáticas a cada 3 segundos, duração de 120–180ms, mantendo fallback sem sprite e pausas em atividades/abas ocultas. Falas ambientais após 2 minutos desde a última fala, durando 10 segundos; respeitam atividades, painéis e visibilidade, sem fila de mensagens atrasadas. O aviso de sujeira continua único por ocorrência. Valores centralizados em pet-config.js e pet-sprites.js.
 
 Validação: 85 testes passaram e verificação no Edge cobriu reabrir o catálogo, cadência real das piscadas, falas/expiração/pausa em modal e encaixe sem rolagem em 1280×900, 1366×768, 1280×720, 390×660 e 360×800. Capturas: outputs/digi-pet-life17-desktop.png e outputs/digi-pet-life17-mobile.png. Nenhuma publicação, deploy ou integração.
+
+
+## Itens visuais — etapa 18
+
+Prévia: http://127.0.0.1:4231/?lab=16&items=18. Recovery Disk: +10 PV do Digimon; Energy Patch: +10 Energia de combate do Digimon; Care Pack: +3 Pontos de Laço. Textos de uso em um Tópico/Luta. Os dois primeiros atuam no parceiro simulado e não nas barras de cuidado. Integração real continua desligada.
+
+Os três ícones de Time Stranger aparecem no inventário, na revelação e no catálogo. Cards do catálogo mostram a carta azul enviada, sem novas artes. Fontes em assets/items/SOURCES.md. Recurso de Dados removido dos sorteios, inventário, catálogo e resultados antigos; demais itens e progresso preservados. A faixa 81–90 sempre dá um fragmento; o evento Sinal Antigo dá 2 Energy Patch. Caches legados que sorteavam recurso agora dão Recovery Disk.
+
+Validação: testes de domínio, alvo de recuperação, probabilidades e migração; Edge com imagens carregadas, inventário, catálogo, prêmio e mobile sem overflow. Nenhuma publicação, deploy ou integração.

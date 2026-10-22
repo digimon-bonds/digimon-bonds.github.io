@@ -25,15 +25,15 @@
    {min:11,max:45,id:'credits',name:'CRÉDITOS DIGITAIS'},
    {min:46,max:65,id:'food',name:'COMIDA ESPECIAL'},
    {min:66,max:80,id:'care',name:'ITEM DE CUIDADO'},
-   {min:81,max:90,id:'fragment',name:'FRAGMENTO / MATERIAL'},
+   {min:81,max:90,id:'fragment',name:'FRAGMENTO DE CARD'},
    {min:91,max:97,id:'common',name:'CARD COMUM'},
    {min:98,max:99,id:'rareFind',name:'EVENTO RARO'},
    {min:100,max:100,id:'rare',name:'CARD RARO'}
   ],
   careItems:[
-   {id:'recovery-disk',name:'RECOVERY DISK',price:10,consumable:true,target:'RPG',description:'Recupera 10 PV do humano na ficha do RPG.',rpgEffect:{kind:'recover',resource:'hp',amount:10}},
-   {id:'energy-patch',name:'ENERGY PATCH',price:12,consumable:true,target:'RPG',description:'Recupera 10 de Energia do humano. Não é a Energia do Digi-Pet.',rpgEffect:{kind:'recover',resource:'humanEnergy',amount:10}},
-   {id:'care-pack',name:'CARE PACK',price:8,consumable:true,target:'RPG',description:'Recupera 3 Pontos de Laço na ficha do RPG. Não altera Companhia.',rpgEffect:{kind:'recover',resource:'bond',amount:3}}
+   {id:'recovery-disk',name:'RECOVERY DISK',image:'assets/items/recovery-disk.webp',price:10,consumable:true,target:'RPG',description:'Recupera 10 PV do Digimon em um Tópico/Luta.',rpgEffect:{kind:'recover',target:'digimon',resource:'hp',amount:10}},
+   {id:'energy-patch',name:'ENERGY PATCH',image:'assets/items/energy-patch.webp',price:12,consumable:true,target:'RPG',description:'Recupera 10 de Energia do Digimon em um Tópico/Luta.',rpgEffect:{kind:'recover',target:'digimon',resource:'energy',amount:10}},
+   {id:'care-pack',name:'CARE PACK',image:'assets/items/care-pack.webp',price:8,consumable:true,target:'RPG',description:'Recupera 3 Pontos de Laço em um Tópico/Luta. Não altera Companhia.',rpgEffect:{kind:'recover',target:'human',resource:'bond',amount:3}}
   ],
   cards:[
    {id:'power-drive',name:'Power Drive',rarity:'COMMON',test:'Poder',description:'Força extra para superar um obstáculo.'},
