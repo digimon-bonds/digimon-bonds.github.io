@@ -81,14 +81,22 @@
       this.nextTimer = setTimeout(() => {
         this.nextTimer = null;
         if (!this.allowed()) { this.cancel(); return; }
-        this.show('blink');
-        this.returnTimer = setTimeout(() => {
-          this.returnTimer = null;
-          this.show('normal');
-        }, this.draw(this.timing.duration));
-        // Start-to-start intervals stay within 3–8 seconds, independently of blink duration.
-        this.schedule();
+        this.blinkOnce();
       }, this.draw(this.timing.interval));
+    }
+
+    // Shared by automatic blinking and the user's short touch reaction.
+    blinkOnce() {
+      if (!this.allowed() || this.returnTimer !== null) return false;
+      clearTimeout(this.nextTimer);
+      this.nextTimer = null;
+      this.show('blink');
+      this.returnTimer = setTimeout(() => {
+        this.returnTimer = null;
+        this.show('normal');
+      }, this.draw(this.timing.duration));
+      this.schedule();
+      return true;
     }
 
     cancel() {

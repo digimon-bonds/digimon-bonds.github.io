@@ -33,9 +33,44 @@ test('complete application initializes against current HTML without removed-cont
  const actions=['food','play','train','talk'].map(action=>{const n=e.element();n.dataset.action=action;return n});const habitats=['interior','exterior'].map(habitat=>{const n=e.element();n.dataset.habitat=habitat;return n});
  e.doc.querySelector=selector=>({'.pet-thought':thought,'.room-shell':shell,'.scenery-interior':inside,'.scenery-exterior':outside,'dialog[open]':[...e.nodes.values()].find(n=>n.open),'.pet-experience':e.element()}[selector]??null);
  e.doc.querySelectorAll=selector=>({'[data-action]':actions,'.habitat-switch button':habitats,'[data-simulate]':[],'[data-debug]':[]}[selector]||[]);
- for(const file of ['pet-config.js','pet-engine.js','pet-sprites.js','pet-speech.js','digi-pet.js'])e.load(file);
+ for(const file of ['pet-config.js','pet-engine.js','pet-sprites.js','pet-speech.js','pet-motion.js','digi-pet.js'])e.load(file);
  await vm.runInContext('petSprites.ready',e.context);assert.equal(shell.dataset.skin,'street');assert.equal(thought.hidden,false);e.clock.tick(4500);assert.equal(thought.hidden,true);assert.equal(e.nodes.get('pet-thought-text').textContent,'');
  assert.ok(!html.includes('id="open-history"'));assert.ok(!html.includes('id="last-action"'));assert.ok(!html.includes('deck-caption'));assert.ok(!fs.readFileSync(path.join(__dirname,'digi-pet.js'),'utf8').includes('A atividade termina em'));
  assert.equal(e.nodes.get('system-feedback').hidden,true);assert.ok(e.storage.has('digimon-bonds:digi-pet:prototype:v3'));
+ const beforeTouch=e.storage.get('digimon-bonds:digi-pet:prototype:v3');
+ e.nodes.get('pet-touch').emit('click');assert.equal(e.nodes.get('partner-image').dataset.spriteVariant,'blink');assert.equal(e.storage.get('digimon-bonds:digi-pet:prototype:v3'),beforeTouch);
+ e.clock.tick(180);assert.equal(e.nodes.get('partner-image').dataset.spriteVariant,'normal');
+ actions.find(x=>x.dataset.action==='play').emit('click');assert.equal(e.nodes.get('pet-touch').disabled,true);
+ const whileBusy=e.storage.get('digimon-bonds:digi-pet:prototype:v3');e.nodes.get('pet-touch').emit('click');assert.equal(e.storage.get('digimon-bonds:digi-pet:prototype:v3'),whileBusy);
  e.doc.emit('keydown',{ctrlKey:true,shiftKey:true,code:'KeyD',preventDefault(){}});assert.equal(e.nodes.get('history-dialog').open,true);
+});
+
+function motion(){
+ const e=environment();e.load('pet-motion.js');const breath=e.element(),touch=e.element(),records=[];let allowed=true;
+ for(const [name,element]of [['breath',breath],['touch',touch]])element.animate=(frames,options)=>{
+  let resolve,reject;const finished=new Promise((yes,no)=>{resolve=yes;reject=no});
+  const timer=e.clock.set(()=>resolve(),options.duration);
+  const animation={finished,cancel(){e.clock.clear(timer);reject(new Error('cancelled'))}};
+  records.push({name,frames,options,animation});return animation;
+ };
+ const values=[0,.999999,0];let index=0;
+ const controller=e.context.PetMotion.create({breathElement:breath,touchElement:touch,canAnimate:()=>allowed,random:()=>values[index++%values.length]});
+ return {...e,controller,records,allow:value=>{allowed=value}};
+}
+test('idle breathing draws a fresh 2.4–3.4 second duration per completed cycle',async()=>{
+ const e=motion();assert.equal(e.records[0].options.duration,2400);assert.equal(e.records[0].frames[1].transform,'translateY(-1px) scale(1.006, 1.012)');
+ e.clock.tick(2400);await Promise.resolve();assert.equal(e.records[1].options.duration,3400);
+ assert.equal(e.records[0].frames[0].transform,e.records[0].frames[2].transform);e.controller.destroy();await Promise.resolve();
+});
+test('idle motion pauses for critical actions, hidden tabs and reduced motion',async()=>{
+ const e=motion();e.allow(false);e.controller.refresh();assert.equal(e.clock.pending,0);assert.equal(e.controller.react(),false);
+ e.allow(true);e.controller.refresh();assert.equal(e.clock.pending,1);e.media.matches=true;e.media.emit('change');assert.equal(e.clock.pending,0);
+ e.media.matches=false;e.media.emit('change');e.doc.hidden=true;e.doc.emit('visibilitychange');assert.equal(e.clock.pending,0);e.controller.destroy();await Promise.resolve();
+});
+test('touch reaction is a small 320ms tilt on a separate wrapper',async()=>{
+ const e=motion();assert.equal(e.controller.react(),true);const reaction=e.records.find(x=>x.name==='touch');assert.equal(reaction.options.duration,320);assert.equal(reaction.frames[1].transform,'rotate(-1deg) translateY(-1px)');
+ e.clock.tick(320);await Promise.resolve();assert.equal(e.controller.touchAnimation,null);assert.ok(e.controller.breathAnimation);e.controller.destroy();await Promise.resolve();
+});
+test('manual happy blink reuses the normal/blink lifecycle without overlapping timers',async()=>{
+ const e=sprites();await e.controller.ready;assert.equal(e.controller.blinkOnce(),true);assert.equal(e.image.dataset.spriteVariant,'blink');assert.equal(e.controller.blinkOnce(),false);e.clock.tick(120);assert.equal(e.image.dataset.spriteVariant,'normal');e.controller.destroy();assert.equal(e.clock.pending,0);
 });

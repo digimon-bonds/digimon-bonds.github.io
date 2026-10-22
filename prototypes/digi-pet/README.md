@@ -6,11 +6,21 @@ Execute `node serve.mjs` nesta pasta (Node.js 22+) e abra http://127.0.0.1:4231.
 
 ## Visor e cards
 
+O aparelho tem largura máxima de **480px** no desktop e se adapta ao mobile. Fica centralizado horizontal e verticalmente sobre o fundo escuro. Cabeçalho, necessidades, visor, controles, salvamento e reset fazem parte da mesma carcaça. O visor usa altura própria, sem crescer para ocupar a janela. Diálogos continuam sobrepostos; telas muito baixas podem rolar para preservar a usabilidade.
+
 A carcaça agora usa somente Street Link. A faixa superior com textos e seletor de skin foi removida, deixando a estampa exposta. Saves com outra skin são normalizados para Street Link sem perder o progresso. Textura é apenas da carcaça; visor, controles, cards e menus têm fundo próprio opaco. Descansar não escurece a tela inteira. Ações indisponíveis ficam escurecidas e realmente desabilitadas.
 
 Quatro cards separados, com ícones vetoriais originais: carne (Saciedade), rosto (Humor), raio (Energia) e coração (Companhia). Barras mantêm escala 0–100, valores e semântica de medidor acessível. O card de Humor fica vermelho enquanto houver sujeira.
 
-Interior e Exterior compartilham as mesmas dimensões do parceiro. Seu Parceiro e controles mantêm bordas físicas semelhantes ao visor; Descansar/Acordar é maior e dourado. A limpeza ocorre pelo próprio cocô. Agumon agora alterna apenas NORMAL/BLINK, sem movimento corporal. O visor emite um halo cyan discreto. A base dos controles usa uma textura CSS de borracha com círculos em relevo, inspirada em tapete arcade. Não há frases fixas, legenda promocional, histórico ou indicação da última ação nessa área: somente botões.
+Interior e Exterior compartilham as mesmas dimensões do parceiro. Seu Parceiro e controles mantêm bordas físicas semelhantes ao visor; Descansar/Acordar é maior e dourado. A limpeza ocorre pelo próprio cocô. Agumon alterna NORMAL/BLINK e respira de forma sutil durante idle. O visor emite um halo cyan discreto. A base dos controles usa uma textura CSS de borracha com círculos em relevo, inspirada em tapete arcade. Não há frases fixas, legenda promocional, histórico ou indicação da última ação nessa área: somente botões.
+
+## Respiração e toque
+
+`pet-motion.js` aplica respiração em um wrapper, sem interferir na troca de sprites: deslocamento máximo de 1px e escala de 1,006/1,012. Cada ciclo concluído sorteia nova duração entre **2,4 e 3,4 segundos**; não muda a duração no meio do movimento. Pausa durante atividades, diálogos, aba oculta e preferência de movimento reduzido. Navegadores sem Web Animations mantêm a imagem estática, sem erro.
+
+Clicar/tocar no parceiro ou focá-lo e usar Enter/Espaço aciona `blinkOnce()` da camada já existente de sprites. Uma inclinação de até 1 grau, por 320ms, acompanha a reação. Cliques repetidos têm intervalo mínimo de 800ms, sem sobrepor animações. O toque não concede atributos nem muda necessidades, histórico ou save.
+
+A fala de cócegas é opcional: chance de 20% por toque aceito, no máximo uma tentativa de fala aceita a cada 30 segundos, ainda respeitando o fluxo de falas curtas. Exemplos mock: “Isso faz cócegas!” e “Hehe!”. Reações e respiração não executam durante atividades críticas/descanso. A preferência de movimento reduzido também impede a reação visual.
 
 ## Sprites NORMAL e BLINK
 
@@ -149,9 +159,9 @@ O botão Histórico/Teste foi removido. Para desenvolvimento local, o diálogo a
 
 ## Arquivos desta etapa
 
-Alterados: `index.html`, `digi-pet.js`, `pet-config.js`, `care-interface.css` e `README.md`.
+Alterados nesta iteração: `index.html`, `digi-pet.js`, `pet-config.js`, `pet-sprites.js`, `pet-presentation.test.cjs` e `README.md`.
 
-Criados: `pet-sprites.js`, `pet-speech.js`, `pet-presentation.test.cjs`, `assets/agumon-normal.png` e `assets/agumon-blink.png`. O PNG legado `assets/agumon.png` permanece como referência de compatibilidade, mas as variantes ativas são somente normal e blink.
+Criados: `compact-device.css` e `pet-motion.js`. A limpeza visual anterior, as duas sprites e os módulos de fala continuam preservados.
 
 Preservados: lógica de cuidados, schema do save v3, arte urbana, sala, jardim e servidor local. O projeto continua isolado em `prototypes/digi-pet`.
 
@@ -159,9 +169,9 @@ Preservados: lógica de cuidados, schema do save v3, arte urbana, sala, jardim e
 
 `node pet-engine.test.cjs`: 24 testes de tempo offline, conclusão única, descanso parcial, comidas/recusa/preferência, Companhia após graça, Humor composto, limpeza exata, migração/persistência, conversa, debug e canais de fala.
 
-`node pet-presentation.test.cjs`: 12 testes com relógio e DOM simulados. Cobrem limites de tempo das piscadas, fallback de asset ausente, pausa/retomada, descarte dos controladores, dimensões dos PNGs, expiração real das falas, intervalos de silêncio, ausência de filas e inicialização do aplicativo contra o HTML atual, sem referências aos botões removidos.
+`node pet-presentation.test.cjs`: 16 testes com relógio, DOM e animações simulados. Cobrem piscadas/fallback, pausa/retomada, descarte, dimensões dos PNGs, expiração das falas, silêncio, inicialização contra o HTML atual, durações variáveis de respiração, reação de toque de 320ms e blink manual sem sobreposição. A integração simulada também confere que tocar não grava alterações no save e é bloqueado durante atividade.
 
-Total desta iteração: 36 testes passando e sintaxe JavaScript conferida. A validação visual real no navegador desta iteração está pendente: a execução do Edge foi bloqueada pelo revisor automático de aprovação por limite de uso. Isso não foi uma avaliação de risco. Nenhuma captura da etapa anterior deve ser tratada como prévia atualizada desta iteração.
+Total desta iteração: 40 testes passando e sintaxe JavaScript conferida. A validação visual real no navegador desta iteração está pendente pelo bloqueio anterior da execução do Edge pelo revisor automático de aprovação por limite de uso. Isso não foi uma avaliação de risco. Nenhuma captura da etapa anterior deve ser tratada como prévia atualizada desta iteração.
 
 ## Limites
 

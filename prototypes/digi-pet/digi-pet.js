@@ -26,7 +26,7 @@ function showSystemFeedback(text){
  systemFeedbackTimer=setTimeout(()=>{toast.hidden=true;toast.textContent='';},3200);
 }
 const petSpeech=PetSpeech.create({element:document.querySelector('.pet-thought'),textElement:byId('pet-thought-text'),library:PET_SPEECH,settings:P.speech,canSpeak:()=>!document.hidden});
-function showPetSpeech(context,explicit=false){petSpeech.speak(context,explicit);}
+function showPetSpeech(context,explicit=false){return petSpeech.speak(context,explicit);}
 function renderPetSpeech(){petSpeech.observe(engine.speechContext(state));}
 function consumeEvent(){if(state.lastEvent&&state.lastEvent.id>seenEvent){seenEvent=state.lastEvent.id;showSystemFeedback(state.lastEvent.system);showPetSpeech(state.lastEvent.context,true);}}
 const formatTime=ms=>{const seconds=Math.max(0,Math.ceil(ms/1000));return `${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`;};
@@ -69,6 +69,8 @@ function render(){
  byId('history-empty').hidden=state.history.length>0;byId('care-count').textContent=`Treinos concluídos: ${state.activityStats.trainingSessions}`;
  renderPetSpeech();
  petSprites.refresh();
+ petMotion.refresh();
+ byId('pet-touch').disabled=Boolean(state.activity);
 }
 function update(){state=engine.advance(state);consumeEvent();save();render();}
 function interact(action,options={}){const result=engine.act(state,action,Date.now(),options);state=result.state;consumeEvent();showSystemFeedback(result.feedback);if(!result.ok&&result.speechContext)showPetSpeech(result.speechContext,true);save();render();}
@@ -77,6 +79,13 @@ const petSprites=PetSprites.create({
  element:byId('partner-image'),
  variants:mockPartner.sprites,
  canBlink:()=>!state.activity&&!document.querySelector('dialog[open]'),
+});
+const petMotion=PetMotion.create({breathElement:byId('pet-breath'),touchElement:byId('pet-touch'),canAnimate:()=>!state.activity&&!document.querySelector('dialog[open]')});
+let lastTouchAt=-Infinity,lastTickleSpeechAt=-Infinity;
+byId('pet-touch').addEventListener('click',()=>{
+ const now=Date.now();if(state.activity||document.querySelector('dialog[open]')||now-lastTouchAt<P.touch.cooldownMs)return;
+ lastTouchAt=now;petSprites.blinkOnce();petMotion.react();
+ if(now-lastTickleSpeechAt>=P.touch.speechCooldownMs&&Math.random()<P.touch.speechChance&&showPetSpeech('tickled',true))lastTickleSpeechAt=now;
 });
 document.querySelectorAll('[data-action]').forEach(button=>button.addEventListener('click',()=>{if(button.dataset.action==='food'&&!state.activity){update();renderFoods();byId('food-dialog').showModal();}else interact(button.dataset.action);}));
 byId('close-food').addEventListener('click',()=>byId('food-dialog').close());
