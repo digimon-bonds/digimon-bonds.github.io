@@ -1,9 +1,9 @@
 /* Mock display identity; personality and rules are independent configuration. */
-const mockPartner=Object.freeze({humanName:'Tamer',digimonName:'Agumon',species:'Agumon',stage:'Rookie',image:'assets/agumon.png'});
+const mockPartner=Object.freeze({humanName:'Tamer',digimonName:'Agumon',species:'Agumon',stage:'Rookie',sprites:{normal:'assets/agumon-normal.png',blink:'assets/agumon-blink.png'}});
 const engine=globalThis.DigiPetEngine;
 const {PET_CONFIG:P,FOOD_CONFIG,ACTIVITY_CONFIG,PET_SPEECH}=globalThis.DigiPetConfig;
 const byId=id=>document.getElementById(id),room=byId('room');
-let state,storageAvailable=true,loadNotice='',seenEvent=0,feedbackUntil=0,historySignature='';
+let state,storageAvailable=true,loadNotice='',seenEvent=0,historySignature='';
 function validSave(raw){const c=raw?.version===1?raw.stats?.bond:raw?.stats?.companionship;return [1,2,3].includes(raw?.version)&&[raw.stats?.satiety,raw.stats?.energy,c,raw.version===3?raw.baseMood:raw.stats?.mood].every(x=>typeof x==='number'&&Number.isFinite(x));}
 try{
  let rawText=localStorage.getItem(P.storageKey),source=P.storageKey;
@@ -19,23 +19,15 @@ state=engine.advance(state);
 function save(){try{localStorage.setItem(P.storageKey,JSON.stringify(state));storageAvailable=true;}catch{storageAvailable=false;}byId('save-status').textContent=storageAvailable?'SALVO NESTE NAVEGADOR':'SEM SALVAMENTO · SESSÃO TEMPORÁRIA';}
 
 // Two independent channels. System text never enters the pet speech component.
-function showSystemFeedback(text){byId('system-feedback').textContent=text;feedbackUntil=Date.now()+10000;}
-const speechRanks={dirty:120,hungry:100,tired:90,sad:80,lonely:70,play:60,train:60,sleep:60,happy:20,casual:10,greeting:15};
-let currentSpeech=null,pendingSpeech=null;const speechCounts={};
-function showPetSpeech(context,explicit=false){
- if(!PET_SPEECH[context])return;
- const now=Date.now(),priority=explicit?110:(speechRanks[context]||30);
- if(currentSpeech&&now<currentSpeech.until&&priority<=currentSpeech.priority){if(explicit&&context!==currentSpeech.context)pendingSpeech={context,expires:now+P.speechHoldMs*2};return;}
- if(!explicit&&currentSpeech?.context===context)return;
- if(explicit)pendingSpeech=null;
- const phrases=PET_SPEECH[context],index=speechCounts[context]||0;speechCounts[context]=index+1;
- byId('pet-thought-text').textContent=phrases[index%phrases.length];currentSpeech={context,priority,until:now+P.speechHoldMs};
+let systemFeedbackTimer;
+function showSystemFeedback(text){
+ if(!text||text.startsWith('Agumon começou'))return;
+ clearTimeout(systemFeedbackTimer);const toast=byId('system-feedback');toast.textContent=text;toast.hidden=false;
+ systemFeedbackTimer=setTimeout(()=>{toast.hidden=true;toast.textContent='';},3200);
 }
-function renderPetSpeech(){
- const now=Date.now(),need=engine.speechContext(state);
- if(pendingSpeech&&now>=currentSpeech.until){const queued=pendingSpeech;pendingSpeech=null;if(now<=queued.expires&&need!=='dirty'){showPetSpeech(queued.context,true);return;}}
- showPetSpeech(need);
-}
+const petSpeech=PetSpeech.create({element:document.querySelector('.pet-thought'),textElement:byId('pet-thought-text'),library:PET_SPEECH,settings:P.speech,canSpeak:()=>!document.hidden});
+function showPetSpeech(context,explicit=false){petSpeech.speak(context,explicit);}
+function renderPetSpeech(){petSpeech.observe(engine.speechContext(state));}
 function consumeEvent(){if(state.lastEvent&&state.lastEvent.id>seenEvent){seenEvent=state.lastEvent.id;showSystemFeedback(state.lastEvent.system);showPetSpeech(state.lastEvent.context,true);}}
 const formatTime=ms=>{const seconds=Math.max(0,Math.ceil(ms/1000));return `${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`;};
 const activityNames={play:'Brincando',train:'Treinando',sleep:'Descansando'};
@@ -72,29 +64,34 @@ function render(){
  byId('sleep-button').setAttribute('aria-disabled',String(byId('sleep-button').disabled));
  byId('activity-status').hidden=!state.activity;
  if(state.activity){byId('activity-label').textContent=activityNames[state.activity.kind];byId('activity-timer').textContent=formatTime(state.activity.endsAt-Date.now());byId('activity-timer').dateTime=new Date(state.activity.endsAt).toISOString();}
- if(Date.now()>=feedbackUntil){const text=state.activity?`A atividade termina em ${formatTime(state.activity.endsAt-Date.now())}.`:state.waste?'Há uma limpeza pendente. Clique na sujeira para limpar.':'Escolha um cuidado para Agumon.';if(byId('system-feedback').textContent!==text)byId('system-feedback').textContent=text;}
  const signature=JSON.stringify(state.history);
  if(signature!==historySignature){const list=byId('history-list');list.replaceChildren();for(const entry of state.history){const li=document.createElement('li');li.textContent=`${new Date(entry.at).toLocaleString('pt-BR')} · ${engine.labels[entry.action]}${entry.phase==='started'?' (início)':''}${entry.detail?' · '+entry.detail:''}`;list.append(li);}historySignature=signature;}
  byId('history-empty').hidden=state.history.length>0;byId('care-count').textContent=`Treinos concluídos: ${state.activityStats.trainingSessions}`;
- const latest=state.history[0];byId('last-action').textContent=latest?`Último: ${engine.labels[latest.action]}${latest.phase==='started'?' · início':''}`:'Pronto para o primeiro cuidado.';
  renderPetSpeech();
+ petSprites.refresh();
 }
 function update(){state=engine.advance(state);consumeEvent();save();render();}
 function interact(action,options={}){const result=engine.act(state,action,Date.now(),options);state=result.state;consumeEvent();showSystemFeedback(result.feedback);if(!result.ok&&result.speechContext)showPetSpeech(result.speechContext,true);save();render();}
-byId('partner-name').textContent=mockPartner.digimonName;byId('partner-species').textContent=mockPartner.species;byId('partner-stage').textContent=mockPartner.stage;byId('partner-image').src=mockPartner.image;
+byId('partner-name').textContent=mockPartner.digimonName;byId('partner-species').textContent=mockPartner.species;byId('partner-stage').textContent=mockPartner.stage;
+const petSprites=PetSprites.create({
+ element:byId('partner-image'),
+ variants:mockPartner.sprites,
+ canBlink:()=>!state.activity&&!document.querySelector('dialog[open]'),
+});
 document.querySelectorAll('[data-action]').forEach(button=>button.addEventListener('click',()=>{if(button.dataset.action==='food'&&!state.activity){update();renderFoods();byId('food-dialog').showModal();}else interact(button.dataset.action);}));
 byId('close-food').addEventListener('click',()=>byId('food-dialog').close());
 document.querySelectorAll('.habitat-switch button').forEach(button=>button.addEventListener('click',()=>{if(state.activity)return;state.habitat=button.dataset.habitat;update();}));
 byId('sleep-button').addEventListener('click',()=>interact(state.activity?.kind==='sleep'?'wake':'sleep'));
 byId('waste').addEventListener('click',()=>interact('clean'));
-byId('open-history').addEventListener('click',()=>{update();byId('history-dialog').showModal();});byId('close-history').addEventListener('click',()=>byId('history-dialog').close());
+byId('close-history').addEventListener('click',()=>byId('history-dialog').close());
+document.addEventListener('keydown',event=>{if(event.ctrlKey&&event.shiftKey&&event.code==='KeyD'){event.preventDefault();if(!document.querySelector('dialog[open]')){update();byId('history-dialog').showModal();}}});
 document.querySelectorAll('[data-simulate]').forEach(button=>button.addEventListener('click',()=>{state=engine.simulate(state,Number(button.dataset.simulate));consumeEvent();save();render();byId('test-feedback').textContent=`+${button.dataset.simulate} minutos simulados.`;}));
 document.querySelectorAll('[data-debug]').forEach(button=>button.addEventListener('click',()=>{state=engine.debug(state,button.dataset.debug);consumeEvent();save();render();byId('test-feedback').textContent='Ajuste aplicado apenas neste protótipo.';}));
 byId('open-reset').addEventListener('click',()=>byId('reset-dialog').showModal());byId('cancel-reset').addEventListener('click',()=>byId('reset-dialog').close());
-byId('confirm-reset').addEventListener('click',()=>{state=engine.create();seenEvent=0;currentSpeech=null;pendingSpeech=null;showSystemFeedback('Protótipo reiniciado.');showPetSpeech('greeting');save();render();byId('reset-dialog').close();byId('test-feedback').textContent='';});
+byId('confirm-reset').addEventListener('click',()=>{state=engine.create();seenEvent=0;petSpeech.reset();showSystemFeedback('Protótipo reiniciado.');showPetSpeech('greeting');save();render();byId('reset-dialog').close();byId('test-feedback').textContent='';});
 const fullscreen=byId('fullscreen');if(!document.fullscreenEnabled)fullscreen.hidden=true;
 fullscreen.addEventListener('click',async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.querySelector('.pet-experience').requestFullscreen();}catch{showSystemFeedback('Use F11 para ampliar a sala no navegador.');}});
 document.addEventListener('fullscreenchange',()=>fullscreen.setAttribute('aria-label',document.fullscreenElement?'Sair da tela cheia':'Entrar em tela cheia'));
-document.addEventListener('visibilitychange',()=>{if(!document.hidden)update();});window.addEventListener('pagehide',update);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)update();else petSpeech.hide();});window.addEventListener('pagehide',update);
 window.addEventListener('storage',event=>{if(event.key!==P.storageKey)return;try{const raw=JSON.parse(event.newValue);if(validSave(raw)){state=engine.advance(engine.restore(raw));consumeEvent();render();}}catch{}});
-setInterval(update,1000);consumeEvent();if(loadNotice)showSystemFeedback(loadNotice);if(!currentSpeech)showPetSpeech('greeting');save();render();
+setInterval(update,1000);consumeEvent();if(loadNotice)showSystemFeedback(loadNotice);if(!petSpeech.current){const context=engine.speechContext(state);showPetSpeech(['dirty','hungry','tired','sad','lonely'].includes(context)?context:'greeting');}save();render();

@@ -11,6 +11,8 @@
   <link rel="stylesheet" href="care-interface.css">
   <script src="pet-config.js" defer></script>
   <script src="pet-engine.js" defer></script>
+  <script src="pet-sprites.js" defer></script>
+  <script src="pet-speech.js" defer></script>
   <script src="digi-pet.js" defer></script>
 </head>
 <body>
@@ -38,7 +40,7 @@
       <div class="prototype-label"><span></span> PROTÓTIPO LOCAL <b>04</b></div>
     </header>
     <main class="pet-experience">
-      <div class="page-heading"><div class="page-title"><svg><use href="#i-pet"/></svg><h1>DIGI-PET</h1><span class="separator"></span><span>Um pequeno mundo. Um grande vínculo.</span></div><span class="session">SESSÃO LOCAL</span></div>
+      <div class="page-heading"><div class="page-title"><svg><use href="#i-pet"/></svg><h1>DIGI-PET</h1></div><span class="session">SESSÃO LOCAL</span></div>
       <section class="room-shell" data-skin="street" aria-label="Aparelho Digi-Pet Street Link">
         <div class="shell-hardware" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
         <div class="partner-console">
@@ -60,25 +62,26 @@
           <img class="room-scenery scenery-exterior" src="assets/garden.svg" alt="Jardim digital com grama, árvore e céu ao entardecer" draggable="false" hidden>
           <div class="room-vignette" aria-hidden="true"></div>
           <div class="visor-label" id="habitat-name">01 / QUARTO DIGITAL</div>
-          <div class="partner-anchor"><div class="partner-shadow" aria-hidden="true"></div><img id="partner-image" class="partner-image" src="assets/agumon.png" alt="Agumon, parceiro de exemplo" draggable="false"></div>
+          <div class="partner-anchor"><div class="partner-shadow" aria-hidden="true"></div><img id="partner-image" class="partner-image" src="assets/agumon-normal.png" alt="Agumon, parceiro de exemplo" draggable="false"></div>
           <button id="waste" class="waste" type="button" aria-label="Limpar cocô do habitat" title="Clique para limpar · remove a penalidade de sujeira" hidden><svg viewBox="0 0 40 36" aria-hidden="true"><path d="M21 4c7 7-7 7 5 13 8 2 7 6 5 8 9 5 5 9-10 9S0 31 8 25c-4-5 1-9 7-10 6-4 3-7 6-11Z" fill="#9a8260" stroke="#d2b27c" stroke-width="1.5"/></svg><span class="flies" aria-hidden="true"><i></i><i></i><i></i></span></button>
-          <div class="pet-thought" aria-label="Fala de Agumon"><span>AGUMON</span><span id="pet-thought-text">Oi! Que bom te ver.</span></div>
+          <div class="pet-thought" aria-label="Fala de Agumon" hidden><span>AGUMON</span><span id="pet-thought-text"></span></div>
           <div id="activity-status" class="activity-status" hidden aria-label="Atividade em andamento"><span id="activity-label"></span><time id="activity-timer"></time><small>EM ANDAMENTO</small></div>
           <div class="room-bottom"><span><i></i> <span id="condition" role="status">TRANQUILO</span></span><div><span class="sound-label" title="Este protótipo não possui áudio"><svg><use href="#i-sound"/></svg> SEM ÁUDIO</span><button id="fullscreen" class="fullscreen" type="button" aria-label="Entrar em tela cheia" title="Tela cheia"><svg><use href="#i-expand"/></svg></button></div></div>
         </div>
         </div>
         <div class="device-trim" aria-hidden="true"><span class="device-led"></span><span>PARTNER LINK</span><span class="speaker"><i></i><i></i><i></i><i></i><i></i></span></div>
-        <div class="interaction-deck"><div class="deck-caption"><span id="system-feedback" role="status" aria-live="polite">Pronto para cuidar de Agumon.</span><span>PEQUENOS CUIDADOS, BOA COMPANHIA</span></div>
+        <div class="interaction-deck">
           <div class="actions" role="group" aria-label="Interações com o parceiro">
             <button type="button" data-action="food"><svg><use href="#i-food"/></svg><span>COMIDA</span><span class="action-number" aria-hidden="true">01</span></button>
             <button type="button" data-action="play"><svg><use href="#i-play"/></svg><span>BRINCAR</span><span class="action-number" aria-hidden="true">02</span></button>
             <button type="button" data-action="train"><svg><use href="#i-train"/></svg><span>TREINAR</span><span class="action-number" aria-hidden="true">03</span></button>
             <button type="button" data-action="talk"><svg><use href="#i-talk"/></svg><span>CONVERSAR</span><span class="action-number" aria-hidden="true">04</span></button>
           </div>
-          <div class="care-tools"><span id="last-action">Pronto para o primeiro cuidado.</span><div><button id="sleep-button" type="button" aria-pressed="false">☾ Descansar</button><button id="open-history" type="button">Histórico / teste</button></div></div>
+          <div class="care-tools"><div><button id="sleep-button" type="button" aria-pressed="false">☾ Descansar</button></div></div>
         </div>
       </section>
       <footer class="experience-footer"><span id="save-status">SALVO NESTE NAVEGADOR</span><button id="open-reset" type="button">Resetar protótipo</button></footer>
+      <div id="system-feedback" class="system-toast" role="status" aria-live="polite" hidden></div>
       <dialog id="food-dialog" aria-labelledby="food-title"><div class="food-heading"><div><span class="eyebrow">HORA DO LANCHE</span><h2 id="food-title">O que vamos oferecer?</h2></div><button id="close-food" type="button" aria-label="Fechar menu de comidas">×</button></div><p class="food-intro">Perfil de teste: Fogo / Vacina. Ofereça alimentos para descobrir as preferências deste parceiro.</p><div id="food-list" class="food-list"></div><p class="food-hint">Os efeitos e preferências são exclusivos deste protótipo.</p></dialog>
       <dialog id="history-dialog" aria-labelledby="history-title"><h2 id="history-title">Pequenos cuidados</h2><p id="care-count"></p><p id="history-empty">O primeiro cuidado ainda está por vir.</p><ol id="history-list"></ol><div class="test-time"><p>Ferramentas locais · apenas o relógio e os dados deste pet.</p><div class="debug-grid"><button id="simulate-time" type="button" data-simulate="5">+5 minutos</button><button type="button" data-simulate="60">+1 hora</button><button type="button" data-simulate="720">+12 horas</button><button type="button" data-simulate="1440">+24 horas</button><button type="button" data-debug="waste">Forçar sujeira</button><button type="button" data-debug="complete">Concluir atividade</button><button type="button" data-debug="reduce:satiety">−20 Saciedade</button><button type="button" data-debug="reduce:mood">−20 Humor-base</button><button type="button" data-debug="reduce:energy">−20 Energia</button><button type="button" data-debug="reduce:companionship">−20 Companhia</button></div><p id="test-feedback" role="status"></p></div><button id="close-history" type="button">Voltar ao pet</button></dialog>
       <dialog id="reset-dialog" aria-labelledby="reset-title"><h2 id="reset-title">Começar de novo?</h2><p>Restaura os quatro estados, o Interior e o histórico deste protótipo. Nenhum outro dado do Bonds será alterado.</p><div class="dialog-actions"><button id="cancel-reset" type="button" autofocus>Cancelar</button><button id="confirm-reset" type="button">Resetar dados</button></div></dialog>

@@ -10,14 +10,33 @@ A carcaça agora usa somente Street Link. A faixa superior com textos e seletor 
 
 Quatro cards separados, com ícones vetoriais originais: carne (Saciedade), rosto (Humor), raio (Energia) e coração (Companhia). Barras mantêm escala 0–100, valores e semântica de medidor acessível. O card de Humor fica vermelho enquanto houver sujeira.
 
-Interior, Exterior e Agumon estático permanecem. Os dois ambientes compartilham exatamente as dimensões do parceiro usadas no Interior, inclusive nos breakpoints menores. O módulo Seu Parceiro e o módulo de botões receberam bordas físicas em camadas, trilhos e profundidade semelhantes ao visor. Descansar/Acordar é maior e dourado. Não há botão separado de limpeza: o cocô é o próprio controle de limpar, acessível também por teclado. Sem novas animações do personagem; as moscas existentes respeitam movimento reduzido.
+Interior e Exterior compartilham as mesmas dimensões do parceiro. Seu Parceiro e controles mantêm bordas físicas semelhantes ao visor; Descansar/Acordar é maior e dourado. A limpeza ocorre pelo próprio cocô. Agumon agora alterna apenas NORMAL/BLINK, sem movimento corporal. O visor emite um halo cyan discreto. A base dos controles usa uma textura CSS de borracha com círculos em relevo, inspirada em tapete arcade. Não há frases fixas, legenda promocional, histórico ou indicação da última ação nessa área: somente botões.
+
+## Sprites NORMAL e BLINK
+
+`pet-sprites.js` é uma camada de apresentação independente do jogo. O perfil visual atual usa:
+
+```js
+sprites: {
+  normal: 'assets/agumon-normal.png',
+  blink: 'assets/agumon-blink.png'
+}
+```
+
+NORMAL é uma cópia intacta do PNG atual; BLINK é a imagem enviada pelo usuário, sem edição. Ambas possuem o mesmo tamanho de canvas. Os dois arquivos são pré-carregados/decodificados antes de iniciar as trocas, e a dimensão do elemento de imagem não muda.
+
+Intervalos aleatórios entre inícios de piscada: 3–8 segundos. Duração aleatória da piscada: 120–180 ms. Retorna automaticamente a NORMAL. Se BLINK estiver ausente ou falhar, permanece NORMAL sem tentativas contínuas nem imagem quebrada na tela. O estado do jogo e o localStorage não armazenam a piscada.
+
+Durante atividades (inclusive descanso), diálogos, aba oculta ou preferência de movimento reduzido, as piscadas são suspensas e a imagem volta para NORMAL. Ao retomar, começa um novo intervalo completo, sem acumular piscadas. `destroy()` cancela timers e listeners. O mapa de variantes permite acrescentar nomes no futuro, mas não foram implementados happy, sad, tired ou sleeping.
 
 ## Dois canais de texto
 
 - **PET SPEECH**: exclusivamente o balão de Agumon. Biblioteca temporária em `PET_SPEECH`, por contexto, independente da espécie. Frases curtas de fome, sono, solidão, tristeza, sujeira, comida e atividades.
-- **SYSTEM FEEDBACK**: exclusivamente a área inferior. Início/fim de ações, recusa mecânica, intervalo de conversa, migração e instruções de cuidado.
+- **SYSTEM FEEDBACK**: notificações discretas e temporárias, fora da área dos botões. Conclusões, recusas e avisos de migração desaparecem após 3,2 segundos. O início da atividade e sua contagem não são repetidos em frases; o relógio do visor basta.
 
-A UI implementa `showPetSpeech` e `showSystemFeedback` separadamente. Nunca coloca avisos de sistema no balão. Uma fala fica normalmente pelo menos 8 segundos, com fila curta para reações. Necessidades urgentes podem interromper mensagens menos importantes. Prioridade contextual: sujeira, fome, cansaço, tristeza, solidão, atividade, casual. Reações diretas ao cuidado têm prioridade sobre fala casual; não há várias falas simultâneas.
+A UI implementa `showPetSpeech` e `showSystemFeedback` separadamente. `pet-speech.js` controla o ciclo do balão: aparece por 4,5 segundos e é escondido de verdade, com o texto limpo. Não há fila de falas antigas, repetição automática de frases casuais/felizes ou balão permanente durante atividades. Reações a ações são breves, com intervalo mínimo de 2 segundos entre elas.
+
+Lembretes de necessidade mantêm a prioridade do estado (sujeira, fome, cansaço, tristeza, solidão), mas há pelo menos 60 segundos de silêncio desde a última fala e 3 minutos antes de repetir o mesmo contexto. Resolver a causa remove uma reclamação automática ainda visível. A saudação aparece uma vez por abertura e desaparece. Os tempos ficam em `PET_CONFIG.speech`; aba oculta limpa o balão.
 
 ## Configuração central
 
@@ -126,19 +145,23 @@ JSON inválido ou formato incompatível é preservado numa chave `...:v3:backup:
 
 ## Histórico / teste
 
-Todas as ferramentas de teste ficam no diálogo: +5 minutos, +1 hora, +12 horas, +24 horas, forçar sujeira, reduzir cada necessidade e concluir atividade. A simulação avança só o relógio deste pet e depois ajusta os timestamps, sem mudar o relógio do computador. São ferramentas explícitas de desenvolvimento, não recompensas do jogo.
+O botão Histórico/Teste foi removido. Para desenvolvimento local, o diálogo ainda pode ser aberto pelo atalho **Ctrl+Shift+D**: +5 minutos, +1 hora, +12 horas, +24 horas, forçar sujeira, reduzir necessidades e concluir atividade. Nada disso aparece na área principal de controles. A simulação afeta somente o relógio do pet. O histórico continua salvo internamente.
 
 ## Arquivos desta etapa
 
-Alterados nesta iteração: `index.html`, `digi-pet.js`, `pet-engine.js`, `pet-config.js`, `care-interface.css` e `README.md`. Nenhum arquivo novo.
+Alterados: `index.html`, `digi-pet.js`, `pet-config.js`, `care-interface.css` e `README.md`.
 
-Preservados: lógica de cuidados e testes, arte urbana, sala, jardim, PNG de Agumon e servidor local. O projeto continua isolado em `prototypes/digi-pet`.
+Criados: `pet-sprites.js`, `pet-speech.js`, `pet-presentation.test.cjs`, `assets/agumon-normal.png` e `assets/agumon-blink.png`. O PNG legado `assets/agumon.png` permanece como referência de compatibilidade, mas as variantes ativas são somente normal e blink.
+
+Preservados: lógica de cuidados, schema do save v3, arte urbana, sala, jardim e servidor local. O projeto continua isolado em `prototypes/digi-pet`.
 
 ## Verificação
 
 `node pet-engine.test.cjs`: 24 testes de tempo offline, conclusão única, descanso parcial, comidas/recusa/preferência, Companhia após graça, Humor composto, limpeza exata, migração/persistência, conversa, debug e canais de fala.
 
-No Edge nesta iteração: 1440×900, 1366×768, 1024×650, 390×844 e 360×740, sem scroll e com controles visíveis. Conferidos por medidas os mesmos tamanhos de Agumon nos dois ambientes e as mesmas dimensões/posição do visor antes e durante descanso. Relógio dentro dos limites da tela, bloqueio nativo dos botões (incluindo cliques programáticos), desbloqueio ao acordar/concluir, limpeza pelo cocô e Street Link fixa após recarga. Sem erros JavaScript. Os fluxos mecânicos de comida, save e migração já foram verificados na etapa anterior; os 24 testes de lógica continuam passando. Telas menores podem rolar para preservar usabilidade.
+`node pet-presentation.test.cjs`: 12 testes com relógio e DOM simulados. Cobrem limites de tempo das piscadas, fallback de asset ausente, pausa/retomada, descarte dos controladores, dimensões dos PNGs, expiração real das falas, intervalos de silêncio, ausência de filas e inicialização do aplicativo contra o HTML atual, sem referências aos botões removidos.
+
+Total desta iteração: 36 testes passando e sintaxe JavaScript conferida. A validação visual real no navegador desta iteração está pendente: a execução do Edge foi bloqueada pelo revisor automático de aprovação por limite de uso. Isso não foi uma avaliação de risco. Nenhuma captura da etapa anterior deve ser tratada como prévia atualizada desta iteração.
 
 ## Limites
 
