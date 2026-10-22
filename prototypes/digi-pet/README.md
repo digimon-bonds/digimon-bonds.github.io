@@ -156,3 +156,9 @@ node --test --test-isolation=none pet-presentation.test.cjs
 Validação adicional no Edge desktop e mobile: quatro cuidados básicos, duas atividades especiais, painel de ciclo, três treinos em dias distintos → PREPARADO, exploração → card e nada encontrado, dez ciclos → XP pendente, quatro categorias de inventário, compra/uso de consumível, reload, limpeza e ausência de overflow horizontal/erros JavaScript. Capturas atuais: `outputs/digi-pet-gameplay13-*.png`.
 
 Nenhum build de publicação, deploy, push, merge, workflow, GitHub Pages ou módulo existente do Bonds foi alterado.
+
+## Encaixe na janela — etapa 14
+
+O aparelho agora tem escala padrão de 90% e reduz proporcionalmente conforme a altura disponível. A largura natural de até 480px é preservada no cálculo; o visor e controles diminuem juntos. Painéis de inventário e Digi-Cycle mantêm tamanho legível e rolagem interna quando necessário. O ajuste roda ao abrir, carregar fontes, redimensionar e alternar tela cheia, sem esconder conteúdo com overflow.
+
+Validado sem rolagem da página em 1440×900, 1366×768, 1280×720, 360×800 e 390×660, mantendo o inventário clicável. Arquivo: device-fit.js. Prévia: http://127.0.0.1:4231/?fit=14. Nada publicado.
