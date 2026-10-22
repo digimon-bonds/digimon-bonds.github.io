@@ -1,42 +1,93 @@
-# Digi-Pet — etapa 1: protótipo visual
+# Digi-Pet — protótipo funcional local
 
-## Abrir localmente
+## Abrir
 
-Abra `index.html` diretamente no navegador. A sala, as animações e os quatro botões funcionam offline, sem instalação.
-
-Para usar um servidor local, com Node.js disponível:
+Com Node.js 22 ou superior, execute nesta pasta:
 
 ```powershell
 node serve.mjs
 ```
 
-Abra http://127.0.0.1:4231. Encerre com Ctrl+C. Se estiver na raiz do repositório, use `node prototypes/digi-pet/serve.mjs`.
+Abra http://127.0.0.1:4231. Ctrl+C encerra o servidor. Na raiz da branch do projeto: `node prototypes/digi-pet/serve.mjs`.
 
-## Composição
+O HTML também pode ser aberto diretamente para uma prévia offline; para persistência previsível, use sempre o mesmo endereço local e navegador. O armazenamento de `file://` depende do navegador e é separado do endereço HTTP.
 
-Aparelho compacto em navy e azul-petróleo, com carcaça arredondada, moldura espessa, visor rebaixado, reflexo de vidro e vinheta suave. Botões com relevo e pequenos detalhes físicos de luz e saída de som decorativa. Cyan na iluminação e âmbar em pequenos detalhes. Agumon menor, centralizado no mini-habitat, com respiração, sombra e partículas suaves. Nome, espécie, estágio e indicador visual de link estável ficam na carcaça, fora da cena. Todos esses elementos são demonstrativos.
+## Visual preservado
 
-O seletor **Interior / Exterior** troca apenas a apresentação, sem persistência ou efeito nas regras. Interior: quarto compacto com janela digital, terminal, cama, planta e brinquedo. Exterior: jardim com grama, árvore, céu ao entardecer, banco e luminária digital. A escolha inicial ao abrir é Interior.
+O visor, a carcaça, o quarto e o jardim permanecem. O seletor Interior / Exterior também é salvo. Agumon continua sendo o PNG de exemplo. Respiração, movimento, sombra animada, partículas e reação corporal foram desativados/removidos: a imagem permanece estática, inclusive dormindo. O sono é indicado por texto e iluminação suave, sem novos assets do personagem.
 
-Comida, Brincar, Treinar e Conversar mostram frases por 3,2 segundos e uma reação visual. Não alteram atributos nem gravam estado. O botão de ampliação usa tela cheia do navegador quando disponível; Esc sai. Não há áudio. A preferência do sistema por movimento reduzido desativa animações.
+## Quatro estados (0 a 100)
 
-## Arquivos
+| Estado | Inicial | Comportamento |
+| --- | ---: | --- |
+| Saciedade | 65 | Sobe ao comer; diminui com tempo e treino. |
+| Humor | 60 | Sobe ao brincar e conversar. Não cai pela ausência. |
+| Energia | 70 | Gasta em brincadeiras/treino; recupera acordado ou dormindo. |
+| Vínculo | 10 | Sobe ao conversar e nunca diminui com o tempo. É exclusivo deste protótipo. |
 
-- `index.html`: estrutura semântica da experiência e ícones vetoriais locais.
-- `digi-pet.css`: composição, responsividade, estados e animações.
-- `digi-pet.js`: objeto `mockPartner`, função `renderPartner`, seletor acessível de habitat e feedback temporário.
-- `assets/room.svg`: cenário vetorial original, editável separadamente.
-- `assets/garden.svg`: cenário externo vetorial original, editável separadamente.
-- `assets/agumon.png`: placeholder reutilizado de `site/assets/partner-cutouts/agumon.png` do Bonds; permanece arte do personagem original, sem reivindicação de autoria.
-- `serve.mjs`: servidor estático opcional, limitado a `127.0.0.1:4231`.
-- `README.md`: acesso e escopo.
+Os indicadores são números discretos, sem barras. Condições derivadas, em ordem de prioridade: Dormindo; Com fome (Saciedade ≤30); Cansado (Energia ≤25); Feliz (Humor ≥75); Tranquilo. Condições não são atributos adicionais nem modificam recursos oficiais.
 
-## Limite da etapa
+## Ações e regras
 
-O objeto mock é somente uma entrada de apresentação, sem constituir um modelo permanente de personagem. A imagem pode ser trocada pela propriedade `image`; `renderPartner(partner)` concentra a apresentação dos dados. Integração futura exige autorização e definição do contrato real.
+| Ação | Efeito | Limite |
+| --- | --- | --- |
+| Comida | +20 Saciedade | Não alimenta se já estiver em 100. |
+| Brincar | +15 Humor, −12 Energia | Exige Energia ≥12. |
+| Treinar | −20 Energia, −8 Saciedade | Exige Energia ≥20 e Saciedade ≥10. |
+| Conversar | +5 Vínculo, +4 Humor | Disponível acordado. |
+| Dormir | Liga descanso: +8 Energia, −1 Saciedade por minuto | Sem ganho instantâneo; acorda automaticamente em 100 Energia. |
+| Acordar | Encerra o sono | Sem alteração instantânea de estados. |
+| Limpar | Remove um cocô | Sem bônus ou punições de estados. |
 
-Sem APIs, backend, autenticação, armazenamento, ficha, XP, Laço ou regras. Nenhuma alteração em módulos existentes, build, publicação ou workflows. O protótipo fica em `prototypes/digi-pet`, fora do diretório `site` usado pelo build atual. Nada foi publicado, enviado ao GitHub ou mesclado.
+As quatro ações principais têm intervalo de 5 segundos para repetir a mesma ação. Outras ações continuam disponíveis. Durante o sono, é necessário acordar antes de usar as quatro ações; limpar e trocar ambiente continuam possíveis. Valores ficam entre 0 e 100. Uma ação recusada explica o motivo sem registrar sucesso nem gastar estados.
 
-## Verificação local
+Cada sucesso registra ação e horário; o histórico mantém as últimas 12 entradas e contadores acumulados. Treinos são registrados nesse histórico/contador, sem criar outro atributo, XP, PL, evolução ou bônus de combate. Mensagens são placeholders de Agumon; os dados de apresentação continuam no `mockPartner`.
 
-Conferido no Edge: 1440×900, 1366×768, 1024×650, 390×844 e 360×640, sem scroll e com os quatro botões visíveis. Alternância Interior / Exterior conferida em desktop e celular, incluindo seleção visual e atributos `aria-pressed`. Verificados os quatro feedbacks, desaparecimento da mensagem, carregamento das imagens e uso por `file://`. Sem erros JavaScript ou requisições externas. Telas abaixo da altura mínima podem rolar para preservar a usabilidade.
+## Passagem do tempo e ausência gentil
+
+- Um passo a cada 60 segundos: acordado, −2 Saciedade e +1 Energia; dormindo, −1 Saciedade e +8 Energia.
+- A interface verifica o relógio a cada segundo e ao voltar à aba. Minutos incompletos são preservados; não há contagem duplicada ao recarregar.
+- Iniciar ou encerrar sono começa um novo minuto de descanso/atividade, sem aproveitar uma fração de minuto anterior para ganhar energia instantânea.
+- Após uma ausência, calcula no máximo 30 minutos; o excesso é descartado e não vira dívida nas próximas visitas.
+- A perda passiva de Saciedade para em 20. Se um treino já tiver levado abaixo disso, o relógio não diminui mais nem oferece recuperação artificial.
+- Humor e Vínculo não caem com o tempo. Sem doença, morte, perda de XP ou punição por ausência.
+
+## Digestão e limpeza
+
+Uma refeição agenda digestão para 2 minutos depois, se não houver cocô ou digestão pendente. Novas refeições não empilham sujeira nem adiam a digestão em curso. No máximo um cocô aparece no cenário, compartilhado entre Interior e Exterior. Limpar o remove. A sujeira não reduz estados, não causa doença e não gera penalidades; é uma necessidade simples de cuidado, sem um quinto atributo.
+
+## Salvar e resetar
+
+`localStorage`, chave exclusiva:
+
+```text
+digimon-bonds:digi-pet:prototype:v1
+```
+
+Guarda os quatro estados, sono, habitat, digestão, sujeira, horários, contadores e histórico. Não armazena ficha real nem dados de outros módulos. Salva após ações e atualizações de tempo; outra aba acompanha o estado salvo mais recente. Valores inválidos são normalizados; JSON inválido inicia um pet novo. Se o navegador bloquear o armazenamento, o jogo continua em memória e o rodapé indica sessão temporária.
+
+No rodapé, **Resetar protótipo → Resetar dados** restaura apenas esta chave, inclusive histórico, sono, sujeira, relógio e ambiente. Há opção Cancelar. Nenhuma outra chave do Bonds é removida.
+
+Para testar sem esperar: **Histórico / teste → Simular +5 minutos**. Avança somente o relógio do pet, aplica as mesmas regras de tempo/digestão e registra a simulação; não altera o relógio do computador.
+
+## Arquivos desta etapa
+
+Alterados: `index.html`, `digi-pet.css`, `digi-pet.js`, `README.md`.
+
+Criados: `pet-engine.js` (configuração e funções puras de estado/tempo/ações/validação) e `pet-engine.test.cjs` (testes determinísticos).
+
+Preservados: `assets/room.svg`, `assets/garden.svg`, `assets/agumon.png`, `serve.mjs`.
+
+`mockPartner` continua sendo só apresentação temporária. `pet-engine.js` guarda exclusivamente o estado deste experimento, independente das regras do RPG. Nenhum contrato de ficha real foi criado.
+
+## Verificação
+
+Execute `node pet-engine.test.cjs`: 10 testes de efeitos, cooldown, limites, tempo fracionado, ausência longa, sono, digestão/limpeza, restauração, simulação e condições.
+
+Conferência no Edge: ações, recarga e nova aba, histórico, cancelamento/confirmação de reset, simulação de tempo, sono, limpeza, ausência de 10 dias, sincronização entre abas e armazenamento inválido/bloqueado. Layout sem scroll em 1440×900, 1366×768, 1024×650, 390×844 e 360×740. Sem animação do personagem, erros JavaScript ou requisições externas. Telas menores podem rolar para preservar controles.
+
+## Referência e limites
+
+O ciclo de alimentação, diversão, sono e limpeza foi inspirado no manual oficial Tamagotchi Connection da Bandai: https://www.bandai.com/amfile/file/download/file/242/product/1297925/ . Os valores e proteções deste protótipo são escolhas próprias para validação, não regras da Bandai.
+
+Sem backend, ficha real, autenticação, IA, Forumeiros, XP, PL ou Laço oficial. Somente arquivos em `prototypes/digi-pet`, fora do build de publicação. Nenhuma publicação, deploy, push, merge, mudança em GitHub Pages ou workflow.
