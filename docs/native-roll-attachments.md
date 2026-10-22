@@ -1,6 +1,6 @@
 # Native roll attachments — local review only
 
-Status: prepared on `codex/native-roll-attachments`. Do not push or deploy without a later explicit request.
+Status: publication authorized by the user after local review on `codex/native-roll-attachments`.
 
 ## Evidence inspected before implementation
 
@@ -39,10 +39,10 @@ The existing bridge starts the module once. Mutation observers reuse the first m
 ## Validation
 
 - 283 automated tests passed, including six association/recognition regressions.
-- 18 browser checks passed against real public example posts #523 and #524.
-- Browser checks cover exact original content/profile preservation, exact dice HTML/order, copied totals, idempotence, default-open state, official-link fallback, classic-skin fallback, missing CSS, changed source images, rendering exceptions, failed reads, one successful metadata read, observer stability, duplicate DOM IDs and consecutive rolls.
+- 20 browser checks passed against real public example posts #523 and #524.
+- Browser checks cover exact original content/profile preservation, exact dice HTML/order, copied totals, idempotence, default-open state, official-link fallback, classic-skin fallback, missing CSS, changed source images, rendering exceptions, failed reads, one successful metadata read, observer stability, duplicate DOM IDs, consecutive rolls, editing the source narrative and removing the source post. Removing the source in the local test reveals the unchanged official roll as an independent post; editing the source leaves the same official result. Native server permissions and the ability to request further rolls are unchanged.
 - Mobile preview: 390px viewport and 390px document width, all five original dice images loaded.
-- Production build passed locally. No GitHub push, workflow dispatch, backend deployment, forum edit, roll request or post deletion was performed.
+- Production build passed locally. The preview phase performed no GitHub push, workflow dispatch, backend deployment, forum edit, roll request or post deletion. Publication was authorized afterwards; the implementation remains unchanged.
 
 Local review artifacts (outside the repository):
 
