@@ -53,7 +53,8 @@ test('complete application initializes against current HTML without removed-cont
  actions.find(x=>x.dataset.action==='explore').emit('click');assert.equal(e.nodes.get('downtime-title').textContent,'ÁREA DE DADOS // SETOR 01');
  descendants(e.nodes.get('downtime-dialog')).find(x=>x.textContent==='INICIAR EXPLORAÇÃO').emit('click');assert.equal(vm.runInContext('state.activity.kind',e.context),'explore');
  vm.runInContext("state=DigiDowntime.debug(state,'roll',Date.now(),95);state=DigiDowntime.debug(state,'finishExplore');save();render();",e.context);
- assert.equal(e.nodes.get('downtime-title').textContent,'ROLANDO… D100');
+ assert.equal(e.nodes.get('downtime-title').textContent,'CARD RARO');
+ assert.ok(!descendants(e.nodes.get('downtime-dialog')).some(x=>/D100|ROLANDO|Disposição/.test(x.textContent)));
  // A delayed native close event from the previous chooser must not cancel the
  // newly opened reveal or acknowledge its pending reward before dismissal.
  e.nodes.get('downtime-dialog').emit('close');assert.equal(vm.runInContext('state.downtime.results[0].seen',e.context),false);

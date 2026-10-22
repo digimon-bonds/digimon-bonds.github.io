@@ -3,9 +3,9 @@
  'use strict';
  const D=globalThis.DigiDowntime,C=D.config;
  const panel=document.createElement('dialog');panel.id='downtime-dialog';panel.setAttribute('aria-labelledby','downtime-title');document.querySelector('.pet-experience').append(panel);
- let currentView=null,presentingId=null,rollTimers=[],openingPanel=false;
+ let currentView=null,presentingId=null,openingPanel=false;
  function finishPresentation(){
-  rollTimers.forEach(clearTimeout);rollTimers=[];currentView=null;
+  currentView=null;
   if(presentingId){const r=state.downtime.results.find(r=>r.id===presentingId);if(r)r.seen=true;presentingId=null;save();}
  }
  function closePanel(){finishPresentation();panel.close();}
@@ -97,7 +97,7 @@
    const collection=el('div',undefined,'collection-grid'),groups=new Map();for(const card of i.cards){if(!groups.has(card.id))groups.set(card.id,{card,quantity:0});groups.get(card.id).quantity++;}
    for(const {card,quantity}of groups.values()){const tile=el('section',undefined,'collection-item'),image=el('img');image.src=card.image;image.alt='';tile.append(image,el('small',`${card.rarity} · Quantidade: ${quantity}`),el('strong',card.name),el('p',`+1d6 em um teste de ${card.effect.test}`),el('small','Consumível futuro · 1 teste por card'),button('Ver Card',()=>revealCard(card)));collection.append(tile);}panel.append(collection);
   }else{
-   const fragments=el('section',undefined,'reward-tile');fragments.append(el('small','FRAGMENTOS DE CARD','eyebrow'),el('h3',`${i.fragments} / 3`),el('p','Material consumível de restauração. Reúna 3 para obter um Card Comum.'),button('RESTAURAR CARD',()=>{const r=commit(D.restoreCard(state));if(r.ok)revealCard(r.card);},i.fragments<3));panel.append(fragments);
+   const fragments=el('section',undefined,'reward-tile');fragments.append(fragmentArtwork(),el('small','FRAGMENTOS DE CARD','eyebrow'),el('h3',`${i.fragments} / 3`),el('p','Material consumível de restauração. Reúna 3 para obter um Card Comum.'),button('RESTAURAR CARD',()=>{const r=commit(D.restoreCard(state));if(r.ok)revealCard(r.card);},i.fragments<3));panel.append(fragments);
    const data=el('section',undefined,'reward-tile');data.append(el('small','RECURSO DE DADOS','eyebrow'),el('h3',`Quantidade: ${i.data['data-resource']||0}`),el('p','Material especial guardado. Não consumível nesta etapa; uso futuro a definir.'));panel.append(data);
    if(d.prepared){const tile=el('section',undefined,'reward-tile');tile.append(el('small','BENEFÍCIO PRONTO','eyebrow'),el('h3',`PREPARADO // ${d.prepared.label}`),el('p','Quantidade: 1 · +1d6 em um teste apropriado. Consumível futuro; não acumula.'));panel.append(tile);}
    line(`${d.pendingBondXP} XP de convivência pendente · recompensa não consumível, aguardando integração futura.`);
@@ -109,14 +109,34 @@
   wrap.append(el('small',card.rarity==='RARE'?'SINAL EXCEPCIONAL // CARD RARO':'SIGNAL DETECTED // CARD DATA FOUND','eyebrow'),image,el('small',`CARD // ${card.rarity}`),el('h3',card.name),el('p',`+1d6 em UM teste de ${card.effect.test}.`),el('p',card.description));panel.append(wrap);line('Benefício registrado na coleção local. Sem aplicação ou consumo na ficha nesta etapa.');
  }
  function revealCard(card){heading('DADOS RESTAURADOS','Card encontrado');cardContent(card);panel.append(button('Ver coleção',()=>inventory('cards')));open('card');}
+ function fragmentArtwork(){
+  const art=el('div',undefined,'fragment-artwork'),image=el('img');image.src='assets/card-placeholder.png';image.alt='Fragmento de card rasgado pela metade';art.append(image);return art;
+ }
+ function rewardContent(result){
+  const r=result.reward,food=FOOD_CONFIG.find(f=>f.id===r.food),item=C.careItems.find(i=>i.id===r.item);
+  const quantity=r.fragments??r.credits??Number(r.text.match(/\+(\d+)/)?.[1]||1);
+  const tile=el('section',undefined,`loot-reveal loot-${result.kind}`);
+  let label=r.text,detail='',tab='items';
+  if(food){const image=el('img');image.src=food.image;image.alt=food.name;image.className='loot-food-art';tile.append(image);label=`+${quantity} ${food.name}`;detail=`+${food.satiety} Saciedade${food.energy?` · +${food.energy} Energia`:''}${food.mood?` · +${food.mood} Humor`:''} por porção`;tab='food';}
+  else if(r.fragments){tile.append(fragmentArtwork());label=`+${r.fragments} ${r.fragments===1?'Fragmento de Card':'Fragmentos de Card'}`;detail=`${state.downtime.inventory.fragments} / 3 fragmentos no inventário. Reúna 3 para restaurar um card.`;tab='special';}
+  else if(r.credits){tile.append(el('div','CR','loot-emblem loot-credits-art'));detail='Créditos para alimentos e cuidados na loja do inventário.';tab='food';}
+  else if(item){tile.append(el('div',item.id==='energy-patch'?'ϟ':'+','loot-emblem loot-care-art'));detail=item.description;}
+  else if(result.kind==='nothing'){tile.append(el('div','…','loot-emblem loot-empty-art'));detail='Agumon voltou bem. A atividade conta para o Digi-Cycle de hoje.';}
+  else{tile.append(el('div','◇','loot-emblem loot-data-art'));detail='Recurso especial guardado para uso futuro.';tab='special';}
+  tile.append(el('small',result.kind==='rareFind'?'UM ENCONTRO INESPERADO':'RESULTADO DA EXPLORAÇÃO','eyebrow'),el('h3',label),el('p',detail));panel.append(tile);
+  if(result.kind!=='nothing')panel.append(el('p','Já adicionado ao seu inventário.','reward-saved'));
+  return tab;
+ }
  function resultView(result){
-  presentingId=result.id;heading('EXPLORAÇÃO CONCLUÍDA','ROLANDO… D100');const stage=el('div',undefined,'roll-stage'),number=el('strong','D100'),caption=el('p','Decodificando o sinal…');stage.append(number,caption);panel.append(stage);open('result');
-  rollTimers.push(setTimeout(()=>{number.textContent=String(result.natural);caption.textContent=`D100 natural ${result.natural} · Disposição ${result.modifier>=0?'+':''}${result.modifier} → ${result.final}`;},750));
-  rollTimers.push(setTimeout(()=>{
-   byId('downtime-title').textContent=result.title;stage.classList.add('roll-resolved');
-   if(result.reward.card)cardContent(result.reward.card);else{const tile=el('section',undefined,'reward-tile');tile.append(el('small',result.title,'eyebrow'),el('h3',result.reward.text));panel.append(tile);}
-   panel.append(button('Guardar e continuar',closePanel));
-  },1550));
+  // Loot is already resolved and persisted by the domain, including offline
+  // completion. Present the prize directly; never roll or grant here.
+  presentingId=result.id;heading('EXPLORAÇÃO CONCLUÍDA',result.kind==='fragment'&&result.reward.fragments?'FRAGMENTO DE CARD':result.title);
+  const card=result.reward.card,tab=card?'cards':null;
+  if(card)cardContent(card);
+  const destination=card?tab:rewardContent(result);
+  const actions=el('div',undefined,'reward-actions');actions.append(button('Voltar ao parceiro',closePanel));
+  if(result.kind!=='nothing')actions.append(button('Ver no inventário',()=>{closePanel();inventory(destination);}));
+  panel.append(actions);open('result');
  }
  // Native close events are queued. A stale event from the activity chooser must
  // not cancel a newly opened result (especially with fast debug completion).

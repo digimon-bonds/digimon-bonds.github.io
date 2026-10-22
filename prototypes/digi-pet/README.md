@@ -40,7 +40,7 @@ Requisitos: Energia ≥20 e Saciedade ≥15. Ao concluir: −15 Energia, −8 Sa
 
 Zona mock extensível: **ÁREA DE DADOS // SETOR 01**. Requisitos: Energia ≥25, Saciedade ≥20. Recusas usam PET SPEECH. Na partida: −20 Energia e −10 Saciedade. Agumon fica ausente do habitat até voltar.
 
-Duração local: **90 segundos**; preset futuro: 30 minutos. A atividade continua por timestamps mesmo com a aba fechada. Ao concluir, resolve uma única vez o D100 e a recompensa. O resultado é persistido antes da revelação: suspense → número natural → modificador/final → achado. Reloads não rerrolam ou duplicam itens. Resultados não vistos ficam pendentes até apresentação/fechamento.
+Duração local: **90 segundos**; preset futuro: 30 minutos. A atividade continua por timestamps mesmo com a aba fechada. Ao concluir, resolve uma única vez o D100 e a recompensa. O resultado é persistido antes da revelação. A interface mostra diretamente o prêmio, sem animação de dados, número natural, modificador ou cálculo; a rolagem continua interna ao domínio. Reloads não rerrolam ou duplicam itens. Resultados não vistos ficam pendentes até apresentação/fechamento.
 
 ### Disposição de saída
 
@@ -162,3 +162,10 @@ Nenhum build de publicação, deploy, push, merge, workflow, GitHub Pages ou mó
 O aparelho agora tem escala padrão de 90% e reduz proporcionalmente conforme a altura disponível. A largura natural de até 480px é preservada no cálculo; o visor e controles diminuem juntos. Painéis de inventário e Digi-Cycle mantêm tamanho legível e rolagem interna quando necessário. O ajuste roda ao abrir, carregar fontes, redimensionar e alternar tela cheia, sem esconder conteúdo com overflow.
 
 Validado sem rolagem da página em 1440×900, 1366×768, 1280×720, 360×800 e 390×660, mantendo o inventário clicável. Arquivo: device-fit.js. Prévia: http://127.0.0.1:4231/?fit=14. Nada publicado.
+
+
+## Prêmios visuais — etapa 15
+
+Prévia: http://127.0.0.1:4231/?rewards=15. A exploração pode terminar com a aba aberta, oculta ou fechada; ao voltar, o prêmio pendente aparece diretamente. Comidas exibem o próprio ícone, quantidade e efeito por porção; créditos, cuidados e recursos têm emblemas próprios. Cards mostram a nova imagem enviada, preservada sem edição no arquivo card-placeholder.png. Fragmentos usam a mesma arte com recorte CSS de metade da carta e borda serrilhada, também na categoria Especiais do inventário. Nenhuma recompensa é concedida pela tela: ela já está salva antes de aparecer. Os botões permitem voltar ao parceiro ou abrir a categoria correspondente no inventário.
+
+A tabela e o RNG permanecem internos, sem novos sorteios ao recarregar. Resultados antigos mantêm seu prêmio registrado, mesmo que o número original pertença hoje a outra faixa da tabela. Validado no Edge: exemplo legado +1 DIGICARROT com imagem correta, card/fragmento, fechamento da aba antes da conclusão, retorno, recarga sem duplicação, conclusão com aba aberta, inventário e mobile. Testes de apresentação atualizados; nada publicado.
