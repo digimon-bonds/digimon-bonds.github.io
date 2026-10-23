@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {nativeRollPlan,nativeRollMetadata,nativeRollOfficialView} from '../site/forum-native-rolls.js';
+import {nativeRollPlan,nativeRollMetadata,nativeRollOfficialView,nativeRollLastAuthor,readNativeRollTopic} from '../site/forum-native-rolls.js';
 const player=(id='p485',name='Mikazuchi Yuki',authorId='21')=>({id,authorName:name,authorId,narrative:true,actor:null});
 const roll=(id='p486',actor='Mikazuchi Yuki',authorId='1')=>({id,authorName:'Omegamon',authorId,narrative:false,actor});
 
@@ -41,4 +41,30 @@ test('official recognition requires account ID 1 plus generated marker, preamble
 
 test('post-shaped HTML nested inside another message is never treated as an official post',()=>{
  const doc=envelope(),post=doc.querySelectorAll()[0];post.parentElement={closest:()=>({id:'p485'})};assert.deepEqual(nativeRollMetadata(doc),[]);
+});
+
+test('last-author cards use only a verified immediate source, never a normal bot post',()=>{
+ const rollDoc=envelope(),automatic=rollDoc.querySelectorAll()[0];
+ const profile={querySelectorAll:()=>[{getAttribute:()=>'/u21'}],querySelector:s=>s==='[data-bos-roll-origin]'?null:s==='dt img[src]'?{getAttribute:()=> 'https://example.org/avatar.png'}:{textContent:'Mikazuchi Yuki'}};
+ const source={id:'p485',querySelector:s=>s.startsWith('.postprofile')?profile:{textContent:'História do jogador',children:[],querySelector:()=>null}};
+ const doc={querySelectorAll:()=>[source,automatic],getElementById:id=>id==='p485'?source:automatic};
+ assert.deepEqual(nativeRollLastAuthor(doc,'/t58p25-topic#486'),{forumUserId:'21',username:'Mikazuchi Yuki',href:'/t58p25-topic#485',avatar:'https://example.org/avatar.png'});
+ assert.equal(nativeRollLastAuthor(doc,'/t58p25-topic#485'),null);
+ assert.equal(nativeRollLastAuthor(doc,'https://evil.example/t58p25-topic#486'),null);
+ doc.querySelectorAll=()=>[automatic];assert.equal(nativeRollLastAuthor(doc,'/t58p25-topic#486'),null);
+ const normal=envelope({marker:false});assert.equal(nativeRollLastAuthor(normal,'/t58p25-topic#486'),null);
+});
+
+test('topic reads coalesce concurrent callers and permalink variants, and reject foreign redirects',async()=>{
+ let reads=0;const parsed={},host={location:{href:'https://digimonbonds.forumeiros.com/'},DOMParser:class{parseFromString(){return parsed;}},fetch:async url=>{reads++;return {url,ok:true,text:async()=>'<html></html>'};}};
+ const results=await Promise.all([readNativeRollTopic(host,'/t79p25-topic#557'),readNativeRollTopic(host,'/t79p25-topic?bos_roll_post=557#557')]);
+ assert.equal(reads,1);assert.equal(results[0],parsed);assert.equal(results[1],parsed);
+ await assert.rejects(readNativeRollTopic(host,'https://evil.example/t79-topic'));
+ await assert.rejects(readNativeRollTopic(host,'/post?mode=delete'));
+ host.fetch=async()=>({ok:true,url:'https://evil.example/t79-topic',text:async()=>''});await assert.rejects(readNativeRollTopic(host,'/t79-topic'));
+});
+
+test('a failed topic read can retry without caching an outage',async()=>{
+ let calls=0;const host={location:{href:'https://digimonbonds.forumeiros.com/'},DOMParser:class{parseFromString(){return {}; }},fetch:async url=>{if(++calls===1)throw Error('offline');return {url,ok:true,text:async()=>''};}};
+ await assert.rejects(readNativeRollTopic(host,'/t79-topic'));await readNativeRollTopic(host,'/t79-topic');assert.equal(calls,2);
 });

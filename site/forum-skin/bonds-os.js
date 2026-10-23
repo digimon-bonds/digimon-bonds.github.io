@@ -129,6 +129,7 @@
     return pending;
   }
   async function fetchPage(url) {
+    if(/^\/t\d+(?:p\d+)?(?:-|$)/.test(url.pathname)&&typeof window!=='undefined'&&typeof window.__bondsReadRollTopic==='function')return window.__bondsReadRollTopic(url.href);
     var controller = new AbortController();
     var timeout = setTimeout(function () { controller.abort(); }, 12000);
     try {

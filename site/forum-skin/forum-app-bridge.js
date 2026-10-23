@@ -1,4 +1,4 @@
-import {installNativeRollAttachments} from '../forum-native-rolls.js';
+import {installNativeRollAttachments,installNativeRollLastPosts} from '../forum-native-rolls.js';
 import {hideOmegamonEditNotices} from '../forum-edit-notices.js';
 import {installUpdateSheetTools} from '../forum-update-tools.js';
 import {installForumProfileDevices} from '../forum-profile-devices.js';
@@ -9,6 +9,8 @@ const APP_ORIGIN='https://digimon-bonds.github.io';
 export function installForumAppBridge(host=window){
  if(host.location.origin!==FORUM_ORIGIN||host.__bondsForumAppBridge)return;host.__bondsForumAppBridge=true;
  const doc=host.document,known=new WeakSet(),cache=new Map();let approved=null,identityChallenge=null,publishing=false;
+ // Start capturing native roll metadata before DOMContentLoaded and share topic reads.
+ if(doc.querySelectorAll){installNativeRollAttachments(host);installNativeRollLastPosts(host);}
  const frame=()=>doc.getElementById('db-app-frame');
  const send=(target,data)=>target.contentWindow?.postMessage({...data,version:1},APP_ORIGIN);
  function identity(){const data=host._userdata;return data&&String(data.session_logged_in)==='1'?normalizeForumUser({forumUserId:data.user_id,forumUsername:data.username}):null;}

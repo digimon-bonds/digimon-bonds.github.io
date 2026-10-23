@@ -71,3 +71,16 @@ The narrative used a native 800px `blockquote`, while the content column was wid
 Validation: 284 automated tests passed; 21 browser regression checks passed, including source editing/removal, original contents, multiple consecutive rolls, image fidelity and fallback. Another 13 browser checks passed at both 1280px and 390px using the actual #556/#557 markup, covering both hash formats, explicit official-only rendering, centered quote geometry, dark/white opened spoilers and no horizontal overflow. Mobile width was 390px with 375px scroll width (vertical scrollbar). These are Chromium browser checks at mobile width, not a claim of a physical iPhone/Safari test.
 
 Local evidence: `C:/Users/mt164/Documents/Codex/native-roll-fix-desktop.png`, `C:/Users/mt164/Documents/Codex/native-roll-fix-mobile-full.png`; reproducible additional preview `C:/Users/mt164/Documents/Codex/native-roll-fix-preview.mjs` on port 4230. No live posts were edited, deleted or rolled during validation.
+
+
+## Loading and last-message automation — 2026-10-23
+
+The existing identity bridge now starts the roll observer before DOMContentLoaded. It captures verified native preambles before the installed formatter erases them when execution order permits, avoiding a second request in that case. Otherwise it reuses a same-origin topic reader with in-flight deduplication and a 30-second cache, also used by the existing activity feed and last-message cards. Failed reads are not cached. Observation is coalesced per animation frame, without recurring polling for rolls.
+
+A mounted mirror hides its official frame atomically using an owned inline display declaration, retaining/restoring the exact previous display and priority. This remains consistent if CSS is rewritten or a post frame is replaced. Hash navigation focuses only after the mirrored target is present. Cancelling the layer during a pending read cannot mount a late mirror. Recognition failures continue to leave the official post visible.
+
+Home, forum and topic-list `.lastpost` cards replace the displayed author, avatar and destination only after the same strict immediate-source association verifies that the linked last post is a native bot roll. Regular narrator messages, orphan rolls, foreign links and failed reads remain unchanged. The original card nodes are retained for restoration, and no stored author, timestamp, post content or server permission is edited. Two readers at a time service last-message cards, sharing identical page requests with the activity feed.
+
+Validation: 288 automated tests and 31 browser checks passed. Additional browser checks cover exact inline-style restoration, external display rewrites, replacement post frames, cancellation during reads, two last-message cards sharing one read, source-author navigation and exact card fallback, and native preamble capture without any topic request. Desktop/mobile layout checks from the preceding revision remain applicable; a physical Safari device is not available in this session.
+
+Deployment maintenance: official checkout v7.0.1, setup-node v7.1.0, configure-pages v6.0.0, upload-pages-artifact v5.0.0 and deploy-pages v5.0.1 releases/manifests were inspected through the GitHub API; JavaScript actions use Node 24. Runner is pinned to ubuntu-24.04; token permissions and Pages hosting remain unchanged.

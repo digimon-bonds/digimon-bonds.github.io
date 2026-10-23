@@ -62,6 +62,11 @@ test('per-request timeout aborts and always clears its timer',async()=>{
  const pending=context.api.readPage(topicURL('/t1-timeout'),new Map());timeout();await assert.rejects(pending,/aborted/);assert.equal(cleared,1);
 });
 
+test('activity reuses the roll topic reader when the existing bridge provides it',async()=>{
+ const page={shared:true},refs=[];context.window={__bondsReadRollTopic:async ref=>{refs.push(ref);return page;}};
+ try{assert.equal(await context.api.readPage(topicURL('/t79p25-topic#557'),new Map()),page);assert.equal(refs.length,1);}finally{delete context.window;}
+});
+
 function activityEnvironment(idle=true){
  const made=[],timers=new Map(),events={},idleTasks=new Map();let id=0;
  function node(tag,cls='',text=''){const n={tag,className:cls,textContent:text,children:[],handlers:{},attrs:{},append(...nodes){this.children.push(...nodes)},appendChild(n){this.append(n)},setAttribute(k,v){this.attrs[k]=v},removeAttribute(k){delete this.attrs[k]},replaceChildren(...n){this.children=n},addEventListener(k,fn){this.handlers[k]=fn}};made.push(n);return n;}
