@@ -1,6 +1,6 @@
-# Native roll attachments — local review only
+# Native roll attachments
 
-Status: publication authorized by the user after local review on `codex/native-roll-attachments`.
+Status: initial release published after user approval; global permalink, quote alignment and spoiler fixes reviewed on 2026-10-23.
 
 ## Evidence inspected before implementation
 
@@ -28,7 +28,7 @@ An open-by-default `details` card is placed after the source `.content`, outside
 
 Only a clone of the rendered `.content` is displayed. Dice image attributes and ordering are preserved; duplicate IDs are removed only from the clone. Success labels are copied verbatim from `data-sucessos`. There is no face interpretation, random generation, success computation, new roll endpoint, BBCode substitution or posting request.
 
-The original automatic post, its profile, native controls, IDs, anchors and content remain in place. A Skin 2.0 CSS rule hides its outer frame only after the mirror has mounted successfully. The mirror has no editing controls. Native server permissions remain unchanged. A direct hash link to the official roll reveals the original post.
+The original automatic post, its profile, native controls, IDs, anchors and content remain in place. A Skin 2.0 CSS rule hides its outer frame only after the mirror has mounted successfully. The mirror has no editing controls. Native server permissions remain unchanged. Ordinary hash links (`#ID` or `#pID`) focus the attached result without revealing a duplicate original. “Ver post oficial” adds the explicit `bos_roll_post=ID` view: that roll is shown only as its original post, without a mirrored copy.
 
 ## Fallback
 
@@ -57,6 +57,17 @@ The preview uses public message content and known native profile IDs from those 
 - `site/forum-native-rolls.js` — recognition, association, visual mirroring, read caching and fallback.
 - `site/forum-skin/forum-app-bridge.js` — registration through the existing bridge.
 - `site/forum-skin/bonds-os.css` — Skin 2.0 presentation and responsive layout.
-- `site/forum-skin/forumeiros-loader.js` — future cache revision, still local/unpublished.
+- `site/forum-skin/forumeiros-loader.js` — cache revision for the CSS and existing bridge module.
 - `scripts/forum-native-rolls.test.mjs` — automated recognition and association tests.
 - `docs/native-roll-attachments.md` — this review record.
+
+
+## Global correction — 2026-10-23
+
+Inspected `/t79p25-ikebukuro-dama-de-seda`, source #556 (Myrddin, native `/u16`) and automatic roll #557 (`/u1`). The same roll had one supplied success and one original dice image. The prior permalink behavior deliberately revealed the original alongside the mirror; this explains the duplicated mobile presentation when opening last-message links. Hash permalinks now keep one attached representation on every viewport. Explicit official-view links keep one standalone original, and still preserve all native content.
+
+The narrative used a native 800px `blockquote`, while the content column was wider. Global quote margins now center these constrained blocks instead of forcing them left. Their width and text alignment remain intact. Native `dl.codebox.spoiler` headers and `.spoiler_content` bodies now use the dark palette with white text; hidden attributes and native spoiler toggles are unchanged. All selectors apply to Skin 2.0 throughout the forum, with no topic or post ID selectors.
+
+Validation: 284 automated tests passed; 21 browser regression checks passed, including source editing/removal, original contents, multiple consecutive rolls, image fidelity and fallback. Another 13 browser checks passed at both 1280px and 390px using the actual #556/#557 markup, covering both hash formats, explicit official-only rendering, centered quote geometry, dark/white opened spoilers and no horizontal overflow. Mobile width was 390px with 375px scroll width (vertical scrollbar). These are Chromium browser checks at mobile width, not a claim of a physical iPhone/Safari test.
+
+Local evidence: `C:/Users/mt164/Documents/Codex/native-roll-fix-desktop.png`, `C:/Users/mt164/Documents/Codex/native-roll-fix-mobile-full.png`; reproducible additional preview `C:/Users/mt164/Documents/Codex/native-roll-fix-preview.mjs` on port 4230. No live posts were edited, deleted or rolled during validation.

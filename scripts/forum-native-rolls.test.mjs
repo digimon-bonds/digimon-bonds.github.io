@@ -1,8 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {nativeRollPlan,nativeRollMetadata} from '../site/forum-native-rolls.js';
+import {nativeRollPlan,nativeRollMetadata,nativeRollOfficialView} from '../site/forum-native-rolls.js';
 const player=(id='p485',name='Mikazuchi Yuki',authorId='21')=>({id,authorName:name,authorId,narrative:true,actor:null});
 const roll=(id='p486',actor='Mikazuchi Yuki',authorId='1')=>({id,authorName:'Omegamon',authorId,narrative:false,actor});
+
+test('ordinary roll permalinks never opt into a second visible official result',()=>{
+ for(const hash of ['', '#486', '#p486'])assert.equal(nativeRollOfficialView({search:'',hash},'p486'),false);
+ assert.equal(nativeRollOfficialView({search:'?bos_roll_post=486',hash:'#486'},'p486'),true);
+ assert.equal(nativeRollOfficialView({search:'?bos_roll_post=486',hash:'#487'},'p487'),false);
+ assert.equal(nativeRollOfficialView({search:'?bos_roll_post=p486'},'p486'),false);
+});
 
 test('a verified automatic roll attaches only to the immediately preceding matching member',()=>{
  const plan=nativeRollPlan([player(),roll()]);assert.equal(plan.length,1);assert.equal(plan[0].source.id,'p485');assert.equal(plan[0].roll.id,'p486');assert.equal(plan[0].previousId,'p485');

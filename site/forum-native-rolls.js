@@ -5,6 +5,8 @@ const normalize=value=>String(value||'').normalize('NFC').replace(/\s+/g,' ').tr
 const postId=node=>/^p[1-9]\d*$/.test(node?.id||'')&&!node.parentElement?.closest?.('.post')?node.id:null;
 const imageURLs=content=>[...content.querySelectorAll('img')].map(img=>new URL(img.getAttribute('src'),FORUM_ORIGIN).href);
 const sameImages=(a,b)=>a.length===b.length&&a.every((value,i)=>value===b[i]);
+// A normal permalink opens the attached result; the official view is explicit.
+export const nativeRollOfficialView=(location,id)=>new URLSearchParams(location.search).get('bos_roll_post')===id.slice(1);
 function author(post){
  const profile=post.querySelector('.postprofile[id="profile'+post.id.slice(1)+'"]'),native=profile?.querySelector('[data-bos-roll-origin]')||profile;
  const ids=[...new Set([...native?.querySelectorAll('dt a[href]')||[]].map(a=>forumProfileId(a.getAttribute('href'))).filter(Boolean))];
@@ -45,7 +47,7 @@ function renderedPayload(post,metadata){
 }
 export function createNativeRollPresentation(host,metadata){
  const doc=host.document,root=doc.documentElement,records=new Map(),groups=new Map(),plan=nativeRollPlan(metadata);
- let failed=false;
+ let failed=false,focusedHash=null;
  const active=()=>root.classList.contains('bonds-os-preview')&&root.dataset.bosInitialized==='ready'&&host.getComputedStyle(root).getPropertyValue('--bos-native-roll-view').trim()==='1';
  const make=(tag,cls,text)=>{const node=doc.createElement(tag);if(cls)node.className=cls;if(text)node.textContent=text;return node;};
  function restore(){
@@ -62,7 +64,8 @@ export function createNativeRollPresentation(host,metadata){
  }
  function mirror(post,content){
   const card=make('article','bos-native-roll-entry'),head=make('header','bos-native-roll-entry-head'),official=make('a','','Ver post oficial ↗');
-  official.href=host.location.pathname+host.location.search+'#'+post.id.slice(1);head.append(make('span','','FORUMEIROS // #'+post.id.slice(1)),official);
+  const search=new URLSearchParams(host.location.search);search.set('bos_roll_post',post.id.slice(1));
+  official.href=host.location.pathname+'?'+search.toString()+'#'+post.id.slice(1);head.append(make('span','','FORUMEIROS // #'+post.id.slice(1)),official);
   const payload=content.cloneNode(true);payload.className='bos-native-roll-payload';payload.setAttribute('contenteditable','false');
   for(const node of [payload,...payload.querySelectorAll('[id]')])node.removeAttribute('id');
   for(const group of payload.querySelectorAll('.padrao,.vantagem,.desvantagem')){
@@ -81,19 +84,21 @@ export function createNativeRollPresentation(host,metadata){
     const post=byId.get(item.roll.id),source=byId.get(item.source.id),previous=posts[posts.indexOf(post)-1],who=source&&author(source);
     const content=post&&renderedPayload(post,item.roll);
     if(!source||!content||previous?.id!==item.previousId||who.id!==item.source.authorId||who.name!==item.source.authorName){discardMirror(item.roll.id);continue;}
+    // Show exactly one representation, including links to the latest roll on mobile.
+    if(nativeRollOfficialView(host.location,post.id)){discardMirror(post.id);continue;}
     const fingerprint=content.outerHTML,old=records.get(post.id);
     if(!old||old.fingerprint!==fingerprint||!old.card.isConnected){
      const card=mirror(post,content),group=groupFor(source);if(old?.card.isConnected)old.card.replaceWith(card);else group.querySelector('.bos-native-rolls-list').append(card);
      records.set(post.id,{post,card,fingerprint});
     }
-    // Deep links intentionally reveal the untouched official post for verification.
-    if(host.location.hash==='#'+post.id.slice(1)||host.location.hash==='#'+post.id)post.removeAttribute('data-bos-roll-attached');
-    else post.dataset.bosRollAttached=source.id;
+    post.dataset.bosRollAttached=source.id;
     kept.add(post.id);
    }
    for(const id of records.keys())if(!kept.has(id))discardMirror(id);
    for(const [id,group] of groups)if(!group.querySelector('.bos-native-roll-entry')){group.remove();groups.delete(id);}
    if(records.size)root.dataset.bosRollAttachments='ready';else root.removeAttribute('data-bos-roll-attachments');
+   const hash=host.location.hash,linked=records.get(hash.replace(/^#(?:p)?/,'p'));
+   if(hash!==focusedHash){focusedHash=hash;if(linked)linked.card.scrollIntoView?.({block:'center'});}
   }catch(error){failed=true;restore();host.console?.warn('[BONDS OS] Roll anexado indisponível; posts oficiais preservados.',error);}
  }
  return {refresh,restore};
