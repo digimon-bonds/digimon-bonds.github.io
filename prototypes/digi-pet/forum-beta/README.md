@@ -1,6 +1,6 @@
 # Digi-Pet — teste Omegamon (usuário 1)
 
-Status: autorizado explicitamente pelo usuário e ativado em 26/10/2026 para Omegamon (ID 1). Pacote da branch de teste publicado por CDN; main e GitHub Pages não foram alterados.
+Status: botão exclusivo do Omegamon desativado em 26/10/2026, a pedido do usuário. Entrada substituída pelo sexto card do App, disponível a todos com senha de teste.
 
 ## Instalação preparada
 
@@ -27,3 +27,9 @@ work/verify-forum-beta.cjs valida bloqueio de visitantes/outros usuários, image
 Entrada JavaScript nova ID 29: Digi-Pet — teste Omegamon u1. Administradores sim; moderadores, membros e convidados não. Todas as páginas. Bootstrap com allowlist de login + user_id 1 + username Omegamon e SRI SHA-384. Fonte imutável: commit 01a3e284248eea81db20635c5244b020598dba0e.
 
 Verificação na sessão real do Omegamon: botão à direita, imagem original, abertura em overlay, Exterior diurno, Conversar, fechamento e retomada com habitat/Companhia salvos. Página e JavaScript baixados sem sessão não incluem o bootstrap do Digi-Pet. Capturas reais: outputs/digi-pet-forum-live-button.png e outputs/digi-pet-forum-live-overlay.png. Nenhuma integração com ficha/backend, alteração de scripts anteriores, main, workflows ou publicação de Pages.
+
+## Substituição pelo sexto card
+
+JavaScript ID 29 desativado no painel do fórum. Nenhum novo botão flutuante. Novo acesso em Digimon App → DB–06 DIGI-PET, ao lado do Battle Link. A main e o deploy foram autorizados explicitamente para essa atualização, commit f6aab60.
+
+app-runtime.mjs fornece o mesmo jogo isolado, com namespace local por usuário do fórum quando identificado. build-app.mjs reaproveita o documento do pacote anterior sem incluir o botão/chaveiro. O campo de senha fica no App e usa comparação de SHA-256, sem transmitir/salvar a senha; é um bloqueio visual de teste, não autenticação de recompensas.
