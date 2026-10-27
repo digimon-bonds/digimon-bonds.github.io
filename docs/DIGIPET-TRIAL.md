@@ -10,12 +10,10 @@ O Digi-Pet abre em `dialog`, dentro de iframe `sandbox="allow-scripts"` sem aces
 
 Validação: build de produção; 288 testes existentes; navegador com seis cards, posição lado a lado, senha errada/correta, cancelamento, nova solicitação ao reabrir, carregamento tardio, sandbox e mobile sem overflow. `work/verify-app-pet-card.cjs` no workspace de implementação guarda a verificação visual.
 
-## Janela independente e apresentação sem moldura
+## Abertura dentro do App
 
-Após a senha correta, o App abre digi-pet-window.html em uma janela pop-up redimensionável (o navegador pode escolher uma aba). O tamanho inicial é até 500×920, ajustado à tela. A janela mostra somente o dispositivo e mantém os controles nativos para minimizar/maximizar/fechar. Não há cabeçalho de ACESSO DE TESTE nem borda/painel extra envolvendo o aparelho.
+Após a senha correta, o Digi-Pet abre centralizado dentro do App, sem nova aba ou janela. O dispositivo mantém sua própria carcaça, sem cabeçalho ou painel externo adicional. O botão de fechar retorna ao App; cada nova abertura pede a senha novamente.
 
-O acesso inicial usa um identificador aleatório por abertura e uma troca postMessage que valida origem, janela emissora e token. Isso funciona mesmo quando o armazenamento de terceiros do App é particionado. O App aguarda até 8 segundos pela confirmação e oferece Abrir aqui quando não recebe resposta. O fragmento é removido da URL ao carregar. Não contém senha. A janela mantém apenas uma autorização de sessão para permitir F5 e zera opener; continua jogável mesmo depois de fechar o App/fórum. O save usa a mesma chave da versão anterior do App. Não migra o antigo teste do domínio do fórum.
+A entrada carrega o runtime sob demanda e usa diretamente o diálogo sem moldura. A persistência continua na mesma chave local do App e não altera a ficha real. Os arquivos da janela independente permanecem apenas como implementação anterior; o card não os utiliza.
 
-Quando pop-ups são bloqueados, a interface explica como permitir e oferece Abrir aqui. A alternativa mantém o player isolado e remove a moldura e o cabeçalho extra. Testes de navegador: senha errada, popup independente, ausência de cabeçalho/borda, opener nulo, save após F5, funcionamento após fechar o App, redimensionamento e fallback bloqueado; 288 testes existentes passaram. Fontes: app-window-runtime.mjs e build-app.mjs na branch do protótipo.
-
-Compatibilidade conferida com o App em iframe de outra origem e com popup sem confirmação, além de popup bloqueado explicitamente. Na primeira abertura independente, um save do App pode ser copiado pelo canal validado se ainda não existir save na janela. Dados existentes da janela nunca são sobrescritos por essa migração inicial.
+Validação de navegador: seis cards, senha incorreta/correta, abertura na mesma página sem popup, sandbox, cancelamento/reabertura e mobile sem overflow.
