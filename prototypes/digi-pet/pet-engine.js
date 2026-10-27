@@ -28,10 +28,13 @@
   s.lastUpdatedAt=timestamp(legacy?raw.lastTick:raw.lastUpdatedAt);s.lastInteractionAt=timestamp(raw.lastInteractionAt,s.lastUpdatedAt);
   s.lastTalkAt=raw.lastTalkAt===null?null:finite(raw.lastTalkAt)?timestamp(raw.lastTalkAt):finite(raw.lastActions?.talk)?timestamp(raw.lastActions.talk):null;
   s.digestionDue=finite(raw.digestionDue)&&raw.digestionDue>=0?Math.min(raw.digestionDue,now+N.digestionMs):null;
-  if(raw.version===3&&raw.activity&&['play','train','sleep','explore'].includes(raw.activity.kind)&&finite(raw.activity.startedAt)&&finite(raw.activity.endsAt)&&raw.activity.endsAt>raw.activity.startedAt){
+  if(raw.version===3&&raw.activity&&['food','talk','play','train','sleep','explore'].includes(raw.activity.kind)&&finite(raw.activity.startedAt)&&finite(raw.activity.endsAt)&&raw.activity.endsAt>raw.activity.startedAt){
    const maxDuration=A.durations.production[raw.activity.kind];
-   if(raw.activity.endsAt-raw.activity.startedAt<=maxDuration&&raw.activity.startedAt<=now)s.activity={kind:raw.activity.kind,startedAt:raw.activity.startedAt,endsAt:raw.activity.endsAt,...(raw.activity.cycleDate?{cycleDate:raw.activity.cycleDate,attribute:raw.activity.attribute,zone:raw.activity.zone,disposition:raw.activity.disposition}: {})};
+   if(raw.activity.endsAt-raw.activity.startedAt<=maxDuration&&raw.activity.startedAt<=now&&(raw.activity.kind!=='food'||F.some(f=>f.id===raw.activity.foodId)))s.activity={kind:raw.activity.kind,startedAt:raw.activity.startedAt,endsAt:raw.activity.endsAt,...(raw.activity.foodId?{foodId:raw.activity.foodId}:{}),...(raw.activity.costsPaid?{costsPaid:true}:{}),...(raw.activity.cycleDate?{cycleDate:raw.activity.cycleDate,attribute:raw.activity.attribute,zone:raw.activity.zone,disposition:raw.activity.disposition}: {})};
   } else if(legacy&&raw.sleeping){s.activity={kind:'sleep',startedAt:now,endsAt:now+A.durations[P.mode].sleep};s.lastUpdatedAt=now;}
+  // Recompute from the saved energy/time, preserving partial rest and upgrading
+  // older short rests without a second reward or a reset on every reload.
+  if(s.activity?.kind==='sleep')s.activity.endsAt=s.lastUpdatedAt+(100-s.stats.energy)/A.sleep.energyRecovery*A.durations[P.mode].sleep;
   s.activityStats.trainingSessions=finite(raw.activityStats?.trainingSessions)?Math.max(0,Math.floor(raw.activityStats.trainingSessions)):Math.max(0,Math.floor(raw.counts?.train||0));
   for(const food of F){const discovered=raw.discoveredFoods?.[food.id];if(discovered&&['favorite','liked','neutral','disliked'].includes(discovered.preference))s.discoveredFoods[food.id]={preference:discovered.preference,at:timestamp(discovered.at)};}
   for(const key of Object.keys(labels))if(finite(raw.counts?.[key]))s.counts[key]=Math.max(0,Math.floor(raw.counts[key]));
@@ -52,11 +55,19 @@
  }
  function finish(s,at){
   const completed=s.activity,kind=completed.kind;s.activity=null;
+  if(kind==='food'){
+   const food=F.find(f=>f.id===completed.foodId),preference=preferenceFor(food.id),bonus=PR.bonuses[preference],basic=food.price===0;
+   apply(s,{satiety:food.satiety,energy:food.energy,mood:basic||preference==='disliked'?0:food.mood+bonus.mood,companionship:basic||preference==='disliked'?0:food.company+bonus.companionship});
+   s.discoveredFoods[food.id]={preference,at:s.discoveredFoods[food.id]?.at??at};
+   if(!s.waste&&s.digestionDue===null)s.digestionDue=at+N.digestionMs;
+   notify(s,`Agumon comeu ${food.name}. Saciedade aumentou.`,{favorite:'eatingFavorite',liked:'eatingLiked',neutral:'eatingNeutral',disliked:'eatingDisliked'}[preference],at);
+  }
+  if(kind==='talk'){apply(s,P.talkEffects);s.lastTalkAt=at;notify(s,'Agumon passou um tempo com você. Companhia e Humor aumentaram.','talk',at);}
   if(kind==='play'){apply(s,A.play.effects);notify(s,'Agumon terminou de brincar.','finishedPlaying',at);}
-  if(kind==='train'){const comfortable=mood(s).visibleMood>=M.trainingComfortMinimum;apply(s,A.train.effects);if(comfortable)apply(s,{mood:A.train.happyMoodGain});s.activityStats.trainingSessions++;notify(s,'Agumon terminou o treino.','finishedTraining',at);}
+  if(kind==='train'){const comfortable=mood(s).visibleMood>=M.trainingComfortMinimum;if(!completed.costsPaid)apply(s,A.train.effects);if(comfortable)apply(s,{mood:A.train.happyMoodGain});s.activityStats.trainingSessions++;notify(s,'Agumon terminou o treino.','finishedTraining',at);}
   if(kind==='sleep')notify(s,'Agumon terminou o descanso.','finishedResting',at);
   globalThis.DigiDowntime?.complete(s,completed,at);
-  record(s,kind,at,'completed',completed.attribute||'');
+  record(s,kind,at,'completed',completed.attribute||(kind==='food'?F.find(f=>f.id===completed.foodId).name:''));
  }
  function advance(input,now=Date.now()){
   const s=copy(input);if(now<s.lastUpdatedAt){s.lastUpdatedAt=now;return s;}
@@ -68,7 +79,7 @@
    const next=Math.min(now,s.activity?.endsAt??Infinity,s.digestionDue??Infinity);
    const elapsed=next-cursor,dt=Math.min(elapsed,decayBudget);decayBudget-=dt;
    decrease(s,'satiety',dt/hour*N.satietyPerHour);
-   if(s.activity?.kind==='sleep')s.stats.energy=clamp(s.stats.energy+A.sleep.energyRecovery*elapsed/(s.activity.endsAt-s.activity.startedAt));
+   if(s.activity?.kind==='sleep')s.stats.energy=clamp(s.stats.energy+A.sleep.energyRecovery*elapsed/A.durations[P.mode].sleep);
    else {
     decrease(s,'energy',dt/hour*N.energyPerHour);
     const eligible=Math.max(0,next-Math.max(cursor,s.lastInteractionAt+N.companyGraceMs));
@@ -94,30 +105,22 @@
   if(reason)return {state:s,ok:false,feedback:reason,speechContext:action==='food'&&s.stats.satiety>=P.foodRefusalAt?'foodRefused':null};
   if(action==='food'){
    const food=F.find(x=>x.id===options.foodId);if(!food)return {state:s,ok:false,feedback:'Escolha um alimento.',speechContext:null};
-   const preference=preferenceFor(food.id),bonus=PR.bonuses[preference];
-   apply(s,{satiety:food.satiety,energy:food.energy,mood:preference==='disliked'?0:food.mood+bonus.mood,companionship:preference==='disliked'?0:food.company+bonus.companionship});
-   s.discoveredFoods[food.id]={preference,at:s.discoveredFoods[food.id]?.at??now};
-   if(!s.waste&&s.digestionDue===null)s.digestionDue=now+N.digestionMs;
-   s.lastInteractionAt=now;record(s,'food',now,'completed',food.name);
-   const context={favorite:'eatingFavorite',liked:'eatingLiked',neutral:'eatingNeutral',disliked:'eatingDisliked'}[preference];
-   notify(s,`Agumon comeu ${food.name}. Saciedade aumentou.`,context,now);
-  } else if(['play','train','sleep'].includes(action)){
-   s.activity={kind:action,startedAt:now,endsAt:now+A.durations[P.mode][action]};s.lastInteractionAt=now;
-   record(s,action,now,'started');notify(s,`Agumon começou ${action==='play'?'a brincar':action==='train'?'o treino':'o descanso'}.`,action,now);
+   s.activity={kind:'food',foodId:food.id,startedAt:now,endsAt:now+A.durations[P.mode].food};s.lastInteractionAt=now;
+   record(s,'food',now,'started',food.name);notify(s,'Agumon começou a comer.',null,now);
+  } else if(['play','train','sleep','talk'].includes(action)){
+   const duration=action==='sleep'?(100-s.stats.energy)/A.sleep.energyRecovery*A.durations[P.mode].sleep:A.durations[P.mode][action];
+   s.activity={kind:action,startedAt:now,endsAt:now+duration};s.lastInteractionAt=now;
+   if(action==='train'){apply(s,A.train.effects);s.activity.costsPaid=true;}
+   record(s,action,now,'started');notify(s,`Agumon começou ${action==='play'?'a brincar':action==='train'?'o treino':action==='talk'?'a conversar':'o descanso'}.`,action,now);
   } else if(action==='wake'){
    s.activity=null;s.lastInteractionAt=now;record(s,'wake',now);notify(s,'Agumon acordou. Recuperou apenas a energia do tempo descansado.','finishedResting',now);
   } else if(action==='clean'){
    s.waste=false;s.lastInteractionAt=now;record(s,'clean',now);notify(s,'Ambiente limpo. A penalidade temporária de sujeira foi removida.','clean',now);
-  } else if(action==='talk'){
-   const rewarded=s.lastTalkAt===null||now-s.lastTalkAt>=P.talkCooldownMs;
-   if(rewarded){apply(s,P.talkEffects);s.lastTalkAt=now;}
-   s.lastInteractionAt=now;record(s,'talk',now,'completed',rewarded?'Com ganho':'Sem ganho: intervalo de conversa');
-   notify(s,rewarded?'Agumon passou um tempo com você. Companhia e Humor aumentaram.':'Conversa registrada. Novos ganhos ficam disponíveis após 1 minuto.','talk',now);
   }
   return {state:s,ok:true,feedback:s.lastEvent.system,speechContext:s.lastEvent.context};
  }
  function condition(s){
-  if(s.activity)return {play:'Brincando',train:'Treinando',sleep:'Dormindo',explore:'Explorando'}[s.activity.kind];
+  if(s.activity)return {food:'Comendo',talk:'Conversando',play:'Brincando',train:'Treinando',sleep:'Dormindo',explore:'Explorando'}[s.activity.kind];
   const m=mood(s);if(m.visibleMood<=P.thresholds.sad||m.badNeeds>=3)return 'Triste';
   if(s.stats.satiety<=P.thresholds.hungry)return 'Com fome';if(s.stats.energy<=P.thresholds.tired)return 'Cansado';if(s.stats.companionship<=P.thresholds.lonely)return 'Solitário';if(s.waste)return 'Incomodado';
   if(m.visibleMood>=P.thresholds.animated&&s.stats.energy>=P.thresholds.happy)return 'Animado';if(m.visibleMood>=P.thresholds.happy)return 'Feliz';return 'Tranquilo';

@@ -240,3 +240,15 @@ Validação: testes de domínio, alvo de recuperação, probabilidades e migraç
 ## Correção de energia e carta azul — etapa 19
 
 Recovery Disk mantém +10 PV do Digimon; Energy Patch recupera +10 Energia do humano; Care Pack mantém +3 Laço. A bancada separa os alvos e não altera necessidades do pet. O print de carta foi removido dos assets ativos e substituído por card-blue.svg: carta azul vetorial limpa, circuitos e símbolo digital. Cards, coleção, catálogo, revelação e metades rasgadas usam a mesma arte. Saves antigos atualizam as referências de imagem no carregamento. Nenhuma integração ou publicação.
+
+## Ritmo de cuidado — 27/10/2026
+
+Comer, brincar e conversar levam 60 segundos, com relógio no visor e ações incompatíveis bloqueadas. O cuidado e os ganhos são registrados ao concluir. Uma comida paga é reservada do estoque no início; o save restaura a refeição sem cobrar novamente.
+
+Treino e exploração duram 30 minutos reais nos dois presets. Ambos descontam 50 Energia e 15 Saciedade na saída, sem cobrança dupla ao concluir ou recarregar. A Disposição da exploração é calculada antes do custo. A regra de uma atividade principal por dia continua.
+
+Descansar não mostra relógio. Recupera 100 Energia em 45 minutos (aprox. 2,22/min); partindo de Energia 50, completa em 22,5 minutos. Acorda automaticamente em 100, ou manualmente pelo botão Acordar, mantendo o ganho parcial. A recuperação continua por timestamp com a página fechada.
+
+As imagens de comida usam caminhos explícitos para serem incorporadas no pacote isolado do fórum, cuja CSP permite somente imagens em data URI. Itens, cards e fragmentos também foram conferidos no pacote. Prêmios recebidos e cards restaurados têm apenas Ver inventário; o inventário permite fechar e voltar ao pet.
+
+Testes: 93 testes do Digi-Pet; navegador sobre o build real com seis comidas, três itens, card inteiro e metade, cinco categorias de prêmio, relógios e retorno pelo inventário. Nenhum efeito de item/card/XP conectado à ficha ou backend.

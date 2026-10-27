@@ -129,22 +129,21 @@
    if(action==='food'){
     const f=P.FOOD_CONFIG.find(f=>f.id===options.foodId);
     if(f.price>0)result.state.downtime.inventory.food[f.id]--;
-    else{ // Basic food: no favorite/special mood or company bonus.
-     result.state.baseMood=s.baseMood;result.state.stats.companionship=s.stats.companionship;
-    }
+    // Reserve one serving at the start; timestamp completion applies its care
+    // effects once. Reloading never consumes a second serving.
    }
   }
   const next=result.state;
   if(['train','explore'].includes(action)){
    const row=sync(next,at);row.major=action;next.activity.cycleDate=next.downtime.currentCycleDate;
    if(action==='train'){next.activity.attribute=options.attribute;row.attribute=options.attribute;}
-  }else if(['food','talk','clean'].includes(action))care(next,at);
+  }else if(action==='clean')care(next,at);
   sync(next,at);return result;
  };
  // A completed play session counts as care; starting it alone does not.
  const onComplete=complete;
  globalThis.DigiDowntime={config:C,dateKey,sync,disposition,
-  complete(s,a,at){onComplete(s,a,at);if(['play','sleep'].includes(a.kind))care(s,at);},
+  complete(s,a,at){onComplete(s,a,at);if(['food','talk','play','sleep'].includes(a.kind))care(s,at);},
   buy(input,id,at=Date.now()){
    const s=E.advance(input,at),f=P.FOOD_CONFIG.find(f=>f.id===id);
    if(!f||f.price<=0)return {state:s,ok:false,feedback:'DIGIMEAT já está sempre disponível.'};

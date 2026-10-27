@@ -7,9 +7,9 @@
  C.PET_CONFIG.storageKey='digimon-bonds:digi-pet:prototype:v6';
  C.FOOD_CONFIG.forEach(f=>{f.price={digimeat:0,digifish:8,digiapple:6,digicarrot:6,digibanana:7,digiprotein:12}[f.id];});
  C.FOOD_CONFIG.find(f=>f.id==='digimeat').satiety=20;
- C.ACTIVITY_CONFIG.durations.test.explore=90000;
+ C.ACTIVITY_CONFIG.durations.test.explore=1800000;
  C.ACTIVITY_CONFIG.durations.production.explore=1800000;
- C.ACTIVITY_CONFIG.explore={minEnergy:25,minSatiety:20,effects:{energy:-20,satiety:-10}};
+ C.ACTIVITY_CONFIG.explore={minEnergy:25,minSatiety:20,effects:{energy:-50,satiety:-15}};
  C.PET_SPEECH.explore=['Vou descobrir o que tem por lá!'];
  C.PET_SPEECH.exploreTired=['Podemos ir depois que eu descansar um pouco?'];
  C.PET_SPEECH.exploreHungry=['Explorar de barriga vazia?'];

@@ -13,8 +13,8 @@
  const el=(tag,text,cls)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;};
  function button(text,fn,disabled=false){const b=el('button',text);b.type='button';b.disabled=disabled;b.addEventListener('click',fn);return b;}
  function line(text){panel.append(el('p',text,'downtime-copy'));}
- function heading(eyebrow,title){
-  panel.replaceChildren();const h=el('div',undefined,'downtime-heading'),label=el('div');label.append(el('small',eyebrow,'eyebrow'));const titleEl=el('h2',title);titleEl.id='downtime-title';label.append(titleEl);const close=button('×',closePanel);close.setAttribute('aria-label','Fechar painel');h.append(label,close);panel.append(h);
+ function heading(eyebrow,title,closable=true){
+  panel.replaceChildren();const h=el('div',undefined,'downtime-heading'),label=el('div');label.append(el('small',eyebrow,'eyebrow'));const titleEl=el('h2',title);titleEl.id='downtime-title';label.append(titleEl);const close=button('×',closePanel);close.setAttribute('aria-label','Fechar painel');h.append(label);if(closable)h.append(close);panel.append(h);
  }
  function open(view){currentView=view;if(!panel.open)panel.showModal();}
  function commit(result){state=result.state;save();render();if(result.feedback)showSystemFeedback(result.feedback);return result;}
@@ -55,7 +55,7 @@
  }
  function openTraining(){
   refreshBeforePanel();heading('ATIVIDADE PRINCIPAL','O que vamos treinar?');
-  line(`Duração: ${formatTime(ACTIVITY_CONFIG.durations[P.mode].train)} · ${ACTIVITY_CONFIG.train.effects.energy} Energia · ${ACTIVITY_CONFIG.train.effects.satiety} Saciedade ao concluir.`);
+  line(`Duração: ${formatTime(ACTIVITY_CONFIG.durations[P.mode].train)} · ${ACTIVITY_CONFIG.train.effects.energy} Energia · ${ACTIVITY_CONFIG.train.effects.satiety} Saciedade na saída.`);
   line(`Escolha um atributo. Após ${C.trainingGoal} Digi-Cycles completos no mesmo treino, receba +1d6 em UM teste desse atributo. Um cuidado no dia também é necessário.`);
   const grid=el('div',undefined,'downtime-grid');
   for(const [attribute,name]of Object.entries(C.attributes)){const progress=state.downtime.training[attribute],choice=button(`${name} · ${progress}/${C.trainingGoal}`,()=>{closePanel();interact('train',{attribute});},Boolean(engine.availability(state,'train')));choice.append(el('small',`Faltam ${C.trainingGoal-progress} ciclos`),el('small',`Recompensa: +1d6 em ${name}`));grid.append(choice);}
@@ -108,7 +108,7 @@
   const c=R.definition(card),wrap=el('div',undefined,`card-reveal ${c.rarity==='RARE'?'is-rare':''}`),image=el('img');image.src=c.image;image.alt=`Arte provisória de ${c.name}`;
   wrap.append(el('small',c.rarity==='RARE'?'SINAL EXCEPCIONAL // CARD RARO':'SIGNAL DETECTED // CARD DATA FOUND','eyebrow'),image,el('small',`CARD // ${c.rarity}`),el('h3',c.name),el('p',R.cardText(c)),el('p',c.description),el('p',c.consumable?'Uso único: o exemplar é consumido na ativação.':'Permanente na ficha: exige Scanner e não é consumido.'));panel.append(wrap);line('Regra inicial: 1 card por turno do humano, sem acumular cards. Expira ao fim desse turno. Uso em um Tópico/Luta; integração automática ainda desligada.');
  }
- function revealCard(card){heading('DADOS RESTAURADOS','Card encontrado');cardContent(card);panel.append(button('Ver coleção',()=>inventory('cards')));open('card');}
+ function revealCard(card){heading('DADOS RESTAURADOS','Card encontrado',false);cardContent(card);panel.append(button('Ver inventário',()=>inventory('cards')));open('card');}
  function fragmentArtwork(){
   const art=el('div',undefined,'fragment-artwork'),image=el('img');image.src='assets/card-blue.svg';image.alt='Fragmento de card rasgado pela metade';art.append(image);return art;
  }
@@ -130,12 +130,14 @@
  function resultView(result){
   // Loot is already resolved and persisted by the domain, including offline
   // completion. Present the prize directly; never roll or grant here.
-  presentingId=result.id;heading('EXPLORAÇÃO CONCLUÍDA',result.kind==='fragment'&&result.reward.fragments?'FRAGMENTO DE CARD':result.title);
+  presentingId=result.id;heading('EXPLORAÇÃO CONCLUÍDA',result.kind==='fragment'&&result.reward.fragments?'FRAGMENTO DE CARD':result.title,result.kind==='nothing');
   const card=result.reward.card,tab=card?'cards':null;
   if(card)cardContent(card);
   const destination=card?tab:rewardContent(result);
-  const actions=el('div',undefined,'reward-actions');actions.append(button('Voltar ao parceiro',closePanel));
-  if(result.kind!=='nothing')actions.append(button('Ver no inventário',()=>{closePanel();inventory(destination);}));
+  const actions=el('div',undefined,'reward-actions');
+  if(result.kind!=='nothing'){
+   actions.append(button('Ver inventário',()=>{finishPresentation();inventory(destination);}));
+  }else actions.append(button('Voltar ao parceiro',closePanel));
   panel.append(actions);open('result');
  }
  // Native close events are queued. A stale event from the activity chooser must

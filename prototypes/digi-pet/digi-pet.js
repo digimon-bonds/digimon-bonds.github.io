@@ -40,7 +40,7 @@ function renderPetSpeech(){
 }
 function consumeEvent(){if(state.lastEvent&&state.lastEvent.id>seenEvent){seenEvent=state.lastEvent.id;showSystemFeedback(state.lastEvent.system);showPetSpeech(state.lastEvent.context,true);if(state.lastEvent.context==='dirty')wasteWasVisible=state.waste;}}
 const formatTime=ms=>{const seconds=Math.max(0,Math.ceil(ms/1000));return `${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`;};
-const activityNames={play:'Brincando',train:'Treinando',sleep:'Descansando',explore:'Explorando'};
+const activityNames={food:'Comendo',talk:'Conversando',play:'Brincando',train:'Treinando',sleep:'Descansando',explore:'Explorando'};
 function renderFoods(){
  const list=byId('food-list');list.replaceChildren();
  const names={favorite:'♥ Favorito',liked:'Gostou',neutral:'Neutro',disliked:'Não gosta'};
@@ -70,12 +70,13 @@ function render(){
  document.querySelector('.scenery-interior').hidden=state.habitat!=='interior';document.querySelector('.scenery-exterior').hidden=state.habitat!=='exterior';
  byId('habitat-name').textContent=state.habitat==='interior'?'01 / QUARTO DIGITAL':'02 / JARDIM DIGITAL';
  document.querySelectorAll('.habitat-switch button').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.habitat===state.habitat));b.disabled=Boolean(state.activity);});
- document.querySelectorAll('[data-action]').forEach(button=>{const action=button.dataset.action,reason=engine.availability(state,action);button.disabled=Boolean(reason)&&!(['food','explore'].includes(action)&&!state.activity&&(action==='food'||!state.downtime.majorActivityUsed));button.setAttribute('aria-disabled',String(button.disabled));button.title=reason||({food:'Alimentar: recupera Saciedade. DIGIMEAT é grátis e infinito.',play:'Brincar: +15 Humor, −10 Energia. Conta como cuidado ao concluir.',talk:'Conversar: +10 Companhia e +4 Humor, com intervalo de 1 minuto.',train:'Treinar: 2 Digi-Cycles no mesmo atributo concedem PREPARADO +1d6.',explore:'Explorar: usa a atividade do dia e retorna com um resultado D100.'}[action]||'Cuidar de Agumon');});
+ document.querySelectorAll('[data-action]').forEach(button=>{const action=button.dataset.action,reason=engine.availability(state,action);button.disabled=Boolean(reason)&&!(['food','explore'].includes(action)&&!state.activity&&(action==='food'||!state.downtime.majorActivityUsed));button.setAttribute('aria-disabled',String(button.disabled));button.title=reason||({food:'Alimentar: leva 1 minuto e recupera Saciedade ao terminar. DIGIMEAT é grátis e infinito.',play:'Brincar: 1 minuto; +15 Humor, −10 Energia ao concluir.',talk:'Conversar: 1 minuto; +10 Companhia e +4 Humor ao concluir.',train:'Treinar: 30 minutos, −50 Energia e −15 Saciedade. 2 ciclos concedem PREPARADO +1d6.',explore:'Explorar: 30 minutos, −50 Energia e −15 Saciedade. Usa a atividade do dia.'}[action]||'Cuidar de Agumon');});
  byId('sleep-label').textContent=state.activity?.kind==='sleep'?'ACORDAR':'DESCANSAR';byId('sleep-button').setAttribute('aria-pressed',String(state.activity?.kind==='sleep'));
  byId('sleep-button').disabled=Boolean(state.activity&&state.activity.kind!=='sleep')||(!state.activity&&Boolean(engine.availability(state,'sleep')));
- byId('sleep-button').setAttribute('aria-disabled',String(byId('sleep-button').disabled));byId('sleep-button').title=state.activity?.kind==='sleep'?'Acordar agora: mantém apenas a Energia já recuperada.':'Descansar: recupera até 60 de Energia em 3 minutos. Conta como cuidado ao concluir.';
- byId('activity-status').hidden=!state.activity;
- if(state.activity){byId('activity-label').textContent=activityNames[state.activity.kind];byId('activity-timer').textContent=formatTime(state.activity.endsAt-Date.now());byId('activity-timer').dateTime=new Date(state.activity.endsAt).toISOString();}
+ byId('sleep-button').setAttribute('aria-disabled',String(byId('sleep-button').disabled));byId('sleep-button').title=state.activity?.kind==='sleep'?'Acordar agora: mantém apenas a Energia já recuperada.':'Descansar até recuperar toda a Energia: de 0 a 100 em cerca de 45 minutos. Pode acordar antes.';
+ const showClock=Boolean(state.activity&&state.activity.kind!=='sleep');
+ byId('activity-status').hidden=!showClock;
+ if(showClock){byId('activity-label').textContent=activityNames[state.activity.kind];byId('activity-timer').textContent=formatTime(state.activity.endsAt-Date.now());byId('activity-timer').dateTime=new Date(state.activity.endsAt).toISOString();}
  const signature=JSON.stringify(state.history);
  if(signature!==historySignature){const list=byId('history-list');list.replaceChildren();for(const entry of state.history){const li=document.createElement('li');li.textContent=`${new Date(entry.at).toLocaleString('pt-BR')} · ${engine.labels[entry.action]}${entry.phase==='started'?' (início)':''}${entry.detail?' · '+entry.detail:''}`;list.append(li);}historySignature=signature;}
  byId('history-empty').hidden=state.history.length>0;byId('care-count').textContent=`Treinos concluídos: ${state.activityStats.trainingSessions}`;

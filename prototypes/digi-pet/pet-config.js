@@ -9,12 +9,13 @@
   {id:'digibanana',name:'DIGIBANANA',satiety:20,energy:5,mood:0,company:0,category:'Fruta',icon:'banana'},
   {id:'digiprotein',name:'DIGIPROTEIN',satiety:10,energy:15,mood:0,company:0,category:'Suplemento',icon:'protein'},
  ];
- FOOD_CONFIG.forEach(food=>{food.image=`assets/food/${food.id}.webp`;});
+ const foodImages={digimeat:'assets/food/digimeat.webp',digifish:'assets/food/digifish.webp',digiapple:'assets/food/digiapple.webp',digicarrot:'assets/food/digicarrot.webp',digibanana:'assets/food/digibanana.webp',digiprotein:'assets/food/digiprotein.webp'};
+ FOOD_CONFIG.forEach(food=>{food.image=foodImages[food.id];});
  const ACTIVITY_CONFIG={
-  durations:{test:{play:60000,train:120000,sleep:180000},production:{play:600000,train:900000,sleep:1800000}},
+  durations:{test:{food:60000,talk:60000,play:60000,train:1800000,sleep:2700000},production:{food:60000,talk:60000,play:60000,train:1800000,sleep:2700000}},
   play:{minEnergy:12,minSatiety:10,effects:{mood:15,companionship:8,energy:-10,satiety:-5}},
-  train:{minEnergy:20,minSatiety:15,effects:{energy:-15,satiety:-8},happyMoodGain:3},
-  sleep:{energyRecovery:60},
+  train:{minEnergy:25,minSatiety:20,effects:{energy:-50,satiety:-15},happyMoodGain:3},
+  sleep:{energyRecovery:100},
  };
  const NEED_DECAY_CONFIG={satietyPerHour:2,energyPerHour:1.5,companyPerHour:2,companyGraceMs:12*3600000,maxCompanyLoss:35,maxDecayMs:24*3600000,floors:{satiety:15,energy:15,companionship:20},digestionMs:120000};
  const MOOD_CONFIG={dirtyMoodCap:20,hungerPenalty:12,exhaustionPenalty:12,lonelinessPenalty:12,stackedNeedPenalty:5,trainingComfortMinimum:50};
