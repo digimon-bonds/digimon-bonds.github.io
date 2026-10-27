@@ -33,3 +33,7 @@ Verificação na sessão real do Omegamon: botão à direita, imagem original, a
 JavaScript ID 29 desativado no painel do fórum. Nenhum novo botão flutuante. Novo acesso em Digimon App → DB–06 DIGI-PET, ao lado do Battle Link. A main e o deploy foram autorizados explicitamente para essa atualização, commit f6aab60.
 
 app-runtime.mjs fornece o mesmo jogo isolado, com namespace local por usuário do fórum quando identificado. build-app.mjs reaproveita o documento do pacote anterior sem incluir o botão/chaveiro. O campo de senha fica no App e usa comparação de SHA-256, sem transmitir/salvar a senha; é um bloqueio visual de teste, não autenticação de recompensas.
+
+## Janela independente — revisão fdc98c4
+
+Refinamento autorizado explicitamente: janela própria do navegador, sem moldura externa ou cabeçalho extra. app-window-runtime.mjs é a fonte atual. Abertura por concessão local de uso único; save preservado na origem do App e independente do fórum aberto. Fallback Abrir aqui para pop-ups bloqueados, também sem moldura. Validação de navegador e 288 testes existentes passaram.
