@@ -28,13 +28,24 @@ if(trigger){
    const hash=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value));
    if(attempt!==generation||!gate.open)return;
    if([...new Uint8Array(hash)].map(b=>b.toString(16).padStart(2,'0')).join('')!==PASSWORD_DIGEST){message.textContent='Senha incorreta. Tente novamente.';input.focus();return;}
-   const userId=getForumUser()?.forumUserId||null,token=crypto.randomUUID(),grantKey='digimon-bonds:digi-pet:launch:'+token;
-   localStorage.setItem(grantKey,JSON.stringify({at:Date.now(),userId}));
+   const userId=getForumUser()?.forumUserId||null,token=crypto.randomUUID();
    const url=new URL('./digi-pet-window.html',import.meta.url);url.hash=token;
    const width=Math.min(500,screen.availWidth),height=Math.min(920,screen.availHeight-60);
-   const popup=window.open(url.href,'bonds-digipet-'+(userId||'browser'),'popup=yes,resizable=yes,scrollbars=no,width='+width+',height='+height);
-   if(!popup){localStorage.removeItem(grantKey);verifiedUser={userId};inline.hidden=false;message.textContent='Permita pop-ups para abrir em janela própria, ou escolha Abrir aqui.';return;}
-   popup.focus();gate.close();
+   // Exact-source handshake also works with partitioned third-party storage.
+   let popup=null,timer;
+   const cleanup=()=>{clearTimeout(timer);window.removeEventListener('message',claim);gate.removeEventListener('close',cleanup);};
+   const fallback=()=>{cleanup();if(attempt!==generation||!gate.open)return;verifiedUser={userId};inline.hidden=false;message.textContent='Permita pop-ups para abrir em janela própria, ou escolha Abrir aqui.';};
+   const claim=event=>{
+    if(event.origin!==location.origin||event.source!==popup||event.data?.type!=='digipet:claim'||event.data.token!==token)return;
+    if(attempt!==generation||!gate.open){cleanup();return;}
+    const uid=String(userId||''),key='digimon-bonds:digi-pet:app-beta:'+(/^\d+$/.test(uid)?'u'+uid:'browser')+':v1';
+    let initial=null;try{initial=localStorage.getItem(key);}catch{}
+    popup.postMessage({type:'digipet:launch',token,userId,initial},location.origin);cleanup();gate.close();
+   };
+   window.addEventListener('message',claim);gate.addEventListener('close',cleanup);
+   popup=window.open(url.href,'bonds-digipet-'+token,'popup=yes,resizable=yes,scrollbars=no,width='+width+',height='+height);
+   if(!popup){fallback();return;}
+   popup.focus();timer=setTimeout(fallback,8000);
   }catch(error){if(attempt===generation&&gate.open)message.textContent=error.message||'Não foi possível abrir o Digi-Pet.';}
   finally{submit.disabled=false;submit.textContent='ENTRAR NO DIGI-PET';}
  });
