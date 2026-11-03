@@ -569,6 +569,14 @@
       main.prepend(heading);
     }
     enhanceCompose(main);
+    // The native forum-presence box has no useful content when nobody is listed.
+    main.querySelectorAll(':scope > .onlaine').forEach(function (box) {
+      if (/^Nenhum$/i.test(box.textContent.replace(/\s+/g, ' ').trim()) &&
+          !box.querySelector('a,input,select,textarea,button,iframe,img')) {
+        box.hidden = true;
+        box.dataset.bosEmptyPresence = '';
+      }
+    });
     if (kind === 'editor') {
       // Legacy posting templates wrap their title/editor in post profile/body frames.
       // Scope this reset to structural shells; never touch quoted/player content.

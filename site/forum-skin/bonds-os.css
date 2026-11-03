@@ -549,6 +549,7 @@ html.bonds-os-preview #page-body [data-bos-topics] ul.topiclist {display:block;m
 html.bonds-os-preview #page-body [data-bos-topics] li.row[data-bos-topic-row] {min-width:0;}
 html.bonds-os-preview [data-bos-topic-row] .span-tab {position:static;inset:auto;transform:none;}
 html.bonds-os-preview #page-body .onlaine {box-sizing:border-box;position:static;width:100%;max-width:100%;height:auto;min-height:0;margin:18px 0;padding:14px 18px;background:#0b202b;border:1px solid #36586a77;border-radius:6px;color:#9ebac8;font:11px/1.7 'Segoe UI',sans-serif;text-transform:none;}
+html.bonds-os-preview #page-body .onlaine[data-bos-empty-presence] {display:none!important;}
 html.bonds-os-preview #page-body [data-bos-topic-row] .span-tab {position:static!important;inset:auto!important;transform:none!important;display:block!important;width:auto!important;height:auto!important;margin:5px 0 0!important;padding:0!important;background:none!important;line-height:1.6!important;}
 html.bonds-os-preview[data-bos-page="search"] #page-body fieldset dl {display:grid;grid-template-columns:180px minmax(0,1fr);gap:10px 14px;}
 html.bonds-os-preview[data-bos-page="search"] #page-body fieldset dl :is(dt,dd) {float:none;width:auto;min-width:0;margin:0;}
