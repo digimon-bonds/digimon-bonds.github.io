@@ -1,0 +1,29 @@
+
+:root{color-scheme:light;--ink:#2b201a;--muted:#65584d;--edge:#cbb9a4;--accent:#864932;--paper:#f8f2e7}
+*{box-sizing:border-box}
+body{margin:0;background:#ede5d7;color:var(--ink);font:14px/1.5 Arial,sans-serif;text-align:justify}
+header{background:#2d211a;color:#fff5e2;border-bottom:3px solid #9a6248}
+.mast{max-width:1260px;margin:auto;padding:22px clamp(16px,4vw,40px);display:flex;align-items:center;gap:14px}
+.mark{border:1px solid #bd9073;color:#f8d6aa;width:44px;height:44px;display:grid;place-items:center;font-size:19px}
+.mast p,.section-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:750;margin:0}
+.mast p{color:#ddb99d}.mast h1{font:700 27px/1.1 Arial,sans-serif;margin:3px 0 0}
+main{max-width:1260px;margin:auto;padding:22px clamp(12px,3vw,32px);display:grid;grid-template-columns:minmax(290px,370px) minmax(0,1fr);gap:20px;align-items:start}
+.editor,.workbench{min-width:0;background:var(--paper);border:1px solid var(--edge);border-radius:8px}
+.editor{padding:18px}.workbench{overflow:hidden}
+.toolbar{padding:12px 15px;border-bottom:1px solid var(--edge);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.section-label{color:var(--accent)}.hint{color:var(--muted);font-size:12px;margin:4px 0 10px}
+button{font:inherit;font-weight:700;background:#402a20;color:#fff7e9;border:1px solid #402a20;border-radius:5px;padding:8px 12px;cursor:pointer}
+button:hover{background:#704632}button:focus-visible,textarea:focus-visible,input:focus-visible,.editor summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+label{display:grid;gap:4px;font-size:12px;font-weight:650;min-width:0}
+textarea,input{width:100%;border:1px solid #bfae9a;border-radius:4px;background:#fffdf7;color:var(--ink);padding:7px 8px;font:inherit;text-align:justify}
+textarea{resize:vertical;min-height:180px;font-size:14px;font-weight:400}.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding-top:12px}
+.fields .wide{grid-column:1/-1}.fields .wide textarea{min-height:145px}.editor details{margin-top:14px;border-top:1px solid var(--edge);padding-top:10px}
+.editor summary{font-weight:700;cursor:pointer}.editor summary:hover{color:var(--accent)}
+#preview{padding:2px clamp(8px,3vw,24px) 10px;background:radial-gradient(ellipse at 40% 0%,#fff9ec,#e7dbc8)}
+#copy-status{margin:0;padding:0 15px;color:var(--muted);font-size:12px}
+#copy-status:not(:empty){padding-block:6px}#fallback{display:block;margin:0 3% 12px;width:94%;min-height:90px}#fallback[hidden]{display:none}
+@media(max-width:800px){main{grid-template-columns:1fr}.editor{padding:13px}}
+
+.editor .story-tools{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:5px}.editor .story-tools label{font-size:12px;font-weight:650}.editor .story-tools button{padding:4px 9px;background:#f2e7d7;color:#593524;border-color:#ae8a6f;font-size:12px}.editor .story-tools button:hover{background:#e9d8c0}.editor #story{font-family:Arial,sans-serif}
+#jutsu-choices{display:grid;gap:5px;max-height:260px;overflow:auto;padding:3px 0 8px}#jutsu-choices label{display:flex;align-items:baseline;gap:8px}#jutsu-choices input{width:auto;margin:0;accent-color:#864932}.jutsu-sync{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0}.jutsu-sync a{color:#713d2a;text-decoration:underline;font-size:12px;cursor:grab}#jutsu-editor button{font-size:12px}#jutsu-input{min-height:52px;margin-bottom:6px}
+#rp-type{width:100%;min-width:0;padding:7px 8px;border:1px solid #bfae9a;border-radius:4px;background:#fffdf7;color:var(--ink);font:inherit}.rp-type-field{grid-column:1/-1}
