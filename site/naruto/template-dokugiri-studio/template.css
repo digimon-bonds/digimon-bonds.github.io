@@ -55,3 +55,7 @@
 
 /* Keep forum smileys out of animation functions, and contain icon dimensions. */
 .dk-post .dk-frog{display:block!important;width:30px!important;height:25px!important;max-width:30px!important;max-height:25px!important;flex:0 0 30px!important;object-fit:contain!important;font-size:0!important;line-height:0!important;color:transparent!important}.dk-post .dk-art{display:block!important;border:0!important;margin:0!important}
+/* Explicit dimensions prevent forum-wide img height:auto rules from enlarging the art. */
+.dk-post .dk-art{width:56%!important;height:355px!important;max-width:56%!important;max-height:355px!important;object-fit:contain!important;object-position:right bottom!important;bottom:0!important;right:0!important;top:auto!important;left:auto!important}
+.dk-post{margin-top:90px}
+@media(max-width:480px){.dk-post{margin-top:70px}.dk-post .dk-art{width:60%!important;max-width:60%!important;height:300px!important;max-height:300px!important;right:0!important;bottom:0!important}}
