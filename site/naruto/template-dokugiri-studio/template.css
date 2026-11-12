@@ -26,7 +26,7 @@
 .dk-post .dk-paper{margin-top:-2px}.dk-post .dk-syringe{mix-blend-mode:normal}
 
 /* Dark violet banner, floating paper and an original liquid flourish. */
-.dk-post{filter:drop-shadow(0 14px 19px #693e7a3a )}.dk-post .dk-paper{box-shadow:-9px 2px 20px -14px #61432355,9px 2px 20px -14px #61432355}.dk-post .dk-ink-ornament{position:absolute;top:1px;left:8%;width:76%;height:31px;pointer-events:none;opacity:.9}.dk-post .dk-entry{padding-top:65px}.dk-post .dk-art{filter:none}.dk-post .dk-venom-track{top:15px}.dk-post .dk-hero-copy .dk-title{color:#fff0dc}.dk-post .dk-ending{background:linear-gradient(115deg,#211927,#302036 60%,#1d1724 )}@media(max-width:480px ){.dk-post .dk-ink-ornament{left:6%;width:77%;height:25px}.dk-post .dk-entry{padding-top:56px}}
+.dk-post{filter:drop-shadow(0 16px 18px #58290c24 )}.dk-post .dk-paper{box-shadow:-9px 2px 20px -14px #61432355,9px 2px 20px -14px #61432355}.dk-post .dk-ink-ornament{position:absolute;top:1px;left:8%;width:76%;height:31px;pointer-events:none;opacity:.9}.dk-post .dk-entry{padding-top:65px}.dk-post .dk-art{filter:none}.dk-post .dk-venom-track{top:15px}.dk-post .dk-hero-copy .dk-title{color:#fff0dc}.dk-post .dk-ending{background:linear-gradient(115deg,#211927,#302036 60%,#1d1724 )}@media(max-width:480px ){.dk-post .dk-ink-ornament{left:6%;width:77%;height:25px}.dk-post .dk-entry{padding-top:56px}}
 /* Continuous purple transition into the right-hand ink fringe. */
 .dk-post .dk-ink-ornament{left:auto;right:2.5%;top:0;width:61%;height:34px;opacity:1;z-index:2}
 .dk-post .dk-entry:before{content:'';position:absolute;left:0;right:0;top:-2px;height:7px;background:#39223f;pointer-events:none}
@@ -61,7 +61,7 @@
 @media(max-width:480px){.dk-post{margin-top:100px}.dk-post .dk-hero .dk-art{width:64%!important;max-width:64%!important;height:335px!important;max-height:335px!important;right:0!important;bottom:0!important}}
 
 /* The same paper treatment is exported with the article, including in forum posts. */
-.dk-post .dk-paper{background:linear-gradient(180deg,#faf3e6 0px,#faf3e6e6 18px,#faf3e666 48px,#faf3e600 85px),linear-gradient(90deg,#241b2b24 0%,#faf3e6 5%,#fffaf0 50%,#faf3e6 95%,#241b2b24 100%);box-shadow:none}
+.dk-post .dk-paper{background:linear-gradient(180deg,#faf3e6 0px,#faf3e6f2 12px,#faf3e6b3 42px,#faf3e64d 85px,#faf3e600 145px),linear-gradient(105deg,#fff8e9,#fffdf6 53%,#fbefda);border:0;box-shadow:none}
 .dk-post .dk-entry{background:transparent}
 .dk-post .dk-prose{color:#382c30;text-shadow:0 1px 0 #fff9}
 
