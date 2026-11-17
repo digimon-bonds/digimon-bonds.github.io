@@ -28,7 +28,7 @@ function shortRPLabel(label) {
 }
 
 const rpSelect = document.querySelector('#rp-type');
-rpCards['Outras RPs'] = [{ id: 'rp-especial', label: 'RP Especial', showHeading: true, blocks: [] }];
+rpCards['Outras RPs'] = [{ id: 'rp-especial', label: 'RP Especial', showHeading: true, blocks: ['RPs que não se enquadram nas modalidades convencionais, com ganhos próprios e regras especificadas pelo Narrador/Mestre.'] }];
 for (const [label, records] of Object.entries(rpCards)) {
   const group = document.createElement('optgroup');
   group.label = label;
