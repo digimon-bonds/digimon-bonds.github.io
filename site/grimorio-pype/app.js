@@ -183,7 +183,7 @@
   return ['', `<div class="opening-front">
     <span class="chapter">${esc(state.profile.name)}</span>
     <span class="opening-ornament" aria-hidden="true">✧</span>
-    <h1>Observações sobre<br>Incidências Favoráveis</h1>
+    <h1>Observações sobre<br>Incidências Favoráveis,<br>Coincidências e Outras Improbabilidades.</h1>
     <span class="opening-author">Caderno de campo</span>
   </div>`];
  }
@@ -369,7 +369,7 @@
   return [0, 1].map(leaf => {
    const index = notePage * 2 + leaf;
    const key = journalKey(side, index);
-   return `<h2>${label}</h2>
+   return `${leaf ? '<div class="journal-title-spacer" aria-hidden="true"></div>' : `<h2 class="journal-title">${label}</h2>`}
    <textarea class="journal-text" data-journal="${index}" data-note="${key}"
     aria-label="${label}, página ${index + 1}" placeholder="${placeholder}">${esc(state.notes[key] || '')}</textarea>
    <div class="journal-tools">${leaf ? sheetControls('journal', notePage === count - 1 && count < maxJournalSpreads, notePage > 0) : ''}</div>`;
@@ -755,7 +755,3 @@
  // API somente de leitura para diagnóstico local e expansões.
  window.grimoire={snapshot:()=>structuredClone(state),rules:()=>({level:state.level,dc:dc(),attack:atk(),proficiency:pb(),preparedLimit:row()[0],slots:[...row()[1]]})};
 })();
-
-
-
-

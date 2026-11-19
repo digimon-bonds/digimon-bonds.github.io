@@ -446,3 +446,13 @@ body:has(#desk.is-closed) .toolbar { visibility: hidden; }
   .reading-room .album-title { height: 46px; }
   .journal-tools { min-height: 70px; }
 }
+
+.journal-leaf .journal-title,
+.journal-leaf .journal-title-spacer {
+  min-height: 1.15em;
+  font-size: clamp(20px, 3vw, 38px);
+  margin: 13px 0;
+}
+.journal-title-spacer { flex: none; }
+.journal-leaf.right .page-top span:last-child { visibility: hidden; }
+.title-leaf .opening-front h1 { font-size: clamp(15px, 2.9vw, 42px); }
