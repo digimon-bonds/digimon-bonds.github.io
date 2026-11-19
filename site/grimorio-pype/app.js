@@ -152,7 +152,7 @@
  function toast(t){$('#toast').textContent=t;$('#toast').classList.add('visible');clearTimeout(turnTimer);turnTimer=setTimeout(()=>$('#toast').classList.remove('visible'),4300);}
  function page(title, number, content) {
   const heading = section === 8 ? '' :
-   `<div class="page-top"><span>PYPE ERVAFINA</span><span>${esc(title)}</span></div>`;
+   `<div class="page-top"><span>PYPE ERVAFINA</span>${journalSide(section) && notePage > 0 ? '' : `<span>${esc(title)}</span>`}</div>`;
   return `<div class="page-content">${heading}${content}</div>
   <span class="page-number">${String(number).padStart(2, '0')}</span>`;
  }
@@ -379,7 +379,7 @@
   return [0, 1].map(leaf => {
    const index = notePage * 2 + leaf;
    const key = journalKey(side, index);
-   return `${leaf ? '<div class="journal-title-spacer" aria-hidden="true"></div>' : `<h2 class="journal-title">${label}</h2>`}
+   return `${notePage > 0 ? '' : leaf ? '<div class="journal-title-spacer" aria-hidden="true"></div>' : `<h2 class="journal-title">${label}</h2>`}
    <textarea class="journal-text" data-journal="${index}" data-note="${key}"
     aria-label="${label}, página ${index + 1}" placeholder="${placeholder}">${esc(state.notes[key] || '')}</textarea>
    <div class="journal-tools">${leaf ? sheetControls('journal', notePage === count - 1 && count < maxJournalSpreads, notePage > 0) : ''}</div>`;

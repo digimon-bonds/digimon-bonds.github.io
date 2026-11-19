@@ -454,7 +454,7 @@ body:has(#desk.is-closed) .toolbar { visibility: hidden; }
   margin: 13px 0;
 }
 .journal-title-spacer { flex: none; }
-.journal-leaf.right .page-top span:last-child { visibility: hidden; }
+.journal-leaf.right .page-top span:nth-child(2) { visibility: hidden; }
 .title-leaf .opening-front h1 { font-size: clamp(15px, 2.9vw, 42px); }
 
 /* Align the page controls with the outer corners of the book. */
