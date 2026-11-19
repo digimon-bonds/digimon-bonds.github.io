@@ -69,3 +69,27 @@
 .dk-frame{width:100%;max-width:720px;margin:0 auto;padding-top:125px;box-sizing:border-box;overflow:visible}.dk-frame .dk-post{margin:0!important;border:0!important;overflow:visible!important;background:transparent!important}.dk-frame .dk-hero{overflow:visible!important}.dk-frame .dk-paper{border-radius:0 0 24px 24px}@media(max-width:480px){.dk-frame{padding-top:100px}}
 
 .dk-frame .dk-hero{background:transparent!important}.dk-frame .dk-hero:after{display:none!important}
+
+/* Portrait framing: keep the hat above the banner and the coat behind its wave. */
+.dk-post .dk-hero .dk-art{width:53%!important;max-width:53%!important;height:405px!important;max-height:405px!important;right:0!important;bottom:0!important}
+@media(max-width:480px){.dk-post .dk-hero .dk-art{width:56%!important;max-width:56%!important;height:335px!important;max-height:335px!important}}
+
+
+/* Each oracle card rises independently; the banner masks its lower edge. */
+.dk-post .dk-hero{isolation:isolate}
+.dk-post .tr-oracle-deck{position:absolute;left:6%;top:-96px;width:40%;height:190px;z-index:0;pointer-events:none}
+.dk-post .tr-oracle-card{position:absolute;display:block;width:44%;height:180px;bottom:0;pointer-events:auto;transform-origin:50% 100%;transition:transform .5s cubic-bezier(.2,.75,.2,1),filter .5s;outline-offset:4px;filter:drop-shadow(0 4px 4px #24132e20)}
+.dk-post .tr-oracle-card svg{display:block;width:100%;height:100%;overflow:visible}
+.dk-post .tr-oracle-0{left:0;transform:translateY(57px) rotate(-18deg)}
+.dk-post .tr-oracle-1{left:29%;transform:translateY(49px) rotate(-4deg)}
+.dk-post .tr-oracle-2{left:58%;transform:translateY(59px) rotate(14deg)}
+.dk-post .tr-oracle-card:hover,.dk-post .tr-oracle-card:focus-visible{transform:translateY(-18px) rotate(0deg);z-index:5;filter:drop-shadow(0 6px 8px #24132e30)}
+.dk-post .dk-hero .dk-art{bottom:18px!important}
+.dk-post .dk-card-icon{display:block;width:29px!important;height:29px!important;max-width:29px!important;flex:0 0 29px;overflow:visible;transition:transform .6s ease}
+.dk-post summary:hover .dk-card-icon,.dk-post details[open]>summary .dk-card-icon{transform:rotate(360deg)}
+.dk-post .tr-sorcerer-seal{display:block;width:max-content;margin:0 auto;color:#c3a5ca;font:22px/1.6 'Yu Mincho','Noto Serif JP',serif;letter-spacing:.16em;text-shadow:0 1px 8px #bd92d522}
+@media(max-width:480px){.dk-post .tr-oracle-deck{left:5%;top:-70px;width:45%;height:145px}.dk-post .tr-oracle-card{height:140px}.dk-post .tr-oracle-0{transform:translateY(38px) rotate(-18deg)}.dk-post .tr-oracle-1{transform:translateY(32px) rotate(-4deg)}.dk-post .tr-oracle-2{transform:translateY(40px) rotate(14deg)}.dk-post .tr-oracle-card:hover,.dk-post .tr-oracle-card:focus-visible{transform:translateY(-10px) rotate(0deg)}.dk-post .dk-hero .dk-art{bottom:14px!important}}
+@media(prefers-reduced-motion:reduce){.dk-post .tr-oracle-card,.dk-post .dk-card-icon{transition:none}}
+.dk-post button.tr-oracle-card{padding:0!important;border:0!important;background:transparent!important;border-radius:12px;cursor:pointer;box-shadow:none!important}
+.dk-post .tr-oracle-card:focus{transform:translateY(-18px) rotate(0deg);z-index:5}
+@media(max-width:480px){.dk-post .tr-oracle-card:focus{transform:translateY(-10px) rotate(0deg)}}
