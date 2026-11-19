@@ -91,5 +91,7 @@
 @media(max-width:480px){.dk-post .tr-oracle-deck{left:5%;top:-70px;width:45%;height:145px}.dk-post .tr-oracle-card{height:140px}.dk-post .tr-oracle-0{transform:translateY(38px) rotate(-18deg)}.dk-post .tr-oracle-1{transform:translateY(32px) rotate(-4deg)}.dk-post .tr-oracle-2{transform:translateY(40px) rotate(14deg)}.dk-post .tr-oracle-card:hover,.dk-post .tr-oracle-card:focus-visible{transform:translateY(-10px) rotate(0deg)}.dk-post .dk-hero .dk-art{bottom:14px!important}}
 @media(prefers-reduced-motion:reduce){.dk-post .tr-oracle-card,.dk-post .dk-card-icon{transition:none}}
 .dk-post button.tr-oracle-card{padding:0!important;border:0!important;background:transparent!important;border-radius:12px;cursor:pointer;box-shadow:none!important}
+.dk-post .tr-oracle-deck{left:12%;width:38%}
+@media(max-width:480px){.dk-post .tr-oracle-deck{left:12%;width:42%}}
 .dk-post .tr-oracle-card:focus{transform:translateY(-18px) rotate(0deg);z-index:5}
 @media(max-width:480px){.dk-post .tr-oracle-card:focus{transform:translateY(-10px) rotate(0deg)}}
