@@ -54,6 +54,12 @@
     if (/^Se a possibilidade é diferente de zero, já é o bastante para (?:tentar|continuar andando)\.?$/u.test(quote || '')) {
      state.notes.indexQuote = window.PYPE_PUBLIC_BOOK.notes.indexQuote;
     }
+    for (const key of ['free', 'free1', 'free2']) {
+     state.notes[key] ||= window.PYPE_PUBLIC_BOOK.notes[key];
+    }
+    if (!state.notes.verso0 || state.notes.verso0.trim() === "- Libertamos Mirna Dendrar, seu filho Naars e sua filha (cujo nome desconheço) das garras dos Marca Rubra. A família veio de Thundertree, que parece ter tido algum incidente com mortos-vivos. Ela nos disse que caso um dia passemos por Thundertree, encontrarmos sua lojinha e pegar para nós um tesouro que ela guardou lá.") {
+     state.notes.verso0 = window.PYPE_PUBLIC_BOOK.notes.verso0;
+    }
     savedLocally = true;
    }
   } catch {
@@ -217,7 +223,7 @@
    return;
   }
   $('#folio').textContent = section === -1 ? 'Folha de rosto' : `${title} · ${first}–${first + 1}`;
-  $('#prev').disabled = section === -1;
+  $('#prev').setAttribute('aria-label', section === -1 ? 'Fechar livro' : 'Virar para a esquerda');
   $('#next').disabled = currentSpread() === spreads().length - 1;
  }
 
@@ -587,6 +593,7 @@
  }
 
  function movePage(direction) {
+  if (direction < 0 && section === -1) return closeBook();
   const next = spreads()[currentSpread() + direction];
   if (next) go(next.section, next.part);
  }
