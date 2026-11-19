@@ -50,6 +50,10 @@
    const saved = localStorage.getItem(KEY);
    if (saved) {
     state = validate(JSON.parse(saved));
+    const quote = state.notes.indexQuote?.trim().replace(/^[“"]|[”"]$/gu, '').replace(/\s+/gu, ' ');
+    if (/^Se a possibilidade é diferente de zero, já é o bastante para (?:tentar|continuar andando)\.?$/u.test(quote || '')) {
+     state.notes.indexQuote = window.PYPE_PUBLIC_BOOK.notes.indexQuote;
+    }
     savedLocally = true;
    }
   } catch {
@@ -246,7 +250,7 @@
    ${editableText('p','indexSubtitle','Nota do índice','Para encontrar o fio da meada, ou perdê-lo com método.','subtitle')}
    <nav class="index-list" aria-label="Índice do grimório">${links}</nav>`,
    `<span class="chapter">NOTA DO AUTOR</span>${inkArt('cosmos','intro-art')}
-   ${editableText('p','indexQuote','Epígrafe','“Se a possibilidade é diferente de zero, já é o bastante para continuar andando.”','quote')}
+   ${editableText('p','indexQuote','Epígrafe',window.PYPE_PUBLIC_BOOK.notes.indexQuote,'quote')}
    ${editableText('p','indexThought','Pensamento do autor','Há quem colecione moedas. Eu coleciono as vezes em que elas caem do lado errado.','handwritten')}
    ${editableText('p','indexSignature','Assinatura','Pype Ervafina','subtitle')}`,
   ];
